@@ -20,7 +20,7 @@
 	mHeight = 50;
 
 START_QUEUE(@"Proc");
-//	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 //	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
 END_QUEUE(@"Proc");
     
