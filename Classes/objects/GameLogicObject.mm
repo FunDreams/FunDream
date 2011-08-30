@@ -53,8 +53,9 @@
 					  SET_FLOAT_V(300,@"mHeight"),
 					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
 //===============================================================================
-
 	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
+    CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
+    
 //    CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
 
 //физика приложения тут///////////////////////////////////////////////////////		
