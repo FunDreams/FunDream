@@ -17,7 +17,9 @@
 // Macros
 #define DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) / 180.0 * M_PI)
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////
+#define ACCEL m_pParent->m_vAccel
+#define OFFSET m_pParent->m_vOffset
+////////////////////////////////////////////////////////////////////////////////////////////////////////
 //макрос для создания и управления объектами
 #define CREATE_NEW_OBJECT(NAMECLASS,NAMEOBJECT,...) [m_pParent.m_pObjMng CreateNewObject:NAMECLASS WithNameObject:NAMEOBJECT WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 
@@ -87,7 +89,7 @@ pfdestY=((pfsourceX-pfSourceF1)*((pfDestF1-pfDestF2)/(pfSourceF1-pfSourceF2)))+p
 
 #define NAME(OB) OB->m_strName
 
-#define GET_STAGE_EX(OB_NAME,PROC_NAME) [[m_pObjMng GetObjectByName:OB_NAME] FindProcByName:PROC_NAME]->m_pICurrentStage;
+#define GET_STAGE_EX(OB_NAME,PROC_NAME) [[m_pObjMng GetObjectByName:OB_NAME] FindProcByName:PROC_NAME]->m_CurStage->NameStage;
 
 #define SAVE [m_pObjMng->m_pParent.m_pPrSettings Save];
 #define LOAD [m_pObjMng->m_pParent.m_pPrSettings Load];

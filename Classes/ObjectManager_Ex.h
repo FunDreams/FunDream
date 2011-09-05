@@ -17,6 +17,7 @@
 typedef enum tagLayerID {
 	layerOpenGL = 0,
     layerNotShow,
+    layerSystem,
 	layerBackground,	
 	layerInterfaceSpace1,	
 	layerInterfaceSpace2,

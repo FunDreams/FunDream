@@ -27,7 +27,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
     Vector3D TmpVector1,TmpVector2,TmpVector3,TmpVector4,TmpVector5;
 
 	//различные скорости
-	float m_fVelMove,m_fVelFade;
+	float m_fVelMove,m_fVelFade,m_fFinish;
 	
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
@@ -179,14 +179,20 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)SetLayer:(int)iLayer;
 - (void)SetLayerAndChild:(int)iLayer;
 - (void)SelfOffsetVert:(Vertex3D)VOffset;
+- (void)LinkValues;
 - (void)Destroy;
 //processors--------------------------------------------------------------------------------------------
 - (void)timerWaitNextStage:(Processor_ex *)pProc;
 
-- (void)InitAchiveLineFloat:(ProcStage_ex *)pStage;
+- (void)InitAchiveLineFloat:(ProcStage_ex *)pStage;//изменение float значения с параметнами
 - (void)AchiveLineFloat:(Processor_ex *)pProc;
 
+- (void)InitAnimate:(ProcStage_ex *)pStage;//линейная анимация (до фиксированого кадра)
 - (void)Animate:(Processor_ex *)pProc;
+
+- (void)InitAnimateLoop:(ProcStage_ex *)pStage;//замкнутая анимация
+- (void)AnimateLoop:(Processor_ex *)pProc;
+
 - (void)Idle:(Processor_ex *)pProc;
 
 - (void)DestroySelfUpdate:(Processor_ex *)pProc;

@@ -74,34 +74,38 @@
 	m_pCurScale.x=mWidth*0.5f;
 	m_pCurScale.y=mHeight*0.5f;
 
+	return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LinkValues{
+    
     m_pNameTexture=[NSMutableString stringWithString:@""];
 
-//link values
+    //link values
     SET_CELL(LINK_STRING_V(m_pNameTexture,m_strName,@"m_pNameTexture"));
-
+    
     SET_CELL(LINK_VECTOR_V(m_pCurPosition,m_strName,@"m_pCurPosition"));
     SET_CELL(LINK_VECTOR_V(m_pCurScale,m_strName,@"m_pCurScale"));
     SET_CELL(LINK_VECTOR_V(m_pCurAngle,m_strName,@"m_pCurAngle"));
-
+    
     SET_CELL(LINK_VECTOR_V(m_pOffsetCurPosition,m_strName,@"m_pOffsetCurPosition"));
     SET_CELL(LINK_VECTOR_V(m_pOffsetCurScale,m_strName,@"m_pOffsetCurScale"));
     SET_CELL(LINK_VECTOR_V(m_pOffsetCurAngle,m_strName,@"m_pOffsetCurAngle"));
     
     SET_CELL(LINK_COLOR_V(mColor,m_strName,@"mColor"));
-
+    
     SET_CELL(LINK_INT_V(m_iLayer,m_strName,@"m_iLayer"));
     SET_CELL(LINK_INT_V(m_iLayerTouch,m_strName,@"m_iLayerTouch"));
-
+    
     SET_CELL(LINK_BOOL_V(m_bNoOffset,m_strName,@"m_bNoOffset"));
     SET_CELL(LINK_BOOL_V(m_bHiden,m_strName,@"m_bHiden"));
     SET_CELL(LINK_BOOL_V(m_bNonStop,m_strName,@"m_bNonStop"));
-
+    
     SET_CELL(LINK_FLOAT_V(mWidth,m_strName,@"mWidth"));
     SET_CELL(LINK_FLOAT_V(mHeight,m_strName,@"mHeight"));
-
+    
     SET_CELL(LINK_ID_V(m_pOwner,m_strName,@"m_pOwner"));
 
-	return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -113,7 +117,7 @@
     GET_TEXTURE(mTextureId,m_pNameTexture);
 
 	m_pCurScale.x=mWidth*0.5f;
-	m_pCurScale.y=mHeight*0.5f;
+	m_pCurScale.y=mHeight*0.5f;    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -176,9 +180,12 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetTouch:(bool)bTouch{
-	
-	m_bTouch=bTouch;
-	[m_pObjMng->m_pObjectAddToTouch setObject:self forKey:m_strName];
+
+    if(m_strName!=nil){
+
+        m_bTouch=bTouch;
+        [m_pObjMng->m_pObjectAddToTouch setObject:self forKey:m_strName];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RomoveFromTouch{
@@ -203,7 +210,7 @@
 	
 	NSMutableDictionary *pCurrentLayer=[m_pObjMng->pLayers objectAtIndex:m_iLayer];
 	
-	if (pCurrentLayer && m_strName)
+	if (pCurrentLayer && m_strName!=nil)
 		[pCurrentLayer removeObjectForKey:m_strName];
 	
 }
@@ -234,7 +241,7 @@
 
 	CGPoint tmpPointDif=pPoint;
 	
-	if(!m_bNoOffset){
+	if(m_bNoOffset){
 		tmpPointDif.x-=m_pObjMng->m_pParent->m_vOffset.x;
 		tmpPointDif.y-=m_pObjMng->m_pParent->m_vOffset.y;
 	}
@@ -412,7 +419,7 @@
     NSString *NameParam=nil;
     
     //линкуем параметры
-    NameParam=[NSString stringWithFormat:@"%@finish_Frame",TmpStr];
+    NameParam=[NSString stringWithFormat:@"%@Finish_Frame",TmpStr];
     pStage->IntsValues[0]=GET_INT_V(NameParam);
     if(pStage->IntsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
     
@@ -434,18 +441,95 @@
     ProcStage_ex * pStage=pProc->m_CurStage;
 
     (*pStage->FloatsValues[0])+=(*pStage->FloatsValues[1])*DELTA;
-	(*pStage->IntsValues[1])=(int)(*pStage->FloatsValues[0]);
-	
-	if((*pStage->FloatsValues[1])>0 && (*pStage->IntsValues[0]<=*pStage->IntsValues[1]))
+    int TmpFrame=(int)(*pStage->FloatsValues[0]);
+
+	if((*pStage->FloatsValues[1])>0 && (*pStage->IntsValues[0]<=TmpFrame))
     {
-        *pStage->IntsValues[1]=*pStage->IntsValues[0];
+        *pStage->IntsValues[1]=(int)(*pStage->IntsValues[0]);
         NEXT_STAGE;
     }	
-	else if((*pStage->FloatsValues[1])<0 && (*pStage->IntsValues[0]>=*pStage->IntsValues[1]))
+	else if((*pStage->FloatsValues[1])<0 && (*pStage->IntsValues[0]>=TmpFrame))
     {
-        *pStage->IntsValues[1]=*pStage->IntsValues[0];
+        *pStage->IntsValues[1]=(int)(*pStage->IntsValues[0]);
         NEXT_STAGE;
     }	
+    else (*pStage->IntsValues[1])=TmpFrame;  
+}
+//------------------------------------------------------------------------------------------------------
+- (void)InitAnimateLoop:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@Start_Frame",TmpStr];
+    pStage->IntsValues[0]=GET_INT_V(NameParam);
+    if(pStage->IntsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+
+    NameParam=[NSString stringWithFormat:@"%@Finish_Frame",TmpStr];
+    pStage->IntsValues[1]=GET_INT_V(NameParam);
+    if(pStage->IntsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@InstFrame",TmpStr];
+    pStage->IntsValues[2]=GET_INT_V(NameParam);
+    if(pStage->IntsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    
+    NameParam=[NSString stringWithFormat:@"%@InstFrameFloat",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@Vel",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+- (void)AnimateLoop:(Processor_ex *)pProc{
+    
+    ProcStage_ex * pStage=pProc->m_CurStage;
+    
+    (*pStage->FloatsValues[0])+=(*pStage->FloatsValues[1])*DELTA;
+    int TmpFrame=(int)(*pStage->FloatsValues[0]);
+    
+    if((*pStage->FloatsValues[1])<0)TmpFrame++;
+    
+    if(*pStage->IntsValues[0]<*pStage->IntsValues[1]){
+        
+        if((*pStage->FloatsValues[1])>0 && (TmpFrame>*pStage->IntsValues[1]))
+        {
+            TmpFrame=(int)(*pStage->IntsValues[0]);
+            (*pStage->IntsValues[2])=TmpFrame;
+            (*pStage->FloatsValues[0])=TmpFrame;
+            return;
+        }	
+        else if((*pStage->FloatsValues[1])<0 && (TmpFrame<*pStage->IntsValues[0]))
+        {
+            TmpFrame=(int)(*pStage->IntsValues[1]);
+            (*pStage->IntsValues[2])=TmpFrame;
+            (*pStage->FloatsValues[0])=TmpFrame;
+            return;
+        }
+    }
+    else{
+        
+        if((*pStage->FloatsValues[1])>0 && (TmpFrame>*pStage->IntsValues[0]))
+        {
+            TmpFrame=(int)(*pStage->IntsValues[1]);
+            (*pStage->IntsValues[2])=TmpFrame;
+            (*pStage->FloatsValues[0])=TmpFrame;
+            return;
+        }	
+        else if((*pStage->FloatsValues[1])<0 && (TmpFrame<*pStage->IntsValues[1]))
+        {
+            TmpFrame=(int)(*pStage->IntsValues[0]);
+            (*pStage->IntsValues[2])=TmpFrame;
+            (*pStage->FloatsValues[0])=TmpFrame;
+            return;
+        }
+    }
+    
+    (*pStage->IntsValues[2])=TmpFrame;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitAchiveLineFloat:(ProcStage_ex *)pStage{

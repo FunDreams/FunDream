@@ -38,8 +38,8 @@
         CFTimeInterval time;
         time = CFAbsoluteTimeGetCurrent();
         double delta = (time - m_flastTime);
-        if( delta > 0.33 ) delta = 0.33;
-        if( delta < 0.001 ) delta = 0.001;
+        if( delta > 1.0f ) delta = 1.0f;
+    //    if( delta < 0.001 ) delta = 0.001;
         m_flastTime=time;
         
         [m_pRootViewController SelfMove:delta];

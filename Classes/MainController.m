@@ -93,8 +93,6 @@
 	m_sNormal=NSSelectorFromString(@"SelfMoveNormal:");
 	m_SCurrentSel=m_sNormal;
 	
-	m_bMultiTouch=YES;
-
 	NSString* Str_Orientation = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"UIInterfaceOrientation"];
 	
 	if([Str_Orientation isEqualToString:@"UIInterfaceOrientationLandscapeLeft"])
@@ -111,10 +109,6 @@
 	
 	if(previousOrientation == UIInterfaceOrientationLandscapeRight)
 		self.view.transform = CGAffineTransformMakeRotation(-3.14159);
-	
-#ifdef SUDOKU
-	m_bMultiTouch=NO;
-#endif
 
     return self;
 }
@@ -160,18 +154,18 @@
    //     if([self.view respondsToSelector:@"setContentScale:"]){
             self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
    //     }
-    }
-	
-//	[glView layoutSubviews];
+    }	
 
 	[self.view addSubview:glView];
 	
 	glView.controller = self;
-//	[self MoveSubview: glView withLayer: layerOpenGL ];	
 	[self setupView:glView];
     [self LoadAllTextures];
     [self LoadAllSounds];
 		
+    m_bMultiTouch=YES;
+    glView.multipleTouchEnabled=m_bMultiTouch;
+
 #ifdef BANNER_IAD
     
     adView = [[ADBannerView alloc] initWithFrame:CGRectZero];
@@ -399,6 +393,8 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
+    NSSet *allTouches = [event allTouches];
+
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
         NSEnumerator *enumerator = [pDic objectEnumerator];
@@ -406,21 +402,26 @@ FullName:(NSString *)FullNameSound
         
         while ((TmpOb = [enumerator nextObject])) {
 
-            for (UITouch *touch in touches) {
+            if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
+                continue;
+            
+     //       m_CountTouch=0;
+            for (UITouch *touch in allTouches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
-                m_CountTouch++;
-
-                if (m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)continue;
+         //       m_CountTouch++;
 
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                     {[TmpOb touchesBegan:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesBeganOut:touch WithPoint:tmpPoint];}
                 
-                if(!m_bMultiTouch)goto nextObject;
             }
-nextObject:
+            
+//            if(m_CountTouch>1){
+//                int m=0;
+//            }
+
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
@@ -428,99 +429,78 @@ nextObject:
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
+    NSSet *allTouches = [event allTouches];
+
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
         NSEnumerator *enumerator = [pDic objectEnumerator];
         GObject *TmpOb;
         
+   //     m_CountTouch=0;
         while ((TmpOb = [enumerator nextObject])) {
             
-            for (UITouch *touch in touches) {
+            if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
+                continue;
+
+            for (UITouch *touch in allTouches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
-                m_CountTouch++;
-                
-                if (m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)continue;
-                
+           //     m_CountTouch++;
+                                
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesMoved:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesMovedOut:touch WithPoint:tmpPoint];}
                 
-                if(!m_bMultiTouch)goto nextObject;
             }
-        nextObject:
+            
+//            if(m_CountTouch>1){
+//                int m=0;
+//            }
+
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
-
-//	for (UITouch *touch in touches) {
-//		CGPoint tmpPoint = [touch locationInView:self.view];
-//		[self ConvPoint:&tmpPoint];
-//		
-//		NSEnumerator *enumerator = [m_pObjMng.m_pObjectTouch objectEnumerator];
-//		GObject *TmpOb;
-//		
-//		while ((TmpOb = [enumerator nextObject])) {
-//			
-//            if (m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)continue;
-//
-//			if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
-//				{[TmpOb touchesMoved:touch WithPoint:tmpPoint];}
-//			else {[TmpOb touchesMovedOut:touch WithPoint:tmpPoint];}			
-//		}
-//		if(!m_bMultiTouch)return;
-//	}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
+
+    NSSet *allTouches = [event allTouches];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
         NSEnumerator *enumerator = [pDic objectEnumerator];
         GObject *TmpOb;
-        
+                
+   //     m_CountTouch=0;
+
         while ((TmpOb = [enumerator nextObject])) {
             
-            for (UITouch *touch in touches) {
+            if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
+                continue;
+
+            for (UITouch *touch in allTouches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
-                m_CountTouch++;
-                
-                if (m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)continue;
-                
+        //        m_CountTouch++;
+                                
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesEnded:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesEndedOut:touch WithPoint:tmpPoint];}
                 
-                if(!m_bMultiTouch)goto nextObject;
             }
-        nextObject:
+            
+//            if(m_CountTouch>1){
+//                int m=0;
+//            }
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
-
-    
-//	for (UITouch *touch in touches) {
-//		CGPoint tmpPoint = [touch locationInView:self.view];
-//		[self ConvPoint:&tmpPoint];
-//
-//		m_CountTouch--;
-//		
-//		NSEnumerator *enumerator = [m_pObjMng.m_pObjectTouch objectEnumerator];
-//		GObject *TmpOb;
-//		
-//		while ((TmpOb = [enumerator nextObject])) {
-//			
-//            if (m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)continue;
-//
-//			if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
-//				{[TmpOb touchesEnded:touch WithPoint:tmpPoint];}
-//			else {[TmpOb touchesEndedOut:touch WithPoint:tmpPoint];}
-//		}
-//		if(!m_bMultiTouch)return;
-//	}	
+}
+//------------------------------------------------------------------------------------------------------
+-(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
+    [self touchesEnded:touches withEvent:event];
 }
 //------------------------------------------------------------------------------------------------------
 - (IBAction)StartBt

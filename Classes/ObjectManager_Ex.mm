@@ -172,9 +172,7 @@
             Processor_ex *pProc_ex;
             enumeratorProc = [pObject->m_pProcessor_ex objectEnumerator];
 			while ((pProc_ex = [enumeratorProc nextObject]))
-            {
                 [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
-            }
             
             [pObject->m_pProcessor_ex SynhData];
 
@@ -216,11 +214,14 @@
 		fTimeOneSecondUpdate=0;
 		[self Update];
 		
-	} else if (m_bNeedUppdate==YES) {
+	}
+    else if (m_bNeedUppdate==YES) {
+        
+        fTimeOneSecondUpdate=0;
 		m_bNeedUppdate=NO;
 		[self Update];
 	}
-	
+
 //FPS----------------------------------------------------------------------------
 #ifdef FPS
 	static int AllFrame=0;
@@ -355,14 +356,15 @@ repeate:
 }	
 //------------------------------------------------------------------------------------------------------
 - (id)DestroyObject:(GObject *)pObject{
-		
-	[pMustDelKeys addObject:pObject];
-	pObject->m_bDeleted=YES;
-	
-	[pObject DeleteFromDraw];
-	
-	[pObject Destroy];
 
+    if(pObject->m_bDeleted==NO){
+        [pMustDelKeys addObject:pObject];
+        pObject->m_bDeleted=YES;
+
+        [pObject DeleteFromDraw];
+        [pObject Destroy];
+    }
+    
 	return pObject;
 }
 //------------------------------------------------------------------------------------------------------
@@ -405,6 +407,8 @@ repeate:
 			else pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
 
 			pObject->m_bDeleted=NO;
+
+            [pObject LinkValues];
 
 			[self SetParams:pObject WithParams:Parametrs];
 

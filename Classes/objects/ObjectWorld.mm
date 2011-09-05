@@ -19,7 +19,7 @@
 START_QUEUE(@"Proc");
 //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-    DELAY_STAGE(@"Proc", 3000, 3000);
+    DELAY_STAGE(@"Proc", 300, 200);
 END_QUEUE(@"Proc");
     
     GET_TEXTURE(mTextureId,m_pNameTexture);
@@ -41,7 +41,7 @@ END_QUEUE(@"Proc");
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
- //   CREATE_NEW_OBJECT(@"ObjectShip", @"Ship", nil);
+ //   CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
     NEXT_STAGE;
 }
 //------------------------------------------------------------------------------------------------------

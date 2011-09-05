@@ -45,7 +45,7 @@ START_QUEUE(@"Proc");
     DELAY_STAGE(@"a10", 1000, 1);
 
     ASSIGN_STAGE(@"Animate1",@"Animate:",
-                 LINK_INT_V(iFinishFrame,@"finish_Frame"),
+                 LINK_INT_V(iFinishFrame,@"Finish_Frame"),
                  LINK_INT_V(mTextureId,@"InstFrame"),
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
                  SET_FLOAT_V(-30,@"Vel"));
@@ -54,7 +54,7 @@ START_QUEUE(@"Proc");
     DELAY_STAGE(@"ChangePar", 3000, 4000);
 
     ASSIGN_STAGE(@"Animate2",@"Animate:",
-                 LINK_INT_V(iFinishFrame,@"finish_Frame"),
+                 LINK_INT_V(iFinishFrame,@"Finish_Frame"),
                  LINK_INT_V(mTextureId,@"InstFrame"),
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
                  SET_FLOAT_V(30,@"Vel"));
@@ -64,7 +64,7 @@ START_QUEUE(@"Proc");
 END_QUEUE(@"Proc");
 //====================================================
 	
-	mColor = Color3DMake(0,1,0,1.0f);
+	mColor = Color3DMake(1,1,0,1.0f);
 
     SET_CELL(LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrenNumber"));
     SET_CELL(LINK_INT_V(m_iPlace,m_strName,@"m_iPlace"));
@@ -88,7 +88,7 @@ END_QUEUE(@"Proc");
 	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:
                                (m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
     
-    InstFrameFloat=mTextureId+0.99f;
+    InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
 }
 //------------------------------------------------------------------------------------------------------
@@ -125,7 +125,7 @@ END_QUEUE(@"Proc");
     m_iCurrentFrame=9;
 	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:(m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
 	
-    InstFrameFloat=mTextureId+0.99f;
+    InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
 	
     SET_STAGE_EX(NAME(self), @"Proc", @"Animate1");
