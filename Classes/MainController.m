@@ -103,13 +103,6 @@
 		previousOrientation=UIInterfaceOrientationLandscapeRight;
 	else previousOrientation=UIInterfaceOrientationPortrait;
 
-	// Repositions and resizes the view.
-	if(previousOrientation == UIInterfaceOrientationLandscapeLeft || previousOrientation == UIInterfaceOrientationLandscapeRight)
-		self.view.bounds = CGRectMake(0,0,[[UIScreen mainScreen] bounds].size.width,[[UIScreen mainScreen] bounds].size.height);
-	
-	if(previousOrientation == UIInterfaceOrientationLandscapeRight)
-		self.view.transform = CGAffineTransformMakeRotation(-3.14159);
-
     return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -131,40 +124,37 @@
 		[[NSNotificationCenter defaultCenter] addObserver:self
 												 selector:@selector(didRotate)
 													 name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+        
+        if(previousOrientation==UIInterfaceOrientationLandscapeRight){
+            m_pObjMng->fAngleRotateOffset=-90;
+            m_pObjMng->fCurrentAngleRotateOffset=-90;
+        }
 
-		if([self isDeviceAniPad])
-			glView = [[GLView alloc] initWithFrame:CGRectMake(-128,128,
-						[[UIScreen mainScreen] bounds].size.height,
-						[[UIScreen mainScreen] bounds].size.width)];
-		
-		else glView = [[GLView alloc] initWithFrame:CGRectMake(-80,80,
-						[[UIScreen mainScreen] bounds].size.height,
-						[[UIScreen mainScreen] bounds].size.width)];
-		
-		glView.transform=CGAffineTransformMakeRotation(-3.14159*0.5f);
+        if(previousOrientation==UIInterfaceOrientationLandscapeLeft){
+            m_pObjMng->fAngleRotateOffset=90;
+            m_pObjMng->fCurrentAngleRotateOffset=90;
+        }
 	}
-	else{
-        
-        CGRect bounds = CGRectMake(0,0,
-                                   [[UIScreen mainScreen] bounds].size.width,
-                                   [[UIScreen mainScreen] bounds].size.height);
-        
-        glView = [[GLView alloc] initWithFrame:bounds];
-        
-   //     if([self.view respondsToSelector:@"setContentScale:"]){
-            self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
-   //     }
-    }	
 
+    //создаём 
+    CGRect bounds = CGRectMake(0,0,
+                               [[UIScreen mainScreen] bounds].size.width,
+                               [[UIScreen mainScreen] bounds].size.height);
+    
+    glView = [[GLView alloc] initWithFrame:bounds];
+
+    self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
 	[self.view addSubview:glView];
 	
 	glView.controller = self;
 	[self setupView:glView];
     [self LoadAllTextures];
     [self LoadAllSounds];
-		
+
+#ifdef MULTITOUCH
     m_bMultiTouch=YES;
     glView.multipleTouchEnabled=m_bMultiTouch;
+#endif
 
 #ifdef BANNER_IAD
     
@@ -244,39 +234,16 @@ FullName:(NSString *)FullNameSound
 		
 	if(previousOrientation==UIInterfaceOrientationLandscapeLeft && orientation==UIInterfaceOrientationLandscapeRight){
 		
-		[UIView beginAnimations:@"rotation" context:nil];
-		[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-		[UIView setAnimationDuration:0.3f];	
-		
-		CGAffineTransform transform = CGAffineTransformMakeRotation(-3.14159);
-		self.view.transform = transform;
-		
+        m_pObjMng->fAngleRotateOffset=-90;
 		previousOrientation=UIInterfaceOrientationLandscapeRight;
-
-		[UIView commitAnimations];
-
 	}
 	
 	if(previousOrientation==UIInterfaceOrientationLandscapeRight && orientation==UIInterfaceOrientationLandscapeLeft){
 		
-		[UIView beginAnimations:@"rotation" context:nil];
-		[UIView setAnimationCurve:UIViewAnimationCurveLinear];
-		[UIView setAnimationDuration:0.3f];	
-		
-		CGAffineTransform transform = CGAffineTransformMakeRotation(0);
-		self.view.transform = transform;
-		
+        m_pObjMng->fAngleRotateOffset=90;
 		previousOrientation=UIInterfaceOrientationLandscapeLeft;
-		
-		[UIView commitAnimations];
 	}
 }
-//------------------------------------------------------------------------------------------------------
-// Override to allow orientations other than the default portrait orientation.
-//- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-//    // Return YES for supported orientations
-//    return (interfaceOrientation == UIInterfaceOrientationLandscapeLeft);
-//}
 //------------------------------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {[super didReceiveMemoryWarning];}
 //------------------------------------------------------------------------------------------------------
@@ -360,8 +327,23 @@ FullName:(NSString *)FullNameSound
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
 	//NSLog(@"x: %f, y: %f", acceleration.x, acceleration.y);
     
-    m_vAccel.x=acceleration.x;
-    m_vAccel.y=acceleration.y;
+    if (previousOrientation==UIInterfaceOrientationLandscapeRight) {
+        
+        m_vAccel.x=-acceleration.y;
+        m_vAccel.y=acceleration.x;
+
+    }
+    else if (previousOrientation==UIInterfaceOrientationLandscapeLeft){
+
+        m_vAccel.x=acceleration.y;
+        m_vAccel.y=-acceleration.x;
+    }
+    else {
+        
+        m_vAccel.x=acceleration.x;
+        m_vAccel.y=acceleration.y;
+    }
+    
     m_vAccel.z=acceleration.z;
 }
 //------------------------------------------------------------------------------------------------------
@@ -379,8 +361,8 @@ FullName:(NSString *)FullNameSound
 	}
 	else if (previousOrientation==UIInterfaceOrientationLandscapeRight) {
 		
-		tmpPointDif.x=(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
-		tmpPointDif.y=0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width);
+		tmpPointDif.x=-(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
+		tmpPointDif.y=-(0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width));
 	}
 	else{
 		
@@ -393,7 +375,11 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
+    mpCurtouches=touches;
+    mpCurEvent=event;
+
     NSSet *allTouches = [event allTouches];
+    m_CountTouch=[allTouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -406,7 +392,7 @@ FullName:(NSString *)FullNameSound
                 continue;
             
      //       m_CountTouch=0;
-            for (UITouch *touch in allTouches) {
+            for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
@@ -425,11 +411,17 @@ FullName:(NSString *)FullNameSound
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
+    mpCurtouches=nil;
+    mpCurEvent=nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
+    mpCurtouches=touches;
+    mpCurEvent=event;
+
     NSSet *allTouches = [event allTouches];
+    m_CountTouch=[allTouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -442,7 +434,7 @@ FullName:(NSString *)FullNameSound
             if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
                 continue;
 
-            for (UITouch *touch in allTouches) {
+            for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
@@ -461,11 +453,17 @@ FullName:(NSString *)FullNameSound
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
+    mpCurtouches=nil;
+    mpCurEvent=nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 
+    mpCurtouches=touches;
+    mpCurEvent=event;
+
     NSSet *allTouches = [event allTouches];
+    m_CountTouch=[allTouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -479,7 +477,7 @@ FullName:(NSString *)FullNameSound
             if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
                 continue;
 
-            for (UITouch *touch in allTouches) {
+            for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
                 
@@ -497,6 +495,9 @@ FullName:(NSString *)FullNameSound
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
+    
+    mpCurtouches=nil;
+    mpCurEvent=nil;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{
@@ -692,10 +693,8 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)SetOrt:(Vector3D)Offset{
 	m_vOffset=Offset;
-
-	if(previousOrientation == UIInterfaceOrientationLandscapeLeft || previousOrientation == UIInterfaceOrientationLandscapeRight)
-		glOrthof (- VIEWPORT_H*0.5f+Offset.x, VIEWPORT_H*0.5f+Offset.x, - VIEWPORT_W*0.5f+Offset.y, VIEWPORT_W*0.5f+Offset.y,  0.0f, 20.0f);
-	else glOrthof (- VIEWPORT_W*0.5f+Offset.x, VIEWPORT_W*0.5f+Offset.x, - VIEWPORT_H*0.5f+Offset.y, VIEWPORT_H*0.5f+Offset.y,  0.0f, 20.0f);
+        
+    glOrthof (- VIEWPORT_W*0.5f+Offset.x, VIEWPORT_W*0.5f+Offset.x, - VIEWPORT_H*0.5f+Offset.y, VIEWPORT_H*0.5f+Offset.y,  0.0f, 20.0f);
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAllSounds{
@@ -715,7 +714,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"sounds_loop/"];
+        NSString *REZ=[NSString stringWithString:@"sounds/"];
         REZ=[REZ stringByAppendingString:SubStr];
 
         TmpId = [self LoadSound:REZ WithExt:SubStr1 WithLoop:NO FullName:tString];        
@@ -772,7 +771,7 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)setupView:(GLView*)view
 {
-	glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 	
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);

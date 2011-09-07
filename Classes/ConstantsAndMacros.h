@@ -96,6 +96,9 @@ pfdestY=((pfsourceX-pfSourceF1)*((pfDestF1-pfDestF2)/(pfSourceF1-pfSourceF2)))+p
 
 //processor
 #define NEXT_STAGE if(pProc!=nil)[pProc NextStage];
+
+#define NEXT_STAGE_EX(NAME_OB,NAME_PROC)[[[m_pObjMng GetObjectByName:NAME_OB] FindProcByName:NAME_PROC] NextStage];
+
 #define SET_STAGE(NAME_OB,STAGE) [[[m_pObjMng GetObjectByName:NAME_OB] FindProcByName:@"Proc"] SetStage:STAGE];
 #define SET_STAGE_EX(NAME_OB,NAME_PROC,STAGE)[[[m_pObjMng GetObjectByName:NAME_OB] FindProcByName:NAME_PROC] SetStage:STAGE];
 

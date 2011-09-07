@@ -44,6 +44,29 @@
         
         [m_pRootViewController SelfMove:delta];
 
+//FPS----------------------------------------------------------------------------
+#ifdef FPS
+	static int AllFrame=0;
+	static float fTimeOneSecond=0;
+	static int iNumFrame=0;
+	static int AllCount=0; 
+	iNumFrame++;
+	fTimeOneSecond+=delta;
+    
+	if(fTimeOneSecond>=1){
+		
+		AllFrame+=iNumFrame;
+		AllCount++;
+		
+		NSLog(@"FPS:%d===%d",iNumFrame,AllFrame/AllCount);
+        
+		fTimeOneSecond=0;
+		iNumFrame=0;		
+	}
+#endif
+//-------------------------------------------------------------------------------
+
+    
 //    }
 //    @catch (NSException *exception) {
 //        NSLog ( @"Exception caught: %@", exception );

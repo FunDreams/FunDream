@@ -45,6 +45,10 @@
 		1890161D129178860027418F /* Physics.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18901616129178860027418F /* Physics.mm */; };
 		1890161E129178860027418F /* Jumper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18901618129178860027418F /* Jumper.mm */; };
 		189EB338125B052200262E27 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189EB337125B052200262E27 /* StoreKit.framework */; };
+		18D2782414171AD60001B480 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D2782114171AD60001B480 /* Default.png */; };
+		18D2782514171AD60001B480 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D2782214171AD60001B480 /* Default@2x.png */; };
+		18D2782714171B090001B480 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D2782614171B090001B480 /* Default-Landscape~ipad.png */; };
+		18D2782A14171B460001B480 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 18D2782914171B460001B480 /* icon.png */; };
 		18D79553127B29C800BD5445 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D79552127B29C800BD5445 /* GLView.m */; };
 		18D79587127B2A4700BD5445 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D79586127B2A4700BD5445 /* OpenGLES.framework */; };
 		18EFBFE91414F2E900426553 /* texture in Resources */ = {isa = PBXBuildFile; fileRef = 18EFBFE81414F2E900426553 /* texture */; };
@@ -161,6 +165,10 @@
 		1890161A129178860027418F /* Physics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Physics.h; path = objects/Physics.h; sourceTree = "<group>"; };
 		1890164312917AE10027418F /* GameLogicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameLogicObject.h; path = objects/GameLogicObject.h; sourceTree = "<group>"; };
 		189EB337125B052200262E27 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		18D2782114171AD60001B480 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = resources/funDreams1/Art/interface/Default.png; sourceTree = "<group>"; };
+		18D2782214171AD60001B480 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "resources/funDreams1/Art/interface/Default@2x.png"; sourceTree = "<group>"; };
+		18D2782614171B090001B480 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "resources/funDreams1/Art/interface/Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		18D2782914171B460001B480 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = icon.png; path = resources/funDreams1/Art/icons/icon.png; sourceTree = "<group>"; };
 		18D79551127B29C800BD5445 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		18D79552127B29C800BD5445 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		18D79556127B29E600BD5445 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConstantsAndMacros.h; sourceTree = "<group>"; };
@@ -356,6 +364,17 @@
 			path = MKStoreKit;
 			sourceTree = "<group>";
 		};
+		18D2782814171B190001B480 /* Interface */ = {
+			isa = PBXGroup;
+			children = (
+				18D2782914171B460001B480 /* icon.png */,
+				18D2782614171B090001B480 /* Default-Landscape~ipad.png */,
+				18D2782114171AD60001B480 /* Default.png */,
+				18D2782214171AD60001B480 /* Default@2x.png */,
+			);
+			name = Interface;
+			sourceTree = "<group>";
+		};
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
@@ -438,6 +457,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				18D2782814171B190001B480 /* Interface */,
 				18EFBFEA1414F30A00426553 /* sounds */,
 				18EFBFEB1414F30A00426553 /* sounds_loop */,
 				18EFBFE81414F2E900426553 /* texture */,
@@ -668,6 +688,10 @@
 				18EFBFE91414F2E900426553 /* texture in Resources */,
 				18EFBFEC1414F30A00426553 /* sounds in Resources */,
 				18EFBFED1414F30A00426553 /* sounds_loop in Resources */,
+				18D2782414171AD60001B480 /* Default.png in Resources */,
+				18D2782514171AD60001B480 /* Default@2x.png in Resources */,
+				18D2782714171B090001B480 /* Default-Landscape~ipad.png in Resources */,
+				18D2782A14171B460001B480 /* icon.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

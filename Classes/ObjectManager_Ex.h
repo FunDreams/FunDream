@@ -16,8 +16,8 @@
 
 typedef enum tagLayerID {
 	layerOpenGL = 0,
-    layerNotShow,
     layerSystem,
+    layerNotShow,
 	layerBackground,	
 	layerInterfaceSpace1,	
 	layerInterfaceSpace2,
@@ -46,7 +46,10 @@ typedef enum tagLayerID {
 /** Класс который управляет другими объектами в зависимости от их состояния**/
 @interface CObjectManager : NSObject {
 @public
-	
+
+    //угол вращения картинки
+    float fCurrentAngleRotateOffset,fAngleRotateOffset;
+
     //время для апдейта
     float fTimeOneSecondUpdate;
     

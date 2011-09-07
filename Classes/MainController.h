@@ -64,6 +64,8 @@
 	NSMutableDictionary* m_pTextureList;
 
 	int m_CountTouch;
+    NSSet* mpCurtouches;
+    UIEvent* mpCurEvent;
 	
 	UIInterfaceOrientation previousOrientation;
 

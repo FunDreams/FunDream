@@ -24,6 +24,7 @@
 -(void)Update;
 
 - (GObject *)GetNear:(CGPoint)Point;
+- (float)GetNearDist:(CGPoint)Point;
 
 - (void)dealloc;
     

@@ -222,41 +222,66 @@
 		[self Update];
 	}
 
-//FPS----------------------------------------------------------------------------
-#ifdef FPS
-	static int AllFrame=0;
-	static float fTimeOneSecond=0;
-	static int iNumFrame=0;
-	static int AllCount=0; 
-	iNumFrame++;
-	fTimeOneSecond+=m_fDeltaTime;
-
-	if(fTimeOneSecond>=1){
-		
-		AllFrame+=iNumFrame;
-		AllCount++;
-		
-		NSLog(@"FPS:%d===%d",iNumFrame,AllFrame/AllCount);
-
-		fTimeOneSecond=0;
-		iNumFrame=0;		
-	}
-#endif
 //отрисовка объектов---------------------------------------------------------------
-
 	glEnableClientState(GL_VERTEX_ARRAY);
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY); 
-
+	glEnableClientState(GL_COLOR_ARRAY);
+    
 	int ObjectCountDraw=[pDrawArray count];  
-	
-	for (int i=0; i<ObjectCountDraw; i++) {
-		
-		glLoadIdentity();
-			
-		GObject *pTmpOb=[pDrawArray objectAtIndex:i];
-		[[pDrawArray objectAtIndex:i] performSelector:pTmpOb->m_sDraw];
-	}
+
+    
+    if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
+        
+        fCurrentAngleRotateOffset=fAngleRotateOffset;
+        
+        if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+            
+            fCurrentAngleRotateOffset=fAngleRotateOffset;
+        }
+
+        if(fAngleRotateOffset>fCurrentAngleRotateOffset){
+            
+            fCurrentAngleRotateOffset+=m_fDeltaTime*1000;
+            
+            if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+                
+                fCurrentAngleRotateOffset=fAngleRotateOffset;
+            }
+        }
+        else{
+            
+            fCurrentAngleRotateOffset-=m_fDeltaTime*1000;
+            
+            if(fCurrentAngleRotateOffset<=fAngleRotateOffset){
+                
+                fCurrentAngleRotateOffset=fAngleRotateOffset;
+            }
+
+        }
+    }
+    
+   if(m_pParent->previousOrientation==UIInterfaceOrientationLandscapeRight || 
+            m_pParent->previousOrientation==UIInterfaceOrientationLandscapeLeft)
+   {
+        for (int i=0; i<ObjectCountDraw; i++) {
+
+            glLoadIdentity();
+            glRotatef(fCurrentAngleRotateOffset, 0, 0, 1);
+
+            GObject *pTmpOb=[pDrawArray objectAtIndex:i];
+            [[pDrawArray objectAtIndex:i] performSelector:pTmpOb->m_sDraw];
+        }
+    }
+    else
+    {
+        for (int i=0; i<ObjectCountDraw; i++) {
+
+            glLoadIdentity();
+
+            GObject *pTmpOb=[pDrawArray objectAtIndex:i];
+            [[pDrawArray objectAtIndex:i] performSelector:pTmpOb->m_sDraw];
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc {

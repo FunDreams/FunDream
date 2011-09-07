@@ -15,7 +15,7 @@
 	
 	m_iLayer = layerOb2;
 
-    GET_TEXTURE(mTextureId,@"2-09@2x.png");
+    GET_TEXTURE(mTextureId,@"button.png");
 
     mWidth  = 150;
 	mHeight = 150;
@@ -23,6 +23,19 @@
 START_QUEUE(@"Proc");
 	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 //	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
+        
+    ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
+                 LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
+                 SET_FLOAT_V(220,@"finish_Instance"),
+                 SET_FLOAT_V(400,@"Vel"));
+    
+    ASSIGN_STAGE(@"hide",@"AchiveLineFloat:",
+                 LINK_FLOAT_V(mColor.alpha,@"Instance"),
+                 SET_FLOAT_V(0,@"finish_Instance"),
+                 SET_FLOAT_V(-1,@"Vel"));
+    
+	ASSIGN_STAGE(@"Destroy",@"DestroySelf:",nil);
+
 END_QUEUE(@"Proc");
     
     GET_TEXTURE(mTextureId,m_pNameTexture);
@@ -38,12 +51,15 @@ END_QUEUE(@"Proc");
 	[super Start];
     //   [self SetTouch:YES];//интерактивность
     
+    mColor.alpha=1;
     [m_pObjMng AddToGroup:@"Bullets" Object:self];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{}
+- (void)Proc:(Processor_ex *)pProc{
+    
+}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------

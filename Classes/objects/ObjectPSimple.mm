@@ -39,7 +39,7 @@ START_QUEUE(@"Proc");
 	ASSIGN_STAGE(@"Destroy",@"DestroySelf:",nil);
 END_QUEUE(@"Proc");
     
-    GET_TEXTURE(mTextureId,@"0-09@2x.png");
+    GET_TEXTURE(mTextureId,@"button.png");
 
 //    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
  //   m_iLayerTouch=layerTouch_0;//слой касания
@@ -53,6 +53,8 @@ END_QUEUE(@"Proc");
     
     m_pCurPosition.x=((float)(RND%640)-320)*0.8f;
     m_pCurPosition.y=220;
+    
+    m_pCurAngle.z=RND%360;
     
     mColor.alpha=0.0f;
     //[self SetTouch:YES];//интерактивность

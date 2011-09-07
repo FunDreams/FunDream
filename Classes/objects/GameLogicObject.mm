@@ -67,5 +67,8 @@
 		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectPSimple%d",k] autorelease];
 		RESERV_NEW_OBJECT(@"ObjectPSimple",NameOb,nil);
 	}
+    
+    PLAY_SOUND(@"papper.wav");
+
 }
 @end

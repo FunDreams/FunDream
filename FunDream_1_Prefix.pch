@@ -4,8 +4,10 @@
 
 #ifdef __OBJC__
 
-	#define FPS
-//    #define BANNER_IAD
+    #define FPS
+    #define FADE_NO
+    #define MULTITOUCH
+//  #define BANNER_IAD
 
     #import <Foundation/Foundation.h>
     #import <UIKit/UIKit.h>
