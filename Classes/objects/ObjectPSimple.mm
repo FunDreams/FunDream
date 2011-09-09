@@ -16,8 +16,9 @@
 	m_iLayer = layerOb2;
 
  //   GET_DIM_FROM_TEXTURE(@"");
-	mWidth  = 100;
-	mHeight = 100;
+	mWidth  = 150;
+	mHeight = 150;
+    mRadius = 120;
 
 START_QUEUE(@"Proc");
 
@@ -26,11 +27,13 @@ START_QUEUE(@"Proc");
                  SET_FLOAT_V(1,@"finish_Instance"),
                  SET_FLOAT_V(1,@"Vel"));
 
+    ASSIGN_STAGE(@"PrepareMove", @"PrepareMove:", nil);
     ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
                  LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
                  SET_FLOAT_V(m_pCurPosition.y-450,@"finish_Instance"),
                  SET_FLOAT_V(-200,@"Vel"));
 
+    ASSIGN_STAGE(@"PrapareHide",@"PrapareHide:",nil);
     ASSIGN_STAGE(@"hide",@"AchiveLineFloat:",
                  LINK_FLOAT_V(mColor.alpha,@"Instance"),
                  SET_FLOAT_V(0,@"finish_Instance"),
@@ -61,6 +64,17 @@ END_QUEUE(@"Proc");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
+//------------------------------------------------------------------------------------------------------
+- (void)PrepareMove:(Processor_ex *)pProc{
+    
+    [m_pObjMng AddToGroup:@"BallUp" Object:self];
+    NEXT_STAGE;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)PrapareHide:(Processor_ex *)pProc{
+    [m_pObjMng RemoveFromGroup:@"BallUp" Object:self];
+    NEXT_STAGE;
+}
 //------------------------------------------------------------------------------------------------------
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
 

@@ -23,6 +23,7 @@
 -(void)Start;
 -(void)Update;
 
+- (void)AchiveLineFloat:(Processor_ex *)pProc;
 - (void)dealloc;
     
 @end

@@ -38,7 +38,7 @@
         CFTimeInterval time;
         time = CFAbsoluteTimeGetCurrent();
         double delta = (time - m_flastTime);
-        if( delta > 1.0f ) delta = 1.0f;
+        if( delta > 0.3f ) delta = 0.3f;
     //    if( delta < 0.001 ) delta = 0.001;
         m_flastTime=time;
         

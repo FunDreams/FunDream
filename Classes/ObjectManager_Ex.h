@@ -132,6 +132,7 @@ typedef enum tagLayerID {
 
 - (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject;
 - (void)RemoveFromGroup:(NSString*)NameGroup Object:(GObject *)pObject;
+- (void)RemoveFromGroups:(NSMutableDictionary *)NamesGroup Object:(GObject *)pObject;
 - (NSMutableArray *)GetGroup:(NSString*)NameGroup;
 	
 

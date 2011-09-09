@@ -27,7 +27,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
     Vector3D TmpVector1,TmpVector2,TmpVector3,TmpVector4,TmpVector5;
 
 	//различные скорости
-	float m_fVelMove,m_fVelFade,m_fFinish;
+	float m_fVelMove,m_fVelFade,m_fFinish,m_fPhase,m_fVelPhase;
 	
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
@@ -82,8 +82,8 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//имя объекта
 	NSMutableString *m_strName;
 
-	//имя группы
-	NSMutableString *m_strGroup;
+	//имена групп
+	NSMutableDictionary *m_Groups;
 
 	//флаг. указвает что на объект не действует глобальная пауза
 	bool m_bNonStop;
@@ -113,7 +113,10 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//ширина и высота спрайта
 	float mWidth;
 	float mHeight;
-	
+    
+    //радиус взаимодействия
+    float mRadius;
+
 	//текущий идентификатор для звука
 	UInt32 iIdSound;
 	
@@ -164,6 +167,8 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 
 //функции для обработки касаний
 - (bool)Intersect:(CGPoint)Point;
+- (bool)IntersectSphereWithOb:(GObject *)pOb;
+
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;

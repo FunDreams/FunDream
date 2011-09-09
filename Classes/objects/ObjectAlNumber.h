@@ -19,7 +19,6 @@
 	
 	int m_iCurrenNumber;
 	int m_iPlace;
-	float m_fPhase;
 	float m_fSpeedScale;
 	
 	int m_iCurrentFrame;

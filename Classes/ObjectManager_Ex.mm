@@ -88,7 +88,7 @@
 			[TmpOb->m_strName release];
 			TmpOb->m_strName = nil;
 			
-			[self RemoveFromGroup:TmpOb->m_strGroup Object:TmpOb];
+			[self RemoveFromGroups:TmpOb->m_Groups Object:TmpOb];
 		}
 	}
 	
@@ -471,6 +471,8 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject{
 	
+    if(pObject==nil)return;
+    
 	NSMutableArray *pGroup = [m_pGroups objectForKey:NameGroup];
 	
 	if(pGroup==nil){
@@ -479,11 +481,36 @@ repeate:
 		[m_pGroups setObject:pGroup forKey:NameGroup];
 	}
 	
-	for (int i=0; i<[pGroup count]; i++)
-		if (pObject==[pGroup objectAtIndex:i])return;
+    NSString *PtmpOb=[pObject->m_Groups objectForKey:NameGroup];
+    if (PtmpOb!=nil)return;
 	
-	pObject->m_strGroup= [NSString stringWithString:NameGroup];
+	NSString *pNameGroup = [NSString stringWithString:NameGroup];
+    [pObject->m_Groups setObject:pNameGroup forKey:pNameGroup];
 	[pGroup addObject:pObject];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)RemoveFromGroups:(NSMutableDictionary *)NamesGroup Object:(GObject *)pObject{
+
+    if(pObject==nil)return;
+
+	for (NSString *Pname in NamesGroup) {
+        
+        NSMutableArray *pGroup = [m_pGroups objectForKey:Pname];
+
+        if(pGroup){
+            
+            for (int i=0; i<[pGroup count]; i++)
+                if (pObject==[pGroup objectAtIndex:i]){
+                    
+                    [pGroup removeObjectAtIndex:i];
+                    
+                    NSString *PtmpOb=[pObject->m_Groups objectForKey:Pname];
+                    [pObject->m_Groups removeObjectForKey:PtmpOb];
+                    
+                    break;
+                }
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RemoveFromGroup:(NSString*)NameGroup Object:(GObject *)pObject{
@@ -498,7 +525,10 @@ repeate:
 			if (pObject==[pGroup objectAtIndex:i]){
 				
 				[pGroup removeObjectAtIndex:i];
-				pObject->m_strGroup=nil;
+                
+                NSString *PtmpOb=[pObject->m_Groups objectForKey:NameGroup];
+                [pObject->m_Groups removeObjectForKey:PtmpOb];
+
 				return;
 			}
 	}

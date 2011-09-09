@@ -93,7 +93,7 @@ va_end(argList);\
     mpType=[NSString stringWithString:@"b"];
 	mpIdPoint=(id)parPoint;
     mbLocal=NO;
-    mSize=4;
+    mSize=sizeof(bool);
     
     APPEND_STR
     

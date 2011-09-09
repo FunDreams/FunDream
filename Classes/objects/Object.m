@@ -23,6 +23,7 @@
 	m_pObjMng=m_pParent.m_pObjMng;
 	
 	m_strName= [[NSMutableString alloc] initWithString:strName];
+    m_Groups=[[NSMutableDictionary alloc] init];
 
 	m_bNonStop=NO;
 	m_bHiden=NO;
@@ -70,6 +71,7 @@
 //-------------------------------------------------------------------------		
 	mWidth = 40;
 	mHeight = 40;
+    mRadius = 40;
 
 	m_pCurScale.x=mWidth*0.5f;
 	m_pCurScale.y=mHeight*0.5f;
@@ -103,6 +105,7 @@
     
     SET_CELL(LINK_FLOAT_V(mWidth,m_strName,@"mWidth"));
     SET_CELL(LINK_FLOAT_V(mHeight,m_strName,@"mHeight"));
+    SET_CELL(LINK_FLOAT_V(mRadius,m_strName,@"mRadius"));
     
     SET_CELL(LINK_ID_V(m_pOwner,m_strName,@"m_pOwner"));
 
@@ -237,6 +240,19 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (bool)IntersectSphereWithOb:(GObject *)pOb{
+    
+    Vector3D V=Vector3DMake(m_pCurPosition.x-pOb->m_pCurPosition.x,
+                            m_pCurPosition.y-pOb->m_pCurPosition.y,0);
+    float Dist=Vector3DMagnitude(V);
+
+    if(Dist<(pOb->mRadius+mRadius)*0.5f){
+        return YES;
+    }
+    
+    return NO;
+}
+//------------------------------------------------------------------------------------------------------
 - (bool)Intersect:(CGPoint)pPoint{
 
 	CGPoint tmpPointDif=pPoint;
@@ -296,6 +312,8 @@
 	[m_pChildrenbjectsDic release];
 	[m_pChildrenbjectsArr release];
 	[m_pArrayImages release];
+    [m_Groups release];
+
 	
 	free(vertices);
 	free(texCoords);

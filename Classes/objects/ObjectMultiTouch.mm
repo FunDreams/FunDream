@@ -21,7 +21,7 @@
 START_QUEUE(@"TimeDie");
 	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 	ASSIGN_STAGE(@"TimerDie",@"Proc:",nil);
-    DELAY_STAGE(@"TimerDie", 100, 1);
+    DELAY_STAGE(@"TimerDie", 200, 1);
 END_QUEUE(@"TimeDie");
     
     GET_TEXTURE(mTextureId,m_pNameTexture);
@@ -39,9 +39,9 @@ END_QUEUE(@"TimeDie");
 }
 //------------------------------------------------------------------------------------------------------
 - (float)GetNearDist:(CGPoint)Point{
-    GObject *TmpOb=nil;
+    TmpLastNearOb=nil;
     
-    NSArray *pBullets=[m_pObjMng GetGroup:@"Bullets"];
+    NSArray *pBullets=[m_pObjMng GetGroup:@"StartBullet"];
     
     float MinDist=1000000;
     for (int i=0;i<[pBullets count];i++) {
@@ -52,7 +52,7 @@ END_QUEUE(@"TimeDie");
         
         if(Dist<MinDist){
             MinDist=Dist;
-            TmpOb=pObt;
+            TmpLastNearOb=pObt;
         }
     }
     
@@ -62,7 +62,7 @@ END_QUEUE(@"TimeDie");
 - (GObject *)GetNear:(CGPoint)Point{
     GObject *TmpOb=nil;
     
-    NSArray *pBullets=[m_pObjMng GetGroup:@"Bullets"];
+    NSArray *pBullets=[m_pObjMng GetGroup:@"StartBullet"];
     
     float MinDist=1000000;
     for (int i=0;i<[pBullets count];i++) {
@@ -80,6 +80,28 @@ END_QUEUE(@"TimeDie");
     return TmpOb;
 }
 //------------------------------------------------------------------------------------------------------
+- (CGPoint)CoppectPoint:(CGPoint)Point{
+//    GObject *TmpOb=nil;
+    CGPoint Ret=Point;
+    
+//    NSArray *pBullets=[m_pObjMng GetGroup:@"BallDown"];
+//    
+//    float MinDist=1000000;
+//    for (int i=0;i<[pBullets count];i++) {
+//        
+//        GObject *pObt=(GObject *)[pBullets objectAtIndex:i];
+//        Vector3D V=Vector3DMake(Point.x-pObt->m_pCurPosition.x,Point.y-pObt->m_pCurPosition.y,0);
+//        float Dist=Vector3DMagnitude(V);
+//        
+//        if(Dist<MinDist){
+//            MinDist=Dist;
+//            TmpOb=pObt;
+//        }
+//    }
+    
+    return Ret;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
@@ -95,6 +117,7 @@ END_QUEUE(@"TimeDie");
         }
     }
     NEXT_STAGE;
+    UPDATE;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
@@ -108,9 +131,12 @@ END_QUEUE(@"TimeDie");
 
     if([self GetNearDist:Point]>40){
         
+        Point=[self CoppectPoint:Point];
+        
         PLAY_SOUND(@"StartTouch.wav");
         CREATE_NEW_OBJECT(@"ObjectBullet", @"Bullet",
                           SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
+
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -119,6 +145,9 @@ END_QUEUE(@"TimeDie");
     GObject *pObject = [self GetNear:Point];
 
     if(pObject!=nil){
+
+        Point=[self CoppectPoint:Point];
+        
         OBJECT_SET_PARAMS(NAME(pObject),
                           SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
     }
@@ -128,34 +157,28 @@ END_QUEUE(@"TimeDie");
         
     GObject *pObject = [self GetNear:Point];
 
-    [m_pObjMng RemoveFromGroup:@"Bullets" Object:pObject];
+    [m_pObjMng RemoveFromGroup:@"StartBullet" Object:pObject];
 
     if(m_pParent->m_CountTouch==[m_pParent->mpCurtouches count]){
         
         if(pObject!=nil){SET_STAGE_EX(NAME(pObject),@"Proc",@"Move");}
         
         NSArray * pBullets=[m_pObjMng GetGroup:@"MustDie"];
-        
-        for (int i=0;i<[pBullets count];i++) {
+
+        int iCount=[pBullets count];
+        for (int i=0;i<iCount;i++) {
             
-            GObject *pObt=(GObject *)[pBullets objectAtIndex:i];
+            GObject *pObt=(GObject *)[pBullets objectAtIndex:0];
             
             SET_STAGE_EX(NAME(pObt),@"Proc",@"Move");
             [m_pObjMng RemoveFromGroup:@"MustDie" Object:pObt];
         }
-
     }
-    else{
-
-        [m_pObjMng AddToGroup:@"MustDie" Object:pObject];
-        NEXT_STAGE_EX(NAME(self),@"TimeDie");
+    else
+    {
+        SET_STAGE_EX(NAME(self),@"TimeDie",@"TimerDie");
+        if(pObject!=nil)[m_pObjMng AddToGroup:@"MustDie" Object:pObject];
     }
-}
-//------------------------------------------------------------------------------------------------------
-- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    GObject *pObject = [self GetNear:Point];
-    
-    if(pObject!=nil){DESTROY_OBJECT(pObject);}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc{[super dealloc];}

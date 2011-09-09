@@ -13,6 +13,7 @@
 
 /** Шаблонный класс для объектов**/
 @interface ObjectMultiTouch : GObject {
+    GObject *TmpLastNearOb;
 }
 
 /** Инициализирует объект **/
@@ -25,6 +26,7 @@
 
 - (GObject *)GetNear:(CGPoint)Point;
 - (float)GetNearDist:(CGPoint)Point;
+- (CGPoint)CoppectPoint:(CGPoint)Point;
 
 - (void)dealloc;
     
