@@ -14,6 +14,7 @@
 	NSString *mpName;
 	NSString *mpType;
 	id mpIdPoint;
+	id *mppIdPoint;
     bool mbLocal;
     int mSize;
 }
@@ -38,7 +39,7 @@
 - (id)Link_Color:(Color3D *)parPoint withKey:(id)sKey,...;
 - (id)Set_Color:(Color3D)Value withKey:(id)sKey,...;
 
-- (id)Link_Id:(id)parPoint withKey:(id)sKey,...;
+- (id)Link_Id:(id *)parPoint withKey:(id)sKey,...;
 
 - (id)Link_String:(NSString *)parPoint withKey:(id)sKey,...;
 - (id)Set_String:(NSString *)Value withKey:(id)sKey,...;

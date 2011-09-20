@@ -83,7 +83,7 @@ mHeight=pNum->m_fHeight;}
 #define MAIN_CONTROLLER m_pObjMng->m_pParent
 
 #define SET_MIRROR(pfdestY,pfsourceX,pfSourceF2,pfSourceF1,pfDestF2,pfDestF1)    \
-pfdestY=((pfsourceX-pfSourceF1)*((pfDestF1-pfDestF2)/(pfSourceF1-pfSourceF2)))+pfDestF1;
+pfdestY=(((float)pfsourceX-(float)pfSourceF1)*(((float)pfDestF1-(float)pfDestF2)/((float)pfSourceF1-(float)pfSourceF2)))+(float)pfDestF1;
 
 #define LOCK_TOUCH m_pObjMng->m_pParent->m_bTouchGathe=YES;
 
@@ -140,7 +140,7 @@ WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 #define LINK_COLOR_V(VALUE,...) [[UniCell alloc] Link_Color:(Color3D *)&VALUE withKey:__VA_ARGS__,nil]
 #define SET_COLOR_V(VALUE,...) [[UniCell alloc] Set_Color:VALUE withKey:__VA_ARGS__,nil]
 
-#define LINK_ID_V(VALUE,...) [[UniCell alloc] Link_Id:VALUE withKey:__VA_ARGS__,nil]
+#define LINK_ID_V(VALUE,...) [[UniCell alloc] Link_Id:&VALUE withKey:__VA_ARGS__,nil]
 #define LINK_STRING_V(VALUE,...) [[UniCell alloc] Link_String:VALUE withKey:__VA_ARGS__,nil]
 #define SET_STRING_V(VALUE,...) [[UniCell alloc] Set_String:VALUE withKey:__VA_ARGS__,nil]
 

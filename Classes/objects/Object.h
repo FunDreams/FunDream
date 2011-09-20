@@ -39,7 +39,8 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	
 	//без смещения
 	bool m_bNoOffset;
-	
+    float m_fScaleOffset;
+    
 	//флаг удаления
 	bool m_bDeleted;
 
@@ -147,6 +148,12 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 //функция установки цвета
 - (void)SetColor:(Color3D)color;
 
+//установить сдвиг по текстуре
+- (void)SetOffsetTexture:(Vector3D)vOffset;
+
+//установить масштаб текстуры
+- (void)SetScaleTexture:(Vector3D)vStartScale SecondVector:(Vector3D)vEndScale;
+
 //установление функции отрисовки
 - (void)SetDrawSelector:(NSString *)pNameSel;
 
@@ -197,6 +204,9 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 
 - (void)InitAnimateLoop:(ProcStage_ex *)pStage;//замкнутая анимация
 - (void)AnimateLoop:(Processor_ex *)pProc;
+
+- (void)InitOffsetTexLoop:(ProcStage_ex *)pStage;//замкнутая анимация сдвига текстуры
+- (void)OffsetTexLoop:(Processor_ex *)pProc;
 
 - (void)Idle:(Processor_ex *)pProc;
 

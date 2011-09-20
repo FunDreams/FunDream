@@ -84,6 +84,8 @@ END_QUEUE(@"TimeDie");
 //    GObject *TmpOb=nil;
     CGPoint Ret=Point;
     
+    Ret.y+=100;
+    
 //    NSArray *pBullets=[m_pObjMng GetGroup:@"BallDown"];
 //    
 //    float MinDist=1000000;

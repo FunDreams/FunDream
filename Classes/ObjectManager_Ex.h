@@ -37,8 +37,13 @@ typedef enum tagLayerID {
 	
 	layerInvisible,
 	
+    layerOb4,
+	layerOb5,
+	layerOb6,
+
 	layerInterfaceSpace5,
 	layerInterfaceSpace6,
+	layerInterfaceSpace7,
 
 	layerTemplet,
 } EGP_LayerID;

@@ -9,35 +9,30 @@
 
 #import <Foundation/Foundation.h>
 #import "Box2D.h"
-#import "Object.h"
-
-//макрос для названия объекта, просто переименуйте его что бы получить новый объект
-#define NAME_TEMPLETS_OBJECT ObjectSymbol
+#import "StaticObject.h"
 
 /** Шаблонный класс для объектов**/
-@interface NAME_TEMPLETS_OBJECT : GObject {
+@interface ObjectSymbol : StaticObject {
 	int m_iCurrentSym;
 	
-	float m_fPhase;
 	float m_fSpeedScale;    
-    
-    int m_iNextStage;
-    
+        
     float m_fOffsetPosYTmp;
     
     float m_fRotateVel;
     Vector3D m_Vvelosity;
+    
+    NSMutableString *m_strStartStage;
+    NSMutableString *m_strNextStage;
+    
+    int m_iStartTexture;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-- (void)GetParams:(CParams *)Parametrs;
-- (void)SetParams:(CParams *)Parametrs;
-
 /** **/
 -(void)dealloc;
 -(void)Start;
--(void)Move;
 
 @end

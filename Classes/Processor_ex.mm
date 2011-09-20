@@ -41,7 +41,6 @@
     if([pParent->m_pObject respondsToSelector:InitSel]){
         [pParent->m_pObject performSelector:InitSel withObject:self];
     }
-
 }
 //-------------------------------------------------------------------------------------------
 - (void)dealloc {[super dealloc];}

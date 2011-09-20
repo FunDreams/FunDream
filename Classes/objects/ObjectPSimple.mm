@@ -16,9 +16,9 @@
 	m_iLayer = layerOb2;
 
  //   GET_DIM_FROM_TEXTURE(@"");
-	mWidth  = 150;
-	mHeight = 150;
-    mRadius = 120;
+	mWidth  = 100;
+	mHeight = 100;
+    mRadius = 90;
 
 START_QUEUE(@"Proc");
 
@@ -42,7 +42,7 @@ START_QUEUE(@"Proc");
 	ASSIGN_STAGE(@"Destroy",@"DestroySelf:",nil);
 END_QUEUE(@"Proc");
     
-    GET_TEXTURE(mTextureId,@"button.png");
+    GET_TEXTURE(mTextureId,@"Bullet_Up.png");
 
 //    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
  //   m_iLayerTouch=layerTouch_0;//слой касания
@@ -57,10 +57,13 @@ END_QUEUE(@"Proc");
     m_pCurPosition.x=((float)(RND%640)-320)*0.8f;
     m_pCurPosition.y=220;
     
-    m_pCurAngle.z=RND%360;
-    
+ //   m_pCurAngle.z=RND%360;
+
+    mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
     mColor.alpha=0.0f;
     //[self SetTouch:YES];//интерактивность
+    
+    SET_STAGE_EX(NAME(self), @"Proc", @"Show");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -78,7 +81,7 @@ END_QUEUE(@"Proc");
 //------------------------------------------------------------------------------------------------------
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
 
-    m_pCurAngle.z+=DELTA*10;
+//    m_pCurAngle.z+=DELTA*10;
     [super AchiveLineFloat:pProc];
 }
 //------------------------------------------------------------------------------------------------------

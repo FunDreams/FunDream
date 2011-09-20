@@ -13,9 +13,29 @@
 
 /** Шаблонный класс для объектов**/
 @interface ObjectAnimateStatic : GObject {
+    float m_fStartDelay;
     int m_iOffsetFrame;
     float m_fVelFrame;
     bool m_bDimFromTexture;
+
+    NSMutableString *m_strStartStage;
+    
+    float InstFrameFloat;
+
+    int m_iStartFrame;
+    int m_iFinishFrame;
+
+
+    Vector3D m_vDirect;
+    float m_fVelOffset;
+    float m_fMagnitude;
+
+    Vector3D m_vStartOffsetTex;
+    Vector3D m_vCurrentOffset;
+    Vector3D m_vEndOffsetTex;
+
+    Vector3D m_vStartTex;
+    Vector3D m_vEndTex;
 }
 
 /** Инициализирует объект **/

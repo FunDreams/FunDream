@@ -15,11 +15,11 @@
 	
 	m_iLayer = layerOb2;
 
-    GET_TEXTURE(mTextureId,@"button.png");
+    GET_TEXTURE(mTextureId,@"Bullet_Down.png");
 
-    mWidth  = 150;
-	mHeight = 150;
-    mRadius = 120;
+	mWidth  = 100;
+	mHeight = 100;
+    mRadius = 90;
 
 START_QUEUE(@"Proc");
 	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
@@ -29,7 +29,7 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
                  LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
                  SET_FLOAT_V(220,@"finish_Instance"),
-                 SET_FLOAT_V(400,@"Vel"));
+                 SET_FLOAT_V(200,@"Vel"));
 
     ASSIGN_STAGE(@"PrapareHide",@"PrapareHide:",nil);
     ASSIGN_STAGE(@"hide",@"AchiveLineFloat:",
@@ -56,6 +56,10 @@ END_QUEUE(@"Proc");
     
     mColor.alpha=1;
     [m_pObjMng AddToGroup:@"StartBullet" Object:self];
+    
+    mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
+    
+    SET_STAGE_EX(NAME(self), @"Proc", @"Idle");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -71,6 +75,18 @@ END_QUEUE(@"Proc");
     NEXT_STAGE;
 }
 //------------------------------------------------------------------------------------------------------
+- (bool)IntersectBullet:(GObject *)pOb{
+    
+    Vector3D V=Vector3DMake(m_pCurPosition.x-pOb->m_pCurPosition.x,
+                            m_pCurPosition.y-pOb->m_pCurPosition.y,0);
+    
+    if(fabs(V.x)<30 && fabs(V.y)<60){
+        return YES;
+    }
+            
+    return NO;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
     [super AchiveLineFloat:pProc];
     
@@ -79,7 +95,23 @@ END_QUEUE(@"Proc");
         
         for (GObject *pOb in pArray) {
             
-            if([self IntersectSphereWithOb:pOb]){
+            if([self IntersectBullet:pOb]){
+                
+                if(fabs(m_pCurPosition.x-pOb->m_pCurPosition.x)<10){
+                    Color3D tColor=Color3DMake(1.0f, 0, 0, 1.0f);
+                    OBJECT_SET_PARAMS(NAME(pOb),
+                                      SET_COLOR_V(tColor,@"mColor"));
+                    mColor=tColor;
+                    
+                    float TmpF=(m_pCurPosition.x+pOb->m_pCurPosition.x)*0.5f;
+                    
+                    float Deltaf=m_pCurPosition.x-TmpF;
+                    m_pCurPosition.x-=Deltaf;
+
+                    Deltaf=pOb->m_pCurPosition.x-TmpF;
+                    pOb->m_pCurPosition.x-=Deltaf;
+                }
+                
                 NEXT_STAGE;
                 NEXT_STAGE_EX(NAME(pOb), @"Proc");
                 break;

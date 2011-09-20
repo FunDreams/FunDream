@@ -187,10 +187,11 @@ va_end(argList);\
     return self;
 }
 //-----------------------------------------------------------------------------------
-- (id)Link_Id:(id)parPoint withKey:(id)sKey, ...{
+- (id)Link_Id:(id *)parPoint withKey:(id)sKey, ...{
     
     mpType=[NSString stringWithString:@"id"];
-	mpIdPoint=[parPoint retain];
+	mpIdPoint=[*parPoint retain];
+    mppIdPoint=parPoint;
     mbLocal=NO;
     mSize=sizeof(id);
     
@@ -341,6 +342,7 @@ va_end(argList);\
             }
             else if(pCellTmp->mpType==@"id"){
                 pCellTmp->mpIdPoint=[pCell->mpIdPoint retain];
+                *(pCellTmp->mppIdPoint)=pCellTmp->mpIdPoint;
             }
             else {
                 memcpy(pCellTmp->mpIdPoint, pCell->mpIdPoint, pCellTmp->mSize);

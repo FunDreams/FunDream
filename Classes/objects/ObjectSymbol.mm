@@ -8,26 +8,13 @@
 
 #import "ObjectSymbol.h"
 
-@implementation NAME_TEMPLETS_OBJECT
+@implementation ObjectSymbol
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	[super Init:Parent WithName:strName];
 	
 	m_iLayer = layerInterfaceSpace5;
-	
-	for (int i=0; i<11; i++) {
-			
-		NSString *pstr;
-		
-		if (i==10) pstr=[NSString stringWithFormat:@"n_c.png"];
-		else pstr=[NSString stringWithFormat:@"n_%d.png", i];
-		
-		UInt32 TmpIdTexture=-1;
-		LOAD_TEXTURE(TmpIdTexture,pstr);
-		
-		[m_pArrayImages addObject:[NSNumber numberWithInt:TmpIdTexture]];
-	}
-		
+
 	mWidth  = 50;
 	mHeight = 50;
 
@@ -35,47 +22,58 @@
 	m_fPhase=0;
     m_fOffsetPosYTmp=0;
 	
-START_PROC(@"Proc");
-	UP_SELECTOR(@"e01",@"Idle:");
-	UP_SELECTOR(@"e02",@"ScaleWave:");
+START_QUEUE(@"Move");
+    ASSIGN_STAGE(@"Move",@"Move:",nil);
+END_QUEUE(@"Move");
 
-	UP_SELECTOR(@"e03",@"Jump:");
+START_QUEUE(@"Proc");
+	ASSIGN_STAGE(@"Idle",@"Idle:", nil);
+
+    ASSIGN_STAGE(@"ScaleWave",@"ScaleWave:", nil);
+
+    ASSIGN_STAGE(@"Jump",@"Jump:", nil);
     
-    UP_SELECTOR(@"a04",@"InitFall:");
-    UP_SELECTOR(@"e05",@"Fall:");
+    ASSIGN_STAGE(@"Fall",@"Fall:", nil);
 
-END_PROC(@"Proc");
+END_QUEUE(@"Proc");
 
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)GetParams:(CParams *)Parametrs{
-	[super GetParams:Parametrs];
-	
-	COPY_OUT_INT(m_iCurrentSym);
+- (void)LinkValues{
+    [super LinkValues];
+    
+    m_strStartStage=[NSMutableString stringWithString:@"Animate"];
+    SET_CELL(LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage"));
+
+    SET_CELL(LINK_INT_V(m_iCurrentSym,m_strName,@"m_iCurrentSym"));
+
+    m_strNextStage=[NSMutableString stringWithString:@"Animate"];
+    SET_CELL(LINK_STRING_V(m_strNextStage,m_strName,@"m_strNextStage"));
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetParams:(CParams *)Parametrs{
-	[super SetParams:Parametrs];
-	
-	COPY_IN_INT(m_iCurrentSym);
-    COPY_IN_INT(m_iNextStage);
+- (void)Update{
+    [self SetPosWithOffsetOwner];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 	
 	[super Start];
-	mTextureId = [[m_pArrayImages objectAtIndex:m_iCurrentSym] intValue];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Move{
-	mTextureId = [[m_pArrayImages objectAtIndex:m_iCurrentSym] intValue];
     
-  [self SetPosWithOffsetOwner];
-   m_pCurPosition.y+=m_fOffsetPosYTmp;
+    GET_TEXTURE(m_iStartTexture,m_pNameTexture);
+    mTextureId = m_iStartTexture;
+    [m_strNextStage setString:@""];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Jump:(Processor *)pProc{
+- (void)Move:(Processor_ex *)pProc{
+    
+    [self Update];
+
+    mTextureId = m_iStartTexture+m_iCurrentSym;
+    m_pCurPosition.y+=m_fOffsetPosYTmp;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Jump:(Processor_ex *)pProc{
     
     m_fPhase+=DELTA*m_fSpeedScale;
     float OffsetRotate=5.0f*sin(m_fPhase/2);
@@ -86,17 +84,18 @@ END_PROC(@"Proc");
     
     m_pCurScale.x=mWidth*0.5f+OffsetScale;
     m_pCurScale.y=mHeight*0.5f-OffsetScale;		
-
-    if(m_iNextStage!=0 && fabs(OffsetScale)<0.45){
-        SET_STAGE_EX(NAME(self), @"Proc", m_iNextStage);
-        m_iNextStage=0;
+    
+    if([m_strNextStage length]>0 && fabs(OffsetScale)<0.45){
+        
+        SET_STAGE_EX(NAME(self), @"Proc", m_strNextStage);
+        [m_strNextStage setString:@""];
         m_fPhase=0;
         m_fOffsetPosYTmp=0;
         m_pCurAngle.z=0;
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)ScaleWave:(Processor *)pProc{
+- (void)ScaleWave:(Processor_ex *)pProc{
     
     m_fPhase+=DELTA*m_fSpeedScale;
 	
@@ -105,23 +104,22 @@ END_PROC(@"Proc");
 	m_pCurScale.x=mWidth*0.5f+OffsetScale;
 	m_pCurScale.y=mHeight*0.5f+OffsetScale;
     
-    if(m_iNextStage!=0 && fabs(OffsetScale)<0.1){
-        SET_STAGE_EX(NAME(self), @"Proc", m_iNextStage);
-        m_iNextStage=0;
+    if([m_strNextStage length]>0 && fabs(OffsetScale)<0.1){
+        
+        SET_STAGE_EX(NAME(self), @"Proc", m_strNextStage);
+        [m_strNextStage setString:@""];
         m_fPhase=0;
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)InitFall:(Processor *)pProc{
+- (void)PrepareFall:(Processor_ex *)pProc{
     
     m_fRotateVel=RND%400;
     m_Vvelosity=Vector3DMake(0,(float)(RND%200)-100,0);
     m_pOwner=nil;
-    
-    NEXT_STAGE;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Fall:(Processor *)pProc{
+- (void)Fall:(Processor_ex *)pProc{
     
     m_Vvelosity.y-=DELTA*1000;
     m_pCurAngle.z+=DELTA*m_fRotateVel;
@@ -129,13 +127,12 @@ END_PROC(@"Proc");
     m_pCurPosition.x+=DELTA*m_Vvelosity.x;
     m_pCurPosition.y+=DELTA*m_Vvelosity.y;
     
-    if(m_pCurPosition.y<-500){
+    if(m_pCurPosition.y<-700){
         DESTROY_OBJECT(self);
-        SET_STAGE_EX(NAME(self), @"Proc", 0);
+        SET_STAGE_EX(NAME(self), @"Proc", @"Idle");
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc {[super dealloc];}
 //------------------------------------------------------------------------------------------------------
 @end
-#undef NAME_TEMPLETS_OBJECT

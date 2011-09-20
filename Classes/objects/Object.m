@@ -27,7 +27,9 @@
 
 	m_bNonStop=NO;
 	m_bHiden=NO;
+    
 	m_bNoOffset=NO;
+    m_fScaleOffset=1.0f;
 
 	m_pOwner = nil;
 	m_pChildrenbjectsDic = [[NSMutableDictionary alloc] init];
@@ -109,6 +111,7 @@
     
     SET_CELL(LINK_ID_V(m_pOwner,m_strName,@"m_pOwner"));
 
+    SET_CELL(LINK_FLOAT_V(m_fScaleOffset,m_strName,@"m_fScaleOffset"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -138,6 +141,30 @@
 	}
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetOffsetTexture:(Vector3D)vOffset {
+    
+    for (int i=0; i<m_iCountVertex; i++) {
+		
+        texCoords[i*2]-=vOffset.x;
+		texCoords[i*2+1]-=vOffset.y;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetScaleTexture:(Vector3D)vStartScale SecondVector:(Vector3D)vEndScale {
+
+    texCoords[0]=vStartScale.x;
+    texCoords[1]=vEndScale.y;
+    
+    texCoords[2]=vEndScale.x;
+    texCoords[3]=vEndScale.y;
+    
+    texCoords[4]=vStartScale.x;
+    texCoords[5]=vStartScale.y;
+    
+    texCoords[6]=vEndScale.x;
+    texCoords[7]=vStartScale.y;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
 	
 	[self SetColor:mColor];
@@ -148,8 +175,8 @@
    	
 	glBindTexture(GL_TEXTURE_2D, mTextureId);
 	
-	glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x,
-				 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y,
+	glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+				 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
 				 m_pCurPosition.z);
 	
 	//	glRotatef(m_pCurAngle.x, 1, 0, 0);
@@ -454,6 +481,7 @@
     pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
     if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
 }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - (void)Animate:(Processor_ex *)pProc{
     
     ProcStage_ex * pStage=pProc->m_CurStage;
@@ -503,6 +531,7 @@
     pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
     if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
 }
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - (void)AnimateLoop:(Processor_ex *)pProc{
     
     ProcStage_ex * pStage=pProc->m_CurStage;
@@ -570,7 +599,7 @@
     pStage->FloatsValues[2]=GET_FLOAT_V(NameParam);
     if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
 }
-//////////
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
 
     ProcStage_ex * pStage=pProc->m_CurStage;
@@ -587,6 +616,71 @@
 		(*pStage->FloatsValues[0]) = (*pStage->FloatsValues[1]);
         NEXT_STAGE;
     }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)InitOffsetTexLoop:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@vCurrentOffset",TmpStr];
+    pStage->VectorsValues[0]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@vDirect",TmpStr];
+    pStage->VectorsValues[1]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@vStartOffsetTex",TmpStr];
+    pStage->VectorsValues[2]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@vEndOffsetTex",TmpStr];
+    pStage->VectorsValues[3]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[3]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    
+    NameParam=[NSString stringWithFormat:@"%@fVelOffset",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@fMagnitude",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)OffsetTexLoop:(Processor_ex *)pProc{
+    
+    ProcStage_ex * pStage=pProc->m_CurStage;
+    
+    Vector3D m_vDeltaOffset;
+    
+    m_vDeltaOffset.x = (*pStage->VectorsValues[1]).x*(*pStage->FloatsValues[0])*DELTA;
+    m_vDeltaOffset.y = (*pStage->VectorsValues[1]).y*(*pStage->FloatsValues[0])*DELTA;
+    
+    (*pStage->VectorsValues[0]).x += m_vDeltaOffset.x;
+    (*pStage->VectorsValues[0]).y += m_vDeltaOffset.y;
+    
+	Vector3D Dir2=Vector3DMake((*pStage->VectorsValues[0]).x-(*pStage->VectorsValues[2]).x,
+                               (*pStage->VectorsValues[0]).y-(*pStage->VectorsValues[2]).y,0);
+    
+	float Magnitude2 = sqrtf(Dir2.x*Dir2.x+Dir2.y*Dir2.y);
+	
+	if(Magnitude2>=(*pStage->FloatsValues[1]))
+	{        
+        Vector3D DirBack=Vector3DMake((*pStage->VectorsValues[2]).x-(*pStage->VectorsValues[3]).x,
+                                      (*pStage->VectorsValues[2]).y-(*pStage->VectorsValues[3]).y,0);
+        
+        (*pStage->VectorsValues[0]).x += DirBack.x;
+        (*pStage->VectorsValues[0]).y += DirBack.y;
+        
+        [self SetOffsetTexture:DirBack];
+        [self SetOffsetTexture:m_vDeltaOffset];
+	}    
+    else [self SetOffsetTexture:m_vDeltaOffset];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Achive4DColorStatic:(Processor_ex *)pProc{
@@ -780,7 +874,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateScreen:(Processor_ex *)pProc{UPDATE;NEXT_STAGE;}
 //------------------------------------------------------------------------------------------------------
-- (void)DestroySelf:(Processor_ex *)pProc{DESTROY_OBJECT(self);NEXT_STAGE;}
+- (void)DestroySelf:(Processor_ex *)pProc{DESTROY_OBJECT(self);}
 //------------------------------------------------------------------------------------------------------
 - (void)DestroySelfUpdate:(Processor_ex *)pProc{DESTROY_OBJECT(self);UPDATE;NEXT_STAGE;}
 //------------------------------------------------------------------------------------------------------
@@ -802,6 +896,15 @@
     if(pProc->m_CurStage->m_pTime<=0){
         
         pProc->m_CurStage->m_selector=pProc->m_CurStage->m_selectorSecond;
+        
+        NSString *TmpStrSelPrepare=[NSString stringWithFormat:@"Prepare%@",
+                                    NSStringFromSelector(pProc->m_CurStage->m_selector)];
+        
+        SEL InitSel=NSSelectorFromString(TmpStrSelPrepare);
+        
+        if([self respondsToSelector:InitSel]){
+            [self performSelector:InitSel withObject:self];
+        }
     }
 }
 //функции-----------------------------------------------------------------------------------------------

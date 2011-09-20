@@ -11,6 +11,8 @@
 #import "GLView.h"
 #import <iAd/iAd.h>
 
+#import <CoreMotion/CoreMotion.h>
+
 #define MAX_NUM_TEXTURE 600
 //------------------------------------------------------------------------------------------------------
 @interface TextureContainer : NSObject {
@@ -33,6 +35,9 @@
 @interface MainController : UIViewController <UIAccelerometerDelegate,ADBannerViewDelegate> {
 @public
 	
+    NSSet *mpCurtouches;
+    CMMotionManager *motionManager;
+
 #ifdef BANNER_IAD
 	BOOL bannerIsVisible;
 	ADBannerView *adView;
@@ -64,8 +69,6 @@
 	NSMutableDictionary* m_pTextureList;
 
 	int m_CountTouch;
-    NSSet* mpCurtouches;
-    UIEvent* mpCurEvent;
 	
 	UIInterfaceOrientation previousOrientation;
 
@@ -78,7 +81,10 @@
 	//смещение для отображения
 	Vector3D m_vOffset;
     
+    //вектора для акселерометра и гироскопа
     Vector3D m_vAccel;
+    Vector3D m_vRYawPitchRoll;
+    bool m_bMotionMashine;
 
 	GLuint	texture[MAX_NUM_TEXTURE];
 }

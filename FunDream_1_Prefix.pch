@@ -4,8 +4,8 @@
 
 #ifdef __OBJC__
 
- //   #define FPS
-    #define FADE_NO
+    #define FPS
+ // #define FADE_NO
     #define MULTITOUCH
 //  #define BANNER_IAD
 

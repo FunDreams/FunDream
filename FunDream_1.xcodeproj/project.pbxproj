@@ -28,6 +28,7 @@
 		18617777140D3BCB003C53F3 /* Mega_tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 18617774140D3BCB003C53F3 /* Mega_tree.m */; };
 		18617778140D3BCB003C53F3 /* ObjectManager_Ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18617776140D3BCB003C53F3 /* ObjectManager_Ex.mm */; };
 		1861777B140D3BE0003C53F3 /* Processor_ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1861777A140D3BE0003C53F3 /* Processor_ex.mm */; };
+		186866481420C5B9005DCA68 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186866471420C5B9005DCA68 /* CoreMotion.framework */; };
 		187E228F1165E9CB00EA912F /* SoundEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187E228D1165E9CB00EA912F /* SoundEngine.cpp */; };
 		187E22A61165EC3200EA912F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22A51165EC3200EA912F /* CoreAudio.framework */; };
 		187E22CE1165EC7600EA912F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22CD1165EC7600EA912F /* AudioToolbox.framework */; };
@@ -133,6 +134,7 @@
 		18617776140D3BCB003C53F3 /* ObjectManager_Ex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = ObjectManager_Ex.mm; sourceTree = "<group>"; };
 		18617779140D3BE0003C53F3 /* Processor_ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor_ex.h; sourceTree = "<group>"; };
 		1861777A140D3BE0003C53F3 /* Processor_ex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Processor_ex.mm; sourceTree = "<group>"; };
+		186866471420C5B9005DCA68 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		187E228D1165E9CB00EA912F /* SoundEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundEngine.cpp; sourceTree = "<group>"; };
 		187E228E1165E9CB00EA912F /* SoundEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEngine.h; sourceTree = "<group>"; };
 		187E22A51165EC3200EA912F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -262,6 +264,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				186866481420C5B9005DCA68 /* CoreMotion.framework in Frameworks */,
 				1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */,
 				1DF5F4E00D08C38300B7A737 /* UIKit.framework in Frameworks */,
 				288765FD0DF74451002DB57D /* CoreGraphics.framework in Frameworks */,
@@ -432,6 +435,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				186866471420C5B9005DCA68 /* CoreMotion.framework */,
 				1890156C1291684E0027418F /* MKStoreKit */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				187E228C1165E9CB00EA912F /* AudioSupport */,
@@ -778,7 +782,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "facebook-iphone-sdk/src";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A6578CF4-91E5-4B99-A93A-78A5E48019E1";
 				SDKROOT = iphoneos;
@@ -860,6 +864,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "facebook-iphone-sdk/src";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DTARGET_OS_IPHONE";
 				PREBINDING = NO;
@@ -880,7 +885,7 @@
 				HEADER_SEARCH_PATHS = "facebook-iphone-sdk/src";
 				INFOPLIST_EXPAND_BUILD_SETTINGS = YES;
 				INFOPLIST_FILE = "FunDreams-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = YES;
 				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CB00DAA7-3685-4E33-BAFC-A5D78CEB2C90";

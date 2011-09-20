@@ -8,8 +8,8 @@
 //частота обновления акселерометра
 #define kAccelerometerFrequency 10
 
-#include <sys/types.h>
-#include <sys/sysctl.h>
+#import <sys/types.h>
+#import <sys/sysctl.h>
 //------------------------------------------------------------------------------------------------------
 @implementation TextureContainer
 
@@ -113,6 +113,14 @@
 #ifdef FADE_NO
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 #endif
+
+    motionManager = [[CMMotionManager alloc] init];
+    [motionManager setGyroUpdateInterval:1.0 / kAccelerometerFrequency];  
+    
+    if(motionManager.isDeviceMotionAvailable){
+        [motionManager startDeviceMotionUpdates];
+        m_bMotionMashine=YES;
+    }
     
 	m_pObjMng = [[CObjectManager alloc] Init:self];
 
@@ -252,12 +260,13 @@ FullName:(NSString *)FullNameSound
 - (void)SelfMove:(double)DeltaTime{
 
     NSNumber *NumDelta = [NSNumber numberWithDouble:DeltaTime];
- 	[m_pObjMng performSelector:m_SCurrentSel withObject:NumDelta];	
+ 	[m_pObjMng performSelector:m_SCurrentSel withObject:NumDelta];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc {
 	
 	[m_pObjMng release];
+    [motionManager release];
 	
 	NSEnumerator *enumerator = [m_pSoundList objectEnumerator];
 	NSNumber *TmpOb;
@@ -323,6 +332,9 @@ FullName:(NSString *)FullNameSound
 	[self AddSubview:pView withLayer: iLayerNum];
 }
 //------------------------------------------------------------------------------------------------------
+//- (void)update:(ccTime)delta{
+//}
+//------------------------------------------------------------------------------------------------------
 // UIAccelerometerDelegate method, called when the device accelerates.
 - (void)accelerometer:(UIAccelerometer *)accelerometer didAccelerate:(UIAcceleration *)acceleration {
 	//NSLog(@"x: %f, y: %f", acceleration.x, acceleration.y);
@@ -345,6 +357,19 @@ FullName:(NSString *)FullNameSound
     }
     
     m_vAccel.z=acceleration.z;
+    
+    if(m_bMotionMashine){
+    
+        CMDeviceMotion *deviceMotion = motionManager.deviceMotion;      
+        CMAttitude *attitude = deviceMotion.attitude;
+        
+        m_vRYawPitchRoll.x=attitude.roll;
+        m_vRYawPitchRoll.y=attitude.yaw;
+        m_vRYawPitchRoll.z=attitude.pitch;
+        
+ //       NSLog(@"Roll:%.2f pitch:%.2f yaw:%.2f",
+ //             m_vRYawPitchRoll.x, m_vRYawPitchRoll.y,m_vRYawPitchRoll.z);
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ConvPoint:(CGPoint *)pPoint{
@@ -375,11 +400,8 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
-    mpCurtouches=touches;
-    mpCurEvent=event;
-
-    NSSet *allTouches = [event allTouches];
-    m_CountTouch=[allTouches count];
+    mpCurtouches = [event allTouches];
+    m_CountTouch=[touches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -391,12 +413,9 @@ FullName:(NSString *)FullNameSound
             if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
                 continue;
             
-     //       m_CountTouch=0;
             for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
-                
-         //       m_CountTouch++;
 
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                     {[TmpOb touchesBegan:touch WithPoint:tmpPoint];}
@@ -404,31 +423,24 @@ FullName:(NSString *)FullNameSound
                 
             }
             
-//            if(m_CountTouch>1){
-//                int m=0;
-//            }
-
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
+    
     mpCurtouches=nil;
-    mpCurEvent=nil;
+    m_CountTouch=0;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
-    mpCurtouches=touches;
-    mpCurEvent=event;
-
-    NSSet *allTouches = [event allTouches];
-    m_CountTouch=[allTouches count];
+    mpCurtouches = [event allTouches];
+    m_CountTouch=[touches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
         NSEnumerator *enumerator = [pDic objectEnumerator];
         GObject *TmpOb;
         
-   //     m_CountTouch=0;
         while ((TmpOb = [enumerator nextObject])) {
             
             if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
@@ -437,40 +449,30 @@ FullName:(NSString *)FullNameSound
             for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
-                
-           //     m_CountTouch++;
-                                
+                                                
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesMoved:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesMovedOut:touch WithPoint:tmpPoint];}
                 
             }
-            
-//            if(m_CountTouch>1){
-//                int m=0;
-//            }
 
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
+    
     mpCurtouches=nil;
-    mpCurEvent=nil;
+    m_CountTouch=0;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 
-    mpCurtouches=touches;
-    mpCurEvent=event;
-
-    NSSet *allTouches = [event allTouches];
-    m_CountTouch=[allTouches count];
+    mpCurtouches = [event allTouches];
+    m_CountTouch=[touches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
         NSEnumerator *enumerator = [pDic objectEnumerator];
         GObject *TmpOb;
-                
-   //     m_CountTouch=0;
 
         while ((TmpOb = [enumerator nextObject])) {
             
@@ -480,8 +482,6 @@ FullName:(NSString *)FullNameSound
             for (UITouch *touch in touches) {
                 CGPoint tmpPoint = [touch locationInView:self.view];
                 [self ConvPoint:&tmpPoint];
-                
-        //        m_CountTouch++;
                                 
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesEnded:touch WithPoint:tmpPoint];}
@@ -489,15 +489,12 @@ FullName:(NSString *)FullNameSound
                 
             }
             
-//            if(m_CountTouch>1){
-//                int m=0;
-//            }
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
         }
     }
     
     mpCurtouches=nil;
-    mpCurEvent=nil;
+    m_CountTouch=0;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)touchesCancelled:(NSSet *)touches withEvent:(UIEvent *)event{

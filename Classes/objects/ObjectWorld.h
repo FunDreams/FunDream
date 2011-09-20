@@ -23,6 +23,8 @@
 -(void)Start;
 -(void)Update;
 
+- (void)Spaun;
+
 - (void)dealloc;
     
 @end

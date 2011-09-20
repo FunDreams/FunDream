@@ -23,6 +23,8 @@
 -(void)Start;
 -(void)Update;
 
+- (bool)IntersectBullet:(GObject *)pOb;
+
 - (void)AchiveLineFloat:(Processor_ex *)pProc;
 - (void)dealloc;
     
