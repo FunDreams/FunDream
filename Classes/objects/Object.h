@@ -21,18 +21,20 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 @public
 
     //временные цвета
-    Color3D TmpColor1,TmpColor2;
+    Color3D Start_Color,End_Color,Current_Color;
 
     //временные вектора
-    Vector3D TmpVector1,TmpVector2,TmpVector3,TmpVector4,TmpVector5;
+    Vector3D Start_Vector,End_Vector,Current_Vector;
 
 	//различные скорости
-	float m_fVelMove,m_fVelFade,m_fFinish,m_fPhase,m_fVelPhase;
+    float m_fStart,m_fFinish,m_fCurrent;
+	float m_fVelMove,m_fVelFade,m_fPhase,m_fVelPhase,m_fVelRotate;
 	
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
 	float m_fStartAngle,m_fEndAngle;
-    float m_fCurPosSlader;
+	float m_fStartScale,m_fEndScale;
+    float m_fCurPosSlader,m_fCurPosSlader2;
 
 	//селектор для отрисовки
 	SEL m_sDraw;
@@ -208,6 +210,10 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)InitOffsetTexLoop:(ProcStage_ex *)pStage;//замкнутая анимация сдвига текстуры
 - (void)OffsetTexLoop:(Processor_ex *)pProc;
 
+- (void)InitMirror2Dvector:(ProcStage_ex *)pStage;
+- (void)Mirror2Dvector:(Processor_ex *)pProc;
+
+    
 - (void)Idle:(Processor_ex *)pProc;
 
 - (void)DestroySelfUpdate:(Processor_ex *)pProc;

@@ -28,9 +28,30 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)LinkValues{
+    [super LinkValues];
+    SET_CELL(LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture"));
+    SET_CELL(LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX"));
+    SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+    
+    m_strNameSound=[NSMutableString stringWithString:@""];
+    m_strNameStage=[NSMutableString stringWithString:@""];
+    m_strNameObject=[NSMutableString stringWithString:@""];
+    
+    SET_CELL(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
+    SET_CELL(LINK_STRING_V(m_strNameStage,m_strName,@"m_strNameStage"));
+    SET_CELL(LINK_STRING_V(m_strNameObject,m_strName,@"m_strNameObject"));
+
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Start{
 	
+    if(m_bDimFromTexture){GET_DIM_FROM_TEXTURE(m_DOWN);}
+
 	[super Start];
+
+    if(m_bDimMirrorX==YES){m_pCurScale.x=-m_pCurScale.x;}
+    if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
 
 	m_vStartPos=m_pCurPosition;
 	
@@ -68,43 +89,30 @@ END_QUEUE(@"Proc");
 - (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    NSString *Str= GET_STAGE_EX(NAME(self),@"Proc");
-	if(Str==@"e01" && m_Disable==NO)
+	if([self FindProcByName:@"Proc"]->m_CurStage->NameStage==@"e01" && m_Disable==NO)
 		mTextureId=m_TextureDown;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    NSString *Str= GET_STAGE_EX(NAME(self),@"Proc");
-	if(Str==@"e01" && m_Disable==NO)
+	if([self FindProcByName:@"Proc"]->m_CurStage->NameStage==@"e01" && m_Disable==NO)
 		mTextureId=m_TextureDown;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    NSString *Str= GET_STAGE_EX(NAME(self),@"Proc");
-	if(Str==@"e01" && m_Disable==NO)
+	if([self FindProcByName:@"Proc"]->m_CurStage->NameStage==@"e01" && m_Disable==NO)
 		mTextureId=m_TextureUP;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
 
-    NSString *Str= GET_STAGE_EX(NAME(self),@"Proc");
-
-	if(Str==@"e01" && m_Disable==NO)
+	if([self FindProcByName:@"Proc"]->m_CurStage->NameStage==@"e01" && m_Disable==NO)
 	{
-		PLAY_SOUND(@"PushButton.wav");
- //       STOP_SOUND(@"PushButton.wav");
-
 		mTextureId=m_TextureUP;
 
-        if([m_strName isEqualToString:@"ButtonPlay"]){
-
-			[[self FindProcByName:@"Proc"] NextStage];
-
-			[[[m_pObjMng GetObjectByName:@"Cup"] FindProcByName:@"Proc"] NextStage];
-		}
+        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        PLAY_SOUND(m_strNameSound);
+        
+        NEXT_STAGE_EX(NAME(self), @"Proc");
     }
 }
 //------------------------------------------------------------------------------------------------------

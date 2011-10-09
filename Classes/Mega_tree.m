@@ -218,8 +218,8 @@ va_end(argList);\
 
 - (id)Set_String:(NSString *)Value withKey:(id)sKey, ...{
     
-    mpType=[NSString stringWithString:@"s"];    
-	mpIdPoint=[NSString stringWithString:Value];
+    mpType=[NSString stringWithString:@"s"];
+	mpIdPoint=[[NSMutableString alloc] initWithString:Value];
     
     mbLocal=YES;
     

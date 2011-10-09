@@ -401,7 +401,7 @@ FullName:(NSString *)FullNameSound
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
 
     mpCurtouches = [event allTouches];
-    m_CountTouch=[touches count];
+    m_CountTouch=[mpCurtouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -434,7 +434,7 @@ FullName:(NSString *)FullNameSound
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event {
 
     mpCurtouches = [event allTouches];
-    m_CountTouch=[touches count];
+    m_CountTouch=[mpCurtouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -467,7 +467,7 @@ FullName:(NSString *)FullNameSound
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {
 
     mpCurtouches = [event allTouches];
-    m_CountTouch=[touches count];
+    m_CountTouch=[mpCurtouches count];
 
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
@@ -525,6 +525,7 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 - (void)Pause:(bool)bPause
 {
+    m_bPause=bPause;
 	m_pObjMng->m_bGlobalPause = bPause;
 	
 	if(bPause)m_SCurrentSel=m_sPause;

@@ -143,19 +143,21 @@
 // Updates the OpenGL view when the timer fires
 - (void)drawView
 {
-	// Make sure that you are drawing to the current context
-	[EAGLContext setCurrentContext:context];
-		
-	glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
+    if(controller->m_bPause==NO){
+        // Make sure that you are drawing to the current context
+        [EAGLContext setCurrentContext:context];
+            
+        glBindFramebufferOES(GL_FRAMEBUFFER_OES, viewFramebuffer);
 
-	[controller.m_pObjMng drawView:self];
-	
-	glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
-	[context presentRenderbuffer:GL_RENDERBUFFER_OES];
-	
-	GLenum err = glGetError();
-	if(err)
-		NSLog(@"%x error", err);
+        [controller.m_pObjMng drawView:self];
+        
+        glBindRenderbufferOES(GL_RENDERBUFFER_OES, viewRenderbuffer);
+        [context presentRenderbuffer:GL_RENDERBUFFER_OES];
+        
+        GLenum err = glGetError();
+        if(err)
+            NSLog(@"%x error", err);
+    }
 }
 
 // Stop animating and release resources when they are no longer needed.

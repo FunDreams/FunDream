@@ -49,7 +49,7 @@ NSString *SubStr1 = [NAMETEXTURE substringFromIndex:toprange.location+1];\
 [m_pParent loadTexture:SubStr WithExt:SubStr1];}
 
 //texture
-#define GET_TEXTURE(INS,NAMETEXTURE) if((INS==-1 || INS==0) && NAMETEXTURE!=nil){\
+#define GET_TEXTURE(INS,NAMETEXTURE) if(NAMETEXTURE!=nil){\
 TextureContainer *pNum=[m_pParent->m_pTextureList objectForKey:NAMETEXTURE];\
 if(pNum!=nil){INS=pNum->m_iTextureId;}}
 
@@ -82,7 +82,7 @@ mHeight=pNum->m_fHeight;}
 #define PARAMS_APP m_pObjMng->m_pParent.m_pPrSettings
 #define MAIN_CONTROLLER m_pObjMng->m_pParent
 
-#define SET_MIRROR(pfdestY,pfsourceX,pfSourceF2,pfSourceF1,pfDestF2,pfDestF1)    \
+#define SET_MIRROR(pfsourceX,pfSourceF2,pfSourceF1,pfdestY,pfDestF2,pfDestF1)    \
 pfdestY=(((float)pfsourceX-(float)pfSourceF1)*(((float)pfDestF1-(float)pfDestF2)/((float)pfSourceF1-(float)pfSourceF2)))+(float)pfDestF1;
 
 #define LOCK_TOUCH m_pObjMng->m_pParent->m_bTouchGathe=YES;

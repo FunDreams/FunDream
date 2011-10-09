@@ -683,6 +683,88 @@
     else [self SetOffsetTexture:m_vDeltaOffset];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitMirror2Dvector:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@pFinishV",TmpStr];
+    pStage->VectorsValues[0]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@pStartV",TmpStr];
+    pStage->VectorsValues[1]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@pDestV",TmpStr];
+    pStage->VectorsValues[2]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+
+    NameParam=[NSString stringWithFormat:@"%@pfStartF",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@pfFinishF",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@pfSrc",TmpStr];
+    pStage->FloatsValues[2]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);    
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)Mirror2Dvector:(Processor_ex *)pProc{
+
+    ProcStage_ex * pStage=pProc->m_CurStage;
+
+    Vector3D Dir=Vector3DMake(pStage->VectorsValues[0]->x-pStage->VectorsValues[1]->x,
+                              pStage->VectorsValues[0]->y-pStage->VectorsValues[1]->y,0);
+    
+    float Magnitude = sqrtf(Dir.x*Dir.x+Dir.y*Dir.y);
+    
+    if(Magnitude>0)
+    {
+        Dir.x/=Magnitude;
+        Dir.y/=Magnitude;
+        
+        float K=((*pStage->FloatsValues[2]-*pStage->FloatsValues[0])*
+                 (Magnitude/(*pStage->FloatsValues[1]-*pStage->FloatsValues[0])));
+        
+        pStage->VectorsValues[2]->x=Dir.x*K+pStage->VectorsValues[1]->x;
+        pStage->VectorsValues[2]->y=Dir.y*K+pStage->VectorsValues[1]->y;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)InitParabola1:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@SrcF",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@DestF",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+
+    NameParam=[NSString stringWithFormat:@"%@PowI",TmpStr];
+    pStage->IntsValues[0]=GET_INT_V(NameParam);
+    if(pStage->IntsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)Parabola1:(Processor_ex *)pProc{
+    	
+    ProcStage_ex * pStage=pProc->m_CurStage;
+    *pStage->FloatsValues[1]=1-pow(1-*pStage->FloatsValues[0],*pStage->IntsValues[0]);
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Achive4DColorStatic:(Processor_ex *)pProc{
 	
 //	float pfCurVel=(float )[RESIVE(@"Vel") floatValue];
@@ -908,16 +990,6 @@
     }
 }
 //функции-----------------------------------------------------------------------------------------------
-- (void)Parabola:(Processor_ex *)pProc{
-	
-//	float *pfSrc=(float *)RESIVE(@"SrcF");
-//	float *pfDst=(float *)RESIVE(@"DestF");
-//	
-//	int fPow=(float )[RESIVE(@"PowI") intValue];
-//	
-//	*pfDst=1-pow(1-*pfSrc,fPow);
-}
-//------------------------------------------------------------------------------------------------------
 - (void)SetPosWithOffsetOwner{
     
     if(m_pOwner){

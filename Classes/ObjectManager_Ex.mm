@@ -441,10 +441,10 @@ repeate:
 				pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
 
 			[pMusAddKeys addObject:pObject];
-			[pObject AddToDraw];
 			
 			[m_pAllObjects setObject:pObject forKey:pObject->m_strName];
             [pObject Start];
+            [pObject AddToDraw];
 		}
 		
 		return pObject;

@@ -40,7 +40,9 @@ START_QUEUE(@"Move");
 END_QUEUE(@"Move");
 
 START_QUEUE(@"Proc");
-	
+
+    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+
     ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",nil);
     DELAY_STAGE(@"a10", 1000, 1);
 

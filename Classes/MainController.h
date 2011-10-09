@@ -46,6 +46,7 @@
     bool m_bTouchGathe;
 
 	bool m_bMultiTouch;
+    bool m_bPause;
 	SEL m_sPause;
 	SEL m_sNormal;
 	SEL m_SCurrentSel;

@@ -17,6 +17,10 @@
 /** Шаблонный класс для объектов**/
 @interface NAME_TEMPLETS_OBJECT : GObject {
 	
+    NSMutableString *m_strNameSound;
+    NSMutableString *m_strNameStage;
+    NSMutableString *m_strNameObject;
+
 	NSMutableString *m_DOWN;
 	NSMutableString *m_UP;
 	
@@ -24,6 +28,10 @@
 	UInt32 m_TextureUP;	
 	
 	bool m_Disable;
+    
+    bool m_bDimFromTexture;
+    bool m_bDimMirrorX;
+    bool m_bDimMirrorY;
 }
 
 /** Инициализирует объект **/

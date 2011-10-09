@@ -19,7 +19,7 @@
 START_QUEUE(@"Proc");
 //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-    DELAY_STAGE(@"Proc",3000, 1);
+    DELAY_STAGE(@"Proc",1000, 1);
 END_QUEUE(@"Proc");
     
     GET_TEXTURE(mTextureId,m_pNameTexture);
@@ -33,7 +33,7 @@ END_QUEUE(@"Proc");
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-	[super Start];    
+	[super Start];
     [self Spaun];
 }
 //------------------------------------------------------------------------------------------------------

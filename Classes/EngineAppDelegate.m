@@ -38,7 +38,7 @@
         CFTimeInterval time;
         time = CFAbsoluteTimeGetCurrent();
         double delta = (time - m_flastTime);
-        if( delta > 0.3f ) delta = 0.3f;
+        if( delta > 0.1f ) delta = 0.1f;
     //    if( delta < 0.001 ) delta = 0.001;
         m_flastTime=time;
         
@@ -66,7 +66,6 @@
 #endif
 //-------------------------------------------------------------------------------
 
-    
 //    }
 //    @catch (NSException *exception) {
 //        NSLog ( @"Exception caught: %@", exception );
@@ -83,6 +82,10 @@
     [m_pRootViewController.m_pMainController Pause:NO];
     
     m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f) target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
+    
+    CFTimeInterval time;
+    time = CFAbsoluteTimeGetCurrent();
+    m_flastTime=time;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)applicationWillResignActive:(UIApplication *)application{

@@ -41,7 +41,7 @@
 
 - (id)Link_Id:(id *)parPoint withKey:(id)sKey,...;
 
-- (id)Link_String:(NSString *)parPoint withKey:(id)sKey,...;
+- (id)Link_String:(NSMutableString *)parPoint withKey:(id)sKey,...;
 - (id)Set_String:(NSString *)Value withKey:(id)sKey,...;
 
 - (id)Link_Point:(void *)parPoint withKey:(id)sKey,...;

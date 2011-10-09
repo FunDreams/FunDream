@@ -50,11 +50,13 @@ END_QUEUE(@"Proc");
 	
 	[super Start];
 
+    iCountScore=PARAMS_APP->m_iCurRecord;
+    
     if(m_iLayer==layerTemplet)m_iLayer--;
     
 	for (int i=0; i<20; i++) {
 		
-		GObject *Ob = CREATE_NEW_OBJECT(@"ObjectSymbol",([NSString stringWithFormat:@"sym%d", i]),
+		GObject *Ob = CREATE_NEW_OBJECT(@"ObjectAlNumber",([NSString stringWithFormat:@"sym%d", i]),
                                 SET_STRING_V(m_pNameTexture, @"m_pNameTexture"),
                                 LINK_ID_V(self,@"m_pOwner"),
                                 SET_INT_V(0,@"m_iCurrentSym"),
@@ -89,6 +91,9 @@ END_QUEUE(@"Proc");
 
 	iCountScore+=iScoreAdd;
 
+    if(iCountScore>PARAMS_APP->m_iCurRecord)
+        PARAMS_APP->m_iCurRecord=iCountScore;
+    
     if(iCountScore<0)iCountScore=0;
     
 	NSMutableArray *pArrayScore = [[self ParseIntValue:iCountScore] autorelease];

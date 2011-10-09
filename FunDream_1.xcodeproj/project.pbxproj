@@ -34,6 +34,7 @@
 		187E22CE1165EC7600EA912F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22CD1165EC7600EA912F /* AudioToolbox.framework */; };
 		187E22D41165ECA100EA912F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22D31165ECA100EA912F /* QuartzCore.framework */; };
 		187E22DA1165ECC200EA912F /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22D91165ECC200EA912F /* OpenAL.framework */; };
+		18849EB71441B03A006F8EEB /* ObjectScoreFun1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18849EB61441B038006F8EEB /* ObjectScoreFun1.mm */; };
 		189015721291684E0027418F /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1890156E1291684E0027418F /* MKStoreManager.m */; };
 		189015731291684E0027418F /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 189015701291684E0027418F /* MKStoreObserver.m */; };
 		189015AB129171540027418F /* DtManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 189015A8129171540027418F /* DtManager.m */; };
@@ -141,6 +142,8 @@
 		187E22CD1165EC7600EA912F /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		187E22D31165ECA100EA912F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		187E22D91165ECC200EA912F /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
+		18849EB51441B038006F8EEB /* ObjectScoreFun1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectScoreFun1.h; path = objects/ObjectScoreFun1.h; sourceTree = "<group>"; };
+		18849EB61441B038006F8EEB /* ObjectScoreFun1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectScoreFun1.mm; path = objects/ObjectScoreFun1.mm; sourceTree = "<group>"; };
 		1890156D1291684E0027418F /* MKStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreManager.h; sourceTree = "<group>"; };
 		1890156E1291684E0027418F /* MKStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKStoreManager.m; sourceTree = "<group>"; };
 		1890156F1291684E0027418F /* MKStoreObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreObserver.h; sourceTree = "<group>"; };
@@ -381,6 +384,8 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				18849EB51441B038006F8EEB /* ObjectScoreFun1.h */,
+				18849EB61441B038006F8EEB /* ObjectScoreFun1.mm */,
 				182861421410AC56003EDFFE /* ObjectMultiTouch.h */,
 				182861431410AC57003EDFFE /* ObjectMultiTouch.mm */,
 				182861411410AC11003EDFFE /* ObjectBullet.h */,
@@ -767,6 +772,7 @@
 				1861777B140D3BE0003C53F3 /* Processor_ex.mm in Sources */,
 				182861401410AC06003EDFFE /* ObjectButtet.mm in Sources */,
 				182861441410AC57003EDFFE /* ObjectMultiTouch.mm in Sources */,
+				18849EB71441B03A006F8EEB /* ObjectScoreFun1.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

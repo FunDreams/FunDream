@@ -38,13 +38,18 @@
 		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectAlNumber%d",k] autorelease];
 		RESERV_NEW_OBJECT(@"ObjectAlNumber",NameOb,nil);
 	}
-	
-	for (int k=0; k<7; k++) {	
-		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectAlNumber%d",k] autorelease];
-		CREATE_NEW_OBJECT(@"ObjectAlNumber",NameOb,
-						  SET_INT_V(k,@"m_iPlace"),
-						  SET_INT_V(RND%9,@"m_iCurrenNumber"));
-	}
+
+    CREATE_NEW_OBJECT(@"ObjectScore",@"Score",
+                      SET_COLOR_V(Color3DMake(0, 1, 0, 1), @"mColor"),
+					  SET_INT_V(layerNumber,@"m_iLayer"));
+
+//	for (int k=0; k<7; k++) {
+//		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectAlNumber%d",k] autorelease];
+//		CREATE_NEW_OBJECT(@"ObjectAlNumber",NameOb,
+//						  SET_INT_V(k,@"m_iPlace"),
+//						  SET_BOOL_V(YES,@"m_bHiden"),
+//						  SET_INT_V(0/*RND%9*/,@"m_iCurrenNumber"));
+//	}
 //interface======================================================================
 //	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
 //					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
