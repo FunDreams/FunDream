@@ -124,6 +124,7 @@ WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 
 #define COPY_CELL(CELL) [m_pObjMng->pMegaTree CopyCell:CELL];
 #define SET_CELL(CELL) [m_pObjMng->pMegaTree SetCell:CELL];
+#define DEL_CELL(...) [m_pObjMng->pMegaTree RemoveCell:__VA_ARGS__,nil];
 
 #define LINK_INT_V(INT_V,...) [[UniCell alloc] Link_Int:(int *)&INT_V withKey:__VA_ARGS__,nil]
 #define SET_INT_V(INT_V,...) [[UniCell alloc] Set_Int:INT_V withKey:__VA_ARGS__,nil]

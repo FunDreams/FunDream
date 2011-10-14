@@ -39,8 +39,13 @@
 		RESERV_NEW_OBJECT(@"ObjectAlNumber",NameOb,nil);
 	}
 
-    CREATE_NEW_OBJECT(@"ObjectScore",@"Score",
+    CREATE_NEW_OBJECT(@"ObjectScoreFun1",@"Score",
                       SET_COLOR_V(Color3DMake(0, 1, 0, 1), @"mColor"),
+                      SET_INT_V(1, @"m_iAlign"),
+                      SET_FLOAT_V(45, @"m_fWNumber"),
+                      SET_FLOAT_V(50,@"WSym"),
+                      SET_FLOAT_V(92,@"HSym"),
+                      SET_VECTOR_V(Vector3DMake(-45,430,0),@"m_pCurPosition"),
 					  SET_INT_V(layerNumber,@"m_iLayer"));
 
 //	for (int k=0; k<7; k++) {
@@ -64,7 +69,7 @@
     
 //  CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
 
-//физика приложения тут///////////////////////////////////////////////////////		
+//физика приложения тут///////////////////////////////////////////////////////
 //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
 //	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
     

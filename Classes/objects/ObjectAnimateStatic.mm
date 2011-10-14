@@ -37,6 +37,7 @@ START_QUEUE(@"Animate");
                  LINK_FLOAT_V(m_fVelFrame,@"Vel"));
     
     
+    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
     ASSIGN_STAGE(@"AnimateStage",@"Animate:",
                  LINK_INT_V(m_iStartFrame,@"Start_Frame"),
                  LINK_INT_V(m_iFinishFrame,@"Finish_Frame"),
@@ -64,7 +65,10 @@ END_QUEUE(@"Animate");
     
     SET_CELL(LINK_INT_V(m_iOffsetFrame,m_strName,@"m_iOffsetFrame"));
     SET_CELL(LINK_INT_V(m_fVelFrame,m_strName,@"m_fVelFrame"));
+    
     SET_CELL(LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture"));
+    SET_CELL(LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX"));
+    SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
 
     SET_CELL(LINK_VECTOR_V(m_vStartOffsetTex,m_strName,@"m_vStartOffsetTex"));
     SET_CELL(LINK_VECTOR_V(m_vEndOffsetTex,m_strName,@"m_vEndOffsetTex"));
@@ -78,6 +82,9 @@ END_QUEUE(@"Animate");
     
     m_strStartStage=[NSMutableString stringWithString:@"Animate"];
     SET_CELL(LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage"));
+
+    m_strGroup=[NSMutableString stringWithString:@"Animate"];
+    SET_CELL(LINK_STRING_V(m_strGroup,m_strName,@"m_strGroup"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -88,6 +95,9 @@ END_QUEUE(@"Animate");
     if(m_bDimFromTexture){GET_DIM_FROM_TEXTURE(m_pNameTexture);}
     
 	[super Start];
+    
+    if(m_bDimMirrorX==YES){m_pCurScale.x=-m_pCurScale.x;}
+    if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
     
     InstFrameFloat=mTextureId;
     m_iStartFrame=mTextureId;
@@ -127,6 +137,9 @@ END_QUEUE(@"Animate");
         
         [self SetScaleTexture:m_vStartTex SecondVector:m_vEndTex];
     }
+    
+    if(![m_strGroup isEqualToString:@""])
+        [m_pObjMng AddToGroup:m_strGroup Object:self];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareAnimate:(ProcStage_ex *)pStage{
@@ -138,6 +151,9 @@ END_QUEUE(@"Animate");
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     [super Destroy];
+    
+    if(![m_strGroup isEqualToString:@""])
+        [m_pObjMng RemoveFromGroup:m_strGroup Object:self];
 }
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}

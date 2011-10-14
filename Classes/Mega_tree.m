@@ -218,7 +218,7 @@ va_end(argList);\
 
 - (id)Set_String:(NSString *)Value withKey:(id)sKey, ...{
     
-    mpType=[NSString stringWithString:@"s"];
+    mpType=[NSString stringWithString:@"s"];    
 	mpIdPoint=[[NSMutableString alloc] initWithString:Value];
     
     mbLocal=YES;
@@ -351,6 +351,13 @@ va_end(argList);\
     }
     
     [pCell release];
+}
+- (void)RemoveCell:(id)sKey, ...{
+
+    APPEND_STR
+    
+    NSString *mpName=[NSString stringWithString:RezObject];   
+    [self removeObjectForKey_Ex:mpName];
 }
 //////int
 //////

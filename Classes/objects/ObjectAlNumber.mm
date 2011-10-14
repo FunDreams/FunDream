@@ -41,8 +41,6 @@ END_QUEUE(@"Move");
 
 START_QUEUE(@"Proc");
 
-    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-
     ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",nil);
     DELAY_STAGE(@"a10", 1000, 1);
 
@@ -51,6 +49,8 @@ START_QUEUE(@"Proc");
                  LINK_INT_V(mTextureId,@"InstFrame"),
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
                  SET_FLOAT_V(-30,@"Vel"));
+
+    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 
     ASSIGN_STAGE(@"ChangePar",@"ChangePar:",nil);
     DELAY_STAGE(@"ChangePar", 3000, 4000);
@@ -92,9 +92,13 @@ END_QUEUE(@"Proc");
     
     InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
+    
+    [self SetPosWithOffsetOwner];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(Processor_ex *)pProc{
+
+    [self SetPosWithOffsetOwner];
 
 	if (m_bHiden==NO) {
 		m_fPhase+=DELTA*m_fSpeedScale;

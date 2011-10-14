@@ -46,6 +46,7 @@
 
 - (id)Link_Point:(void *)parPoint withKey:(id)sKey,...;
 
+- (void)RemoveCell:(id)sKey, ...;
 -(void)CrearCell;
 -(void)dealloc;
 

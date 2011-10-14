@@ -36,6 +36,11 @@
 
     Vector3D m_vStartTex;
     Vector3D m_vEndTex;
+    
+    bool m_bDimMirrorX;
+    bool m_bDimMirrorY;
+    
+    NSMutableString *m_strGroup;
 }
 
 /** Инициализирует объект **/

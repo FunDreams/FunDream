@@ -6,9 +6,9 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "ObjectScore.h"
+#import "ObjectScoreFun1.h"
 
-@implementation ObjectScore
+@implementation ObjectScoreFun1
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	[super Init:Parent WithName:strName];
@@ -28,14 +28,16 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"Move",@"MoveScore:",nil);
 END_QUEUE(@"Proc");
 
+    m_iAlign=-1;
+
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-        
-    m_strStartStage=[NSMutableString stringWithString:@"Idle"];
-    
+
+    m_strStartStage=[NSMutableString stringWithString:@""];
+
     SET_CELL(LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage"));
 
     SET_CELL(LINK_FLOAT_V(WSym,m_strName,@"WSym"));
@@ -44,17 +46,20 @@ END_QUEUE(@"Proc");
     SET_CELL(LINK_FLOAT_V(m_fWNumber,m_strName,@"m_fWNumber"));
 
     SET_CELL(LINK_INT_V(iScoreAdd,m_strName,@"iScoreAdd"));
+    SET_CELL(LINK_INT_V(m_iAlign,m_strName,@"m_iAlign"));
+
+    SET_CELL(LINK_FLOAT_V(m_fStartPos,m_strName,@"m_fStartPos"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-	
+
 	[super Start];
 
     iCountScore=PARAMS_APP->m_iCurRecord;
-    
+
     if(m_iLayer==layerTemplet)m_iLayer--;
-    
-	for (int i=0; i<20; i++) {
+
+	for (int i=0; i<10; i++) {
 		
 		GObject *Ob = CREATE_NEW_OBJECT(@"ObjectAlNumber",([NSString stringWithFormat:@"sym%d", i]),
                                 SET_STRING_V(m_pNameTexture, @"m_pNameTexture"),
@@ -63,9 +68,9 @@ END_QUEUE(@"Proc");
                     SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
                                 SET_BOOL_V(YES,@"m_bHiden"),
                                 SET_BOOL_V(m_bNoOffset,@"m_bNoOffset"),
-                                SET_BOOL_V(YES, @"m_bDimFromTexture"),
-//                                SET_FLOAT_V(WSym,@"mWidth"),
-//                                SET_FLOAT_V(HSym,@"mHeight"),
+//                                SET_BOOL_V(YES, @"m_bDimFromTexture"),
+                                SET_FLOAT_V(WSym,@"mWidth"),
+                                SET_FLOAT_V(HSym,@"mHeight"),
                                 SET_BOOL_V(m_bNoOffset, @"m_bNoOffset"),
                                 SET_INT_V(m_iLayer+1,@"m_iLayer"));
 
@@ -76,6 +81,7 @@ END_QUEUE(@"Proc");
 	[self SetColorSym];
 
 	[self UpdateScore];
+    
 	UPDATE;
 }
 //------------------------------------------------------------------------------------------------------
@@ -93,9 +99,9 @@ END_QUEUE(@"Proc");
 
     if(iCountScore>PARAMS_APP->m_iCurRecord)
         PARAMS_APP->m_iCurRecord=iCountScore;
-    
+
     if(iCountScore<0)iCountScore=0;
-    
+
 	NSMutableArray *pArrayScore = [[self ParseIntValue:iCountScore] autorelease];
 	NSMutableArray *TmpArr=m_pChildrenbjectsArr;
 
@@ -103,21 +109,40 @@ END_QUEUE(@"Proc");
 		OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
 						  SET_BOOL_V(YES,@"m_bHiden"));
 
-	if ([pArrayScore count]==0 && [TmpArr count]!=0) {
+    if(m_iAlign==-1){
 
-		OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:0])->m_strName,
-						  SET_INT_V(0,@"m_iCurrentSym"),
-						  SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
-						  SET_BOOL_V(NO,@"m_bHiden"));
-	}
-	else for (int i=0; i< [pArrayScore count]; i++) {
+        if ([pArrayScore count]==0 && [TmpArr count]!=0) {
 
-		OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
+            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:0])->m_strName,
+                              SET_INT_V(0,@"m_iCurrentSym"),
+                              SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
+                              SET_BOOL_V(NO,@"m_bHiden"));
+        }
+        else for (int i=0; i< [pArrayScore count]; i++) {
+
+            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
             SET_INT_V([[pArrayScore objectAtIndex:[pArrayScore count]-i-1] intValue],@"m_iCurrentSym"),
-                    SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-						  SET_BOOL_V(NO,@"m_bHiden"));
-	}
+                    SET_VECTOR_V(Vector3DMake(m_fStartPos+i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
+                              SET_BOOL_V(NO,@"m_bHiden"));
+        }
+    }
+    else if(m_iAlign==1){
 
+        if ([pArrayScore count]==0 && [TmpArr count]!=0) {
+            
+            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:0])->m_strName,
+                              SET_INT_V(0,@"m_iCurrentSym"),
+                              SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
+                              SET_BOOL_V(NO,@"m_bHiden"));
+        }
+        else for (int i=0; i< [pArrayScore count]; i++) {
+
+        OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
+            SET_INT_V([[pArrayScore objectAtIndex:[pArrayScore count]-i-1] intValue],@"m_iCurrentSym"),
+                    SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
+                              SET_BOOL_V(NO,@"m_bHiden"));
+        }
+    }
 	UPDATE;
 }
 //------------------------------------------------------------------------------------------------------

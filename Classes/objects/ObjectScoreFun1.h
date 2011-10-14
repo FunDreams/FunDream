@@ -13,7 +13,7 @@
 
 
 /** Шаблонный класс для объектов**/
-@interface ObjectScore : StaticObject {
+@interface ObjectScoreFun1 : StaticObject {
 	
 	int iCountScore;
 	int iScoreAdd;
@@ -22,6 +22,8 @@
     float WSym,HSym;
     
     NSMutableString *m_strStartStage;
+    float m_fStartPos;
+    int m_iAlign;
 }
 
 /** Инициализирует объект **/
