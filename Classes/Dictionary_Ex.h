@@ -13,6 +13,8 @@
 @public
     NSMutableDictionary *pDic;
     NSMutableDictionary *pDicTemp;
+    
+    bool m_bNotSyn;
 }
 
 -(id)init;

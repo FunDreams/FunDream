@@ -140,8 +140,8 @@
                     [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
                 }
                 
-                [pObject->m_pProcessor_ex SynhData];
-
+                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+                if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
             }
 		}
 	}
@@ -485,15 +485,15 @@ repeate:
     if (PtmpOb!=nil)return;
 	
 	NSString *pNameGroup = [NSString stringWithString:NameGroup];
-    [pObject->m_Groups setObject:pNameGroup forKey:pNameGroup];
+    [pObject->m_Groups setObject_Ex:pNameGroup forKey:pNameGroup];
 	[pGroup addObject:pObject];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)RemoveFromGroups:(NSMutableDictionary *)NamesGroup Object:(GObject *)pObject{
+- (void)RemoveFromGroups:(Dictionary_Ex *)NamesGroup Object:(GObject *)pObject{
 
     if(pObject==nil)return;
 
-	for (NSString *Pname in NamesGroup) {
+	for (NSString *Pname in NamesGroup->pDic) {
         
         NSMutableArray *pGroup = [m_pGroups objectForKey:Pname];
 
@@ -505,7 +505,7 @@ repeate:
                     [pGroup removeObjectAtIndex:i];
                     
                     NSString *PtmpOb=[pObject->m_Groups objectForKey:Pname];
-                    [pObject->m_Groups removeObjectForKey:PtmpOb];
+                    [pObject->m_Groups removeObjectForKey_Ex:PtmpOb];
                     
                     break;
                 }
@@ -527,7 +527,7 @@ repeate:
 				[pGroup removeObjectAtIndex:i];
                 
                 NSString *PtmpOb=[pObject->m_Groups objectForKey:NameGroup];
-                [pObject->m_Groups removeObjectForKey:PtmpOb];
+                [pObject->m_Groups removeObjectForKey_Ex:PtmpOb];
 
 				return;
 			}

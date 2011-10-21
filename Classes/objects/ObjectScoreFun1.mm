@@ -49,6 +49,9 @@ END_QUEUE(@"Proc");
     SET_CELL(LINK_INT_V(m_iAlign,m_strName,@"m_iAlign"));
 
     SET_CELL(LINK_FLOAT_V(m_fStartPos,m_strName,@"m_fStartPos"));
+
+    SET_CELL(LINK_INT_V(iCountDownScore,m_strName,@"iCountDownScore"));
+    SET_CELL(LINK_INT_V(iScoreDownAdd,m_strName,@"iScoreDownAdd"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -105,44 +108,36 @@ END_QUEUE(@"Proc");
 	NSMutableArray *pArrayScore = [[self ParseIntValue:iCountScore] autorelease];
 	NSMutableArray *TmpArr=m_pChildrenbjectsArr;
 
-	for (int i=0; i< [TmpArr count]; i++)
+	for (int i=[pArrayScore count]; i< [TmpArr count]; i++)
+    {
 		OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
 						  SET_BOOL_V(YES,@"m_bHiden"));
-
-    if(m_iAlign==-1){
-
-        if ([pArrayScore count]==0 && [TmpArr count]!=0) {
-
-            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:0])->m_strName,
-                              SET_INT_V(0,@"m_iCurrentSym"),
-                              SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
-                              SET_BOOL_V(NO,@"m_bHiden"));
-        }
-        else for (int i=0; i< [pArrayScore count]; i++) {
-
-            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
-            SET_INT_V([[pArrayScore objectAtIndex:[pArrayScore count]-i-1] intValue],@"m_iCurrentSym"),
-                    SET_VECTOR_V(Vector3DMake(m_fStartPos+i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-                              SET_BOOL_V(NO,@"m_bHiden"));
-        }
     }
-    else if(m_iAlign==1){
 
-        if ([pArrayScore count]==0 && [TmpArr count]!=0) {
-            
-            OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:0])->m_strName,
-                              SET_INT_V(0,@"m_iCurrentSym"),
-                              SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
-                              SET_BOOL_V(NO,@"m_bHiden"));
-        }
-        else for (int i=0; i< [pArrayScore count]; i++) {
+    if ([pArrayScore count]==0 && [TmpArr count]!=0) {
+        
+        GObject *pOb=(GObject *)[TmpArr objectAtIndex:0];
 
-        OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
-            SET_INT_V([[pArrayScore objectAtIndex:[pArrayScore count]-i-1] intValue],@"m_iCurrentSym"),
-                    SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-                              SET_BOOL_V(NO,@"m_bHiden"));
-        }
+        OBJECT_SET_PARAMS(pOb->m_strName,
+                          SET_INT_V(0,@"m_iCurrentSym"),
+                          SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
+                          SET_BOOL_V(NO,@"m_bHiden"));
     }
+    else for (int i=0; i< [pArrayScore count]; i++)
+    {
+
+        GObject *pOb=(GObject *)[TmpArr objectAtIndex:i];
+        
+        int bOldHidden=pOb->m_bHiden;
+    OBJECT_SET_PARAMS(pOb->m_strName,
+        SET_INT_V([[pArrayScore objectAtIndex:i] intValue],@"m_iCurrentSym"),
+                SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
+                          SET_BOOL_V(NO,@"m_bHiden"));
+        
+        if(bOldHidden==YES)
+        {SET_STAGE_EX(NAME(pOb), @"Proc", @"First");}
+    }
+    
 	UPDATE;
 }
 //------------------------------------------------------------------------------------------------------

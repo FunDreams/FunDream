@@ -6,43 +6,60 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "ObjectWorld.h"
+#import "ObjectGameSpaun.h"
 
-@implementation ObjectWorld
+@implementation ObjectGameSpaun
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	[super Init:Parent WithName:strName];
 	
-    m_bHiden=YES;
-	m_iLayer = layerSystem;
-
-//START_QUEUE(@"Proc");
+START_QUEUE(@"Proc");
 //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-//	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-//    DELAY_STAGE(@"Proc",1000, 1);
-//END_QUEUE(@"Proc");
-        
-//    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
- //   m_iLayerTouch=layerTouch_0;//слой касания
- //   [self SetTouch:YES];//интерактивность
-
+	ASSIGN_STAGE(@"Spaun",@"Spaun:",nil);
+END_QUEUE(@"Proc");
+    
+    m_bHiden=YES;
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)LinkValues{
+    [super LinkValues];
+    
+//   SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+    
+//    m_strNameObject=[NSMutableString stringWithString:@""];    
+//    SET_CELL(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Start{
-
-    m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
+    m_iLayer = layerSystem;
 
 	[super Start];
+    
+    m_fStartPeriod=3;
+    m_fCurrntPeriod=m_fStartPeriod;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{
+- (void)Update{}
+//------------------------------------------------------------------------------------------------------
+- (void)Spaun{
+    
+    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
+    //    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
+    //    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
 
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{
+- (void)Spaun:(Processor_ex *)pProc{
     
-    NEXT_STAGE;
+    m_fCurrntPeriod-=DELTA;
+    
+    if(m_fCurrntPeriod<0){
+        
+        [self Spaun];
+        m_fCurrntPeriod=m_fStartPeriod;
+        
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

@@ -26,6 +26,7 @@
     id pOb = [pDic objectForKey:aKey];
 
     [pDicTemp setObject:@"delete" forKey:aKey];
+    m_bNotSyn=YES;
     
     return pOb;
 }
@@ -34,6 +35,7 @@
 {
     id pOb = [pDic objectForKey:aKey];
     [pDicTemp setObject:anObject forKey:aKey];
+    m_bNotSyn=YES;
     
     return pOb;
 }
@@ -49,9 +51,7 @@
 }
 //=====================================================================================================
 - (void)SynhData
-{
-    if([pDicTemp count]==0)return;
-    
+{    
     NSEnumerator *Key_enumerator = [pDicTemp keyEnumerator];
     id aKey;
     
@@ -67,6 +67,7 @@
     }
     
     [pDicTemp removeAllObjects];
+    m_bNotSyn=NO;
 }
 //=====================================================================================================
 -(void)dealloc

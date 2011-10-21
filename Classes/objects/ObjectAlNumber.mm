@@ -41,6 +41,8 @@ END_QUEUE(@"Move");
 
 START_QUEUE(@"Proc");
 
+    ASSIGN_STAGE(@"First",@"PrepareTexture:",nil);
+
     ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",nil);
     DELAY_STAGE(@"a10", 1000, 1);
 
@@ -50,10 +52,10 @@ START_QUEUE(@"Proc");
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
                  SET_FLOAT_V(-30,@"Vel"));
 
-    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+    ASSIGN_STAGE(@"Wait",@"Wait:",nil);
 
     ASSIGN_STAGE(@"ChangePar",@"ChangePar:",nil);
-    DELAY_STAGE(@"ChangePar", 3000, 4000);
+ //   DELAY_STAGE(@"ChangePar", 3000, 4000);
 
     ASSIGN_STAGE(@"Animate2",@"Animate:",
                  LINK_INT_V(iFinishFrame,@"Finish_Frame"),
@@ -68,10 +70,14 @@ END_QUEUE(@"Proc");
 	
 	mColor = Color3DMake(1,1,0,1.0f);
 
-    SET_CELL(LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrenNumber"));
-    SET_CELL(LINK_INT_V(m_iPlace,m_strName,@"m_iPlace"));
-
 	return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LinkValues{
+    [super LinkValues];
+    
+    SET_CELL(LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrentSym"));
+    SET_CELL(LINK_INT_V(m_iPlace,m_strName,@"m_iPlace"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -86,14 +92,27 @@ END_QUEUE(@"Proc");
 	m_pCurPosition.x=-284+m_iPlace%15*PLACEPER;
 	m_pCurPosition.y=428-m_iPlace/15*(PLACEPER+18);
 	
-	m_iCurrentFrame=9;
+    [self PrepareTexture:nil];
+    
+    m_iCurrenNumberOld=m_iCurrenNumber;
+    
+    [self SetPosWithOffsetOwner];
+    SET_STAGE_EX(NAME(self), @"Proc", @"a10");    
+}
+//------------------------------------------------------------------------------------------------------
+- (void)PrepareTexture:(Processor_ex *)pProc{
+    
+    m_iCurrentFrame=9;
 	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:
                                (m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
     
     InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
-    
-    [self SetPosWithOffsetOwner];
+    m_iCurrenNumberOld=m_iCurrenNumber;
+
+    if(pProc!=nil){
+        SET_STAGE_EX(NAME(self), @"Proc", @"Animate1");
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(Processor_ex *)pProc{
@@ -118,22 +137,38 @@ END_QUEUE(@"Proc");
 	REPEATE;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)Wait:(Processor_ex *)pProc{
+    
+    if(m_iCurrenNumber!=m_iCurrenNumberOld){
+        
+        m_iCurrenNumberOld=m_iCurrenNumber;
+        NEXT_STAGE;
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)ChangePar:(Processor_ex *)pProc{
 
+//    [self SwitchSym];
+    
+    InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId+9;
+
 	NEXT_STAGE;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)FinishQueue:(Processor_ex *)pProc{
-	
-    m_iCurrenNumber=RND%10;
-	
+- (void)SwitchSym{
+    
     m_iCurrentFrame=9;
 	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:(m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
 	
     InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)FinishQueue:(Processor_ex *)pProc{
 	
+//    m_iCurrenNumber=RND%10;	
+    [self SwitchSym];
     SET_STAGE_EX(NAME(self), @"Proc", @"Animate1");
 }
 //------------------------------------------------------------------------------------------------------

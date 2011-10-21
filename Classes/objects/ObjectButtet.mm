@@ -28,8 +28,8 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"PrepareMove", @"PrepareMove:", nil);
     ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
                  LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
-                 SET_FLOAT_V(100,@"finish_Instance"),
-                 SET_FLOAT_V(200,@"Vel"));
+                 SET_FLOAT_V(260,@"finish_Instance"),
+                 SET_FLOAT_V(600,@"Vel"));
 
     ASSIGN_STAGE(@"Mirror",@"DropRight:",
                  LINK_FLOAT_V(m_fCurPosSlader,@"Instance"),
@@ -113,6 +113,8 @@ END_QUEUE(@"Parabola");
 - (void)PrepareDropRight:(ProcStage_ex *)pStage{
     [m_pObjMng RemoveFromGroup:@"BallDown" Object:self];
     
+    mColor.alpha=0.15f;
+
     m_vStartPos=m_pCurPosition;
     m_fCurPosSlader=0;
     
@@ -155,6 +157,8 @@ END_QUEUE(@"Parabola");
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
     [super AchiveLineFloat:pProc];
     
+    int iNewScore=0;
+    
     if(pProc->m_CurStage->NameStage==@"Move"){
         NSArray *pArray=[m_pObjMng GetGroup:@"BallUp"];
         
@@ -181,15 +185,21 @@ END_QUEUE(@"Parabola");
                     
                     m_vEndPos=Vector3DMake(-300, 0, 0);
                     OBJECT_SET_PARAMS(NAME(pOb),SET_VECTOR_V(Vector3DMake(-300, 0, 0),@"m_vEndPos"));
+                    
+                    iNewScore=RND%30+10;
                 }
                 else if(fDist>40){
                     PLAY_SOUND(@"break.wav");
+                    
+                    iNewScore=-7;
                 }
                 else {
                     m_vEndPos=Vector3DMake(-300, 0, 0);
                     OBJECT_SET_PARAMS(NAME(pOb),SET_VECTOR_V(Vector3DMake(-300, 0, 0),@"m_vEndPos"));
 
                     PLAY_SOUND(@"break_4.wav");
+                    
+                    iNewScore=5;
                 }
                 
                 NEXT_STAGE;
@@ -197,7 +207,7 @@ END_QUEUE(@"Parabola");
                 NEXT_STAGE_EX(NAME(pOb), @"Proc");
                 
                 int *ScoreAdd=GET_INT_V(@"Score",@"iScoreAdd");
-                *ScoreAdd+=20;
+                *ScoreAdd+=iNewScore;
 
                 
                 break;

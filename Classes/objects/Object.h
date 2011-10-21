@@ -33,8 +33,8 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
 	float m_fStartAngle,m_fEndAngle;
-	float m_fStartScale,m_fEndScale;
     float m_fCurPosSlader,m_fCurPosSlader2;
+    float m_fStartScale,m_fEndScale;
 
 	//селектор для отрисовки
 	SEL m_sDraw;
@@ -86,7 +86,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	NSMutableString *m_strName;
 
 	//имена групп
-	NSMutableDictionary *m_Groups;
+	Dictionary_Ex *m_Groups;
 
 	//флаг. указвает что на объект не действует глобальная пауза
 	bool m_bNonStop;
@@ -210,8 +210,14 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)InitOffsetTexLoop:(ProcStage_ex *)pStage;//замкнутая анимация сдвига текстуры
 - (void)OffsetTexLoop:(Processor_ex *)pProc;
 
-- (void)InitMirror2Dvector:(ProcStage_ex *)pStage;
+- (void)InitMirror2Dvector:(ProcStage_ex *)pStage;//отражение вектора (2д)/числа
 - (void)Mirror2Dvector:(Processor_ex *)pProc;
+
+- (void)InitParabola1:(ProcStage_ex *)pStage;//Преобразование по кривой параболы
+- (void)Parabola1:(Processor_ex *)pProc;
+
+- (void)InitAchive1Dvector:(ProcStage_ex *)pStage;//изменение float как вектора.
+- (void)Achive1Dvector:(Processor_ex *)pProc;
 
     
 - (void)Idle:(Processor_ex *)pProc;

@@ -46,7 +46,6 @@
 
 - (id)Link_Point:(void *)parPoint withKey:(id)sKey,...;
 
-- (void)RemoveCell:(id)sKey, ...;
 -(void)CrearCell;
 -(void)dealloc;
 
@@ -69,6 +68,7 @@
 -(id)GetIdValue:(id)sKey,...;
 -(void *)GetPointValue:(id)sKey,...;
 
+- (void)RemoveCell:(id)sKey, ...;
 -(void)RemoveValue:(NSString*)sKey;
 -(void)dealloc;
 

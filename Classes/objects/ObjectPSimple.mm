@@ -15,8 +15,6 @@
 	
 	m_iLayer = layerOb2;
 
- //   GET_DIM_FROM_TEXTURE(@"");
-
 START_QUEUE(@"Proc");
 
     ASSIGN_STAGE(@"Show",@"AchiveLineFloat:",
@@ -27,8 +25,8 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"PrepareMove", @"PrepareMove:", nil);
     ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
                  LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
-                 SET_FLOAT_V(-50,@"finish_Instance"),
-                 SET_FLOAT_V(-300,@"Vel"));
+                 SET_FLOAT_V(-360,@"finish_Instance"),
+                 SET_FLOAT_V(-50,@"Vel"));
         
     ASSIGN_STAGE(@"Mirror",@"DropRight:",
                  LINK_FLOAT_V(m_fCurPosSlader,@"Instance"),
@@ -120,6 +118,7 @@ END_QUEUE(@"Parabola");
 - (void)PrepareDropRight:(ProcStage_ex *)pStage{
     [m_pObjMng RemoveFromGroup:@"BallUp" Object:self];
     
+    mColor.alpha=0.15f;
     m_vStartPos=m_pCurPosition;
     m_fCurPosSlader=0;
     

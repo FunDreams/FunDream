@@ -18,6 +18,7 @@
 @interface NAME_TEMPLETS_OBJECT : GObject {
 	
 	int m_iCurrenNumber;
+	int m_iCurrenNumberOld;
 	int m_iPlace;
 	float m_fSpeedScale;
 	
@@ -36,5 +37,9 @@
 /** **/
 -(void)dealloc;
 -(void)Start;
+
+- (void)PrepareTexture:(Processor_ex *)pProc;
+
+- (void)SwitchSym;
 
 @end

@@ -23,7 +23,7 @@
 	m_pObjMng=m_pParent.m_pObjMng;
 	
 	m_strName= [[NSMutableString alloc] initWithString:strName];
-    m_Groups=[[NSMutableDictionary alloc] init];
+    m_Groups=[[Dictionary_Ex alloc] init];
 
 	m_bNonStop=NO;
 	m_bHiden=NO;
@@ -765,6 +765,52 @@
     *pStage->FloatsValues[1]=1-pow(1-*pStage->FloatsValues[0],*pStage->IntsValues[0]);
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitAchive1Dvector:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@Vel",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@Start",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@Finish",TmpStr];
+    pStage->FloatsValues[2]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+
+    NameParam=[NSString stringWithFormat:@"%@Instance",TmpStr];
+    pStage->FloatsValues[3]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[3]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)Achive1Dvector:(Processor_ex *)pProc{
+	    
+    ProcStage_ex * pStage=pProc->m_CurStage;
+
+	float Dir=*pStage->FloatsValues[2]-*pStage->FloatsValues[1];
+	float Magnitude = fabsf(Dir);
+	
+	if(Magnitude>0){Dir/=Magnitude;}
+	
+	(*pStage->FloatsValues[3])+=Dir*(fabsf(*pStage->FloatsValues[0]))*DELTA;
+	
+	float Dir2=*pStage->FloatsValues[3]-*pStage->FloatsValues[1];
+    float Magnitude2 = fabsf(Dir2);
+
+	if(Magnitude2>=Magnitude)
+	{
+		*pStage->FloatsValues[3] = *pStage->FloatsValues[2];
+		NEXT_STAGE;
+	}
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Achive4DColorStatic:(Processor_ex *)pProc{
 	
 //	float pfCurVel=(float )[RESIVE(@"Vel") floatValue];
@@ -825,32 +871,6 @@
 //	{
 //		pfCurInst->x = pFinish->x;
 //		pfCurInst->y = pFinish->y;
-//		NEXT_STAGE;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Achive1DvectorStatic:(Processor_ex *)pProc{
-	
-//	float pfCurVel=(float )[RESIVE(@"Vel") floatValue];
-//	float pStart=(float )[RESIVE(@"Start") floatValue];
-//	float pFinish=(float )[RESIVE(@"Finish") floatValue];
-//	
-//	float *pfCurInst=(float *)RESIVE(@"Instance");
-//	
-//	float Dir=pFinish-pStart;
-//	float Magnitude = fabsf(Dir);
-//	
-//	if(Magnitude>0){Dir/=Magnitude;}
-//	
-//	*pfCurInst+=Dir*(fabsf(pfCurVel))*DELTA;
-//	
-//	float Dir2=*pfCurInst-pStart;
-//    float Magnitude2 = fabsf(Dir2);
-//
-//	
-//	if(Magnitude2>=Magnitude)
-//	{
-//		*pfCurInst = pFinish;
 //		NEXT_STAGE;
 //	}
 }

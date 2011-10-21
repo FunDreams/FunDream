@@ -29,6 +29,8 @@
 		18617778140D3BCB003C53F3 /* ObjectManager_Ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18617776140D3BCB003C53F3 /* ObjectManager_Ex.mm */; };
 		1861777B140D3BE0003C53F3 /* Processor_ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1861777A140D3BE0003C53F3 /* Processor_ex.mm */; };
 		186866481420C5B9005DCA68 /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 186866471420C5B9005DCA68 /* CoreMotion.framework */; };
+		186921F6144DD22700E9F638 /* ObjectGameSpaun.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186921F5144DD22700E9F638 /* ObjectGameSpaun.mm */; };
+		1869220D14514F3000E9F638 /* ObjectParticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1869220C14514F3000E9F638 /* ObjectParticle.mm */; };
 		187E228F1165E9CB00EA912F /* SoundEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187E228D1165E9CB00EA912F /* SoundEngine.cpp */; };
 		187E22A61165EC3200EA912F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22A51165EC3200EA912F /* CoreAudio.framework */; };
 		187E22CE1165EC7600EA912F /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22CD1165EC7600EA912F /* AudioToolbox.framework */; };
@@ -136,6 +138,10 @@
 		18617779140D3BE0003C53F3 /* Processor_ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor_ex.h; sourceTree = "<group>"; };
 		1861777A140D3BE0003C53F3 /* Processor_ex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Processor_ex.mm; sourceTree = "<group>"; };
 		186866471420C5B9005DCA68 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
+		186921F4144DD22700E9F638 /* ObjectGameSpaun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectGameSpaun.h; path = objects/ObjectGameSpaun.h; sourceTree = "<group>"; };
+		186921F5144DD22700E9F638 /* ObjectGameSpaun.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectGameSpaun.mm; path = objects/ObjectGameSpaun.mm; sourceTree = "<group>"; };
+		1869220B14514F3000E9F638 /* ObjectParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectParticle.h; path = objects/ObjectParticle.h; sourceTree = "<group>"; };
+		1869220C14514F3000E9F638 /* ObjectParticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectParticle.mm; path = objects/ObjectParticle.mm; sourceTree = "<group>"; };
 		187E228D1165E9CB00EA912F /* SoundEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundEngine.cpp; sourceTree = "<group>"; };
 		187E228E1165E9CB00EA912F /* SoundEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEngine.h; sourceTree = "<group>"; };
 		187E22A51165EC3200EA912F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
@@ -384,6 +390,10 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				1869220B14514F3000E9F638 /* ObjectParticle.h */,
+				1869220C14514F3000E9F638 /* ObjectParticle.mm */,
+				186921F4144DD22700E9F638 /* ObjectGameSpaun.h */,
+				186921F5144DD22700E9F638 /* ObjectGameSpaun.mm */,
 				18849EB51441B038006F8EEB /* ObjectScoreFun1.h */,
 				18849EB61441B038006F8EEB /* ObjectScoreFun1.mm */,
 				182861421410AC56003EDFFE /* ObjectMultiTouch.h */,
@@ -773,6 +783,8 @@
 				182861401410AC06003EDFFE /* ObjectButtet.mm in Sources */,
 				182861441410AC57003EDFFE /* ObjectMultiTouch.mm in Sources */,
 				18849EB71441B03A006F8EEB /* ObjectScoreFun1.mm in Sources */,
+				186921F6144DD22700E9F638 /* ObjectGameSpaun.mm in Sources */,
+				1869220D14514F3000E9F638 /* ObjectParticle.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

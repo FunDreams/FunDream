@@ -9,34 +9,24 @@
 
 #import <Foundation/Foundation.h>
 #import "Box2D.h"
-#import "StaticObject.h"
-
+#import "Object.h"
 
 /** Шаблонный класс для объектов**/
-@interface ObjectScoreFun1 : StaticObject {
-	
-	int iCountScore;
-	int iScoreAdd;
-    
-    int iCountDownScore;
-	int iScoreDownAdd;
-	
-	float m_fWNumber;
-    float WSym,HSym;
-    
-    NSMutableString *m_strStartStage;
-    float m_fStartPos;
-    int m_iAlign;
+@interface ObjectGameSpaun : GObject {
+    float m_fCurrntPeriod;
+    float m_fStartPeriod;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-- (void)UpdateScore;
-/** **/
-
--(void)SetColorSym;
--(void)dealloc;
+/** заготовки =) **/
+-(void)Destroy;
 -(void)Start;
+-(void)Update;
 
+- (void)Spaun;
+
+- (void)dealloc;
+    
 @end

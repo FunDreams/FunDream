@@ -66,6 +66,9 @@
 //	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
     CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
+
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"Particle",nil);
+
     
 //  CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
 
