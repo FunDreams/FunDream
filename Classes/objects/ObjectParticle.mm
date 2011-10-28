@@ -187,7 +187,7 @@ END_QUEUE(@"Proc");
         vertices[2+i*6]=Vector3DMake(-1.0+i*2, -1.0, -0.0);
         vertices[3+i*6]=Vector3DMake( 1.0+i*2, -1.0, -0.0);
         vertices[4+i*6]=Vector3DMake(-1.0+i*2, -1.0, -0.0);
-        vertices[5+i*6]=Vector3DMake( 1.0+i*2,  1.0, -0.0);
+        vertices[5+i*6]=Vector3DMake( 1.0+i*2,  1.0, -0.0); 
     }
     
 	texCoords=(GLfloat *)realloc(texCoords,m_iCountVertex*2*sizeof(GLfloat));
