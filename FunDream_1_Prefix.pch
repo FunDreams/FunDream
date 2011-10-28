@@ -28,6 +28,7 @@
 	#import "PreviewController.h"
 	#import "MainController.h"
 
+    #import "ObjectParticle.h"
 	#import "ObjectManager_Ex.h"
 	#import "Object.h"
     #import "Mega_tree.h"

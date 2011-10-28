@@ -17,14 +17,8 @@
 /** Шаблонный класс для объектов**/
 @interface NAME_TEMPLETS_OBJECT : GObject {
 	
-	int TestPar;
-	DWORD TestDword;
-	bool TestBool;
-    float TestFloat;
-    float TestFloat2;
-	NSMutableString *TestStr;
-	Vector3D Testvec;
-    Color3D TestCol;
+    
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/

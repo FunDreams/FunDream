@@ -67,10 +67,11 @@
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
     CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
 
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"Particle",nil);
 
-    
-//  CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"SysParticles",
+                      SET_STRING_V(@"Bullet_Up.png",@"m_pNameTexture"));
+
+    CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
 
 //физика приложения тут///////////////////////////////////////////////////////
 //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
