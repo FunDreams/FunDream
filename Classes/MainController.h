@@ -88,6 +88,7 @@
     bool m_bMotionMashine;
 
 	GLuint	texture[MAX_NUM_TEXTURE];
+    UInt32 m_iCount;
 }
 
 - (void)Pause:(bool)bPause;

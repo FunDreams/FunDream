@@ -131,17 +131,17 @@
             
             if (pObject->m_bNonStop) {
 
-                pObject->m_fDeltaTime = m_fDeltaTime;  
-                
                 Processor_ex *pProc_ex;
                 enumeratorProc = [pObject->m_pProcessor_ex objectEnumerator];
+                
+                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+                if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
+
                 while ((pProc_ex = [enumeratorProc nextObject]))
                 {
                     [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
                 }
                 
-                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
-                if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
             }
 		}
 	}
@@ -154,7 +154,7 @@
 - (void)SelfMoveNormal:(id)pDeltaTime{
 
     NSNumber *NumDelta=pDeltaTime;
-    m_fDeltaTime=[NumDelta doubleValue];
+    m_fDeltaTime=[NumDelta floatValue];
 
 	NSEnumerator *enumeratorProc;
 
@@ -166,16 +166,16 @@
 		GObject *pObject;
 
 		while ((pObject = [enumeratorObjects nextObject])) {
-            
-			pObject->m_fDeltaTime = m_fDeltaTime;
-            
+                        
             Processor_ex *pProc_ex;
             enumeratorProc = [pObject->m_pProcessor_ex objectEnumerator];
+            
+            if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+            if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
+
 			while ((pProc_ex = [enumeratorProc nextObject]))
                 [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
             
-            [pObject->m_pProcessor_ex SynhData];
-
 		}
 	}
 
@@ -230,35 +230,35 @@
 	int ObjectCountDraw=[pDrawArray count];  
 
     
-    if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
-        
-        fCurrentAngleRotateOffset=fAngleRotateOffset;
-        
-        if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
-            
-            fCurrentAngleRotateOffset=fAngleRotateOffset;
-        }
-
-        if(fAngleRotateOffset>fCurrentAngleRotateOffset){
-            
-            fCurrentAngleRotateOffset+=m_fDeltaTime*1000;
-            
-            if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
-                
-                fCurrentAngleRotateOffset=fAngleRotateOffset;
-            }
-        }
-        else{
-            
-            fCurrentAngleRotateOffset-=m_fDeltaTime*1000;
-            
-            if(fCurrentAngleRotateOffset<=fAngleRotateOffset){
-                
-                fCurrentAngleRotateOffset=fAngleRotateOffset;
-            }
-
-        }
-    }
+//    if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
+//        
+//        fCurrentAngleRotateOffset=fAngleRotateOffset;
+//        
+//        if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+//            
+//            fCurrentAngleRotateOffset=fAngleRotateOffset;
+//        }
+//
+//        if(fAngleRotateOffset>fCurrentAngleRotateOffset){
+//            
+//            fCurrentAngleRotateOffset+=m_fDeltaTime*1000;
+//            
+//            if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+//                
+//                fCurrentAngleRotateOffset=fAngleRotateOffset;
+//            }
+//        }
+//        else{
+//            
+//            fCurrentAngleRotateOffset-=m_fDeltaTime*1000;
+//            
+//            if(fCurrentAngleRotateOffset<=fAngleRotateOffset){
+//                
+//                fCurrentAngleRotateOffset=fAngleRotateOffset;
+//            }
+//
+//        }
+//    }
     
    if(m_pParent->previousOrientation==UIInterfaceOrientationLandscapeRight || 
             m_pParent->previousOrientation==UIInterfaceOrientationLandscapeLeft)
@@ -444,6 +444,7 @@ repeate:
 			
 			[m_pAllObjects setObject:pObject forKey:pObject->m_strName];
             [pObject Start];
+            
             [pObject AddToDraw];
 		}
 		

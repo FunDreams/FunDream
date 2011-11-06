@@ -15,7 +15,6 @@
 		1808F34012D9F85700522EED /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1808F33D12D9F85700522EED /* MainWindow-iPad.xib */; };
 		1808F34112D9F85700522EED /* PreviewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1808F33E12D9F85700522EED /* PreviewController-ipad.xib */; };
 		1808F34612D9F8D100522EED /* PushButton.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1808F34512D9F8D100522EED /* PushButton.wav */; };
-		1808F62112DA0ECD00522EED /* FunDream_1-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 1808F62012DA0ECD00522EED /* FunDream_1-Info.plist */; };
 		180F9F0F12ABBFE9000E18FE /* ObjectTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 180F9F0D12ABBFE9000E18FE /* ObjectTest.mm */; };
 		181F2BA712D5019E008A6482 /* ObjectButton.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181F2BA512D5019E008A6482 /* ObjectButton.mm */; };
 		181F2BB712D50229008A6482 /* ObjectCup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181F2BB512D50229008A6482 /* ObjectCup.mm */; };
@@ -60,6 +59,7 @@
 		18EFBFED1414F30A00426553 /* sounds_loop in Resources */ = {isa = PBXBuildFile; fileRef = 18EFBFEB1414F30A00426553 /* sounds_loop */; };
 		18F86B30129975A20068A469 /* ObjectTemplet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F86B2F129975A20068A469 /* ObjectTemplet.mm */; };
 		18F86DE6129A9A4E0068A469 /* StaticObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F86DE5129A9A4E0068A469 /* StaticObject.mm */; };
+		18FDCCAF14645DFE000105FD /* textureAtlas in Resources */ = {isa = PBXBuildFile; fileRef = 18FDCCAE14645DFE000105FD /* textureAtlas */; };
 		18FFC80E121597520092C8F5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FFC80D121597520092C8F5 /* CFNetwork.framework */; };
 		1D3623260D0F684500981E51 /* EngineAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EngineAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -192,6 +192,7 @@
 		18F86B2F129975A20068A469 /* ObjectTemplet.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectTemplet.mm; path = objects/ObjectTemplet.mm; sourceTree = "<group>"; };
 		18F86DE4129A9A4E0068A469 /* StaticObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StaticObject.h; path = objects/StaticObject.h; sourceTree = "<group>"; };
 		18F86DE5129A9A4E0068A469 /* StaticObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = StaticObject.mm; path = objects/StaticObject.mm; sourceTree = "<group>"; };
+		18FDCCAE14645DFE000105FD /* textureAtlas */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textureAtlas; sourceTree = "<group>"; };
 		18FFC80D121597520092C8F5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* EngineAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineAppDelegate.h; sourceTree = "<group>"; };
@@ -479,6 +480,7 @@
 				18D2782814171B190001B480 /* Interface */,
 				18EFBFEA1414F30A00426553 /* sounds */,
 				18EFBFEB1414F30A00426553 /* sounds_loop */,
+				18FDCCAE14645DFE000105FD /* textureAtlas */,
 				18EFBFE81414F2E900426553 /* texture */,
 				1808F62012DA0ECD00522EED /* FunDream_1-Info.plist */,
 				1808F34412D9F8D100522EED /* Sound & Music */,
@@ -668,6 +670,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastUpgradeCheck = 0420;
 				ORGANIZATIONNAME = FunDreams;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FunDream_1" */;
@@ -703,7 +706,6 @@
 				1808F34012D9F85700522EED /* MainWindow-iPad.xib in Resources */,
 				1808F34112D9F85700522EED /* PreviewController-ipad.xib in Resources */,
 				1808F34612D9F8D100522EED /* PushButton.wav in Resources */,
-				1808F62112DA0ECD00522EED /* FunDream_1-Info.plist in Resources */,
 				18EFBFE91414F2E900426553 /* texture in Resources */,
 				18EFBFEC1414F30A00426553 /* sounds in Resources */,
 				18EFBFED1414F30A00426553 /* sounds_loop in Resources */,
@@ -711,6 +713,7 @@
 				18D2782514171AD60001B480 /* Default@2x.png in Resources */,
 				18D2782714171B090001B480 /* Default-Landscape~ipad.png in Resources */,
 				18D2782A14171B460001B480 /* icon.png in Resources */,
+				18FDCCAF14645DFE000105FD /* textureAtlas in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -801,7 +804,6 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "facebook-iphone-sdk/src";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "A6578CF4-91E5-4B99-A93A-78A5E48019E1";
 				SDKROOT = iphoneos;
 			};
@@ -885,7 +887,6 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_CFLAGS = "-DTARGET_OS_IPHONE";
-				PREBINDING = NO;
 				PROVISIONING_PROFILE = "AE473439-E79A-4EF4-8DE2-8CCC60D3F80D";
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
@@ -905,7 +906,6 @@
 				INFOPLIST_FILE = "FunDreams-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
 				ONLY_ACTIVE_ARCH = YES;
-				PREBINDING = NO;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "CB00DAA7-3685-4E33-BAFC-A5D78CEB2C90";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

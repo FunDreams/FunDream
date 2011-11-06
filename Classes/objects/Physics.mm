@@ -56,7 +56,7 @@
 	
 	// Instruct the world to perform a single step of simulation. It is
 	// generally best to keep the time step and iterations fixed.
-	m_pWorld->Step(m_fDeltaTime, iterations);
+	m_pWorld->Step(m_pObjMng->m_fDeltaTime, iterations);
 }
 
 @end

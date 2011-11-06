@@ -31,7 +31,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-    m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
+ //   m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
     
 	[super Start];
 }

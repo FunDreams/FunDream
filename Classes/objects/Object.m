@@ -37,8 +37,6 @@
 
     m_pProcessor_ex = [[Dictionary_Ex alloc] init];
 	
-	m_fDeltaTime = 0;
-	
 	m_pCurPosition=Vector3DMake(0,0,0);
 	m_pCurScale=Vector3DMake(1,1,1);
 	m_pCurAngle=Vector3DMake(0,0,0);

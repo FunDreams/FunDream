@@ -62,9 +62,6 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	
 	//родитель-уровень для данного класса
 	MainController* m_pParent;
-
-	//delta time
-	double m_fDeltaTime;
 	
 	//текущая позиция, масштаб и угол поворота
 	Vector3D m_pCurPosition;

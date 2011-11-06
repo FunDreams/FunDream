@@ -13,6 +13,8 @@
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	[super Init:Parent WithName:strName];
 	
+    m_iLayer = layerTemplet;
+
 START_QUEUE(@"Proc");
 	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
 //	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
@@ -31,8 +33,6 @@ END_QUEUE(@"Proc");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-
-    m_iLayer = layerTemplet;
     
     GET_TEXTURE(mTextureId,m_pNameTexture);
     //   GET_DIM_FROM_TEXTURE(@"");

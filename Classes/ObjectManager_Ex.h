@@ -107,7 +107,7 @@ typedef enum tagLayerID {
     //Mega tree
     Mega_tree *pMegaTree;
     
-	double m_fDeltaTime;
+	float m_fDeltaTime;
 }
 
 @property(nonatomic, retain) NSMutableArray *m_pObjectList;

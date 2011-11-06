@@ -16,9 +16,10 @@
 
 /** Шаблонный класс для объектов**/
 @interface NAME_TEMPLETS_OBJECT : GObject {
-	
     
     Particle *pParticle;
+    Vector3D Vel;
+    float VelRotate;
 }
 
 /** Инициализирует объект **/

@@ -186,7 +186,7 @@
         m_FirstStage=CurrStageTmp;
     }
     
-    [self SetParams:CurrStageTmp->NameStage WithParams:Parametrs];
+    [self SetParams:CurrStageTmp->NameStage WithParams:Parametrs];    
 }
 //-------------------------------------------------------------------------------------------
 - (void)SetStage:(NSString *)Stage{

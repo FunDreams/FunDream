@@ -64,7 +64,7 @@ mHeight=pNum->m_fHeight;}
 #define REPEATE [pProc SetStage:pProc->m_CurStage->NameStage];
 
 #define DWORD unsigned int
-#define DELTA m_fDeltaTime
+#define DELTA m_pObjMng->m_fDeltaTime
 
 #define VIEWPORT_W 640
 #define VIEWPORT_H 960

@@ -115,7 +115,7 @@
 #endif
 
     motionManager = [[CMMotionManager alloc] init];
-    [motionManager setGyroUpdateInterval:1.0 / kAccelerometerFrequency];  
+    [motionManager setGyroUpdateInterval:1.0 / kAccelerometerFrequency];
     
     if(motionManager.isDeviceMotionAvailable){
         [motionManager startDeviceMotionUpdates];
@@ -610,11 +610,10 @@ FullName:(NSString *)FullNameSound
 -(UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention 
             NameFile:(NSString *)NameFile
 {
-	static UInt32 m_iCount=0;
 	UInt32	m_iTextureId=-1;
     TextureContainer * TmpContainer;
 
-	if((TmpContainer=(TextureContainer *)[[m_pTextureList objectForKey:NameFile] intValue])!=nil){
+	if((TmpContainer=(TextureContainer *)[m_pTextureList objectForKey:NameFile])!=nil){
         
         return TmpContainer->m_iTextureId;
     }
@@ -629,8 +628,8 @@ FullName:(NSString *)FullNameSound
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		
 		NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
 		UIImage *image = [[UIImage alloc] initWithData:texData];
@@ -666,7 +665,7 @@ FullName:(NSString *)FullNameSound
         TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
         
 		[m_pTextureList setObject:TmpContainer forKey:NameFile];
-		
+
 		m_iCount++;
 
 		CGContextRelease(context);
