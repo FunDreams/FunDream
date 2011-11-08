@@ -78,6 +78,7 @@ END_QUEUE(@"test")
     
     pParticle=[[Particle alloc] Init:self];
     [pParticle AddToContainer:@"SysParticles"];
+//    [pParticle SetFrame:RND%2];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(Processor_ex *)pProc{

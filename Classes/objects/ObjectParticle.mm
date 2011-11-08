@@ -31,6 +31,45 @@
     return self;
 }
 //------------------------------------------------------------------------------------------------------
+-(void)SetFrame:(int)iFrame{
+
+    if(m_pParticleContainer!=nil){
+        
+        m_iNextFrame=iFrame;
+        GLfloat *m_pTexCoords=(m_pParticleContainer->texCoords+(m_iCurrentOffset)*12);
+        
+        
+        float OffsetX=iFrame%((ObjectParticle *)m_pParticleContainer)->m_iCountX;
+        float OffsetY=iFrame/((ObjectParticle *)m_pParticleContainer)->m_iCountX;
+
+        float TmpStepX=((ObjectParticle *)m_pParticleContainer)->Xstep/((ObjectParticle *)m_pParticleContainer)->m_vSize.x;
+
+        float TmpStepY=((ObjectParticle *)m_pParticleContainer)->Ystep/((ObjectParticle *)m_pParticleContainer)->m_vSize.y;
+
+        CGRect R= CGRectMake(TmpStepX*OffsetX,TmpStepY*OffsetY,
+        TmpStepX*(OffsetX+1),TmpStepY*(OffsetY+1) );
+
+//////координаты текстуры
+        m_pTexCoords[0]= R.origin.x;
+        m_pTexCoords[1]= R.size.height;
+        
+        m_pTexCoords[2]= R.size.width;
+        m_pTexCoords[3]= R.size.height;
+        
+        m_pTexCoords[6]= R.size.width;
+        m_pTexCoords[7]= R.origin.y;
+        
+        m_pTexCoords[4]= R.origin.x;
+        m_pTexCoords[5]= R.origin.y;
+        
+        
+        m_pTexCoords[8]= m_pTexCoords[4];
+        m_pTexCoords[9]= m_pTexCoords[5];
+        m_pTexCoords[10]= m_pTexCoords[2];
+        m_pTexCoords[11]= m_pTexCoords[3];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 -(void)RemoveFromContainer{
     
     if(m_pParticleContainer!=nil){
@@ -280,12 +319,25 @@
 
 	[super Start];
     
-//    GET_TEXTURE(mTextureId,@"Bullet_Up.png");
+    if(m_INumLoadTextures>1){
+        
+        m_ICountFrames=m_iCountY*m_iCountX;
+        
+        Xstep=m_vSize.x/m_iCountX;
+        Ystep=m_vSize.y/m_iCountY;
+        
+        mTextureId=[self LoadTextureAtlas];
+    }
+    else {
+        GET_TEXTURE(mTextureId,m_pNameTexture);
+        m_vSize=Vector3DMake(mWidth,mHeight,0);
+        
+        m_ICountFrames=m_iCountY*m_iCountX;
+        
+        Xstep=m_vSize.x/m_iCountX;
+        Ystep=m_vSize.y/m_iCountY;
 
-    mTextureId=[self LoadTextureAtlas];
-
-//    m_pCurPosition.y=-400;
-//    m_pCurPosition.x=-100;
+    }
 
 //  m_iLayerTouch=layerTouch_0;//слой касания
 //  [self SetTouch:YES];//интерактивность
@@ -294,15 +346,8 @@
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
 }
 //------------------------------------------------------------------------------------------------------
--(void)SetFrame{
-}
-//------------------------------------------------------------------------------------------------------
 -(UInt32)LoadTextureAtlas{
     
-    m_ICountFrames=m_iCountY*m_iCountX;
-    
-    Xstep=m_vSize.x/m_iCountX;
-    Ystep=m_vSize.y/m_iCountY;
     int IcureText=0;
 
     TextureContainer * TmpContainer=[m_pParent->m_pTextureList objectForKey:m_pNameTexture];

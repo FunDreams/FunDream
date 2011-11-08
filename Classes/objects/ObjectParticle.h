@@ -37,6 +37,7 @@
     NSString *strNameParticle;
     
     GObject* m_pParticleContainer;    
+    int m_iNextFrame;
 }
 
 -(id)Init:(GObject *)pObParent;
@@ -54,6 +55,7 @@
 -(void)UpdateParticleColor4Vectex;
     
 -(void)RemoveFromContainer;
+-(void)SetFrame:(int)iFrame;
 
 -(void)dealloc;
 
@@ -61,7 +63,7 @@
 
 /** Шаблонный класс для объектов**/
 @interface ObjectParticle : GObject {
-
+@public
     NSMutableDictionary *m_pParticle;
     
     Vector3D m_vSize;
