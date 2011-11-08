@@ -56,6 +56,13 @@ END_QUEUE(@"Proc");
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesScore",
+                      SET_VECTOR_V(Vector3DMake(128,256,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Bullet_Down.png",@"m_pNameTexture"));
+
 	[super Start];
 
     iCountScore=PARAMS_APP->m_iCurRecord;

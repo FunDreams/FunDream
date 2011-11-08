@@ -67,16 +67,9 @@
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
     CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
 
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"SysParticles",
-                      SET_VECTOR_V(Vector3DMake(128,256,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Bullet_Down.png",@"m_pNameTexture"));
-
-    for (int i=0; i<100; i++) {
-        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
-    }
+//    for (int i=0; i<100; i++) {
+//        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
+//    }
 //физика приложения тут///////////////////////////////////////////////////////
 //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
 //	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
