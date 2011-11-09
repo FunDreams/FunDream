@@ -27,6 +27,8 @@
     
     int iFinishFrame;
     float InstFrameFloat;
+    
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/
@@ -37,6 +39,9 @@
 /** **/
 -(void)dealloc;
 -(void)Start;
+
+- (void)HideNum;
+- (void)ShowNum;
 
 - (void)PrepareTexture:(Processor_ex *)pProc;
 

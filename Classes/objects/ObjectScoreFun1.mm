@@ -57,11 +57,11 @@ END_QUEUE(@"Proc");
 - (void)Start{
 
     CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesScore",
-                      SET_VECTOR_V(Vector3DMake(128,256,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Bullet_Down.png",@"m_pNameTexture"));
+                      SET_VECTOR_V(Vector3DMake(512,1024,0),@"m_vSize"),
+                      SET_INT_V(10, @"m_iCountX"),
+                      SET_INT_V(10, @"m_iCountY"),
+                      SET_INT_V(100, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"0-01@2x.png",@"m_pNameTexture"));
 
 	[super Start];
 
@@ -116,33 +116,30 @@ END_QUEUE(@"Proc");
 	NSMutableArray *TmpArr=m_pChildrenbjectsArr;
 
 	for (int i=[pArrayScore count]; i< [TmpArr count]; i++)
-    {
-		OBJECT_SET_PARAMS(((GObject *)[TmpArr objectAtIndex:i])->m_strName,
-						  SET_BOOL_V(YES,@"m_bHiden"));
+    {        
+        OBJECT_PERFORM_SEL(((GObject *)[TmpArr objectAtIndex:i])->m_strName, @"HideNum");
     }
 
     if ([pArrayScore count]==0 && [TmpArr count]!=0) {
-        
+
         GObject *pOb=(GObject *)[TmpArr objectAtIndex:0];
 
         OBJECT_SET_PARAMS(pOb->m_strName,
                           SET_INT_V(0,@"m_iCurrentSym"),
-                          SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"),
-                          SET_BOOL_V(NO,@"m_bHiden"));
+                          SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pOffsetCurPosition"));
+
+        OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
     }
     else for (int i=0; i< [pArrayScore count]; i++)
     {
 
         GObject *pOb=(GObject *)[TmpArr objectAtIndex:i];
         
-        int bOldHidden=pOb->m_bHiden;
     OBJECT_SET_PARAMS(pOb->m_strName,
         SET_INT_V([[pArrayScore objectAtIndex:i] intValue],@"m_iCurrentSym"),
-                SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-                          SET_BOOL_V(NO,@"m_bHiden"));
-        
-        if(bOldHidden==YES)
-        {SET_STAGE_EX(NAME(pOb), @"Proc", @"First");}
+                SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"));
+
+        OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
     }
     
 	UPDATE;

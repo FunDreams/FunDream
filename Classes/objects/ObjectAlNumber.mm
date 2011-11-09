@@ -15,23 +15,8 @@
 	[super Init:Parent WithName:strName];
 		
 	m_iLayer = layerNumber;
-	
-	for (int i=0; i<10; i++) {
-		for (int j=0; j<10; j++) {
-			
-			NSString *pstr=nil;
-			
-			if(j==9)
-				pstr=[NSString stringWithFormat:@"%d-%d@2x.png", i,j+1];
-			else pstr=[NSString stringWithFormat:@"%d-0%d@2x.png", i,j+1];
-			
-			UInt32 TmpIdTexture=-1;
-			GET_TEXTURE(TmpIdTexture,pstr);
-			
-			[m_pArrayImages addObject:[NSNumber numberWithInt:TmpIdTexture]];
-		}
-	}
-	
+    m_bHiden=YES;
+		
 	mWidth=50;
 	mHeight=92;
 //====================================================
@@ -46,7 +31,7 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",nil);
     DELAY_STAGE(@"a10", 1000, 1);
 
-    ASSIGN_STAGE(@"Animate1",@"Animate:",
+    ASSIGN_STAGE(@"Animate1",@"AnimateParticle:",
                  LINK_INT_V(iFinishFrame,@"Finish_Frame"),
                  LINK_INT_V(mTextureId,@"InstFrame"),
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
@@ -57,7 +42,7 @@ START_QUEUE(@"Proc");
     ASSIGN_STAGE(@"ChangePar",@"ChangePar:",nil);
  //   DELAY_STAGE(@"ChangePar", 3000, 4000);
 
-    ASSIGN_STAGE(@"Animate2",@"Animate:",
+    ASSIGN_STAGE(@"Animate2",@"AnimateParticle:",
                  LINK_INT_V(iFinishFrame,@"Finish_Frame"),
                  LINK_INT_V(mTextureId,@"InstFrame"),
                  LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
@@ -97,15 +82,33 @@ END_QUEUE(@"Proc");
     m_iCurrenNumberOld=m_iCurrenNumber;
     
     [self SetPosWithOffsetOwner];
-    SET_STAGE_EX(NAME(self), @"Proc", @"a10");    
+    SET_STAGE_EX(NAME(self), @"Proc", @"a10");   
+    
+    pParticle=[[Particle alloc] Init:self];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)HideNum{
+    [pParticle RemoveFromContainer];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)ShowNum{
+    
+    if(pParticle->m_pParticleContainer==nil){
+        SET_STAGE_EX(NAME(self), @"Proc", @"First");
+    }
+
+    [pParticle AddToContainer:@"ParticlesScore"];
+    
+    [pParticle SetFrame:mTextureId];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareTexture:(Processor_ex *)pProc{
     
     m_iCurrentFrame=9;
-	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:
-                               (m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
+	mTextureId = m_iCurrenNumber*10+m_iCurrentFrame;
     
+    [pParticle SetFrame:mTextureId];
+
     InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
     m_iCurrenNumberOld=m_iCurrenNumber;
@@ -115,11 +118,21 @@ END_QUEUE(@"Proc");
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitAnimateParticle:(ProcStage_ex *)pStage{
+    
+    [self InitAnimate:pStage];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)AnimateParticle:(Processor_ex *)pProc{
+    [self Animate:pProc];
+    [pParticle SetFrame:mTextureId];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Move:(Processor_ex *)pProc{
 
     [self SetPosWithOffsetOwner];
 
-	if (m_bHiden==NO) {
+	if (pParticle!=nil && pParticle->m_pParticleContainer!=nil) {
 		m_fPhase+=DELTA*m_fSpeedScale;
 		float OffsetRotate=5.0f*sin(m_fPhase/2);
 		m_pCurAngle.z=OffsetRotate;
@@ -127,12 +140,15 @@ END_QUEUE(@"Proc");
 		float OffsetScale=2*cos(m_fPhase);
 		
 		m_pCurScale.x=mWidth*0.5f+OffsetScale;
-		m_pCurScale.y=mHeight*0.5f-OffsetScale;		
+		m_pCurScale.y=mHeight*0.5f-OffsetScale;	
+        
+        [pParticle UpdateParticleMatr];
 	}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HidenOb:(Processor_ex *)pProc{
-	m_bHiden=YES;
+        
+    [pParticle RemoveFromContainer];
 	NEXT_STAGE;
 	REPEATE;
 }
@@ -159,10 +175,12 @@ END_QUEUE(@"Proc");
 - (void)SwitchSym{
     
     m_iCurrentFrame=9;
-	mTextureId = [(NSNumber *)[m_pArrayImages objectAtIndex:(m_iCurrenNumber*10+m_iCurrentFrame)] intValue];
+    mTextureId = m_iCurrenNumber*10+m_iCurrentFrame;
 	
     InstFrameFloat=mTextureId;
     iFinishFrame=mTextureId-9;
+    
+    [pParticle SetFrame:mTextureId];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)FinishQueue:(Processor_ex *)pProc{
@@ -170,6 +188,14 @@ END_QUEUE(@"Proc");
 //    m_iCurrenNumber=RND%10;	
     [self SwitchSym];
     SET_STAGE_EX(NAME(self), @"Proc", @"Animate1");
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Destroy{
+    
+    [pParticle RemoveFromContainer];
+    [pParticle release];
+    
+    [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(CGPoint)CurrentPoint{

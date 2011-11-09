@@ -16,11 +16,11 @@
     m_bHiden=YES;
 	m_iLayer = layerSystem;
 
-//START_QUEUE(@"Proc");
-//	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-//	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-//    DELAY_STAGE(@"Proc",1000, 1);
-//END_QUEUE(@"Proc");
+START_QUEUE(@"Proc");
+	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
+    DELAY_STAGE(@"Proc",1000, 1);
+END_QUEUE(@"Proc");
         
 //    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
  //   m_iLayerTouch=layerTouch_0;//слой касания
@@ -31,7 +31,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
- //   m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
+    m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
     
 	[super Start];
 }
