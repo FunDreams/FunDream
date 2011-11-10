@@ -33,6 +33,20 @@ END_QUEUE(@"Proc");
 
     m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
     
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
+                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Down_Bullet.png",@"m_pNameTexture"));
+
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesUp",
+                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
+
 	[super Start];
 }
 //------------------------------------------------------------------------------------------------------

@@ -84,7 +84,7 @@ END_QUEUE(@"Proc");
     [self SetPosWithOffsetOwner];
     SET_STAGE_EX(NAME(self), @"Proc", @"a10");   
     
-    pParticle=[[Particle alloc] Init:self];
+    if(pParticle==nil){pParticle=[[Particle alloc] Init:self];}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HideNum{
@@ -194,6 +194,7 @@ END_QUEUE(@"Proc");
     
     [pParticle RemoveFromContainer];
     [pParticle release];
+    pParticle=nil;
     
     [super Destroy];
 }

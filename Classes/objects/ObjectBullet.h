@@ -13,6 +13,7 @@
 
 /** Шаблонный класс для объектов**/
 @interface ObjectBullet : GObject {
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/

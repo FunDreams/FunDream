@@ -14,6 +14,7 @@
 	[super Init:Parent WithName:strName];
 	
 	m_iLayer = layerOb2;
+    m_bHiden=YES;
 
 START_QUEUE(@"Proc");
 
@@ -23,7 +24,7 @@ START_QUEUE(@"Proc");
                  SET_FLOAT_V(1,@"Vel"));
 
     ASSIGN_STAGE(@"PrepareMove", @"PrepareMove:", nil);
-    ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
+    ASSIGN_STAGE(@"Move",@"AchiveLineFloatBall:",
                  LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
                  SET_FLOAT_V(-360,@"finish_Instance"),
                  SET_FLOAT_V(-50,@"Vel"));
@@ -105,9 +106,18 @@ END_QUEUE(@"Parabola");
     
     m_fStartScale=m_pCurScale.x;
     m_fEndScale=m_fStartScale*0.6f;
+    
+    if(pParticle==nil){
+        
+        pParticle=[[Particle alloc] Init:self];
+        [pParticle AddToContainer:@"ParticlesUp"];
+        [pParticle SetFrame:0];
+    }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{}
+- (void)Update{
+    [pParticle UpdateParticleMatr];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareMove:(Processor_ex *)pProc{
     
@@ -144,16 +154,34 @@ END_QUEUE(@"Parabola");
     if(m_fCurPosSlader<0.7 && m_vEndPos.x>0){
         m_pCurAngle.z+=DELTA*m_fVelRotate;
     }
+    
+    [pParticle UpdateParticleMatr];
+    [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
 
 //    m_pCurAngle.z+=DELTA*10;
     [super AchiveLineFloat:pProc];
+    [pParticle UpdateParticleColor];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)InitAchiveLineFloatBall:(ProcStage_ex *)pStage{
+    [super InitAchiveLineFloat:pStage];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)AchiveLineFloatBall:(Processor_ex *)pProc{
+    [super AchiveLineFloat:pProc];
+    [pParticle UpdateParticleMatr];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     UPDATE;
+    
+    [pParticle RemoveFromContainer];
+    [pParticle release];
+    pParticle=nil;
+
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

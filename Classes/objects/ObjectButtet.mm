@@ -14,6 +14,7 @@
 	[super Init:Parent WithName:strName];
 	
 	m_iLayer = layerOb2;
+    m_bHiden=YES;
 
     GET_TEXTURE(mTextureId,@"Bullet_Down.png");
 
@@ -37,7 +38,7 @@ START_QUEUE(@"Proc");
                  SET_FLOAT_V(0.5f,@"Vel"));
 
 //    ASSIGN_STAGE(@"PrapareHide",@"PrapareHide:",nil);
-    ASSIGN_STAGE(@"hide",@"AchiveLineFloat:",
+    ASSIGN_STAGE(@"hide",@"Fade:",
                  LINK_FLOAT_V(mColor.alpha,@"Instance"),
                  SET_FLOAT_V(0,@"finish_Instance"),
                  SET_FLOAT_V(-1,@"Vel"));
@@ -100,9 +101,18 @@ END_QUEUE(@"Parabola");
     
     m_fStartScale=m_pCurScale.x;
     m_fEndScale=m_fStartScale*0.6f;
+    
+    if(pParticle==nil){
+
+        pParticle=[[Particle alloc] Init:self];
+        [pParticle AddToContainer:@"ParticlesDown"];
+        [pParticle SetFrame:0];
+    }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{}
+- (void)Update{
+    [pParticle UpdateParticleMatr];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareMove:(Processor_ex *)pProc{
     
@@ -123,7 +133,9 @@ END_QUEUE(@"Parabola");
     
     m_fVelRotate=(float)(RND%50)-25;
     if(m_fVelRotate>0)m_fVelRotate+=100;
-    else m_fVelRotate-=100;    
+    else m_fVelRotate-=100;  
+    
+    [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitDropRight:(ProcStage_ex *)pStage{
@@ -133,6 +145,7 @@ END_QUEUE(@"Parabola");
 - (void)DropRight:(Processor_ex *)pProc{
     
     [super AchiveLineFloat:pProc];
+    [pParticle UpdateParticleMatr];
     
     SET_MIRROR( m_fCurPosSlader2, 1, 0,m_pCurScale.x, m_fEndScale, m_fStartScale);
     SET_MIRROR( m_fCurPosSlader2, 1, 0,m_pCurScale.y, m_fEndScale, m_fStartScale);
@@ -154,8 +167,19 @@ END_QUEUE(@"Parabola");
     return NO;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitFade:(ProcStage_ex *)pStage{
+    [self InitAchiveLineFloat:pStage];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Fade:(Processor_ex *)pProc{
+    [self AchiveLineFloat:pProc];
+    
+    [pParticle UpdateParticleColor];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)AchiveLineFloat:(Processor_ex *)pProc{
     [super AchiveLineFloat:pProc];
+    [pParticle UpdateParticleMatr];
     
     int iNewScore=0;
     
@@ -216,7 +240,14 @@ END_QUEUE(@"Parabola");
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    
+    [pParticle RemoveFromContainer];
+    [pParticle release];
+    pParticle=nil;
+
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 //------------------------------------------------------------------------------------------------------

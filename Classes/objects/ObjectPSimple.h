@@ -13,6 +13,7 @@
 
 /** Шаблонный класс для объектов**/
 @interface ObjectPSimple : GObject {
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/

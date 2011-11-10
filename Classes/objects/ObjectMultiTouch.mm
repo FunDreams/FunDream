@@ -152,6 +152,8 @@ END_QUEUE(@"TimeDie");
         
         OBJECT_SET_PARAMS(NAME(pObject),
                           SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
+        
+        [pObject Update];
     }
 }
 //------------------------------------------------------------------------------------------------------
