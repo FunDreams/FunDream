@@ -21,9 +21,28 @@
     m_DOWN=[NSMutableString stringWithString:@""];
     m_UP=[NSMutableString stringWithString:@""];
 
-    SET_CELL(LINK_STRING_V(m_DOWN,m_strName,@"m_DOWN"));
-    SET_CELL(LINK_STRING_V(m_UP,m_strName,@"m_UP"));
-    SET_CELL(LINK_BOOL_V(m_Disable,m_strName,@"m_Disable"));
+START_QUEUE(@"Proc");
+    
+    ASSIGN_STAGE(@"e01",@"Idle:",nil);
+    
+    ASSIGN_STAGE(@"e02",@"AchiveLineFloat:",
+                 LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
+                 SET_FLOAT_V(m_pCurPosition.y-960,@"finish_Instance"),
+                 SET_FLOAT_V(-1000,@"Vel"));
+    
+	ASSIGN_STAGE(@"e03",@"DestroySelf:",nil);
+    ASSIGN_STAGE(@"e04",@"Idle:",nil);
+    
+	mColor.alpha=1;
+    
+    ASSIGN_STAGE(@"e05",@"AchiveLineFloat:",
+                 LINK_FLOAT_V(mColor.alpha,@"Instance"),
+                 SET_FLOAT_V(0,@"finish_Instance"),
+                 SET_FLOAT_V(-1.8f,@"Vel"));
+    
+    ASSIGN_STAGE(@"e06",@"DestroySelf:",nil);
+    
+END_QUEUE(@"Proc");
 
 	return self;
 }
@@ -41,7 +60,10 @@
     SET_CELL(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
     SET_CELL(LINK_STRING_V(m_strNameStage,m_strName,@"m_strNameStage"));
     SET_CELL(LINK_STRING_V(m_strNameObject,m_strName,@"m_strNameObject"));
-
+    
+    SET_CELL(LINK_STRING_V(m_DOWN,m_strName,@"m_DOWN"));
+    SET_CELL(LINK_STRING_V(m_UP,m_strName,@"m_UP"));
+    SET_CELL(LINK_BOOL_V(m_Disable,m_strName,@"m_Disable"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -61,29 +83,6 @@
 	GET_TEXTURE(m_TextureDown,m_DOWN);
 
 	mTextureId=m_TextureUP;
-
-START_QUEUE(@"Proc");
-
-    ASSIGN_STAGE(@"e01",@"Idle:",nil);
-
-    ASSIGN_STAGE(@"e02",@"AchiveLineFloat:",
-                 LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
-                 SET_FLOAT_V(m_pCurPosition.y-960,@"finish_Instance"),
-                 SET_FLOAT_V(-1000,@"Vel"));
-
-	ASSIGN_STAGE(@"e03",@"DestroySelf:",nil);
-    ASSIGN_STAGE(@"e04",@"Idle:",nil);
-
-	mColor.alpha=1;
-    
-    ASSIGN_STAGE(@"e05",@"AchiveLineFloat:",
-                 LINK_FLOAT_V(mColor.alpha,@"Instance"),
-                 SET_FLOAT_V(0,@"finish_Instance"),
-                 SET_FLOAT_V(-1.8f,@"Vel"));
-    
-    ASSIGN_STAGE(@"e06",@"DestroySelf:",nil);
-
-END_QUEUE(@"Proc");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{}

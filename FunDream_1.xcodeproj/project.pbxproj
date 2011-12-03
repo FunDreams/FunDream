@@ -16,6 +16,7 @@
 		1808F34112D9F85700522EED /* PreviewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1808F33E12D9F85700522EED /* PreviewController-ipad.xib */; };
 		1808F34612D9F8D100522EED /* PushButton.wav in Resources */ = {isa = PBXBuildFile; fileRef = 1808F34512D9F8D100522EED /* PushButton.wav */; };
 		180F9F0F12ABBFE9000E18FE /* ObjectTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 180F9F0D12ABBFE9000E18FE /* ObjectTest.mm */; };
+		181748B91470482300AD10A9 /* ObjectEvilMatter1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181748B81470482300AD10A9 /* ObjectEvilMatter1.mm */; };
 		181F2BA712D5019E008A6482 /* ObjectButton.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181F2BA512D5019E008A6482 /* ObjectButton.mm */; };
 		181F2BB712D50229008A6482 /* ObjectCup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181F2BB512D50229008A6482 /* ObjectCup.mm */; };
 		182861401410AC06003EDFFE /* ObjectButtet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1828613F1410AC06003EDFFE /* ObjectButtet.mm */; };
@@ -115,6 +116,8 @@
 		1808F62012DA0ECD00522EED /* FunDream_1-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "FunDream_1-Info.plist"; sourceTree = "<group>"; };
 		180F9F0D12ABBFE9000E18FE /* ObjectTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectTest.mm; path = objects/ObjectTest.mm; sourceTree = "<group>"; };
 		180F9F0E12ABBFE9000E18FE /* ObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectTest.h; path = objects/ObjectTest.h; sourceTree = "<group>"; };
+		181748B71470482300AD10A9 /* ObjectEvilMatter1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectEvilMatter1.h; path = objects/ObjectEvilMatter1.h; sourceTree = "<group>"; };
+		181748B81470482300AD10A9 /* ObjectEvilMatter1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectEvilMatter1.mm; path = objects/ObjectEvilMatter1.mm; sourceTree = "<group>"; };
 		181F2BA512D5019E008A6482 /* ObjectButton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectButton.mm; path = objects/ObjectButton.mm; sourceTree = "<group>"; };
 		181F2BA612D5019E008A6482 /* ObjectButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectButton.h; path = objects/ObjectButton.h; sourceTree = "<group>"; };
 		181F2BB512D50229008A6482 /* ObjectCup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectCup.mm; path = objects/ObjectCup.mm; sourceTree = "<group>"; };
@@ -391,6 +394,8 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				181748B71470482300AD10A9 /* ObjectEvilMatter1.h */,
+				181748B81470482300AD10A9 /* ObjectEvilMatter1.mm */,
 				1869220B14514F3000E9F638 /* ObjectParticle.h */,
 				1869220C14514F3000E9F638 /* ObjectParticle.mm */,
 				186921F4144DD22700E9F638 /* ObjectGameSpaun.h */,
@@ -788,6 +793,7 @@
 				18849EB71441B03A006F8EEB /* ObjectScoreFun1.mm in Sources */,
 				186921F6144DD22700E9F638 /* ObjectGameSpaun.mm in Sources */,
 				1869220D14514F3000E9F638 /* ObjectParticle.mm in Sources */,
+				181748B91470482300AD10A9 /* ObjectEvilMatter1.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

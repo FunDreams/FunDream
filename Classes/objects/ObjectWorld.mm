@@ -30,8 +30,6 @@ END_QUEUE(@"Proc");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-
-    m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
     
     CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
                       SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
@@ -50,9 +48,23 @@ END_QUEUE(@"Proc");
 	[super Start];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{
+- (void)StartGame{
+    
+    m_pObSpaun=CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
 
+    CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
+    
+    for (int i=0; i<10; i++) {
+        CREATE_NEW_OBJECT(@"ObjectEvilMatter1",@"EvilMater1",
+                          SET_VECTOR_V(Vector3DMake(350,540,0),@"m_pCurPosition"));
+    }
+
+    NEXT_STAGE_EX(@"Cup", @"Proc");
+    
+    SET_CELL(SET_BOOL_V(YES,@"FirstSoundParticle"));
 }
+//------------------------------------------------------------------------------------------------------
+- (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
     

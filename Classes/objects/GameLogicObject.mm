@@ -48,24 +48,19 @@
                       SET_VECTOR_V(Vector3DMake(-45,430,0),@"m_pCurPosition"),
 					  SET_INT_V(layerNumber,@"m_iLayer"));
 
-//	for (int k=0; k<7; k++) {
-//		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectAlNumber%d",k] autorelease];
-//		CREATE_NEW_OBJECT(@"ObjectAlNumber",NameOb,
-//						  SET_INT_V(k,@"m_iPlace"),
-//						  SET_BOOL_V(YES,@"m_bHiden"),
-//						  SET_INT_V(0/*RND%9*/,@"m_iCurrenNumber"));
-//	}
 //interface======================================================================
-//	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
-//					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
-//					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
-//					  SET_FLOAT_V(280,@"mWidth"),
-//					  SET_FLOAT_V(300,@"mHeight"),
-//					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
+	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
+					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
+					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
+					  SET_FLOAT_V(280,@"mWidth"),
+					  SET_FLOAT_V(300,@"mHeight"),
+                      SET_STRING_V(@"World",@"m_strNameObject"),
+                      SET_STRING_V(@"StartGame",@"m_strNameStage"),
+                      SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
 //===============================================================================
-//	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
+	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
-    CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
 
 //    for (int i=0; i<100; i++) {
 //        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);

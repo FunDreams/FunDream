@@ -12,9 +12,14 @@
 #import "Object.h"
 
 /** Шаблонный класс для объектов**/
-@interface ObjectWorld : GObject {
+@interface ObjectEvilMatter1 : GObject {
+    Vector3D m_vCenter;
+    Vector3D m_Corner1;
+    Vector3D m_Corner2;
+    Vector3D m_vPoint;
     
-    GObject *m_pObSpaun;
+    float StartAngle;
+    bool m_bFirstPoint;
 }
 
 /** Инициализирует объект **/
@@ -25,7 +30,7 @@
 -(void)Start;
 -(void)Update;
 
-- (void)StartGame;
+- (void)CreateNextPoint;
 - (void)dealloc;
     
 @end

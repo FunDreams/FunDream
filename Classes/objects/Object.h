@@ -29,7 +29,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//различные скорости
     float m_fStart,m_fFinish,m_fCurrent;
 	float m_fVelMove,m_fVelFade,m_fPhase,m_fVelPhase,m_fVelRotate;
-	
+
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
 	float m_fStartAngle,m_fEndAngle;
