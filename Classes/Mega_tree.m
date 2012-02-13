@@ -7,357 +7,94 @@
 //
 
 #import "Mega_tree.h"
-
-#define APPEND_STR     NSString *currentObject=nil;\
-NSString *RezObject=[NSString stringWithString:sKey];\
-va_list argList;\
-if (sKey)\
-{        \
-va_start(argList, sKey);\
-while ((currentObject = va_arg(argList,id))!=nil){\
-RezObject=[RezObject stringByAppendingString:currentObject];\
-}\
-va_end(argList);\
-}
-
-@implementation UniCell
-//-----------------------------------------------------------------------------------
-- (id)Link_Int:(int *)parPoint withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"i"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=4;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_Int:(int)Value withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"i"];
-    
-    mSize=sizeof(int);
-    int *TmpInt=malloc(mSize);
-    *TmpInt=Value;
-
-	mpIdPoint=(id)TmpInt;
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_Float:(float *)parPoint withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"f"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=4;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_Float:(float)Value withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"f"];
-    
-    mSize=sizeof(float);
-    float *TmpV=malloc(mSize);
-    *TmpV=Value;
-    
-	mpIdPoint=(id)TmpV;
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_Bool:(bool *)parPoint withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"b"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=sizeof(bool);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_Bool:(bool)Value withKey:(id)sKey,...{
-    
-    mpType=[NSString stringWithString:@"b"];
-    
-    mSize=sizeof(bool);
-    bool *TmpV=malloc(mSize);
-    *TmpV=Value;
-    
-	mpIdPoint=(id)TmpV;
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_Vector:(Vector3D *)parPoint withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"v"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=sizeof(Vector3D);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_Vector:(Vector3D)Value withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"v"];
-    
-    mSize=sizeof(Vector3D);
-    Vector3D *TmpV=malloc(mSize);
-    *TmpV=Value;
-    
-	mpIdPoint=(id)TmpV;
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_Color:(Color3D *)parPoint withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"c"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=sizeof(Color3D);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_Color:(Color3D)Value withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"c"];
-    
-    mSize=sizeof(Color3D);
-    Color3D *TmpV=malloc(mSize);
-    *TmpV=Value;
-    
-	mpIdPoint=(id)TmpV;
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_Id:(id *)parPoint withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"id"];
-	mpIdPoint=[*parPoint retain];
-    mppIdPoint=parPoint;
-    mbLocal=NO;
-    mSize=sizeof(id);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//-----------------------------------------------------------------------------------
-- (id)Link_String:(NSMutableString *)parPoint withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"s"];
-	mpIdPoint=[parPoint retain];
-    mbLocal=NO;
-    mSize=sizeof(NSMutableString *);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Set_String:(NSString *)Value withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"s"];    
-	mpIdPoint=[[NSMutableString alloc] initWithString:Value];
-    
-    mbLocal=YES;
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-
-- (id)Link_Point:(void *)parPoint withKey:(id)sKey, ...{
-    
-    mpType=[NSString stringWithString:@"p"];
-	mpIdPoint=(id)parPoint;
-    mbLocal=NO;
-    mSize=sizeof(id);
-    
-    APPEND_STR
-    
-    mpName=[NSString stringWithString:RezObject];
-    
-    return self;
-}
-//---------------------------------------------------------------------------------
-- (id)InitWithName:(NSString *)strName WithType:(NSString *)strType
-             Local:(bool)bLocal WithPoint:(id)parPoint{
-
-    mpName=[NSString stringWithString:strName];
-    mpType=[NSString stringWithString:strType];
-	mpIdPoint=parPoint;
-    mbLocal=bLocal;
-
-    return self;
-}
-
-- (id)InitWithNameForId:(NSString *)strName WithType:(NSString *)strType
-             Local:(bool)bLocal WithPoint:(id *)parPPoint{
-    
-    mpName=[NSString stringWithString:strName];
-    mpType=[NSString stringWithString:strType];
-    mpIdPoint=[*parPPoint retain];
-    mbLocal=bLocal;
-    
-    return self;
-}
-
--(void)CrearCell{
-    
-    if(mpType==@"id" || mpType==@"s"){
-        [mpIdPoint release];
-    }
-    else{
-        
-        if(mbLocal==YES)free(mpIdPoint);
-    }
-    
-    mpIdPoint=nil;
-}
--(void)dealloc{
-    
-    [self CrearCell];
-    [super dealloc];
-}
-@end
+#import "UniCell.h"
 
 @implementation Mega_tree
 //=====================================================================================================
--(id)init
-{
-    pDic = [[NSMutableDictionary alloc] init];
-    pDicTemp = [[NSMutableDictionary alloc] init];
+- (id)init {
+    self = [super init];
+    if (self)
+    {
+        //
+    }
     return self;
 }
+
 //=====================================================================================================
 //-(id)setObject_Ex:(id)anObject forKey:(id)aKey
 //{
 //    return nil;
 //}
 
--(void)SetCell:(UniCell *)pCell{
-    
-    UniCell *pCellTmp = [self objectForKey:pCell->mpName];
-    
-    if(pCellTmp!=nil){
-        
-        if(pCellTmp->mbLocal==YES){
-                if(pCell->mpType==pCellTmp->mpType){
-                    
-                    if(pCellTmp->mpType==@"s"){
-                        NSMutableString * Str=pCellTmp->mpIdPoint;
-                        [Str setString:pCell->mpIdPoint];
-                        [pCell release];
-                        return;
-                    }
-                    else if(pCellTmp->mpType!=@"id"){
-                        memcpy(pCellTmp->mpIdPoint,pCell->mpIdPoint,pCellTmp->mSize);
-                        [pCell release];
-                        return;
+-(void)SetCell:(UniCell *)pCell
+{    
+    UniCell *existingCell = [self objectForKey:pCell->mpName];
+    if (existingCell != nil)
+    {
+        if (existingCell->mbLocal)
+        {
+            if ([pCell->mpType isEqualToString:existingCell->mpType] )
+            {
+                if ([existingCell->mpType isEqualToString:@"s"])
+                {
+                    NSMutableString * Str=existingCell->mpIdPoint;
+                    [Str setString:pCell->mpIdPoint];
+                    [pCell release];
+                    return;
+                }
+                else if (![existingCell->mpType isEqualToString:@"id"])
+                {
+                    memcpy(existingCell->mpIdPoint,pCell->mpIdPoint,existingCell->mSize);
+                    [pCell release];
+                    return;
                 }
             }
         }
         
-        [pCellTmp release];
+        [existingCell release];
         [self setObject_Ex:(id)pCell forKey:pCell->mpName];
     }
-    else [self setObject_Ex:(id)pCell forKey:pCell->mpName];
+    else
+    {
+        [self setObject_Ex:(id)pCell forKey:pCell->mpName];   
+    }
+    
+    //[pCell release];
 }
 
 -(void)CopyCell:(UniCell *)pCell{
     
-    UniCell *pCellTmp = [self objectForKey:pCell->mpName];
-    
-    if(pCellTmp!=nil){
-        
-        if(pCell->mpType==pCellTmp->mpType){
-            
-            if(pCellTmp->mpType==@"s"){
-                NSMutableString * Str=pCellTmp->mpIdPoint;
-                [Str setString:pCell->mpIdPoint];
+    UniCell *existingCell = [self objectForKey:pCell->mpName];
+    if (existingCell != nil)
+    {
+        if (pCell->mpType == existingCell->mpType)
+        {
+            if ([existingCell->mpType isEqualToString:@"s"]){
+                NSMutableString *str = existingCell->mpIdPoint;
+                [str setString:pCell->mpIdPoint];
             }
-            else if(pCellTmp->mpType==@"id"){
-                pCellTmp->mpIdPoint=[pCell->mpIdPoint retain];
-                *(pCellTmp->mppIdPoint)=pCellTmp->mpIdPoint;
+            else if ([existingCell->mpType isEqualToString:@"id"]){
+                existingCell->mpIdPoint = [pCell->mpIdPoint retain];
+                *(existingCell->mppIdPoint) = existingCell->mpIdPoint;
             }
             else {
-                memcpy(pCellTmp->mpIdPoint, pCell->mpIdPoint, pCellTmp->mSize);
+                memcpy(existingCell->mpIdPoint, pCell->mpIdPoint, existingCell->mSize);
             }
         }
     }
-    
     [pCell release];
 }
+
 - (void)RemoveCell:(id)sKey, ...{
 
     APPEND_STR
     
-    NSString *mpName=[NSString stringWithString:RezObject];   
-    [self removeObjectForKey_Ex:mpName];
+    UniCell *existingCell = [self objectForKey:RezObject];
+    if (existingCell != nil)
+    {
+        [self removeObjectForKey_Ex:RezObject];
+        [existingCell release];
+    }
 }
 //////int
 //////
@@ -367,7 +104,8 @@ va_end(argList);\
     
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"i"){
+    if (pOb!=nil && [pOb->mpType isEqualToString:@"i"])
+    {
         return (int *)pOb->mpIdPoint;
     }
     else return nil;
@@ -380,7 +118,8 @@ va_end(argList);\
 
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"f"){
+    if(pOb!=nil && [pOb->mpType isEqualToString:@"f"])
+    {
         return (float *)pOb->mpIdPoint;
     }
     else return nil;
@@ -393,7 +132,8 @@ va_end(argList);\
 
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"b"){
+    if(pOb!=nil && [pOb->mpType isEqualToString:@"b"])
+    {
         return (bool *)pOb->mpIdPoint;
     }
     else return nil;
@@ -407,7 +147,8 @@ va_end(argList);\
 
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"v"){
+    if(pOb!=nil && [pOb->mpType isEqualToString:@"v"])
+    {
         return (Vector3D *)pOb->mpIdPoint;
     }
     else return nil;
@@ -420,7 +161,8 @@ va_end(argList);\
 
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"c"){
+    if(pOb!=nil && [pOb->mpType isEqualToString:@"c"])
+    {
         return (Color3D *)pOb->mpIdPoint;
     }
     else return nil;
@@ -432,7 +174,7 @@ va_end(argList);\
     APPEND_STR
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && (pOb->mpType==@"id" || pOb->mpType==@"s")){
+    if(pOb!=nil && ([pOb->mpType isEqualToString:@"id"] || [pOb->mpType isEqualToString:@"s"])){
         return pOb->mpIdPoint;
     }
     else return nil;
@@ -444,7 +186,7 @@ va_end(argList);\
     APPEND_STR
     UniCell *pOb=[self objectForKey:RezObject];
     
-    if(pOb!=nil && pOb->mpType==@"p"){
+    if(pOb!=nil && [pOb->mpType isEqualToString:@"p"]){
         return (void *)pOb->mpIdPoint;
     }
     else return nil;
@@ -452,21 +194,12 @@ va_end(argList);\
 //=====================================================================================================
 -(void)RemoveValue:(NSString*)sKey
 {
-    UniCell *pOb = [self objectForKey:sKey];
     [self removeObjectForKey_Ex:sKey];
-    [pOb release];
 }
 //=====================================================================================================
 -(void)dealloc
 {
     [self SynhData];
-    
-    NSEnumerator *enumeratorInst = [pDic objectEnumerator];
-    UniCell *pInst;
-
-    while ((pInst = [enumeratorInst nextObject])) {
-        [pInst release];
-    }
 
     [super dealloc];
 };

@@ -7,20 +7,25 @@
 //
 #import "PrSettings.h"
 
-
 @implementation CPrSettings
-//------------------------------------------------------------------------------------------------------
-- (id)Init{
-    
-    m_pPlManager = [[CPlManager alloc] Init];	
 
+//------------------------------------------------------------------------------------------------------
+
+- (id)init
+{
+    self = [super init];
+    if (self)
+    {
+        m_pPlManager = [[CPlManager alloc] init];
 #ifdef SUDOKU
-    bGhost=NO;
+        bGhost=NO;
 #endif
-//	m_iCurRecord = 0;
-	
-	return self;
+//	    m_iCurRecord = 0;
+    }
+    
+    return self;
 }
+
 //------------------------------------------------------------------------------------------------------
 - (bool) Load
 {
@@ -51,7 +56,7 @@
 //------------------------------------------------------------------------------------------------------
 - (bool) Save
 {	
-	[m_pPlManager SetKeyIntValue:@"m_iCurRecord" withValue:m_iCurRecord];
+	[m_pPlManager SetKeyIntValue:@"CurRecord" withValue:m_iCurRecord];
     
 //#ifdef SUDOKU
 //    [m_pPlManager SetKeyFloatValue:@"TimerMain" withValue:TimerMain];

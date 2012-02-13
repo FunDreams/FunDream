@@ -23,6 +23,7 @@ typedef enum tagRootViewControllerState {
 	
 	float m_fSwitchViewTimer;
     float m_fTimePause;
+    BOOL loadingSubviews;
 }
 //------------------------------------------------------------------------------------------------------
 
@@ -35,6 +36,9 @@ typedef enum tagRootViewControllerState {
 - (void)SelfMove:(double)DeltaTime;
 
 -(BOOL)isDeviceAniPad;
+
+-(BOOL) isReady;
+
 @property (nonatomic, retain) MainController *m_pMainController;
 @property (nonatomic, retain) PreviewController *m_pPreviewController;
 //------------------------------------------------------------------------------------------------------

@@ -7,38 +7,24 @@
 //
 
 #import "ObjectFade.h"
+#import "UniCell.h"
 
-@implementation NAME_TEMPLETS_OBJECT
+@implementation ObjectFade
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-    mWidth  = 50;
-	mHeight = 50;
+	self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
+        mWidth  = 50;
+        mHeight = 50;
 
-	m_iLayer = layerInvisible;
-        
-START_QUEUE(@"Proc");
-	
-    ASSIGN_STAGE(@"ShowStage",@"AchiveLineFloat:",
-                 LINK_FLOAT_V(mColor.alpha,@"Instance"),
-                 LINK_FLOAT_V(m_fFinish,@"finish_Instance"),
-                 LINK_FLOAT_V(m_fVelFade,@"Vel"));
-
-    ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+        m_iLayer = layerInvisible;
+            
+        m_fVelFade=1.2f;
+        m_fFinish=1;
+        m_fStartAlpha=0;
+    }
     
-    ASSIGN_STAGE(@"HideStage",@"AchiveLineFloat:",
-                 LINK_FLOAT_V(mColor.alpha,@"Instance"),
-                 LINK_FLOAT_V(m_fFinish,@"finish_Instance"),
-                 LINK_FLOAT_V(m_fVelFade,@"Vel"));
-    
-    ASSIGN_STAGE(@"Destroy",@"DestroySelf:",nil);
-    
-END_QUEUE(@"Proc");
-
-    m_fVelFade=1.2f;
-    m_fFinish=1;
-
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -50,19 +36,40 @@ END_QUEUE(@"Proc");
     m_strNameStage=[NSMutableString stringWithString:@""];
     m_strNameObject=[NSMutableString stringWithString:@""];
 
-    SET_CELL(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
-    SET_CELL(LINK_STRING_V(m_strNameStage,m_strName,@"m_strNameStage"));
-    SET_CELL(LINK_STRING_V(m_strNameObject,m_strName,@"m_strNameObject"));
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound")];
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strNameStage,m_strName,@"m_strNameStage")];
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strNameObject,m_strName,@"m_strNameObject")];
 
-    SET_CELL(LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture"));
-    SET_CELL(LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX"));
-    SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY")];
 
-    SET_CELL(LINK_BOOL_V(m_bObTouch,m_strName,@"m_bObTouch"));
-    SET_CELL(LINK_BOOL_V(m_bLookTouch,m_strName,@"m_bLookTouch"));
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bObTouch,m_strName,@"m_bObTouch")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bLookTouch,m_strName,@"m_bLookTouch")];
 
-    SET_CELL(LINK_FLOAT_V(m_fFinish,m_strName,@"m_fFinish"));
-    SET_CELL(LINK_FLOAT_V(m_fVelFade,m_strName,@"m_fVelFade"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fFinish,m_strName,@"m_fFinish")];
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fVelFade,m_strName,@"m_fVelFade")];
+
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fStartAlpha,m_strName,@"m_fStartAlpha")];
+    
+    
+    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
+    
+        ASSIGN_STAGE(@"ShowStage",@"AchiveLineFloat:",
+                     LINK_FLOAT_V(mColor.alpha,@"Instance"),
+                     LINK_FLOAT_V(m_fFinish,@"finish_Instance"),
+                     LINK_FLOAT_V(m_fVelFade,@"Vel"));
+        
+        ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+        
+        ASSIGN_STAGE(@"HideStage",@"AchiveLineFloat:",
+                     LINK_FLOAT_V(mColor.alpha,@"Instance"),
+                     LINK_FLOAT_V(m_fFinish,@"finish_Instance"),
+                     LINK_FLOAT_V(m_fVelFade,@"Vel"));
+        
+        ASSIGN_STAGE(@"Destroy",@"DestroySelf:",nil);
+    
+    [self END_QUEUE:pProc name:@"Proc"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -74,12 +81,20 @@ END_QUEUE(@"Proc");
     if(m_bDimMirrorX==YES){m_pCurScale.x=-m_pCurScale.x;}
     if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
     
+    mColor.alpha=m_fStartAlpha;
+    [self SetTouch:NO];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)ShowFade{
+    
     mColor.alpha=0;
+    SET_STAGE_EX(self->m_strName,@"Proc", @"ShowStage");
+    [self SetTouch:NO];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HideFade{
     
-    SET_STAGE_EX(NAME(self),@"Proc", @"HideStage");
+    SET_STAGE_EX(self->m_strName,@"Proc", @"HideStage");
     [self SetTouch:NO];
 }
 //------------------------------------------------------------------------------------------------------
@@ -95,21 +110,20 @@ END_QUEUE(@"Proc");
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
-    
-    [self HideFade];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
     
-    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-    PLAY_SOUND(m_strNameSound);
+    if(![m_strNameObject isEqual:@""]){
+        
+        [self HideFade];
+        [self OBJECT_PERFORM_SEL:m_strNameObject selector:m_strNameStage];
+    }
+    
+    [m_pParent PlaySound:m_strNameSound];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{}
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
-//------------------------------------------------------------------------------------------------------
+- (void)Destroy{[self SetTouch:NO];}
 @end
-#undef NAME_TEMPLETS_OBJECT

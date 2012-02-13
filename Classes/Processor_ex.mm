@@ -7,69 +7,118 @@
 //
 
 #import "Processor_ex.h"
+#import "UniCell.h"
+
 //-------------------------------------------------------------------------------------------
 @implementation ProcStage_ex
 - (id)InitWithParent_ex:(Processor_ex *)ProcParent{
-	pParent=ProcParent;
+    self = [super init];
+    if (self != nil)
+    {
+        pParent=ProcParent;
+    }
+    
 	return self;
 }
 //-------------------------------------------------------------------------------------------
+- (void)SetTimer{
+    
+    int m_pTimeBase;
+    int m_pTimeRnd;
+    
+    if(m_pTimeRnd_Timer!=0)m_pTimeRnd=*m_pTimeRnd_Timer;
+    else m_pTimeRnd=1;
+    
+    if(m_pTimeBase_Timer!=0)m_pTimeBase=*m_pTimeBase_Timer;
+    else m_pTimeBase=0;
+    
+    if(m_pTimeRnd==0)m_pTimeRnd=1;
+
+    m_pTime=(float)((RND%m_pTimeRnd)+m_pTimeBase)*0.001f;
+    
+    NSString *Str = NSStringFromSelector(m_selector);
+
+    if(![Str isEqualToString:@"SelfTimerProc:"] && m_pTime!=0){
+        m_selector=NSSelectorFromString(@"SelfTimerProc:");
+    }
+}
+//-------------------------------------------------------------------------------------------
 - (void)SetDelay{
+    
+    int m_pTimeBase;
+    int m_pTimeRnd;
+    
+    if(m_pTimeBase_Delay!=0)m_pTimeBase=*m_pTimeBase_Delay;
+    else m_pTimeBase=0;
+    
+    if(m_pTimeRnd_Delay!=0)m_pTimeRnd=*m_pTimeRnd_Delay;
+    else m_pTimeRnd=1;
+    
+    if(m_pTimeRnd==0)m_pTimeRnd=1;
     
     m_pTime=(float)((RND%m_pTimeRnd)+m_pTimeBase)*0.001f;
     
     NSString *Str = NSStringFromSelector(m_selector);
     
-    if(![Str isEqualToString:@"SelfTimer:"]){
-        m_selectorSecond=m_selector;
+    if(![Str isEqualToString:@"SelfTimer:"] && m_pTime!=0){
         m_selector=NSSelectorFromString(@"SelfTimer:");
     }
-
 }
 //-------------------------------------------------------------------------------------------
-- (void)Prepare {
+- (void)Prepare{
     
-    if(m_pTimeBase!=0){        
+    bool bDelay=false;
+    if(m_pTimeBase_Delay!=0 || m_pTimeRnd_Delay!=0){
+        bDelay=YES;
+        
         [self SetDelay];
     }
-    
-    NSString *TmpStrSelPrepare=[NSString stringWithFormat:@"Prepare%@",
-                             NSStringFromSelector(m_selector)];
-    
-    SEL InitSel=NSSelectorFromString(TmpStrSelPrepare);
-    
-    if([pParent->m_pObject respondsToSelector:InitSel]){
-        [pParent->m_pObject performSelector:InitSel withObject:self];
+    else{
+
+        if(m_pTimeBase_Timer!=0 || m_pTimeRnd_Timer!=0){
+            [self SetTimer];
+        }
+    }
+
+    if(m_selectorPrepare!=nil && bDelay==false){
+        [pParent->m_pObject performSelector:m_selectorPrepare withObject:self];
     }
 }
-//-------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
-//-------------------------------------------------------------------------------------------
 @end
 //-------------------------------------------------------------------------------------------
 @implementation Processor_ex
-//-------------------------------------------------------------------------------------------
-- (id)InitWithName:(NSString *)strName WithParent:(id)pParent{
 
-	pDicStages = [[NSMutableDictionary alloc] init];
-	
-	m_pObject=pParent;
-	m_pNameProcessor=[NSString stringWithString:strName];
-	
+- (id)InitWithName:(NSString *)strName WithParent:(id)pParent{
+    self = [super init];
+    if (self != nil)
+    {
+        pDicStages = [[NSMutableDictionary alloc] init];
+        
+        m_pObject=pParent;
+        m_pNameProcessor=[NSString stringWithString:strName];
+	}
+    
 	return self;
 }
+////-------------------------------------------------------------------------------------------
+//- (void)Delay_Stage:(NSString *)NameStage Time:(int)iTime TimeRnd:(int)iTimeRnd{
+//    
+//    return;
+//    
+//    ProcStage_ex *CurrStageTmp = (ProcStage_ex *)[pDicStages objectForKey:NameStage];
+//    
+//    if (CurrStageTmp!=nil){
+//        
+//        CurrStageTmp->m_pTimeRnd=iTimeRnd;
+//        CurrStageTmp->m_pTimeBase=iTime;
+//        
+//        [CurrStageTmp SetDelay];
+//    }
+//}
 //-------------------------------------------------------------------------------------------
-- (void)Delay_Stage:(NSString *)NameStage Time:(int)iTime TimeRnd:(int)iTimeRnd{
-    
-    ProcStage_ex *CurrStageTmp = (ProcStage_ex *)[pDicStages objectForKey:NameStage];
-    
-    if (CurrStageTmp!=nil){
-        
-        CurrStageTmp->m_pTimeRnd=iTimeRnd;
-        CurrStageTmp->m_pTimeBase=iTime;
-        
-        [CurrStageTmp SetDelay];
-    }
+- (NSString *)GetNameStage{
+    if(m_CurStage!=nil)return m_CurStage->NameStage;
+    else return nil;
 }
 //-------------------------------------------------------------------------------------------
 - (void)Remove_Stage:(NSString *)NameStage{
@@ -92,7 +141,6 @@
         }
 
         [pDicStages removeObjectForKey:NameStage];
-        [CurrStageTmp release];
     }
 }
 //-------------------------------------------------------------------------------------------
@@ -111,15 +159,70 @@
             pParams->mpName=[NSString stringWithString:TmpStr];
             [m_pObject->m_pObjMng->pMegaTree SetCell:pParams];
         }
+
+/////////////////////////////////////
+        NSString *StrNameSelInit=[NSString stringWithFormat:@"%@%@%@%@",
+                          m_pObject->m_strName,m_pNameProcessor,NameStage,@"SelectorInit"];
         
-        NSString *TmpStrSelInit=[NSString stringWithFormat:@"Init%@",
-                                 NSStringFromSelector(CurrStage->m_selector)];
+        NSMutableString *str_SelInit = [m_pObject->m_pObjMng->pMegaTree GetIdValue:StrNameSelInit,nil];
+        NSString *TmpStrSelInit=nil;
         
+        if(str_SelInit!=nil){
+            TmpStrSelInit=[NSString stringWithString:str_SelInit];
+        }
+        else{
+            TmpStrSelInit=[NSString stringWithFormat:@"Init%@",
+                                     NSStringFromSelector(CurrStage->m_selector)];
+        }
+        
+        CurrStage->m_selectorInit=nil;
         SEL InitSel=NSSelectorFromString(TmpStrSelInit);
         
         if([m_pObject respondsToSelector:InitSel]){
+            CurrStage->m_selectorInit=InitSel;
             [m_pObject performSelector:InitSel withObject:CurrStage];
         }
+        
+/////////////////////////////////////
+        NSString *StrNameSelPrepare=[NSString stringWithFormat:@"%@%@%@%@",
+                                  m_pObject->m_strName,m_pNameProcessor,NameStage,@"SelectorPrepare"];
+        
+        NSMutableString *str_SelPrepare = 
+        [m_pObject->m_pObjMng->pMegaTree GetIdValue:StrNameSelPrepare,nil];
+        
+        NSString *TmpStrSelPrepare=nil;
+        
+        if(str_SelPrepare!=nil){
+            TmpStrSelPrepare=[NSString stringWithString:str_SelPrepare];
+        }
+        else{
+            TmpStrSelPrepare=[NSString stringWithFormat:@"Prepare%@",
+                           NSStringFromSelector(CurrStage->m_selector)];
+        }
+        
+        CurrStage->m_selectorPrepare=nil;
+        SEL PrepareSel=NSSelectorFromString(TmpStrSelPrepare);
+        
+        if([m_pObject respondsToSelector:PrepareSel]){
+            CurrStage->m_selectorPrepare=PrepareSel;
+        }
+        
+////////////////////////////////////////////////////
+        //линкуем параметры для времени. Таймер и задержка
+        NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                          m_pObject->m_strName,m_pNameProcessor,NameStage];
+        
+        NSString *NameParam=[NSString stringWithFormat:@"%@TimeRndDelay",TmpStr];
+        CurrStage->m_pTimeRnd_Delay=[m_pObject->m_pObjMng->pMegaTree GetIntValue:NameParam,nil];
+
+        NameParam=[NSString stringWithFormat:@"%@TimeBaseDelay",TmpStr];
+        CurrStage->m_pTimeBase_Delay=[m_pObject->m_pObjMng->pMegaTree GetIntValue:NameParam,nil];
+
+        NameParam=[NSString stringWithFormat:@"%@TimeRndTimer",TmpStr];
+        CurrStage->m_pTimeRnd_Timer=[m_pObject->m_pObjMng->pMegaTree GetIntValue:NameParam,nil];
+
+        NameParam=[NSString stringWithFormat:@"%@TimeBaseTimer",TmpStr];
+        CurrStage->m_pTimeBase_Timer=[m_pObject->m_pObjMng->pMegaTree GetIntValue:NameParam,nil];
     }
 }
 //-------------------------------------------------------------------------------------------
@@ -147,6 +250,8 @@
         
         ProcStage_ex *CurrStageInsert = [[ProcStage_ex alloc] InitWithParent_ex:self];
         CurrStageInsert->m_selector=NSSelectorFromString ( NameSel);
+        CurrStageTmp->m_selectorStage=CurrStageInsert->m_selector;
+
         CurrStageInsert->NameStage=[NSString stringWithString:NameStage];
 
         CurrStageInsert->StagePrev = CurrStageTmp;
@@ -165,7 +270,7 @@
 //-------------------------------------------------------------------------------------------
 - (void)Assign_Stage:(NSString *)NameStage WithSel:(NSString *)NameSel WithParams:(NSArray *)Parametrs{
     
-    ProcStage_ex *CurrStageTmp= (ProcStage_ex *)[pDicStages objectForKey:NameStage ];
+    ProcStage_ex *CurrStageTmp=(ProcStage_ex *)[pDicStages objectForKey:NameStage];
     
 	if (CurrStageTmp==nil){
 		CurrStageTmp = [[ProcStage_ex alloc] InitWithParent_ex:self];
@@ -180,13 +285,15 @@
 	}
 
     CurrStageTmp->m_selector=NSSelectorFromString ( NameSel);
+    CurrStageTmp->m_selectorStage=CurrStageTmp->m_selector;
+
     CurrStageTmp->NameStage=[NSString stringWithString:NameStage];
     
     if(m_FirstStage==nil){
         m_FirstStage=CurrStageTmp;
     }
     
-    [self SetParams:CurrStageTmp->NameStage WithParams:Parametrs];    
+    [self SetParams:CurrStageTmp->NameStage WithParams:Parametrs];
 }
 //-------------------------------------------------------------------------------------------
 - (void)SetStage:(NSString *)Stage{
@@ -214,12 +321,6 @@
 }
 //-------------------------------------------------------------------------------------------
 - (void)dealloc {
-
-	NSEnumerator *enumerator = [pDicStages objectEnumerator];
-	id value;
-	
-	while ((value = [enumerator nextObject])) {[value release];}
-	
 	[pDicStages release];
 	
 	[super dealloc];

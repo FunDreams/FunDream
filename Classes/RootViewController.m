@@ -26,7 +26,38 @@
 #endif
     return NO;
 }
-//------------------------------------------------------------------------------------------------------
+
+-(void) completeLoading
+{
+    [self.view insertSubview:m_pMainController.view atIndex:0];
+    
+    m_iCurrentView = vwPreview;
+
+    [m_pMainController Start];
+    [m_pMainController Pause:NO];
+    loadingSubviews = NO;
+}
+
+- (void) loadVerySlowLoadingViews
+{
+//    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
+    
+    // do all time-intensive jobs here
+    
+    // draw what's loaded in a Main Thread. 
+    // we can't draw in a background thread because GL does not support this.
+//    [self performSelectorOnMainThread:@selector(completeLoading) withObject:nil waitUntilDone:NO];
+    
+//    [pool drain];
+    
+    [self completeLoading];
+}
+
+-(BOOL) isReady
+{
+    return !loadingSubviews;
+}
+
 - (void)initViews
 {
 	if([self isDeviceAniPad])
@@ -39,7 +70,7 @@
 		m_pMainController = [[MainController alloc] initWithNibName:@"mainController" bundle:nil];		
 		m_pPreviewController=[[PreviewController alloc] initWithNibName:@"PreviewController" bundle:nil];
 	}
-
+    
 	m_pMainController.m_pRootViewController = self;
 	m_pMainController.m_pPrSettings=m_pPrSettings;
 	
@@ -49,6 +80,8 @@
 	m_iCurrentView = vwPreview;
     [self.view addSubview:m_pMainController.view];
     [self.view addSubview:m_pPreviewController.view];
+    
+    [m_pMainController createGLView];
     [m_pMainController Start];
 }
 //------------------------------------------------------------------------------------------------------
@@ -104,11 +137,11 @@
 {
 	m_pPrSettings = pPrSettings;
 }
-//------------------------------------------------------------------------------------------------------
-- (void)SelfMove:(double)DeltaTime{
-	
-//	[NSThread sleepForTimeInterval:0.1f];
-	
+
+- (void)SelfMove:(double)DeltaTime
+{
+  //  if(loadingSubviews==YES)return;
+    
     if( m_iCurrentView == vwPreview  )
     {
         m_fSwitchViewTimer += DeltaTime;
@@ -130,7 +163,7 @@
             }
             if( m_iCurrentView == vwPreview )
             {
-                [m_pPreviewController SelfMove:DeltaTime];
+      //          [m_pPreviewController SelfMove:DeltaTime];
             }        
         }
     }

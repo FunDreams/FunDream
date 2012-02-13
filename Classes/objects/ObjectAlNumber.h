@@ -8,8 +8,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
+#import "ObjectParticle.h"
 
 //макрос для названия объекта, просто переименуйте его что бы получить новый объект
 #define NAME_TEMPLETS_OBJECT ObjectAlNumber
@@ -37,7 +37,6 @@
 - (void)Move:(Processor_ex *)pProc;
 
 /** **/
--(void)dealloc;
 -(void)Start;
 
 - (void)HideNum;

@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "StaticObject.h"
 
 
@@ -36,7 +35,6 @@
 /** **/
 
 -(void)SetColorSym;
--(void)dealloc;
 -(void)Start;
 
 @end

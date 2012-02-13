@@ -11,7 +11,7 @@
 /** Класс для работы записи и ситывание данных из файлов **/
 @interface CDataManager : NSObject {
 	/** Хранит полный путь к файлу**/
-	NSMutableString* m_sFullFileName;
+	NSString* m_sFullFileName;
 	/** Объект-буфер отвечающий за загрузку и сохранение данных **/
 	NSMutableData* m_pData;
 	/** Отвечает за текущую позицию считывания**/
@@ -22,7 +22,7 @@
  @param sFileName  Определяет название файла 
  @return Возвращает созданный объект если считывание удачно и nil в противоположном случае
  **/
-+(CDataManager*) InitWithFileFromRes: (NSString*) sFileName;
+-(CDataManager*) InitWithFileFromRes: (NSString*) sFileName;
 
 /** Сохраняет данные миз буфера в файл
  @return Возвращает TRUE если запись удачно и FALSE в противоположном случае

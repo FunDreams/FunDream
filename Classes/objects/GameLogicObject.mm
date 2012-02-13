@@ -6,6 +6,7 @@
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
 #import "GameLogicObject.h"
+#import "UniCell.h"
 
 #ifdef BLACK_PIG
 #import "ObjectStaff.h"
@@ -14,21 +15,18 @@
 @implementation CGameLogic
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-
-	m_bHiden = true;
-
-//    LOAD_SOUND(iIdSound, @"papper.wav", NO);
+	self = [super Init:Parent WithName:strName];
+    if (self != nil)
+    {
+        m_bHiden = true;
+    }
+    
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)dealloc {
-	[super dealloc];
-}
-//------------------------------------------------------------------------------------------------------
 - (void)Start
-{
-	CREATE_NEW_OBJECT(@"StaticObject",@"Fon",
+{    
+    CREATE_NEW_OBJECT(@"StaticObject",@"Fon",
                       SET_STRING_V(@"fon@2x.png",@"m_pNameTexture"),
 					  SET_FLOAT_V(640,@"mWidth"),
 					  SET_FLOAT_V(960,@"mHeight"),
@@ -38,7 +36,7 @@
 		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectAlNumber%d",k] autorelease];
 		RESERV_NEW_OBJECT(@"ObjectAlNumber",NameOb,nil);
 	}
-
+    
     CREATE_NEW_OBJECT(@"ObjectScoreFun1",@"Score",
                       SET_COLOR_V(Color3DMake(0, 1, 0, 1), @"mColor"),
                       SET_INT_V(1, @"m_iAlign"),
@@ -46,9 +44,10 @@
                       SET_FLOAT_V(50,@"WSym"),
                       SET_FLOAT_V(92,@"HSym"),
                       SET_VECTOR_V(Vector3DMake(-45,430,0),@"m_pCurPosition"),
+                      SET_STRING_V(@"First", @"m_strStartStage"),
 					  SET_INT_V(layerNumber,@"m_iLayer"));
-
-//interface======================================================================
+    
+    //interface======================================================================
 	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
 					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
 					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
@@ -58,16 +57,16 @@
                       SET_STRING_V(@"StartGame",@"m_strNameStage"),
                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
-//===============================================================================
+    //===============================================================================
 	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
-
-//    for (int i=0; i<100; i++) {
-//        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
-//    }
-//физика приложения тут///////////////////////////////////////////////////////
-//	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
-//	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
+    
+    //    for (int i=0; i<100; i++) {
+    //        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
+    //    }
+    //физика приложения тут///////////////////////////////////////////////////////
+    //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
+    //	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
     
     for (int k=0; k<40; k++) {	
 		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectPSimple%d",k] autorelease];
@@ -75,6 +74,5 @@
 	}
     
     PLAY_SOUND(@"papper.wav");
-
 }
 @end

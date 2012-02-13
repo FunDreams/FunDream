@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
 /** Шаблонный класс для объектов**/
@@ -26,7 +25,5 @@
 -(void)Update;
 
 - (void)Spaun;
-
-- (void)dealloc;
     
 @end

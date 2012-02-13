@@ -8,13 +8,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
 /** Шаблонный класс для объектов**/
-@interface ObjectWorld : GObject {
-    
-    GObject *m_pObSpaun;
+@interface ObjectWorld : GObject {    
 }
 
 /** Инициализирует объект **/

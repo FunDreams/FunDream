@@ -13,7 +13,7 @@
 
 @interface GLView (private)
 
-- (id)initGLES;
+- (void)initGLES;
 - (BOOL)createFramebuffer;
 - (void)destroyFramebuffer;
 
@@ -30,21 +30,23 @@
 	self = [super initWithFrame:frame];
 	if(self != nil)
 	{
-		self = [self initGLES];
+		[self initGLES];
 	}
 	return self;
 }
 
 - (id)initWithCoder:(NSCoder*)coder
 {
-	if((self = [super initWithCoder:coder]))
+    self = [super initWithCoder:coder];
+	if (self != nil)
 	{
-		self = [self initGLES];
-	}	
+		[self initGLES];
+	}
+    
 	return self;
 }
 
--(id)initGLES
+-(void)initGLES
 {
 	CAEAGLLayer *eaglLayer = (CAEAGLLayer*) self.layer;
 	
@@ -66,10 +68,8 @@
 	if(!context || ![EAGLContext setCurrentContext:context] || ![self createFramebuffer])
 	{
 		[self release];
-		return nil;
+        self = nil;
 	}
-	
-	return self;
 }
 
 -(MainController *)controller
@@ -143,7 +143,7 @@
 // Updates the OpenGL view when the timer fires
 - (void)drawView
 {
-    if(controller->m_bPause==NO){
+//    if(controller->m_bPause==NO){
         // Make sure that you are drawing to the current context
         [EAGLContext setCurrentContext:context];
             
@@ -157,7 +157,7 @@
         GLenum err = glGetError();
         if(err)
             NSLog(@"%x error", err);
-    }
+ //   }
 }
 
 // Stop animating and release resources when they are no longer needed.

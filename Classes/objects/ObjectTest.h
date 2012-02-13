@@ -8,25 +8,24 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
-//макрос для названия объекта, просто переименуйте его что бы получить новый объект
-#define NAME_TEMPLETS_OBJECT ObjectTest
-
 /** Шаблонный класс для объектов**/
-@interface NAME_TEMPLETS_OBJECT : GObject {
-    
-    Particle *pParticle;
-    Vector3D Vel;
-    float VelRotate;
+@interface ObjectTest : GObject {
+	
+	int TestPar;
+	DWORD TestDword;
+	bool TestBool;
+    float TestFloat;
+    float TestFloat2;
+	NSMutableString *TestStr;
+	Vector3D Testvec;
+    Color3D TestCol;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** **/
--(void)dealloc;
 -(void)sfMove;
 -(void)Start;
 

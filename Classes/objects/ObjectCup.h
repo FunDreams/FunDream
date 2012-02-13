@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
 //макрос для названия объекта, просто переименуйте его что бы получить новый объект
@@ -22,7 +21,6 @@
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 /** **/
--(void)dealloc;
 -(void)Start;
 -(void)Move;
 

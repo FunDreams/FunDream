@@ -8,8 +8,8 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
+#import "ObjectParticle.h"
 
 /** Шаблонный класс для объектов**/
 @interface ObjectTemplet : GObject {
@@ -22,7 +22,5 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
-
-- (void)dealloc;
     
 @end

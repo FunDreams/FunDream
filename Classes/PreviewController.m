@@ -13,6 +13,7 @@
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
 - (void)viewDidLoad {
 	[super viewDidLoad];
+    self.view.backgroundColor = [UIColor blueColor];
 }
 //------------------------------------------------------------------------------------------------------
 // Override to allow orientations other than the default portrait orientation.
@@ -28,9 +29,7 @@
 	// Release any cached data, images, etc that aren't in use.
 }
 //------------------------------------------------------------------------------------------------------
-- (void)viewDidUnload {}
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
+- (void)viewDidUnload{}
 //------------------------------------------------------------------------------------------------------
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{}
 //------------------------------------------------------------------------------------------------------

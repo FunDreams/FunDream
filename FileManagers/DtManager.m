@@ -11,41 +11,44 @@
 
 @implementation CDataManager
 
-
 //--------------------------------------------------------
-+(CDataManager*) InitWithFileFromRes:(NSString*) sFileName
+-(CDataManager*) InitWithFileFromRes:(NSString*) sFileName
 {
-	CDataManager* pTempPlMng = [[CDataManager alloc] init];
-	
-	NSString* sFileNameWithoutExt = nil;
-	NSString* sFileExt = nil;
-	NSRange pRangeOfPoint = [sFileName rangeOfString:@"." options:NSBackwardsSearch];
-
-	if( pRangeOfPoint.location != NSNotFound ) {
-		NSRange pRangeOfName = {0, pRangeOfPoint.location};
-		sFileNameWithoutExt = [NSString stringWithString:[sFileName substringWithRange:pRangeOfName]];
-		NSRange pRangeOfExt = {pRangeOfPoint.location+1, [sFileName length]-pRangeOfPoint.location-1};
-		sFileExt = [NSString stringWithString:[sFileName substringWithRange:pRangeOfExt]];
-	}
-	else {
-		sFileNameWithoutExt = [NSString stringWithString:sFileName];
-	}
-	
-	NSBundle* pBungle = [NSBundle mainBundle];
-	pTempPlMng->m_sFullFileName = (NSMutableString *)[pBungle pathForResource:sFileNameWithoutExt ofType:sFileExt];
-
-	pTempPlMng->m_iCurReadingPos = 0;
-	if( pTempPlMng->m_sFullFileName != nil)
-		pTempPlMng->m_pData = [NSMutableData dataWithContentsOfFile:pTempPlMng->m_sFullFileName];
-	
-	[pBungle dealloc];
-	
-	if( pTempPlMng->m_pData == nil)
-	{
-		[pTempPlMng dealloc];
-		pTempPlMng = nil;
-	}	
-	return pTempPlMng;
+    self = [super init];
+    if (self)
+    {
+        NSString* sFileNameWithoutExt = nil;
+        NSString* sFileExt = nil;
+        NSRange pRangeOfPoint = [sFileName rangeOfString:@"." options:NSBackwardsSearch];
+        
+        if (pRangeOfPoint.location != NSNotFound ) {
+            NSRange pRangeOfName = {0, pRangeOfPoint.location};
+            sFileNameWithoutExt = [NSString stringWithString:[sFileName substringWithRange:pRangeOfName]];
+            NSRange pRangeOfExt = {pRangeOfPoint.location+1, [sFileName length]-pRangeOfPoint.location-1};
+            sFileExt = [NSString stringWithString:[sFileName substringWithRange:pRangeOfExt]];
+        }
+        else {
+            sFileNameWithoutExt = [NSString stringWithString:sFileName];
+        }
+        
+        NSBundle* pBungle = [NSBundle mainBundle];
+        m_sFullFileName = [pBungle pathForResource:sFileNameWithoutExt ofType:sFileExt];
+        // prevent auto-release
+        [m_sFullFileName retain];
+        
+        m_iCurReadingPos = 0;
+        if (m_sFullFileName != nil)
+        {
+            m_pData = [NSMutableData dataWithContentsOfFile:m_sFullFileName];
+            if (m_pData == nil)
+            {
+                [self dealloc];
+                self = nil;
+            }
+        }
+    }
+    
+    return self;
 }
 //--------------------------------------------------------
 -(bool) Save
@@ -196,8 +199,8 @@
 }
 //--------------------------------------------------------
 - (void)dealloc {
-    [m_sFullFileName dealloc];
-	[m_pData dealloc];
+    [m_sFullFileName release];
+	[m_pData release];
     [super dealloc];
 }
 @end

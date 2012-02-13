@@ -8,12 +8,11 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
 /** Шаблонный класс для объектов**/
 @interface ObjectAnimateStatic : GObject {
-    float m_fStartDelay;
+    int m_iStartDelay;
     int m_iOffsetFrame;
     float m_fVelFrame;
     bool m_bDimFromTexture;
@@ -50,7 +49,5 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
-
-- (void)dealloc;
     
 @end

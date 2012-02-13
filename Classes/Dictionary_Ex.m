@@ -7,30 +7,34 @@
 //
 
 @implementation Dictionary_Ex
-//=====================================================================================================
--(id)init
+//------------------------------------------------------------------------------------------------------
+- (id)init
 {
-    pDic = [[NSMutableDictionary alloc] init];
-    pDicTemp = [[NSMutableDictionary alloc] init];
-	return self;
+    self = [super init];
+    if (self)
+    {
+        pDic = [[NSMutableDictionary alloc] init];
+        pDicTemp = [[NSMutableDictionary alloc] init];
+    }
+
+    return self;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 -(NSEnumerator *)objectEnumerator
 {
     NSEnumerator *pEn= [pDic objectEnumerator];
     return pEn;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 - (id)removeObjectForKey_Ex:(id)aKey
 {
     id pOb = [pDic objectForKey:aKey];
-
     [pDicTemp setObject:@"delete" forKey:aKey];
     m_bNotSyn=YES;
     
     return pOb;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 -(id)setObject_Ex:(id)anObject forKey:(id)aKey
 {
     id pOb = [pDic objectForKey:aKey];
@@ -39,17 +43,21 @@
     
     return pOb;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 - (id)objectForKey:(id)aKey
 {
     id pOb = [pDicTemp objectForKey:aKey];
-    if(pOb==@"delete"){return nil;}
+    if ([pOb isKindOfClass:[NSString class]])
+    {
+        if ([(NSString*)pOb isEqualToString:@"delete"])
+            return nil;
+    }
     
     if(pOb==nil){pOb = [pDic objectForKey:aKey];}
 
     return pOb;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 - (void)SynhData
 {    
     NSEnumerator *Key_enumerator = [pDicTemp keyEnumerator];
@@ -58,10 +66,13 @@
     while ((aKey = [Key_enumerator nextObject])) {
         
         id pObject = [pDicTemp objectForKey:aKey];
-        if(pObject==@"delete"){
+        if ([pObject isKindOfClass:[NSString class]] && [(NSString*)pObject isEqualToString:@"delete"])
+        {
             [pDic removeObjectForKey:aKey];
         }
-        else{
+        else
+        {
+            [pDic removeObjectForKey:aKey];
             [pDic setObject:pObject forKey:aKey];
         }
     }
@@ -69,12 +80,12 @@
     [pDicTemp removeAllObjects];
     m_bNotSyn=NO;
 }
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 -(void)dealloc
 {
     [pDicTemp release];
     [pDic release];
     [super dealloc];
 };
-//=====================================================================================================
+//------------------------------------------------------------------------------------------------------
 @end

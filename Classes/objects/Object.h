@@ -29,7 +29,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//различные скорости
     float m_fStart,m_fFinish,m_fCurrent;
 	float m_fVelMove,m_fVelFade,m_fPhase,m_fVelPhase,m_fVelRotate;
-
+	
 	//стартовая позиция и финифная
 	Vector3D m_vStartPos,m_vEndPos;
 	float m_fStartAngle,m_fEndAngle;
@@ -62,6 +62,9 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	
 	//родитель-уровень для данного класса
 	MainController* m_pParent;
+
+	//delta time
+	double m_fDeltaTime;
 	
 	//текущая позиция, масштаб и угол поворота
 	Vector3D m_pCurPosition;
@@ -175,6 +178,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (bool)Intersect:(CGPoint)Point;
 - (bool)IntersectSphereWithOb:(GObject *)pOb;
 
+//функции для обработки различных действий для касаний
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point;
@@ -185,15 +189,19 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 -(int)cohen_sutherland:(rect2d *)r PointA:(point2d *)a PointB:(point2d*)b;
 - (void)SetPosWithOffsetOwner;
 
+//добавление/удаление из массива отрисовки для объектка
 - (void)AddToDraw;
 - (void)DeleteFromDraw;
-- (void)SetLayer:(int)iLayer;
-- (void)SetLayerAndChild:(int)iLayer;
-- (void)SelfOffsetVert:(Vertex3D)VOffset;
-- (void)LinkValues;
-- (void)Destroy;
+
+- (void)SetLayer:(int)iLayer;//установить слой отрисовки
+- (void)SetLayerAndChild:(int)iLayer;//установить слой отрисовки и для детей объектов
+- (void)SelfOffsetVert:(Vertex3D)VOffset;//смещение меши объекта на вектор
+
+- (void)SetDefault;//установка переменный по умолчанию
+- (void)LinkValues;//линкование копирование параметров
+- (void)Destroy;//уничтожение объекта и перемещение его в резерв
 //processors--------------------------------------------------------------------------------------------
-- (void)timerWaitNextStage:(Processor_ex *)pProc;
+- (void)timerWaitNextStage:(Processor_ex *)pProc;//ждём время, а потом переходим на следующую стадию
 
 - (void)InitAchiveLineFloat:(ProcStage_ex *)pStage;//изменение float значения с параметнами
 - (void)AchiveLineFloat:(Processor_ex *)pProc;
@@ -213,11 +221,13 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)InitParabola1:(ProcStage_ex *)pStage;//Преобразование по кривой параболы
 - (void)Parabola1:(Processor_ex *)pProc;
 
+- (void)InitParabola2:(ProcStage_ex *)pStage;//Преобразование по кривой параболы
+- (void)Parabola2:(Processor_ex *)pProc;
+
 - (void)InitAchive1Dvector:(ProcStage_ex *)pStage;//изменение float как вектора.
 - (void)Achive1Dvector:(Processor_ex *)pProc;
 
-    
-- (void)Idle:(Processor_ex *)pProc;
+- (void)Idle:(Processor_ex *)pProc;//процессор простаивания
 
 - (void)DestroySelfUpdate:(Processor_ex *)pProc;
 - (void)DestroySelf:(Processor_ex *)pProc;
@@ -227,7 +237,14 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)TouchYes:(Processor_ex *)pProc;
 - (void)TouchNo:(Processor_ex *)pProc;
 
-- (void)SelfTimer:(Processor_ex *)pProc;
+- (void)SelfTimer:(Processor_ex *)pProc;//задержка активации объекта
+- (void)SelfTimerProc:(Processor_ex *)pProc;//время для процесса
+
+- (Processor_ex*)START_QUEUE:(id) NAME;
+- (void)END_QUEUE:(Processor_ex*)pProc name:(id) NAME;
+- (void)END_QUEUE:(Processor_ex*)pProc;
+- (void)OBJECT_PERFORM_SEL:(NSString*)NameObject selector:(NSString*)SelectorName;
+
 //utils------------------------------------------------------------------------------------------------
 - (void)ParseTime:(float)fTime OutSec:(int *)fSec OutMin:(int *)fMin OutHour:(int *)fHour;
 - (NSMutableArray *)ParseIntValue:(int)iValue;

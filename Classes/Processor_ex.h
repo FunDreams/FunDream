@@ -20,12 +20,19 @@
 
     NSString *NameStage;
     SEL       m_selector;
-    SEL       m_selectorSecond;
+    SEL       m_selectorStage;
     
+    SEL       m_selectorInit;
+    SEL       m_selectorPrepare;
+
     float m_pTime;
-	int m_pTimeRnd;
-	int m_pTimeBase;
-    
+
+    int *m_pTimeRnd_Delay;
+    int *m_pTimeBase_Delay;
+
+    int *m_pTimeRnd_Timer;
+    int *m_pTimeBase_Timer;
+
     int *IntsValues[6];
     float *FloatsValues[6];
     Vector3D *VectorsValues[6];
@@ -34,8 +41,7 @@
 - (id)InitWithParent_ex:(Processor_ex *)ProcParent;
 - (void)Prepare;
 - (void)SetDelay;
-
-- (void)dealloc;
+- (void)SetTimer;
 
 @end
 //-------------------------------------------------------------------------------------------
@@ -57,6 +63,7 @@
 
 - (void)NextStage;
 - (void)SetStage:(NSString *)Stage;
+- (NSString *)GetNameStage;
 
 - (void)Assign_Stage:(NSString *)NameStage WithSel:(NSString *)NameSel  WithParams:(NSArray *)Parametrs;
 - (void)Insert_Stage:(NSString *)NameStage WithSel:(NSString *)NameSel 
@@ -65,6 +72,6 @@
 - (void)SetParams:(NSString *)NameStage WithParams:(NSArray *)Parametrs;
 
 - (void)Remove_Stage:(NSString *)NameStage;
-- (void)Delay_Stage:(NSString *)NameStage Time:(int)iTime TimeRnd:(int)iTimeRnd;
+//- (void)Delay_Stage:(NSString *)NameStage Time:(int)iTime TimeRnd:(int)iTimeRnd;
 @end
 //-------------------------------------------------------------------------------------------

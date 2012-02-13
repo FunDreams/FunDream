@@ -11,37 +11,42 @@
 @implementation ObjectTemplet
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-    m_iLayer = layerTemplet;
-
-START_QUEUE(@"Proc");
-	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-//	ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-END_QUEUE(@"Proc");
+	self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
+        m_iLayer = layerTemplet;
+        m_iLayerTouch=layerTouch_0;//слой касания
+    }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+//- (void)SetDefault{}
+//------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
+//====//процессоры для объекта==========================================================================
+    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
+  //      ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
+        ASSIGN_STAGE(@"PROC",@"Proc:",nil);
+    [self END_QUEUE:pProc name:@"Proc"];
     
-//   SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+//====//различные параметры=============================================================================
+//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
     
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
-//    SET_CELL(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
+//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    GET_TEXTURE(mTextureId,m_pNameTexture);
+    mTextureId = [m_pParent GetTextureId:m_pNameTexture];
     //   GET_DIM_FROM_TEXTURE(@"");
 	mWidth  = 50;
 	mHeight = 50;
 
 	[super Start];
 
-    //   m_iLayerTouch=layerTouch_0;//слой касания
     //   [self SetTouch:YES];//интерактивность
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
@@ -54,12 +59,13 @@ END_QUEUE(@"Proc");
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{}
+- (void)Proc:(Processor_ex *)pProc{
+    
+//    PLAY_SOUND(@"");
+//    STOP_SOUND(@"");
+}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc{[super dealloc];}
-//------------------------------------------------------------------------------------------------------
 @end

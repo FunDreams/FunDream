@@ -36,6 +36,10 @@
 //desc: функция таймера. Цикл обработки приложения.
 - (void)OnTimer;
 
+- (void)applicationDidBecomeActive:(UIApplication *)application;
+- (void)applicationWillResignActive:(UIApplication *)application;
+- (void)applicationWillTerminate:(UIApplication *)application;
+
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet RootViewController *m_pRootViewController;
 

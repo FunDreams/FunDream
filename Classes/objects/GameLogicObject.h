@@ -19,8 +19,6 @@
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 /** **/
--(void)dealloc;
 - (void)Start;
-
 
 @end

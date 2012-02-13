@@ -7,36 +7,24 @@
 //
 
 #import "ObjectSymbol.h"
+#import "UniCell.h"
 
 @implementation ObjectSymbol
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-	m_iLayer = layerInterfaceSpace5;
+	self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
+        m_iLayer = layerInterfaceSpace5;
 
-	mWidth  = 50;
-	mHeight = 50;
+        mWidth  = 50;
+        mHeight = 50;
 
-	m_fSpeedScale = 4+(float)(RND%20+20)*0.1f;
-	m_fPhase=0;
-    m_fOffsetPosYTmp=0;
-	
-START_QUEUE(@"Move");
-    ASSIGN_STAGE(@"Move",@"Move:",nil);
-END_QUEUE(@"Move");
-
-START_QUEUE(@"Proc");
-	ASSIGN_STAGE(@"Idle",@"Idle:", nil);
-
-    ASSIGN_STAGE(@"ScaleWave",@"ScaleWave:", nil);
-
-    ASSIGN_STAGE(@"Jump",@"Jump:", nil);
+        m_fSpeedScale = 4+(float)(RND%20+20)*0.1f;
+        m_fPhase=0;
+        m_fOffsetPosYTmp=0;
+    }
     
-    ASSIGN_STAGE(@"Fall",@"Fall:", nil);
-
-END_QUEUE(@"Proc");
-
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -44,12 +32,28 @@ END_QUEUE(@"Proc");
     [super LinkValues];
     
     m_strStartStage=[NSMutableString stringWithString:@"Animate"];
-    SET_CELL(LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage"));
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage")];
 
-    SET_CELL(LINK_INT_V(m_iCurrentSym,m_strName,@"m_iCurrentSym"));
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCurrentSym,m_strName,@"m_iCurrentSym")];
 
     m_strNextStage=[NSMutableString stringWithString:@"Animate"];
-    SET_CELL(LINK_STRING_V(m_strNextStage,m_strName,@"m_strNextStage"));
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strNextStage,m_strName,@"m_strNextStage")];
+    
+    Processor_ex* pProc = [self START_QUEUE:@"Move"];
+        ASSIGN_STAGE(@"Move",@"Move:",nil);
+    [self END_QUEUE:pProc name:@"Move"];
+    
+    pProc = [self START_QUEUE:@"Proc"];
+        ASSIGN_STAGE(@"Idle",@"Idle:", nil);
+        
+        ASSIGN_STAGE(@"ScaleWave",@"ScaleWave:", nil);
+        
+        ASSIGN_STAGE(@"Jump",@"Jump:", nil);
+        
+        ASSIGN_STAGE(@"Fall",@"Fall:", nil);
+    
+    [self END_QUEUE:pProc name:@"Proc"];
+
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{
@@ -60,7 +64,7 @@ END_QUEUE(@"Proc");
 	
 	[super Start];
     
-    GET_TEXTURE(m_iStartTexture,m_pNameTexture);
+    m_iStartTexture = [m_pParent GetTextureId:m_pNameTexture];
     mTextureId = m_iStartTexture;
     [m_strNextStage setString:@""];
 }
@@ -87,7 +91,7 @@ END_QUEUE(@"Proc");
     
     if([m_strNextStage length]>0 && fabs(OffsetScale)<0.45){
         
-        SET_STAGE_EX(NAME(self), @"Proc", m_strNextStage);
+        SET_STAGE_EX(self->m_strName, @"Proc", m_strNextStage);
         [m_strNextStage setString:@""];
         m_fPhase=0;
         m_fOffsetPosYTmp=0;
@@ -106,13 +110,13 @@ END_QUEUE(@"Proc");
     
     if([m_strNextStage length]>0 && fabs(OffsetScale)<0.1){
         
-        SET_STAGE_EX(NAME(self), @"Proc", m_strNextStage);
+        SET_STAGE_EX(self->m_strName, @"Proc", m_strNextStage);
         [m_strNextStage setString:@""];
         m_fPhase=0;
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)PrepareFall:(Processor_ex *)pProc{
+- (void)PrepareFall:(ProcStage_ex *)pStage{
     
     m_fRotateVel=RND%400;
     m_Vvelosity=Vector3DMake(0,(float)(RND%200)-100,0);
@@ -128,11 +132,10 @@ END_QUEUE(@"Proc");
     m_pCurPosition.y+=DELTA*m_Vvelosity.y;
     
     if(m_pCurPosition.y<-700){
-        DESTROY_OBJECT(self);
-        SET_STAGE_EX(NAME(self), @"Proc", @"Idle");
+        [m_pObjMng DestroyObject:self];
+        SET_STAGE_EX(self->m_strName, @"Proc", @"Idle");
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
-//------------------------------------------------------------------------------------------------------
+
 @end

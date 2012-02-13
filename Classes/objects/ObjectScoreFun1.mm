@@ -11,25 +11,24 @@
 @implementation ObjectScoreFun1
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-	m_bHiden=TRUE;
-	m_iLayer = layerInvisible;
+	self=[super Init:Parent WithName:strName];
+    if (self != nil)
+    {
 
-	mWidth  = 50;
-	mHeight = 50;
+        m_bHiden=TRUE;
+        m_iLayer = layerInvisible;
 
-    WSym=30;
-    HSym=50;
+        mWidth  = 50;
+        mHeight = 50;
 
-	m_fWNumber=30;
+        WSym=30;
+        HSym=50;
 
-START_QUEUE(@"Proc");
-    ASSIGN_STAGE(@"Move",@"MoveScore:",nil);
-END_QUEUE(@"Proc");
+        m_fWNumber=30;
 
-    m_iAlign=-1;
-
+        m_iAlign=-1;
+    }
+    
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -38,20 +37,24 @@ END_QUEUE(@"Proc");
 
     m_strStartStage=[NSMutableString stringWithString:@""];
 
-    SET_CELL(LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage"));
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strStartStage,m_strName,@"m_strStartStage")];
 
-    SET_CELL(LINK_FLOAT_V(WSym,m_strName,@"WSym"));
-    SET_CELL(LINK_FLOAT_V(HSym,m_strName,@"HSym"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(WSym,m_strName,@"WSym")];
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(HSym,m_strName,@"HSym")];
 
-    SET_CELL(LINK_FLOAT_V(m_fWNumber,m_strName,@"m_fWNumber"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fWNumber,m_strName,@"m_fWNumber")];
 
-    SET_CELL(LINK_INT_V(iScoreAdd,m_strName,@"iScoreAdd"));
-    SET_CELL(LINK_INT_V(m_iAlign,m_strName,@"m_iAlign"));
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(iScoreAdd,m_strName,@"iScoreAdd")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iAlign,m_strName,@"m_iAlign")];
 
-    SET_CELL(LINK_FLOAT_V(m_fStartPos,m_strName,@"m_fStartPos"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fStartPos,m_strName,@"m_fStartPos")];
 
-    SET_CELL(LINK_INT_V(iCountDownScore,m_strName,@"iCountDownScore"));
-    SET_CELL(LINK_INT_V(iScoreDownAdd,m_strName,@"iScoreDownAdd"));
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(iCountDownScore,m_strName,@"iCountDownScore")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(iScoreDownAdd,m_strName,@"iScoreDownAdd")];
+    
+    Processor_ex *pProc = [self START_QUEUE:@"Proc"];
+        ASSIGN_STAGE(@"Move",@"MoveScore:",nil);
+    [self END_QUEUE:pProc];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -112,10 +115,13 @@ END_QUEUE(@"Proc");
 
     if(iCountScore<0)iCountScore=0;
 
-	NSMutableArray *pArrayScore = [[self ParseIntValue:iCountScore] autorelease];
+	NSMutableArray *pArrayScore = [self ParseIntValue:iCountScore];
 	NSMutableArray *TmpArr=m_pChildrenbjectsArr;
 
-	for (int i=[pArrayScore count]; i< [TmpArr count]; i++)
+    int AddCount=0;
+    if([pArrayScore count]==0)AddCount=1;
+    
+	for (int i=[pArrayScore count]+AddCount; i< [TmpArr count]; i++)
     {        
         OBJECT_PERFORM_SEL(((GObject *)[TmpArr objectAtIndex:i])->m_strName, @"HideNum");
     }
@@ -132,7 +138,6 @@ END_QUEUE(@"Proc");
     }
     else for (int i=0; i< [pArrayScore count]; i++)
     {
-
         GObject *pOb=(GObject *)[TmpArr objectAtIndex:i];
         
     OBJECT_SET_PARAMS(pOb->m_strName,
@@ -140,9 +145,17 @@ END_QUEUE(@"Proc");
                 SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"));
 
         OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
+        OBJECT_PERFORM_SEL(NAME(pOb), @"Move:");
     }
     
 	UPDATE;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)RezetScore{
+    
+    iCountScore=0;
+    iScoreAdd=0;
+    [self UpdateScore];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)MoveScore:(Processor_ex *)pProc{
@@ -152,7 +165,5 @@ END_QUEUE(@"Proc");
         iScoreAdd=0;
     }
 }
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
 //------------------------------------------------------------------------------------------------------
 @end

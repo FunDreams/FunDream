@@ -14,6 +14,7 @@
 @class CPhysics;
 @class Mega_tree;
 
+//структура перечисле для слоёв отрисовки
 typedef enum tagLayerID {
 	layerOpenGL = 0,
     layerSystem,
@@ -27,10 +28,8 @@ typedef enum tagLayerID {
 	layerOb3,
 
 	layerNumber,	
-	
-	layerTouch_0,	
-	
-	layerInterfaceSpace3,	
+		
+	layerInterfaceSpace3,
 	layerInterfaceSpace4,
 	
 	layerScoreTimer,
@@ -44,9 +43,34 @@ typedef enum tagLayerID {
 	layerInterfaceSpace5,
 	layerInterfaceSpace6,
 	layerInterfaceSpace7,
+	layerInterfaceSpace8,
+	layerInterfaceSpace9,
+	layerInterfaceSpace10,
+	layerInterfaceSpace11,
+	layerInterfaceSpace12,
 
-	layerTemplet,
+    //после последнего слоя писать ничего не надо, иначе инициализация в
+    //менеджере будет не правильна  (либо надо поправить там тоже)
+    //чем больше номмер слоя тем выше позже объект рисуется
+	layerTemplet,//25   
 } EGP_LayerID;
+
+//структура перечисле для слоёв касания
+typedef enum tagLayerTouchID {
+
+    layerTouch_3N,//0
+	layerTouch_2N,
+	layerTouch_1N,
+	layerTouch_0,
+	layerTouch_1,
+	layerTouch_2,
+    
+    //чем больше номмер слоя тем позже объект обрабатывается на прикосновение
+    //после последнего слоя писать ничего не надо, иначе инициализация в
+    //менеджере будет не правильна (либо надо поправить там тоже)
+	layerTouch_3,//6
+	
+} EGP_LayerTouchID;
 
 /** Класс который управляет другими объектами в зависимости от их состояния**/
 @interface CObjectManager : NSObject {
@@ -107,7 +131,7 @@ typedef enum tagLayerID {
     //Mega tree
     Mega_tree *pMegaTree;
     
-	float m_fDeltaTime;
+	double m_fDeltaTime;
 }
 
 @property(nonatomic, retain) NSMutableArray *m_pObjectList;
@@ -115,6 +139,7 @@ typedef enum tagLayerID {
 
 /** Инициализирует объект**/
 - (id)Init:(id)Parent;
+
 /** **/
 - (void)dealloc;
 
@@ -126,6 +151,8 @@ typedef enum tagLayerID {
 - (NSString *)GetNameObject:(NSString*) NameObject;
 
 //функции управления объектами (создание/изменение/доступа параметров)
+-(void) CreateNewObject:(NSString*)className withName:(NSString*)objectName objects: (id)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
+
 - (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObject WithParams:(NSArray *)Parametrs;
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs;
 - (GObject *)GetFreeObjectByClass:(NSString*)NameClass;

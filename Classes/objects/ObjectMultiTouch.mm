@@ -11,25 +11,33 @@
 @implementation ObjectMultiTouch
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-	m_iLayer = layerSystem;
-    
-	mWidth  = 640;
-	mHeight = 960;
+    self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
 
-START_QUEUE(@"TimeDie");
-	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-	ASSIGN_STAGE(@"TimerDie",@"Proc:",nil);
-    DELAY_STAGE(@"TimerDie", 200, 1);
-END_QUEUE(@"TimeDie");
+        m_iLayer = layerSystem;
+        
+        mWidth  = 640;
+        mHeight = 960;
+        
+  //      GET_TEXTURE(mTextureId,m_pNameTexture);
+        
+    //    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
+     //   m_iLayerTouch=layerTouch_0;//слой касания
+    }
     
-    GET_TEXTURE(mTextureId,m_pNameTexture);
-    
-//    [self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
- //   m_iLayerTouch=layerTouch_0;//слой касания
-
 	return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LinkValues{
+    [super LinkValues];
+    
+    Processor_ex *pProc = [self START_QUEUE:@"TimeDie"];
+        ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+        ASSIGN_STAGE(@"TimerDie",@"Proc:",
+                     SET_INT_V(200, @""));
+    
+    [self END_QUEUE:pProc name:@"TimeDie"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -126,6 +134,7 @@ END_QUEUE(@"TimeDie");
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
+    return;
 //    if(pOb){
 //        DESTROY_OBJECT(pOb);
 //        pOb=nil;
@@ -184,7 +193,5 @@ END_QUEUE(@"TimeDie");
         if(pObject!=nil)[m_pObjMng AddToGroup:@"MustDie" Object:pObject];
     }
 }
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc{[super dealloc];}
 //------------------------------------------------------------------------------------------------------
 @end

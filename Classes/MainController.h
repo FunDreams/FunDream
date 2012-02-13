@@ -21,13 +21,12 @@
 	float m_fHeight;
 
     UInt32	m_iTextureId;
+    bool m_bPvr;
     NSString *pName;
 }
 
 - (id)InitWithName:(NSString *)pName WithUint:(UInt32)TextureId 
          WithWidth:(float)fWidth  WithWidth:(float)fHeight;
-
-- (void)dealloc;
 
 @end
 //------------------------------------------------------------------------------------------------------
@@ -35,6 +34,8 @@
 @interface MainController : UIViewController <UIAccelerometerDelegate,ADBannerViewDelegate> {
 @public
 	
+    NSString *currentLanguage;
+
     NSSet *mpCurtouches;
     CMMotionManager *motionManager;
 
@@ -88,7 +89,7 @@
     bool m_bMotionMashine;
 
 	GLuint	texture[MAX_NUM_TEXTURE];
-    UInt32 m_iCount;
+    UInt32 m_iCount;//индекс текстуры для загрузки
 }
 
 - (void)Pause:(bool)bPause;
@@ -123,14 +124,24 @@
 -(void)LoadAllTextures;
 -(void)LoadAllSounds;
 
+-(NSString *)GetNameWithLocale:(NSString *)NameTexture Ext:(NSString *)Ext;
+
+-(void) createGLView;
+
 - (void)setupView:(GLView*)view;
-- (UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention  NameFile:(NSString *)NameFile;
+
+
+//функции загрузки текстур
+-(UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention  NameFile:(NSString *)NameFile;
+-(UInt32)loadTexturePVR:(NSString *)NameTexture WithExt:(NSString *)Extention NameFile:(NSString *)NameFile;
 
 -(void)SetProection;
 -(void)SetOrt:(Vector3D)Offset;
 
 -(UInt32)SetDim:(UInt32)Varialable;
 - (bool)SmallDevice;
+
+-(UInt32) GetTextureId:(NSString*)textureName;
 
 @end
 //------------------------------------------------------------------------------------------------------

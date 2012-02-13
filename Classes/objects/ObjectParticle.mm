@@ -10,23 +10,26 @@
 
 @implementation Particle
 -(id)Init:(GObject *)pObParent{
-    
-    m_pParent=[pObParent retain];
-    m_vPos=&pObParent->m_pCurPosition;
-    m_vScale=&pObParent->m_pCurScale;
-    m_fAngle=&pObParent->m_pCurAngle.z;
-    m_cColor=&pObParent->mColor;
-    
-    m_cColor1=Color3DMake(1,1,1,1);
-    m_cColor2=Color3DMake(1,1,1,1);
-    m_cColor3=Color3DMake(1,1,1,1);
-    m_cColor4=Color3DMake(1,1,1,1);
-    
-    
-    m_vTex1=Vector3DMake(0, 1, 0);
-    m_vTex2=Vector3DMake(1, 1, 0);
-    m_vTex3=Vector3DMake(1, 0, 0);
-    m_vTex4=Vector3DMake(0, 0, 0);
+
+    self = [super init];
+    if (self != nil)
+    {
+        m_pParent=[pObParent retain];
+        m_vPos=&pObParent->m_pCurPosition;
+        m_vScale=&pObParent->m_pCurScale;
+        m_fAngle=&pObParent->m_pCurAngle.z;
+        m_cColor=&pObParent->mColor;
+
+        m_cColor1=Color3DMake(1,1,1,1);
+        m_cColor2=Color3DMake(1,1,1,1);
+        m_cColor3=Color3DMake(1,1,1,1);
+        m_cColor4=Color3DMake(1,1,1,1);
+
+        m_vTex1=Vector3DMake(0, 1, 0);
+        m_vTex2=Vector3DMake(1, 1, 0);
+        m_vTex3=Vector3DMake(1, 0, 0);
+        m_vTex4=Vector3DMake(0, 0, 0);
+    }
     
     return self;
 }
@@ -37,8 +40,7 @@
         
         m_iNextFrame=iFrame;
         GLfloat *m_pTexCoords=(m_pParticleContainer->texCoords+(m_iCurrentOffset)*12);
-        
-        
+
         float OffsetX=iFrame%((ObjectParticle *)m_pParticleContainer)->m_iCountX;
         float OffsetY=iFrame/((ObjectParticle *)m_pParticleContainer)->m_iCountX;
 
@@ -271,37 +273,34 @@
 @implementation ObjectParticle
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-	
-    m_iLayer = layerTemplet;
+    self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
+        m_iLayer = layerTemplet;
 
-    mWidth  = 2;
-	mHeight = 2;
-    
-    m_pParticle = [[NSMutableDictionary alloc] init];
+        mWidth  = 2;
+        mHeight = 2;
+        
+        m_pParticle = [[NSMutableDictionary alloc] init];
 
-//START_QUEUE(@"Proc");
-//	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
- //   ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-//END_QUEUE(@"Proc");
+        free(vertices);
+        free(texCoords);
+        free(squareColors);	
+        
+        vertices=0;
+        texCoords=0;
+        squareColors=0;
 
-    free(vertices);
-	free(texCoords);
-	free(squareColors);	
-    
-    vertices=0;
-    texCoords=0;
-    squareColors=0;
+        mTextureId=-1;
+        mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
+        
+        m_iCountVertex=0;
 
-    mTextureId=-1;
-	mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
-    
-    m_iCountVertex=0;
-
-    m_vSize=Vector3DMake(128,128,0);
-    m_iCountX=1;
-    m_iCountY=1;
-    m_INumLoadTextures=1;
+        m_vSize=Vector3DMake(128,128,0);
+        m_iCountX=1;
+        m_iCountY=1;
+        m_INumLoadTextures=1;
+    }
     
 	return self;
 }
@@ -309,10 +308,15 @@
 - (void)LinkValues{
     [super LinkValues];
 
-    SET_CELL(LINK_VECTOR_V(m_vSize,m_strName,@"m_vSize"));
-    SET_CELL(LINK_INT_V(m_iCountX,m_strName,@"m_iCountX"));
-    SET_CELL(LINK_INT_V(m_iCountY,m_strName,@"m_iCountY"));
-    SET_CELL(LINK_INT_V(m_INumLoadTextures,m_strName,@"m_INumLoadTextures"));
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_vSize,m_strName,@"m_vSize")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCountX,m_strName,@"m_iCountX")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCountY,m_strName,@"m_iCountY")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_INumLoadTextures,m_strName,@"m_INumLoadTextures")];
+    
+    //START_QUEUE(@"Proc");
+    //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+    //   ASSIGN_STAGE(@"Proc",@"Proc:",nil);
+    //END_QUEUE(@"Proc");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -352,7 +356,8 @@
 
     TextureContainer * TmpContainer=[m_pParent->m_pTextureList objectForKey:m_pNameTexture];
     
-    if(TmpContainer!=nil)return TmpContainer->m_iTextureId;
+    if(TmpContainer!=nil)
+        return TmpContainer->m_iTextureId;
 
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     bundleRoot=[bundleRoot stringByAppendingString:@"/textureAtlas"];

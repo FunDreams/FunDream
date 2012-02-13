@@ -1,4 +1,4 @@
-//
+	//
 //  mainController.m
 //  Engine
 //
@@ -10,25 +10,29 @@
 
 #import <sys/types.h>
 #import <sys/sysctl.h>
+#import "PVRTexture.h"
+
 //------------------------------------------------------------------------------------------------------
 @implementation TextureContainer
 
 - (id)InitWithName:(NSString *)pNamet WithUint:(UInt32)TextureId 
-         WithWidth:(float)fWidth  WithWidth:(float)fHeight{
+         WithWidth:(float)fWidth  WithWidth:(float)fHeight
+{
+    self = [super init];
+    if (self)
+    {
+        m_fWidth=fWidth;
+        m_fHeight=fHeight;
     
-    m_fWidth=fWidth;
-    m_fHeight=fHeight;
+        m_iTextureId=TextureId;
+        pName=[NSString stringWithString:pNamet];
+    }
     
-    m_iTextureId=TextureId;
-    pName=[NSString stringWithString:pNamet];
-
     return self;
 }
 
-- (void)dealloc{
-    [super dealloc];
-}
 @end
+
 //------------------------------------------------------------------------------------------------------
 @implementation MainController
 
@@ -107,9 +111,14 @@
 }
 //------------------------------------------------------------------------------------------------------
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-	[super viewDidLoad];
+- (void)viewDidLoad
+{
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    NSArray *languages = [defaults objectForKey:@"AppleLanguages"];
+    currentLanguage = [languages objectAtIndex:0];
 
+	[super viewDidLoad];
+ 
 #ifdef FADE_NO
     [UIApplication sharedApplication].idleTimerDisabled = YES;
 #endif
@@ -122,6 +131,7 @@
         m_bMotionMashine=YES;
     }
     
+    // viewDidLoad might be called multiple times
 	m_pObjMng = [[CObjectManager alloc] Init:self];
 
 	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
@@ -143,27 +153,29 @@
             m_pObjMng->fCurrentAngleRotateOffset=90;
         }
 	}
+}
 
+-(void) createGLView
+{
     //создаём 
     CGRect bounds = CGRectMake(0,0,
                                [[UIScreen mainScreen] bounds].size.width,
                                [[UIScreen mainScreen] bounds].size.height);
     
     glView = [[GLView alloc] initWithFrame:bounds];
-
+    
     self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
-	[self.view addSubview:glView];
 	
 	glView.controller = self;
 	[self setupView:glView];
     [self LoadAllTextures];
     [self LoadAllSounds];
-
+    
 #ifdef MULTITOUCH
     m_bMultiTouch=YES;
     glView.multipleTouchEnabled=m_bMultiTouch;
 #endif
-
+    
 #ifdef BANNER_IAD
     
     adView = [[ADBannerView alloc] initWithFrame:CGRectZero];
@@ -184,7 +196,7 @@
     }
     else
     {
-    
+        
         adView.currentContentSizeIdentifier = ADBannerContentSizeIdentifierPortrait;
         
         if ([self isDeviceAniPad])
@@ -198,8 +210,10 @@
     
 	bannerIsVisible=FALSE;
 #endif
+
+    [self.view addSubview:glView];
 }
-//------------------------------------------------------------------------------------------------------
+
 -(UInt32) LoadSound:(NSString *)NameSound WithExt:(NSString *)Ext WithLoop:(bool)loop
 FullName:(NSString *)FullNameSound
 {
@@ -213,10 +227,13 @@ FullName:(NSString *)FullNameSound
 
 	if(pBundle!=nil)
 	{
-		if(loop==YES)SoundEngine_LoadLoopingEffect((char * )pBundle, 0, 0, &iSoundID);
-		else SoundEngine_LoadEffect((char * )pBundle, &iSoundID);
+		if (loop==YES)
+            SoundEngine_LoadLoopingEffect((char * )pBundle, 0, 0, &iSoundID);
+		else
+            SoundEngine_LoadEffect((char * )pBundle, &iSoundID);
 		
-		[m_pSoundList setObject:[[NSNumber alloc] initWithInt:iSoundID] forKey:FullNameSound];
+        NSNumber *soundId = [[NSNumber alloc] initWithInt:iSoundID];
+		[m_pSoundList setObject:soundId forKey:FullNameSound];
 	}
 	
 	return iSoundID;
@@ -255,8 +272,6 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {[super didReceiveMemoryWarning];}
 //------------------------------------------------------------------------------------------------------
-- (void)viewDidUnload {}
-//------------------------------------------------------------------------------------------------------
 - (void)SelfMove:(double)DeltaTime{
 
     NSNumber *NumDelta = [NSNumber numberWithDouble:DeltaTime];
@@ -277,10 +292,6 @@ FullName:(NSString *)FullNameSound
 
 	glDeleteTextures(MAX_NUM_TEXTURE,texture);
 	
-    enumerator = [m_pTextureList objectEnumerator];
-	TextureContainer *TmpContainer;
-    while ((TmpContainer = [enumerator nextObject])){[TmpContainer release];}
-
 	[m_pTextureList release];
 
 #ifdef BANNER_IAD
@@ -294,16 +305,14 @@ FullName:(NSString *)FullNameSound
 {
 	[m_pObjMng CreateObjects];	
 
-#ifdef BLACK_PIG
-	{
-		SoundEngine_StopBackgroundMusic(FALSE);
-		SoundEngine_UnloadBackgroundMusicTrack();
-
-		NSBundle* bundle = [NSBundle mainBundle];
-		SoundEngine_LoadBackgroundMusicTrack([[bundle pathForResource:@"chef" ofType:@"mp3"] UTF8String], true, true);
-		SoundEngine_StartBackgroundMusic();
-	}
-#endif
+//	{
+//		SoundEngine_StopBackgroundMusic(FALSE);
+//		SoundEngine_UnloadBackgroundMusicTrack();
+//
+//		NSBundle* bundle = [NSBundle mainBundle];
+//		SoundEngine_LoadBackgroundMusicTrack([[bundle pathForResource:@"05-Sounds of Fardrop" ofType:@"mp3"] UTF8String], true, true);
+//		SoundEngine_StartBackgroundMusic();
+//	}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)alertView:(UIAlertView *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex {
@@ -420,7 +429,6 @@ FullName:(NSString *)FullNameSound
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                     {[TmpOb touchesBegan:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesBeganOut:touch WithPoint:tmpPoint];}
-                
             }
             
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
@@ -453,7 +461,6 @@ FullName:(NSString *)FullNameSound
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesMoved:touch WithPoint:tmpPoint];}
                 else {[TmpOb touchesMovedOut:touch WithPoint:tmpPoint];}
-                
             }
 
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
@@ -485,8 +492,7 @@ FullName:(NSString *)FullNameSound
                                 
                 if(TmpOb->m_bTouch && [TmpOb Intersect:tmpPoint])
                 {[TmpOb touchesEnded:touch WithPoint:tmpPoint];}
-                else {[TmpOb touchesEndedOut:touch WithPoint:tmpPoint];}
-                
+                else {[TmpOb touchesEndedOut:touch WithPoint:tmpPoint];}                
             }
             
             if(m_bTouchGathe){m_bTouchGathe=NO;return;}
@@ -545,6 +551,22 @@ FullName:(NSString *)FullNameSound
 	{
 		[self performSelector:@selector(vibe:) withObject:self afterDelay:i *.3f];
 	}
+}
+//------------------------------------------------------------------------------------------------------
+-(NSString *)GetNameWithLocale:(NSString *)NameTexture Ext:(NSString *)Ext
+{   
+    NSArray *Locals=[NSArray arrayWithObjects:/*@"ru",*/@"en", nil];
+    
+    NSString *Def=@"en";
+    
+    for (NSString *strLoc in Locals) {
+        if([currentLanguage isEqualToString:strLoc]){
+            Def=strLoc;
+        }
+    }
+    NSString *StrRet=[NSString stringWithFormat:@"%@%@.%@",NameTexture,Def,Ext];
+    
+    return StrRet;
 }
 //------------------------------------------------------------------------------------------------------
 -(BOOL)isDeviceAniPad
@@ -607,29 +629,68 @@ FullName:(NSString *)FullNameSound
     return NO;
 }
 //------------------------------------------------------------------------------------------------------
--(UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention 
+-(UInt32)loadTexturePVR:(NSString *)NameTexture WithExt:(NSString *)Extention 
             NameFile:(NSString *)NameFile
 {
-	UInt32	m_iTextureId=-1;
-    TextureContainer * TmpContainer;
-
-	if((TmpContainer=(TextureContainer *)[m_pTextureList objectForKey:NameFile])!=nil){
+	UInt32 m_iTextureId = -1;
+    if(![Extention isEqualToString:@"pvr"])return m_iTextureId;
+    
+    TextureContainer *existingContainer = (TextureContainer *)[m_pTextureList objectForKey:NameFile];
+    
+	if (existingContainer != nil)
+    {
+        return existingContainer->m_iTextureId;
+    }
+    
+	NSString *path = [[NSBundle mainBundle] pathForResource:NameTexture ofType:Extention];
+	if (path!=nil)
+	{
+            
+        glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
         
-        return TmpContainer->m_iTextureId;
+        PVRTexture *pvrTexture = [PVRTexture pvrTextureWithContentsOfFile:
+                [[NSBundle mainBundle] pathForResource:NameTexture ofType:@"pvr"]];
+        
+        m_iTextureId=texture[m_iCount];
+		
+        int sourceW=pvrTexture.width;
+        int sourceH=pvrTexture.height;
+
+        TextureContainer *TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
+		[m_pTextureList setObject:TmpContainer forKey:NameFile];
+        m_iCount++;
+        
+        [pvrTexture release];
+    }
+    
+    return m_iTextureId;
+}
+//------------------------------------------------------------------------------------------------------
+-(UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention 
+            NameFile:(NSString *)NameFile
+{    
+	UInt32 m_iTextureId = -1;
+    
+    if(!([Extention isEqualToString:@"png"] || [Extention isEqualToString:@"jpg"]))return m_iTextureId;
+    
+    TextureContainer *existingContainer = (TextureContainer *)[m_pTextureList objectForKey:NameFile];
+
+	if (existingContainer != nil)
+    {
+        return existingContainer->m_iTextureId;
     }
 	   
 	NSString *path = [[NSBundle mainBundle] pathForResource:NameTexture ofType:Extention];
-		
-	if(path!=nil)
+	if (path!=nil)
 	{
-//		NSLog(NameTexture);
+		//NSLog(@"texture:%@",NameTexture);
 		glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
 
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 		
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 		
 		NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
 		UIImage *image = [[UIImage alloc] initWithData:texData];
@@ -646,6 +707,9 @@ FullName:(NSString *)FullNameSound
 		width=[self SetDim:width];
 		height=[self SetDim:height];
 
+//        width*=0.01;
+//        height*=0.01;
+        
 		CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
 		void *imageData = malloc( height * width * 4 );
 		CGContextRef context = CGBitmapContextCreate( imageData, width, height, 8, 4 * width, colorSpace, kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
@@ -662,10 +726,9 @@ FullName:(NSString *)FullNameSound
 
 		m_iTextureId=texture[m_iCount];
 		
-        TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
-        
+        TextureContainer *TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
 		[m_pTextureList setObject:TmpContainer forKey:NameFile];
-
+        
 		m_iCount++;
 
 		CGContextRelease(context);
@@ -704,9 +767,6 @@ FullName:(NSString *)FullNameSound
                             contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
     for (NSString *tString in dirContents) {
-        
-        int TmpId=-1;
-
         NSRange toprange = [tString rangeOfString: @"."];
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
@@ -714,7 +774,7 @@ FullName:(NSString *)FullNameSound
         NSString *REZ=[NSString stringWithString:@"sounds/"];
         REZ=[REZ stringByAppendingString:SubStr];
 
-        TmpId = [self LoadSound:REZ WithExt:SubStr1 WithLoop:NO FullName:tString];        
+        [self LoadSound:REZ WithExt:SubStr1 WithLoop:NO FullName:tString];
     }
     
     bundleRoot = [[NSBundle mainBundle] bundlePath];
@@ -723,9 +783,6 @@ FullName:(NSString *)FullNameSound
     dirContents = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
     for (NSString *tString in dirContents) {
-        
-        int TmpId=-1;
-        
         NSRange toprange = [tString rangeOfString: @"."];
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
@@ -733,14 +790,15 @@ FullName:(NSString *)FullNameSound
         NSString *REZ=[NSString stringWithString:@"sounds_loop/"];
         REZ=[REZ stringByAppendingString:SubStr];
 
-        TmpId = [self LoadSound:REZ WithExt:SubStr1 WithLoop:YES FullName:tString]; 
+        [self LoadSound:REZ WithExt:SubStr1 WithLoop:YES FullName:tString];
     }
     
     [Error release];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAllTextures{
-    
+
+//    return;
     //load all textures
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     bundleRoot=[bundleRoot stringByAppendingString:@"/texture"];
@@ -750,19 +808,40 @@ FullName:(NSString *)FullNameSound
         contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
     for (NSString *tString in dirContents) {
+         NSRange toprange = [tString rangeOfString: @"."];
         
-        int TmpId=-1;
+        if(toprange.length==0)continue;
         
-        NSRange toprange = [tString rangeOfString: @"."];
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
         NSString *REZ=[NSString stringWithString:@"texture/"];
         REZ=[REZ stringByAppendingString:SubStr];
         
-        TmpId = [self loadTexture:REZ WithExt:SubStr1 NameFile:tString];
+        [self loadTexture:REZ WithExt:SubStr1 NameFile:tString];
     }
+
     
+    bundleRoot = [[NSBundle mainBundle] bundlePath];
+    bundleRoot=[bundleRoot stringByAppendingString:@"/texturePVR"];
+    
+    dirContents = [[NSFileManager defaultManager] 
+                            contentsOfDirectoryAtPath:bundleRoot error:&Error];
+    
+    for (NSString *tString in dirContents) {
+        NSRange toprange = [tString rangeOfString: @"."];
+        
+        if(toprange.length==0)continue;
+        
+        NSString *SubStr = [tString substringToIndex:toprange.location];
+        NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
+        
+        NSString *REZ=[NSString stringWithString:@"texturePVR/"];
+        REZ=[REZ stringByAppendingString:SubStr];
+        
+        [self loadTexturePVR:REZ WithExt:SubStr1 NameFile:tString];
+    }
+
     [Error release];
 }
 //------------------------------------------------------------------------------------------------------
@@ -794,5 +873,19 @@ FullName:(NSString *)FullNameSound
     // Bind the number of textures we need, in this case one.
 	glGenTextures(MAX_NUM_TEXTURE, &texture[0]);
 }
-//------------------------------------------------------------------------------------------------------
+
+-(UInt32) GetTextureId:(NSString*)textureName
+{
+    if (textureName != nil)
+    {
+        TextureContainer *pNum=[m_pTextureList objectForKey:textureName];
+        if (pNum != nil)
+        {
+            return pNum->m_iTextureId;
+        }
+    }
+    
+    return (UInt32)-1;
+}
+
 @end

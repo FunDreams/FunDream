@@ -5,49 +5,61 @@
 //  Created by svp on 17.04.10.
 //  Copyright 2010 __MyCompanyName__. All rights reserved.
 //
-#import "Box2D.h"
-#import "Physics.h"
 #import "Mega_tree.h"
 
 @implementation CObjectManager
+
 @synthesize m_bReserv,m_pObjectList;
+
 //------------------------------------------------------------------------------------------------------
-- (id)Init:(id)Parent {
-		
-    fTimeOneSecondUpdate=0;
-	m_bGlobalPause=false;
-
-	m_pParent = Parent;
-	m_pObjectList = [[NSMutableArray alloc] init];
-	m_pObjectReserv = [[NSMutableDictionary alloc] init];
-	m_pGroups = [[NSMutableDictionary alloc] init];
-	m_pObjectAddToTouch = [[NSMutableDictionary alloc] init];
-	m_pAllObjects = [[NSMutableDictionary alloc] init];
-	
-	pMustDelKeys = [[NSMutableArray alloc] init];
-	pMusAddKeys = [[NSMutableArray alloc] init];
-    
-    pMegaTree = [[Mega_tree alloc] init];
-    
-	m_pAIObj = nil;
-
-	m_bReserv=NO;
-	
-	pDrawArray=[[NSMutableArray alloc] init];
-	pLayers=[[NSMutableArray alloc] init];
-    m_pObjectTouches = [[NSMutableArray alloc] init];
-
-	for (int i=0; i<layerTemplet+1; i++) {
-		
-		NSMutableDictionary *pOneLayer = [[NSMutableDictionary alloc] init];
-		[pLayers addObject:pOneLayer];
+- (id)Init:(id)Parent
+{
+    self = [super init];
+    if (self)
+    {
+        fTimeOneSecondUpdate=0;
+        m_bGlobalPause=false;
         
-        NSMutableDictionary *pOneLayerTouch = [[NSMutableDictionary alloc] init];
-		[m_pObjectTouches addObject:pOneLayerTouch];
-	}
+        m_pParent = Parent;
+        m_pObjectList = [[NSMutableArray alloc] init];
+        m_pObjectReserv = [[NSMutableDictionary alloc] init];
+        m_pGroups = [[NSMutableDictionary alloc] init];
+        m_pObjectAddToTouch = [[NSMutableDictionary alloc] init];
+        m_pAllObjects = [[NSMutableDictionary alloc] init];
+        
+        pMustDelKeys = [[NSMutableArray alloc] init];
+        pMusAddKeys = [[NSMutableArray alloc] init];
+        
+        pMegaTree = [[Mega_tree alloc] init];
+        
+        m_pAIObj = nil;
+        
+        m_bReserv=NO;
+        
+        pDrawArray=[[NSMutableArray alloc] init];
+        pLayers=[[NSMutableArray alloc] init];
+        
+        for (int i=0; i<layerTemplet+1; i++) {            
+            NSMutableDictionary *pOneLayer = [[NSMutableDictionary alloc] init];
+            [pLayers addObject:pOneLayer];
+            
+        }
 
-	return self;
+        m_pObjectTouches = [[NSMutableArray alloc] init];
+        
+        for (int i=0; i<layerTouch_3+1; i++) {
+                        
+            NSMutableDictionary *pOneLayerTouch = [[NSMutableDictionary alloc] init];
+            [m_pObjectTouches addObject:pOneLayerTouch];
+        }
+        
+        return self;
+
+    }
+    
+    return self;	
 }
+
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateObjects{
 	
@@ -100,21 +112,28 @@
 		
 		NSMutableDictionary *Dic = nil;
 		
-		if([m_pObjectList count]<TmpOb->m_iDeep+1){
+		if ([m_pObjectList count]<TmpOb->m_iDeep+1)
+        {
 			Dic = [[NSMutableDictionary alloc] init];
 			[m_pObjectList addObject:Dic];
+    //        [Dic release];
 		}
-		else Dic=[m_pObjectList objectAtIndex:TmpOb->m_iDeep];
-		
-		if(TmpOb->m_strName!=nil)		
+		else
+        {
+            Dic = [m_pObjectList objectAtIndex:TmpOb->m_iDeep];
+		}
+        
+		if (TmpOb->m_strName!=nil)		
 			[Dic setObject:TmpOb forKey:TmpOb->m_strName];
 	}	
     
-    if(iCount2>0 || iCount>0){m_bNeedUppdate=YES;}
+    if (iCount2>0 || iCount>0)
+        m_bNeedUppdate=YES;
 }
+
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMovePaused:(id)pDeltaTime{
-	
+    
     NSNumber *NumDelta=pDeltaTime;
     m_fDeltaTime=[NumDelta doubleValue];
     
@@ -131,17 +150,17 @@
             
             if (pObject->m_bNonStop) {
 
+                pObject->m_fDeltaTime = m_fDeltaTime;  
+                
                 Processor_ex *pProc_ex;
                 enumeratorProc = [pObject->m_pProcessor_ex objectEnumerator];
-                
-                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
-                if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
-
                 while ((pProc_ex = [enumeratorProc nextObject]))
                 {
                     [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
                 }
                 
+                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+                if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
             }
 		}
 	}
@@ -154,7 +173,7 @@
 - (void)SelfMoveNormal:(id)pDeltaTime{
 
     NSNumber *NumDelta=pDeltaTime;
-    m_fDeltaTime=[NumDelta floatValue];
+    m_fDeltaTime=[NumDelta doubleValue];
 
 	NSEnumerator *enumeratorProc;
 
@@ -166,16 +185,16 @@
 		GObject *pObject;
 
 		while ((pObject = [enumeratorObjects nextObject])) {
-                        
+            
+			pObject->m_fDeltaTime = m_fDeltaTime;
+            
             Processor_ex *pProc_ex;
             enumeratorProc = [pObject->m_pProcessor_ex objectEnumerator];
-            
-            if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
-            if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
-
 			while ((pProc_ex = [enumeratorProc nextObject]))
                 [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
             
+            if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+            if(pObject->m_Groups->m_bNotSyn)[pObject->m_Groups SynhData];
 		}
 	}
 
@@ -230,35 +249,34 @@
 	int ObjectCountDraw=[pDrawArray count];  
 
     
-//    if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
-//        
-//        fCurrentAngleRotateOffset=fAngleRotateOffset;
-//        
-//        if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
-//            
-//            fCurrentAngleRotateOffset=fAngleRotateOffset;
-//        }
-//
-//        if(fAngleRotateOffset>fCurrentAngleRotateOffset){
-//            
-//            fCurrentAngleRotateOffset+=m_fDeltaTime*1000;
-//            
-//            if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
-//                
-//                fCurrentAngleRotateOffset=fAngleRotateOffset;
-//            }
-//        }
-//        else{
-//            
-//            fCurrentAngleRotateOffset-=m_fDeltaTime*1000;
-//            
-//            if(fCurrentAngleRotateOffset<=fAngleRotateOffset){
-//                
-//                fCurrentAngleRotateOffset=fAngleRotateOffset;
-//            }
-//
-//        }
-//    }
+    if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
+        
+        fCurrentAngleRotateOffset=fAngleRotateOffset;
+        
+        if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+            
+            fCurrentAngleRotateOffset=fAngleRotateOffset;
+        }
+
+        if(fAngleRotateOffset>fCurrentAngleRotateOffset){
+            
+            fCurrentAngleRotateOffset+=m_fDeltaTime*1000;
+            
+            if(fCurrentAngleRotateOffset>=fAngleRotateOffset){
+                
+                fCurrentAngleRotateOffset=fAngleRotateOffset;
+            }
+        }
+        else{
+            
+            fCurrentAngleRotateOffset-=m_fDeltaTime*1000;
+            
+            if(fCurrentAngleRotateOffset<=fAngleRotateOffset){
+                
+                fCurrentAngleRotateOffset=fAngleRotateOffset;
+            }
+        }
+    }
     
    if(m_pParent->previousOrientation==UIInterfaceOrientationLandscapeRight || 
             m_pParent->previousOrientation==UIInterfaceOrientationLandscapeLeft)
@@ -284,31 +302,8 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)dealloc {
-	
-	for (int i=0; i<[m_pObjectList count]; i++) {
-		
-		NSMutableDictionary *Dic = [m_pObjectList objectAtIndex:i];
-		NSEnumerator *enumeratorObjects = [Dic objectEnumerator];
-		GObject *pObject;
-		
-		while ((pObject = [enumeratorObjects nextObject]))[pObject release];
-		
-		[Dic release];
-	}
-	
-	NSEnumerator *enumerator = [m_pObjectReserv objectEnumerator];
-	NSMutableArray *pTmpArray;
-	while ((pTmpArray = [enumerator nextObject])) {
-		
-		for (int i=0; i< [pTmpArray count]; i++) {
-			GObject *pTmpObject = [pTmpArray objectAtIndex:i];
-			
-			[pTmpObject release];
-		}
-		[pTmpArray release];
-	}
-		
+- (void)dealloc
+{		
 	[m_pObjectList release];
 	[m_pObjectReserv release];
 	[m_pObjectAddToTouch release];
@@ -317,21 +312,18 @@
 	[pMustDelKeys release];
 	[pMusAddKeys release];
 	
-    for(NSMutableDictionary *pDic in pLayers){[pDic release];}
-    for(NSMutableDictionary *pDic in m_pObjectTouches){[pDic release];}
+    [m_pObjectTouches release];
     
     [pLayers release];
 
 	[m_pAllObjects release];
-	
-	enumerator = [m_pGroups objectEnumerator];
-	while ((pTmpArray = [enumerator nextObject]))[pTmpArray release];
 	[m_pGroups release];
     
     [pMegaTree release];
 
 	[super dealloc];
 }
+
 //------------------------------------------------------------------------------------------------------
 - (GObject *)GetFreeObjectByClass:(NSString*)NameClass{
 		
@@ -368,12 +360,16 @@
 //------------------------------------------------------------------------------------------------------
 - (NSString *)GetNameObject:(NSString*)NameObject{
 
+    NSString* NameObjectTmp=[NSString stringWithString:NameObject];
+    
+    int iStartIndex=0;
 repeate:
-	id pTmpOb=[self GetObjectByName:NameObject];
+	id pTmpOb=[self GetObjectByName:NameObjectTmp];
 	
-	if(pTmpOb==nil)return NameObject;
+	if(pTmpOb==nil)return NameObjectTmp;
 	else {
-		NameObject=[NSMutableString stringWithFormat:@"%@%d",NameObject,RND%10000];
+		NameObjectTmp=[NSMutableString stringWithFormat:@"%@%d",NameObject,iStartIndex];
+        iStartIndex++;
 		goto repeate;
 	}
 
@@ -393,64 +389,83 @@ repeate:
 	return pObject;
 }
 //------------------------------------------------------------------------------------------------------
-- (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp 
-           WithParams:(NSArray *)Parametrs{
-
-	NSString *pNameObject=[self GetNameObject:NameObjectTmp];
-
-	Class  cls = NSClassFromString ( NameClass );
-
-	if(cls!=nil){
-		
-		GObject *pObject=nil;
-		
+-(void) CreateNewObject:(NSString*)className withName:(NSString*)objectName objects: (id)firstObj, ... 
+{
+    NSMutableArray *array = [[NSMutableArray alloc] init];
+    va_list args;
+    va_start(args, firstObj);
+    for (id arg = firstObj; arg != nil; arg = va_arg(args, id))
+    {
+        [array addObject:arg];
+    }
+    va_end(args);
+    
+    [self CreateNewObject:className WithNameObject:objectName WithParams:array];
+    [array release];
+}
+//------------------------------------------------------------------------------------------------------
+- (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp
+           WithParams:(NSArray *)Parametrs
+{
+    NSString *pNameObject=[self GetNameObject:NameObjectTmp];
+	Class cls = NSClassFromString(NameClass);
+	if (cls != nil)
+    {
 		NSMutableArray *pArray = [m_pObjectReserv objectForKey:NameClass];
-		
-		if(pArray==nil){
-			pArray=[[NSMutableArray alloc] init];
+		if (pArray==nil)
+        {
+            pArray=[[NSMutableArray alloc] init];
+//			pArray =[[[NSMutableArray alloc] init] autorelease];
 			[m_pObjectReserv setObject:pArray forKey:NameClass];
 		}
 
-		if(m_bReserv==YES) {
-			
-			pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
+		if (m_bReserv)
+        {
+			GObject *pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
 			[pObject->m_strName release];
 			pObject->m_strName=nil;
 			pObject->m_bDeleted=YES;
-			
-			[pArray addObject:pObject];
-			
-		}
-		else {
-			
-			if ([pArray count]>0) {
-				pObject = [pArray objectAtIndex:0];
-				[pArray removeObjectAtIndex:0];
-
-				pObject->m_strName = [[NSMutableString alloc] initWithString:pNameObject];
-			}
-			else pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
-
-			pObject->m_bDeleted=NO;
-
-            [pObject LinkValues];
-
-			[self SetParams:pObject WithParams:Parametrs];
-
-			if(pObject->m_pOwner!=nil)
-				pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
-
-			[pMusAddKeys addObject:pObject];
-			
-			[m_pAllObjects setObject:pObject forKey:pObject->m_strName];
-            [pObject Start];
             
-            [pObject AddToDraw];
+			[pArray addObject:pObject];
+            return pObject;
 		}
-		
-		return pObject;
+
+        GObject *pObject = nil;
+        if ([pArray count]>0)
+        {
+            pObject = [pArray objectAtIndex:0];
+            pObject->m_strName = [[NSMutableString alloc] initWithString:pNameObject];
+            
+       //     [[pObject retain] autorelease];
+            [pArray removeObjectAtIndex:0];
+        }
+        else
+        {
+            pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
+        }
+
+        pObject->m_bDeleted=NO;
+        
+        [pObject SetDefault];
+        
+        [pObject LinkValues];
+
+        [self SetParams:pObject WithParams:Parametrs];
+        
+        if (pObject->m_pOwner!=nil)
+            pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
+
+        [pMusAddKeys addObject:pObject];
+        [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
+        
+        [pObject Start];
+        
+        [pObject AddToDraw];        
+        
+        return pObject;
 	}
-	else return nil;
+	
+    return nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs{
@@ -459,7 +474,7 @@ repeate:
 		
 		UniCell* pParams = (UniCell*)[Parametrs objectAtIndex:i];
         
- //       if(pParams->mpName==@"Command"){}
+ //       if([pParams->mpName isEqualToString:@"Command"]){}
    //     else{
             NSString *TmpStr=[NSString stringWithFormat:@"%@%@",pTmpOb->m_strName,pParams->mpName];
             pParams->mpName=[NSString stringWithString:TmpStr];
@@ -470,16 +485,17 @@ repeate:
     [pTmpOb Update];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject{
-	
-    if(pObject==nil)return;
+- (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject
+{	
+    if (pObject==nil)
+        return;
     
 	NSMutableArray *pGroup = [m_pGroups objectForKey:NameGroup];
-	
-	if(pGroup==nil){
-		
+	if (pGroup==nil)
+    {
 		pGroup = [[NSMutableArray alloc] init];
 		[m_pGroups setObject:pGroup forKey:NameGroup];
+  //      [pGroup release];
 	}
 	
     NSString *PtmpOb=[pObject->m_Groups objectForKey:NameGroup];

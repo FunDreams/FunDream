@@ -11,19 +11,23 @@
 @implementation ObjectGameSpaun
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
+	self=[super Init:Parent WithName:strName];
 	
-START_QUEUE(@"Proc");
-//	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-	ASSIGN_STAGE(@"Spaun",@"Spaun:",nil);
-END_QUEUE(@"Proc");
-    
-    m_bHiden=YES;
+    if(self!=nil)
+    {
+        m_bHiden=YES;
+    }
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
+    
+    Processor_ex *pProc = [self START_QUEUE:@"Proc"];
+        //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+        ASSIGN_STAGE(@"Spaun",@"Spaun:",nil);
+    
+    [self END_QUEUE:pProc];
     
 //   SET_CELL(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
     
@@ -42,13 +46,7 @@ END_QUEUE(@"Proc");
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
-- (void)Spaun{
-    
-    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
-    //    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
-    //    CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple", nil);
-
-}
+- (void)Spaun{}
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun:(Processor_ex *)pProc{
     
@@ -58,14 +56,10 @@ END_QUEUE(@"Proc");
         
         [self Spaun];
         m_fCurrntPeriod=m_fStartPeriod;
-        
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc{[super dealloc];}
-//------------------------------------------------------------------------------------------------------
 @end

@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "StaticObject.h"
 
 /** Шаблонный класс для объектов**/
@@ -31,8 +30,6 @@
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** **/
--(void)dealloc;
 -(void)Start;
 
 @end

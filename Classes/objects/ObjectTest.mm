@@ -7,165 +7,171 @@
 //
 
 #import "ObjectTest.h"
+#import "UniCell.h"
 
-@implementation NAME_TEMPLETS_OBJECT
+@implementation ObjectTest
+
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];    
+	self = [super Init:Parent WithName:strName];    
+    if (self != nil)
+    {
+        mWidth  = 50;
+        mHeight = 80;
+        
+        m_iLayer = layerTemplet;
+        mTextureId = [m_pParent GetTextureId:@"1-02@2x.png"];
+        
+        TestPar=12;
+        
+        [m_pObjMng->pMegaTree SetCell:LINK_INT_V(TestPar,@"1kh",@"2lkh",@"3df")];
+        [m_pObjMng->pMegaTree SetCell:SET_INT_V(654,@"s5ef",@"rd")];
+        [m_pObjMng->pMegaTree SetCell:SET_INT_V(45322,@"1kh",@"2lkh",@"3df")];
+     //   TestPar=2222;
+
+        TestFloat=23.34f;
+
+        [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(TestFloat,@"TestFloat")];
+        [m_pObjMng->pMegaTree SetCell:SET_FLOAT_V(654,@"TestFloat2")];
+
+        TestFloat=66.34f;
+
+        TestBool=NO;
+        
+        [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(TestBool,@"TestBool")];
+        [m_pObjMng->pMegaTree SetCell:SET_BOOL_V(NO,@"TestBool2")];
+
+        TestBool=YES;
+
+        Testvec=Vector3DMake(3,5,9);
+        [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(Testvec,@"TestVector")];
+        [m_pObjMng->pMegaTree SetCell:SET_VECTOR_V(Vector3DMake(4099, 9, 229423.44),@"TestVector2")];
+        Testvec=Vector3DMake(2,8,4);
+
+        TestCol=Color3DMake(1, .3, .2, 0);
+        
+        [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(TestCol,@"TestColor")];
+        [m_pObjMng->pMegaTree SetCell:SET_COLOR_V(Color3DMake(.4f, 1, 1,.6f),@"TestColor2")];
+
+        TestCol=Color3DMake(0, 0, 0, 0);
+
+        TestStr=[NSMutableString stringWithString:@"ffffff"];
+
+        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(TestStr,@"TestId")];
+        [m_pObjMng->pMegaTree SetCell:SET_STRING_V(@"string2gg",@"TestString2")];
+        
+        [m_pObjMng->pMegaTree SetCell:LINK_POINT_V(TestPar,@"testPoint")];
+        
+//        Processor_ex* pProc = [self START_QUEUE:@"test2"];
+//            
+//            ASSIGN_STAGE(@"TestStage",@"AchiveLineFloat:",
+//                         LINK_FLOAT_V(m_pCurAngle.z,@"Instance"),
+//                         SET_FLOAT_V(m_pCurPosition.y-3000000,@"finish_Instance"),
+//                         SET_FLOAT_V(-100,@"Vel"));
+//
+//        [self END_QUEUE:pProc name:@"test2"];
+
+        Processor_ex *pProc = [self START_QUEUE:@"test"];
+
+//            ASSIGN_STAGE(@"TestStage",@"AchiveLineFloat:",
+//                         LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
+//                         SET_FLOAT_V(m_pCurPosition.y-300,@"finish_Instance"),
+//                         SET_FLOAT_V(-40,@"Vel"));
+            
+          //  PARAMS_STAGE(@"TestStage",SET_FLOAT_V(-400,@"Vel"));
+
+            ASSIGN_STAGE(@"Stage1",@"TestSel:",
+                         SET_INT_V(1, @"TimeRndDelay"),
+                         SET_INT_V(5000, @"TimeBaseDelay"),
+                         SET_INT_V(1, @"TimeRndTimer"),
+                         SET_INT_V(5000, @"TimeBaseTimer"));
+        
+//            DELAY_STAGE(@"Stage1",3000,1000);
+
+            ASSIGN_STAGE(@"Stage2",@"TestSel2:",nil);
+
+            INSERT_STAGE(@"Stage3",@"TestSel3:",@"Stage2",nil);
+
+        [self END_QUEUE:pProc name:@"test"];
+            
+        //Processor_ex* pProc = [self START_QUEUE:@"test"];
+        //    [pProc Remove_Stage:@"Stage2"];
+        //[self END_QUEUE:pProc name:@"test"];
+    }
     
-    mWidth  = 80;
-	mHeight = 80;
-
-    m_iLayer = layerTemplet;
-
-    m_bHiden=YES;
-    
-//START_QUEUE(@"test2")
-//    
-//    ASSIGN_STAGE(@"TestStage",@"AchiveLineFloat:",
-//                 LINK_FLOAT_V(m_pCurAngle.z,@"Instance"),
-//                 SET_FLOAT_V(m_pCurPosition.y-3000000,@"finish_Instance"),
-//                 SET_FLOAT_V(-100,@"Vel"));
-//    
-//    
-//END_QUEUE(@"test2")
-
-START_QUEUE(@"test")
-    ASSIGN_STAGE(@"Stage1",@"TestSel:",nil);
-END_QUEUE(@"test")
-    
-//START_QUEUE(@"test")
-
-//    ASSIGN_STAGE(@"TestStage",@"AchiveLineFloat:",
-//                 LINK_FLOAT_V(m_pCurPosition.y,@"Instance"),
-//                 SET_FLOAT_V(m_pCurPosition.y-300,@"finish_Instance"),
-//                 SET_FLOAT_V(-40,@"Vel"));
-    
-  //  PARAMS_STAGE(@"TestStage",SET_FLOAT_V(-400,@"Vel"));
-
-//    DELAY_STAGE(@"Stage1",3000,1000);
-
- //   ASSIGN_STAGE(@"Stage2",@"TestSel2:",nil);
-
-//    INSERT_STAGE(@"Stage3",@"TestSel3:",@"Stage2",nil);
-    
-    
-//START_QUEUE(@"test")
-//    REMOVE_STAGE(@"Stage2");//[pProc Remove_Stage:@"Stage2"];
-//END_QUEUE(@"test")
-//    END_QUEUE(@"test")
-
     return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-	[super Start];    
-        
-    int iDegree=RND%360;
-    float fDegree=iDegree*4.14f/180;
+	[super Start];
 
-    Vel=Vector3DMake(cosf(fDegree),sinf(fDegree),0);
-
-    float fVelocity=(float)(RND%30)+10.0f;
-    Vel.x*=fVelocity;
-    Vel.y*=fVelocity;
-
-    VelRotate=(float)(RND%30);
-
-    m_pCurPosition.x=(float)(RND%640)-320;
-    m_pCurPosition.y=(float)(RND%960)-480;
+	TestDword=565;
+//	TestBool=NO;
+//	TestPar=4;
     
-    pParticle=[[Particle alloc] Init:self];
-    [pParticle AddToContainer:@"SysParticles"];
-//    [pParticle SetFrame:RND%2];
+ //   [TestStr ]
+//    [TestStr setString:@"Good"];
+//    TestStr=[NSMutableString stringWithString:@"asdfg"];
+//    int m=0;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(Processor_ex *)pProc{
+
+//    int *dfdfdf=GET_INT_V(@"1kh",@"2lkh",@"3df");
+//    int *ddfdf=GET_INT_V(@"s5ef",@"rd");
+//
+//    float *tfloat2=GET_FLOAT_V(@"TestFloat");
+//    float *tfloat=GET_FLOAT_V(@"TestFloat2");
+//
+//    bool *tBool2=GET_BOOL_V(@"TestBool");
+//    bool *tBool=GET_BOOL_V(@"TestBool2");
+//
+//    Vector3D *tvector2=GET_VECTOR_V(@"TestVector");    
+//    Vector3D *tvector=GET_VECTOR_V(@"TestVector2");
+//    Color3D *tColor2=GET_COLOR_V(@"TestColor");
+//
+//    Color3D *tColor=GET_COLOR_V(@"TestColor2");
+//
+//    NSMutableString *tStr2=GET_ID_V(@"TestId");
+//    NSMutableString *tS3=GET_ID_V(@"TestString2");
+//
+//    int * pVoid=(int *)GET_POINT_V(@"testPoint");
+//
+//    NSLog(tStr2);
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)timesel:(Processor_ex *)pProc{
+
+	fabs(8);
+	[pProc SetStage:pProc->m_CurStage->NameStage];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)testAction2:(Processor_ex *)pProc{
+	
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)testAction:(Processor_ex *)pProc{
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)TestSel3:(Processor_ex *)pProc{
-    NEXT_STAGE;
+  //  int m=0;
+ //   [pProc NextStage];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)TestSel2:(Processor_ex *)pProc{
-    NEXT_STAGE;
+ //   int m=0;
+    NSLog(@"good");
+    [pProc NextStage];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)TestSel:(Processor_ex *)pProc{
-    
-    m_pCurPosition.x+=Vel.x*DELTA;
-    m_pCurPosition.y+=Vel.y*DELTA;
-
-    m_pCurAngle.z+=VelRotate*DELTA;
-
-    if(m_pCurPosition.x>320 && Vel.x>0){
-        Vel.x=-Vel.x;
-    }
-    
-    if(m_pCurPosition.x<-320 && Vel.x<0)
-    {
-        Vel.x=-Vel.x;
- //       DESTROY_OBJECT(self);
-   //     return;
-    }
-
-    if(m_pCurPosition.y>480 && Vel.y>0){
-        
-        Vel.y=-Vel.y;
-//        DESTROY_OBJECT(self);
-  //      return;
-
-    }
-    if(m_pCurPosition.y<-480 && Vel.y<0)Vel.y=-Vel.y;
-    
-//    m_pCurScale.x+=3*DELTA;
-
-    [pParticle UpdateParticleMatr];
-    
-//    pParticle->m_cColor3.green=0;
-//    pParticle->m_cColor3.blue=0;
-//    
-//    mColor.red=0;
-//    [pParticle UpdateParticleColor];
-
-    
-//    pParticle->m_vOffsetTex.x+=DELTA;
-//    pParticle->m_vOffsetTex.y+=0.5f*DELTA;
-//
-//    [pParticle UpdateParticleTex];
-
-//    pParticle->m_vTex1.x=0.5f;
-//    pParticle->m_vTex2.y=0.5f;
-//    pParticle->m_vTex3.x=0.5f;
-//    pParticle->m_vTex4.y=0.5f;
-//
-//    [pParticle UpdateParticleTex4Vertex];
-
+	NSLog(@"test");
+//    [pProc NextStage];
 }
-//------------------------------------------------------------------------------------------------------
-- (void)Destroy{
-    
-    [pParticle RemoveFromContainer];
-    [pParticle release];
 
-    [super Destroy];
+- (void)sfMove
+{
 }
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc {
-	[super dealloc];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)sfMove{}
-//------------------------------------------------------------------------------------------------------
+
 @end
-#undef NAME_TEMPLETS_OBJECT

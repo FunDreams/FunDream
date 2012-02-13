@@ -11,105 +11,114 @@
 //------------------------------------------------------------------------------------------------------
 @implementation GObject
 //------------------------------------------------------------------------------------------------------
-- (id)Init:(id)Parent WithName:(NSString *)strName{
-	//	NSLog(@"Init");	
+- (id)Init:(id)Parent WithName:(NSString *)strName
+{
+    self = [super init];
+    if (self)
+    {
+        //	NSLog(@"Init");	
 
-    m_iLayerTouch = layerTouch_0;
-	m_pArrayImages = [[NSMutableArray alloc] init];
+        m_iLayerTouch = layerTouch_0;
+        m_pArrayImages = [[NSMutableArray alloc] init];
 
-	iIdSound=-1;
+        iIdSound=-1;
 	
-	m_pParent=(MainController *)Parent;
-	m_pObjMng=m_pParent.m_pObjMng;
+        m_pParent=(MainController *)Parent;
+        m_pObjMng=m_pParent.m_pObjMng;
 	
-	m_strName= [[NSMutableString alloc] initWithString:strName];
-    m_Groups=[[Dictionary_Ex alloc] init];
+        m_strName= [[NSMutableString alloc] initWithString:strName];
+        m_Groups=[[Dictionary_Ex alloc] init];
 
-	m_bNonStop=NO;
-	m_bHiden=NO;
+        m_bNonStop=NO;
+        m_bHiden=NO;
     
-	m_bNoOffset=NO;
-    m_fScaleOffset=1.0f;
+        m_bNoOffset=NO;
+        m_fScaleOffset=1.0f;
 
-	m_pOwner = nil;
-	m_pChildrenbjectsDic = [[NSMutableDictionary alloc] init];
-	m_pChildrenbjectsArr = [[NSMutableArray alloc] init];
+        m_pOwner = nil;
+        m_pChildrenbjectsDic = [[NSMutableDictionary alloc] init];
+        m_pChildrenbjectsArr = [[NSMutableArray alloc] init];
 
-    m_pProcessor_ex = [[Dictionary_Ex alloc] init];
+        m_pProcessor_ex = [[Dictionary_Ex alloc] init];
 	
-	m_pCurPosition=Vector3DMake(0,0,0);
-	m_pCurScale=Vector3DMake(1,1,1);
-	m_pCurAngle=Vector3DMake(0,0,0);
+        m_fDeltaTime = 0;
+	
+        m_pCurPosition=Vector3DMake(0,0,0);
+        m_pCurScale=Vector3DMake(1,1,1);
+        m_pCurAngle=Vector3DMake(0,0,0);
 //-------------------------------------------------------------------------	
-	m_iCountVertex=4;
+        m_iCountVertex=4;
 
-	vertices=malloc(m_iCountVertex*sizeof(Vertex3D));
-	vertices[0]=Vector3DMake(-1.0,  1.0, -0.0);
-	vertices[1]=Vector3DMake( 1.0,  1.0, -0.0);
-	vertices[2]=Vector3DMake(-1.0, -1.0, -0.0);
-	vertices[3]=Vector3DMake( 1.0, -1.0, -0.0);	
+        vertices=malloc(m_iCountVertex*sizeof(Vertex3D));
+        vertices[0]=Vector3DMake(-1.0,  1.0, -0.0);
+        vertices[1]=Vector3DMake( 1.0,  1.0, -0.0);
+        vertices[2]=Vector3DMake(-1.0, -1.0, -0.0);
+        vertices[3]=Vector3DMake( 1.0, -1.0, -0.0);	
 
-	texCoords=malloc(m_iCountVertex*2*sizeof(GLfloat));
+        texCoords=malloc(m_iCountVertex*2*sizeof(GLfloat));
 	
-	texCoords[0]= 0.0f;
-	texCoords[1]= 1.0f;
-	texCoords[2]= 1.0f;
-	texCoords[3]= 1.0f;
-	texCoords[4]= 0.0f;
-	texCoords[5]= 0.0f;
-	texCoords[6]= 1.0f;
-	texCoords[7]= 0.0f;	
+        texCoords[0]= 0.0f;
+        texCoords[1]= 1.0f;
+        texCoords[2]= 1.0f;
+        texCoords[3]= 1.0f;
+        texCoords[4]= 0.0f;
+        texCoords[5]= 0.0f;
+        texCoords[6]= 1.0f;
+        texCoords[7]= 0.0f;	
 	
-	squareColors=malloc(m_iCountVertex*4*sizeof(GLubyte));
+        squareColors=malloc(m_iCountVertex*4*sizeof(GLubyte));
 	
-	for (int i=0; i<16; i++) 
-		squareColors[i]=255;
+        for (int i=0; i<16; i++) 
+            squareColors[i]=255;
 		
-	mTextureId=-1;
+        mTextureId=-1;
 	
-	mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
+        mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
 //-------------------------------------------------------------------------		
-	mWidth = 40;
-	mHeight = 40;
-    mRadius = 40;
+        mWidth = 40;
+        mHeight = 40;
+        mRadius = 40;
 
-	m_pCurScale.x=mWidth*0.5f;
-	m_pCurScale.y=mHeight*0.5f;
-
+        m_pCurScale.x=mWidth*0.5f;
+        m_pCurScale.y=mHeight*0.5f;
+    }
+    
 	return self;
 }
+//------------------------------------------------------------------------------------------------------
+- (void)SetDefault{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     
     m_pNameTexture=[NSMutableString stringWithString:@""];
 
     //link values
-    SET_CELL(LINK_STRING_V(m_pNameTexture,m_strName,@"m_pNameTexture"));
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_pNameTexture,m_strName,@"m_pNameTexture")];
     
-    SET_CELL(LINK_VECTOR_V(m_pCurPosition,m_strName,@"m_pCurPosition"));
-    SET_CELL(LINK_VECTOR_V(m_pCurScale,m_strName,@"m_pCurScale"));
-    SET_CELL(LINK_VECTOR_V(m_pCurAngle,m_strName,@"m_pCurAngle"));
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pCurPosition,m_strName,@"m_pCurPosition")];
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pCurScale,m_strName,@"m_pCurScale")];
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pCurAngle,m_strName,@"m_pCurAngle")];
     
-    SET_CELL(LINK_VECTOR_V(m_pOffsetCurPosition,m_strName,@"m_pOffsetCurPosition"));
-    SET_CELL(LINK_VECTOR_V(m_pOffsetCurScale,m_strName,@"m_pOffsetCurScale"));
-    SET_CELL(LINK_VECTOR_V(m_pOffsetCurAngle,m_strName,@"m_pOffsetCurAngle"));
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pOffsetCurPosition,m_strName,@"m_pOffsetCurPosition")];
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pOffsetCurScale,m_strName,@"m_pOffsetCurScale")];
+    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_pOffsetCurAngle,m_strName,@"m_pOffsetCurAngle")];
     
-    SET_CELL(LINK_COLOR_V(mColor,m_strName,@"mColor"));
+    [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColor,m_strName,@"mColor")];
     
-    SET_CELL(LINK_INT_V(m_iLayer,m_strName,@"m_iLayer"));
-    SET_CELL(LINK_INT_V(m_iLayerTouch,m_strName,@"m_iLayerTouch"));
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iLayer,m_strName,@"m_iLayer")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iLayerTouch,m_strName,@"m_iLayerTouch")];
     
-    SET_CELL(LINK_BOOL_V(m_bNoOffset,m_strName,@"m_bNoOffset"));
-    SET_CELL(LINK_BOOL_V(m_bHiden,m_strName,@"m_bHiden"));
-    SET_CELL(LINK_BOOL_V(m_bNonStop,m_strName,@"m_bNonStop"));
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bNoOffset,m_strName,@"m_bNoOffset")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bHiden,m_strName,@"m_bHiden")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bNonStop,m_strName,@"m_bNonStop")];
     
-    SET_CELL(LINK_FLOAT_V(mWidth,m_strName,@"mWidth"));
-    SET_CELL(LINK_FLOAT_V(mHeight,m_strName,@"mHeight"));
-    SET_CELL(LINK_FLOAT_V(mRadius,m_strName,@"mRadius"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(mWidth,m_strName,@"mWidth")];
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(mHeight,m_strName,@"mHeight")];
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(mRadius,m_strName,@"mRadius")];
     
-    SET_CELL(LINK_ID_V(m_pOwner,m_strName,@"m_pOwner"));
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(m_pOwner,m_strName,@"m_pOwner")];
 
-    SET_CELL(LINK_FLOAT_V(m_fScaleOffset,m_strName,@"m_fScaleOffset"));
+    [m_pObjMng->pMegaTree SetCell:LINK_FLOAT_V(m_fScaleOffset,m_strName,@"m_fScaleOffset")];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -118,7 +127,7 @@
 		m_sDraw = NSSelectorFromString ( @"SelfDraw" );
 	else m_sDraw = NSSelectorFromString ( @"SelfDrawOffset" );    
 
-    GET_TEXTURE(mTextureId,m_pNameTexture);
+    mTextureId = [m_pParent GetTextureId:m_pNameTexture];
 
 	m_pCurScale.x=mWidth*0.5f;
 	m_pCurScale.y=mHeight*0.5f;    
@@ -282,10 +291,11 @@
 
 	CGPoint tmpPointDif=pPoint;
 	
-	if(m_bNoOffset){
-		tmpPointDif.x-=m_pObjMng->m_pParent->m_vOffset.x;
-		tmpPointDif.y-=m_pObjMng->m_pParent->m_vOffset.y;
-	}
+    //косяк
+//	if(m_bNoOffset){
+//		tmpPointDif.x-=m_pObjMng->m_pParent->m_vOffset.x;
+//		tmpPointDif.y-=m_pObjMng->m_pParent->m_vOffset.y;
+//	}
 	
 	Vector3D VstartPoint = Vector3DMake(tmpPointDif.x-m_pCurPosition.x,tmpPointDif.y-m_pCurPosition.y,0);
 	Vector3D TmpRotate=Vector3DRotateZ2D(VstartPoint,-m_pCurAngle.z);
@@ -324,14 +334,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{}
 //------------------------------------------------------------------------------------------------------
-- (void)dealloc {
-		
-	NSEnumerator *enumerator = [m_pProcessor_ex objectEnumerator];
-	Processor_ex *pProc;
-	
-	while ((pProc = [enumerator nextObject])) {
-		[pProc release];
-	}
+- (void)dealloc
+{		
 	[m_pProcessor_ex release];
     
 	[m_pChildrenbjectsDic release];
@@ -438,21 +442,34 @@
 		TmpValue-=Number;
 		TmpValue/=10;
 		
-		[pArray addObject:[[[NSNumber alloc] initWithInt:Number] autorelease]];
+        NSNumber *number = [[NSNumber alloc] initWithInt:Number];
+		[pArray addObject:number];
+        [number autorelease];
 	}
 
-	return pArray;
+	return [pArray autorelease];
 }
 //processors--------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 - (void)Idle:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
-- (void)timerWaitNextStage:(Processor_ex *)pProc{NEXT_STAGE;}
+- (void)timerWaitNextStage:(Processor_ex *)pProc
+{
+    [pProc NextStage];
+}
 //------------------------------------------------------------------------------------------------------
-- (void)TouchYes:(Processor_ex *)pProc{[self SetTouch:YES];NEXT_STAGE;}
+- (void)TouchYes:(Processor_ex *)pProc
+{
+    [self SetTouch:YES];
+    [pProc NextStage];
+}
 //------------------------------------------------------------------------------------------------------
-- (void)TouchNo:(Processor_ex *)pProc{[self SetTouch:NO];NEXT_STAGE;}
+- (void)TouchNo:(Processor_ex *)pProc
+{
+    [self SetTouch:NO];
+    [pProc NextStage];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)InitAnimate:(ProcStage_ex *)pStage{
     
@@ -490,12 +507,12 @@
 	if((*pStage->FloatsValues[1])>0 && (*pStage->IntsValues[0]<=TmpFrame))
     {
         *pStage->IntsValues[1]=(int)(*pStage->IntsValues[0]);
-        NEXT_STAGE;
+        [pProc NextStage];
     }	
 	else if((*pStage->FloatsValues[1])<0 && (*pStage->IntsValues[0]>=TmpFrame))
     {
         *pStage->IntsValues[1]=(int)(*pStage->IntsValues[0]);
-        NEXT_STAGE;
+        [pProc NextStage];
     }	
     else (*pStage->IntsValues[1])=TmpFrame;  
 }
@@ -607,12 +624,12 @@
 	if((*pStage->FloatsValues[2])>0 && (*pStage->FloatsValues[0] > *pStage->FloatsValues[1])){
         
 		(*pStage->FloatsValues[0]) = (*pStage->FloatsValues[1]);
-        NEXT_STAGE;
+        [pProc NextStage];
 	}
 	else if((*pStage->FloatsValues[2])<0 && (*pStage->FloatsValues[0] < *pStage->FloatsValues[1])){
         
 		(*pStage->FloatsValues[0]) = (*pStage->FloatsValues[1]);
-        NEXT_STAGE;
+        [pProc NextStage];
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -655,9 +672,9 @@
     ProcStage_ex * pStage=pProc->m_CurStage;
     
     Vector3D m_vDeltaOffset;
-    
     m_vDeltaOffset.x = (*pStage->VectorsValues[1]).x*(*pStage->FloatsValues[0])*DELTA;
     m_vDeltaOffset.y = (*pStage->VectorsValues[1]).y*(*pStage->FloatsValues[0])*DELTA;
+    m_vDeltaOffset.z = 0;
     
     (*pStage->VectorsValues[0]).x += m_vDeltaOffset.x;
     (*pStage->VectorsValues[0]).y += m_vDeltaOffset.y;
@@ -763,6 +780,33 @@
     *pStage->FloatsValues[1]=1-pow(1-*pStage->FloatsValues[0],*pStage->IntsValues[0]);
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitParabola2:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@SrcF",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@DestF",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@PowI",TmpStr];
+    pStage->IntsValues[0]=GET_INT_V(NameParam);
+    if(pStage->IntsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)Parabola2:(Processor_ex *)pProc{
+    
+    ProcStage_ex * pStage=pProc->m_CurStage;
+    *pStage->FloatsValues[1]=pow(*pStage->FloatsValues[0],*pStage->IntsValues[0]);
+}
+//------------------------------------------------------------------------------------------------------
 - (void)InitAchive1Dvector:(ProcStage_ex *)pStage{
     
     NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
@@ -805,7 +849,7 @@
 	if(Magnitude2>=Magnitude)
 	{
 		*pStage->FloatsValues[3] = *pStage->FloatsValues[2];
-		NEXT_STAGE;
+		[pProc NextStage];
 	}
 }
 //------------------------------------------------------------------------------------------------------
@@ -972,22 +1016,37 @@
 //	*pfDest=((*pfSrc-pfStartF1)*((pfinishF2-pfStartF2)/(pfFinishF1-pfStartF1)))+pfStartF2;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)UpdateScreen:(Processor_ex *)pProc{UPDATE;NEXT_STAGE;}
+- (void)UpdateScreen:(Processor_ex *)pProc
+{
+    m_pObjMng->m_bNeedUppdate=YES;
+    [pProc NextStage];
+}
 //------------------------------------------------------------------------------------------------------
-- (void)DestroySelf:(Processor_ex *)pProc{DESTROY_OBJECT(self);}
+- (void)DestroySelf:(Processor_ex *)pProc
+{
+    [m_pObjMng DestroyObject:self];
+}
 //------------------------------------------------------------------------------------------------------
-- (void)DestroySelfUpdate:(Processor_ex *)pProc{DESTROY_OBJECT(self);UPDATE;NEXT_STAGE;}
+- (void)DestroySelfUpdate:(Processor_ex *)pProc
+{
+    [m_pObjMng DestroyObject:self];
+    m_pObjMng->m_bNeedUppdate=YES;
+    [pProc NextStage];
+}
 //------------------------------------------------------------------------------------------------------
-- (void)Reset:(Processor_ex *)pProc{SET_STAGE(m_strName,0);}
+- (void)Reset:(Processor_ex *)pProc
+{
+    SET_STAGE(m_strName,0);
+}
 //------------------------------------------------------------------------------------------------------
 - (void)HideSelf:(Processor_ex *)pProc{
     m_bHiden=YES;
-    NEXT_STAGE;
+    [pProc NextStage];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ShowSelf:(Processor_ex *)pProc{
     m_bHiden=NO;
-    NEXT_STAGE;
+    [pProc NextStage];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfTimer:(Processor_ex *)pProc{
@@ -995,16 +1054,29 @@
     
     if(pProc->m_CurStage->m_pTime<=0){
         
-        pProc->m_CurStage->m_selector=pProc->m_CurStage->m_selectorSecond;
-        
-        NSString *TmpStrSelPrepare=[NSString stringWithFormat:@"Prepare%@",
-                                    NSStringFromSelector(pProc->m_CurStage->m_selector)];
-        
-        SEL InitSel=NSSelectorFromString(TmpStrSelPrepare);
-        
-        if([self respondsToSelector:InitSel]){
-            [self performSelector:InitSel withObject:self];
+        pProc->m_CurStage->m_selector=pProc->m_CurStage->m_selectorStage;
+                
+        if([self respondsToSelector:pProc->m_CurStage->m_selectorPrepare]){
+            [self performSelector:pProc->m_CurStage->m_selectorPrepare withObject:pProc->m_CurStage];
         }
+        
+        if(pProc->m_CurStage->m_pTimeBase_Timer!=0 || pProc->m_CurStage->m_pTimeRnd_Timer!=0){
+            [pProc->m_CurStage SetTimer];
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SelfTimerProc:(Processor_ex *)pProc{
+    
+    pProc->m_CurStage->m_pTime-=DELTA;
+    
+    if([self respondsToSelector:pProc->m_CurStage->m_selectorStage]){
+        [self performSelector:pProc->m_CurStage->m_selectorStage withObject:pProc];
+    }
+
+    if(pProc->m_CurStage->m_pTime<=0){
+        
+        [pProc NextStage];
     }
 }
 //функции-----------------------------------------------------------------------------------------------
@@ -1016,5 +1088,40 @@
 	}
 }
 //------------------------------------------------------------------------------------------------------
-
+- (Processor_ex*)START_QUEUE:(id) NAME
+{
+    Processor_ex* existingProc = [m_pProcessor_ex objectForKey:NAME];
+    if (existingProc != nil)
+        return existingProc;
+    
+    Processor_ex* pProc = [[Processor_ex alloc] InitWithName:NAME WithParent:self];
+    return pProc;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)END_QUEUE:(Processor_ex*)pProc name:(id) NAME
+{
+    [m_pProcessor_ex setObject_Ex:pProc forKey:NAME];
+    if (pProc->m_FirstStage != nil)
+    {
+        [pProc SetStage:pProc->m_FirstStage->NameStage];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)END_QUEUE:(Processor_ex*)pProc
+{
+    [m_pProcessor_ex setObject_Ex:pProc forKey:pProc->m_pNameProcessor];
+    if (pProc->m_FirstStage != nil)
+    {
+        [pProc SetStage:pProc->m_FirstStage->NameStage];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)OBJECT_PERFORM_SEL:(NSString*)NameObject selector:(NSString*)SelectorName
+{
+    GObject *TmpObject = [m_pObjMng GetObjectByName:NameObject];
+    SEL TmpSel=NSSelectorFromString(SelectorName);
+    if ([TmpObject respondsToSelector:TmpSel])
+        [TmpObject performSelector:TmpSel withObject:nil];
+}
+//------------------------------------------------------------------------------------------------------
 @end

@@ -1,0 +1,39 @@
+//
+// Prefix header for all source files of the 'Engine' target in the 'Engine' project
+//
+
+#ifdef __OBJC__
+
+//	#define FPS
+    #define FADE_NO
+    #define MULTITOUCH
+//  #define BANNER_IAD
+
+    #import <Foundation/Foundation.h>
+    #import <UIKit/UIKit.h>
+
+	#import <OpenGLES/EAGL.h>
+	#import <OpenGLES/ES1/gl.h>
+	#import <OpenGLES/ES1/glext.h>
+	#import "ConstantsAndMacros.h"
+	#import "OpenGLCommon.h"
+
+	#import "PlManager.h"
+	#import "DtManager.h"
+	#import "SoundEngine.h"
+    #import "UniCell.h"
+
+	#import "EngineAppDelegate.h"
+
+	#import "RootViewController.h"
+	#import "PreviewController.h"
+	#import "MainController.h"
+
+	#import "ObjectManager_Ex.h"
+	#import "Object.h"
+    #import "Mega_tree.h"
+	#import "MKStoreManager.h"
+
+    #import "UniCell.h"
+
+#endif

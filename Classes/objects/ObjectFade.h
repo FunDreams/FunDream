@@ -10,11 +10,8 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 
-//макрос для названия объекта, просто переименуйте его что бы получить новый объект
-#define NAME_TEMPLETS_OBJECT ObjectFade
-
 /** Шаблонный класс для объектов**/
-@interface NAME_TEMPLETS_OBJECT : GObject {
+@interface ObjectFade : GObject {
     NSMutableString *m_strNameSound;
     NSMutableString *m_strNameStage;
     NSMutableString *m_strNameObject;
@@ -25,14 +22,17 @@
     bool m_bDimFromTexture;
     bool m_bDimMirrorX;
     bool m_bDimMirrorY;
+    float m_fStartAlpha;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** **/
--(void)dealloc;
 -(void)Start;
 -(void)Move;
+
+- (void)ShowFade;
+- (void)HideFade;
+
 
 @end

@@ -838,6 +838,14 @@ void b2World::DrawShape(b2Shape* shape, const b2XForm& xf, const b2Color& color,
 			}
 		}
 		break;
+            
+        case e_unknownShape:
+        {}
+        break;
+
+        case e_shapeTypeCount:
+        {}
+        break;
 	}
 }
 

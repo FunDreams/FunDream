@@ -8,14 +8,10 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
-//макрос для названия объекта, просто переименуйте его что бы получить новый объект
-#define NAME_TEMPLETS_OBJECT ObjectButton
-
 /** Шаблонный класс для объектов**/
-@interface NAME_TEMPLETS_OBJECT : GObject {
+@interface ObjectButton : GObject {
 	
     NSMutableString *m_strNameSound;
     NSMutableString *m_strNameStage;
@@ -32,13 +28,13 @@
     bool m_bDimFromTexture;
     bool m_bDimMirrorX;
     bool m_bDimMirrorY;
+    
+    bool m_bLookTouch;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** **/
--(void)dealloc;
 -(void)Start;
 
 - (void)Proc:(Processor_ex *)pProc;

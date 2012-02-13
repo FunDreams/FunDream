@@ -8,7 +8,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
 
 /** Шаблонный класс для объектов**/
@@ -27,7 +26,5 @@
 - (GObject *)GetNear:(CGPoint)Point;
 - (float)GetNearDist:(CGPoint)Point;
 - (CGPoint)CoppectPoint:(CGPoint)Point;
-
-- (void)dealloc;
     
 @end

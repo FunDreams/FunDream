@@ -8,12 +8,17 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "Box2D.h"
 #import "Object.h"
+#import "ObjectParticle.h"
 
 /** Шаблонный класс для объектов**/
 @interface ObjectPSimple : GObject {
     Particle *pParticle;
+    float VelRotate;
+    float m_fVelMovePos;
+    float m_fVelMoveTmp;
+    float m_iDir;
+    float m_fPosSin;
 }
 
 /** Инициализирует объект **/
@@ -24,6 +29,5 @@
 -(void)Start;
 -(void)Update;
 
-- (void)dealloc;
     
 @end

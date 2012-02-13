@@ -12,48 +12,17 @@
 @implementation NAME_TEMPLETS_OBJECT
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	[super Init:Parent WithName:strName];
-		
-	m_iLayer = layerNumber;
-    m_bHiden=YES;
-		
-	mWidth=50;
-	mHeight=92;
-//====================================================
-START_QUEUE(@"Move");
-    ASSIGN_STAGE(@"Move", @"Move:", nil);
-END_QUEUE(@"Move");
-
-START_QUEUE(@"Proc");
-
-    ASSIGN_STAGE(@"First",@"PrepareTexture:",nil);
-
-    ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",nil);
-    DELAY_STAGE(@"a10", 1000, 1);
-
-    ASSIGN_STAGE(@"Animate1",@"AnimateParticle:",
-                 LINK_INT_V(iFinishFrame,@"Finish_Frame"),
-                 LINK_INT_V(mTextureId,@"InstFrame"),
-                 LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
-                 SET_FLOAT_V(-30,@"Vel"));
-
-    ASSIGN_STAGE(@"Wait",@"Wait:",nil);
-
-    ASSIGN_STAGE(@"ChangePar",@"ChangePar:",nil);
- //   DELAY_STAGE(@"ChangePar", 3000, 4000);
-
-    ASSIGN_STAGE(@"Animate2",@"AnimateParticle:",
-                 LINK_INT_V(iFinishFrame,@"Finish_Frame"),
-                 LINK_INT_V(mTextureId,@"InstFrame"),
-                 LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
-                 SET_FLOAT_V(30,@"Vel"));
-
-	ASSIGN_STAGE(@"FinishQueue",@"FinishQueue:",nil); 
-
-END_QUEUE(@"Proc");
-//====================================================
-	
-	mColor = Color3DMake(1,1,0,1.0f);
+    self = [super Init:Parent WithName:strName];
+	if (self != nil)
+    {
+        m_iLayer = layerNumber;
+        m_bHiden=YES;
+            
+        mWidth=50;
+        mHeight=92;
+        
+        mColor = Color3DMake(1,1,0,1.0f);
+    }
 
 	return self;
 }
@@ -61,8 +30,43 @@ END_QUEUE(@"Proc");
 - (void)LinkValues{
     [super LinkValues];
     
-    SET_CELL(LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrentSym"));
-    SET_CELL(LINK_INT_V(m_iPlace,m_strName,@"m_iPlace"));
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrentSym")];
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iPlace,m_strName,@"m_iPlace")];
+    
+//====================================================
+    Processor_ex *pProc = [self START_QUEUE:@"Move"];
+        ASSIGN_STAGE(@"Move", @"Move:", nil);
+    [self END_QUEUE:pProc name:@"Move"];
+    
+    pProc = [self START_QUEUE:@"Proc"];
+    
+        ASSIGN_STAGE(@"First",@"PrepareTexture:",nil);
+        
+        ASSIGN_STAGE(@"a10",@"timerWaitNextStage:",
+                     SET_INT_V(1000, @"TimeBaseDelay"));
+        //        DELAY_STAGE(@"a10", 1000, 1);
+        
+        ASSIGN_STAGE(@"Animate1",@"AnimateParticle:",
+                     LINK_INT_V(iFinishFrame,@"Finish_Frame"),
+                     LINK_INT_V(mTextureId,@"InstFrame"),
+                     LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
+                     SET_FLOAT_V(-30,@"Vel"));
+        
+        ASSIGN_STAGE(@"Wait",@"Wait:",nil);
+        
+        ASSIGN_STAGE(@"ChangePar",@"ChangePar:",nil);
+        //   DELAY_STAGE(@"ChangePar", 3000, 4000);
+        
+        ASSIGN_STAGE(@"Animate2",@"AnimateParticle:",
+                     LINK_INT_V(iFinishFrame,@"Finish_Frame"),
+                     LINK_INT_V(mTextureId,@"InstFrame"),
+                     LINK_FLOAT_V(InstFrameFloat,@"InstFrameFloat"),
+                     SET_FLOAT_V(30,@"Vel"));
+        
+        ASSIGN_STAGE(@"FinishQueue",@"FinishQueue:",nil); 
+    
+    [self END_QUEUE:pProc name:@"Proc"];
+//====================================================
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -82,7 +86,7 @@ END_QUEUE(@"Proc");
     m_iCurrenNumberOld=m_iCurrenNumber;
     
     [self SetPosWithOffsetOwner];
-    SET_STAGE_EX(NAME(self), @"Proc", @"a10");   
+    SET_STAGE_EX(NAME(self), @"Proc", @"a10");
     
     if(pParticle==nil){pParticle=[[Particle alloc] Init:self];}
 }
@@ -202,8 +206,6 @@ END_QUEUE(@"Proc");
 - (void)touchesBegan:(CGPoint)CurrentPoint{
 	//int m=0;
 }
-//------------------------------------------------------------------------------------------------------
-- (void)dealloc {[super dealloc];}
 //------------------------------------------------------------------------------------------------------
 @end
 #undef NAME_TEMPLETS_OBJECT

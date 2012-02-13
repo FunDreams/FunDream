@@ -8,6 +8,11 @@
 
 #import "EngineAppDelegate.h"
 
+//#if !defined (CONFIGURATION_AppStore_Distribution)
+//#import "BWHockeyManager.h"
+//#import "BWQuincyManager.h"
+//#endif
+
 @implementation EngineAppDelegate
 
 @synthesize window;
@@ -15,7 +20,20 @@
 //------------------------------------------------------------------------------------------------------
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
 
-	m_pPrSettings = [[CPrSettings alloc] Init];
+    // This variable is available if you add "CONFIGURATION_$(CONFIGURATION)"
+    // to the Preprocessor Macros in the project settings to all configurations
+    
+//#if TARGET_IPHONE_SIMULATOR
+//#else
+//#if !defined (CONFIGURATION_AppStore_Distribution)
+//    [[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"e3e0c655a45a89bed3d55c1c8ebb9f77"];
+//    [[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
+//    
+//    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"e3e0c655a45a89bed3d55c1c8ebb9f77"];
+//#endif
+//#endif
+    
+	m_pPrSettings = [[CPrSettings alloc] init];
 	[m_pPrSettings Load];
 
 	[m_pRootViewController SetPrSettings:m_pPrSettings]; 
@@ -33,7 +51,12 @@
 }
 //main timer------------------------------------------------------------------------------------------
 - (void)OnTimer{
-	
+//	if (![m_pRootViewController isReady])
+//    {
+//        // root controller still performs initialization
+//        return;
+//    }
+    
  //   @try {
         CFTimeInterval time;
         time = CFAbsoluteTimeGetCurrent();
@@ -76,35 +99,32 @@
 //    }
 
 }
-//------------------------------------------------------------------------------------------------------
-- (void)applicationDidBecomeActive:(UIApplication *)application{
 
+- (void)applicationDidBecomeActive:(UIApplication *)application{
+    
     [m_pRootViewController.m_pMainController Pause:NO];
     
-    m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f) target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
-    
-    CFTimeInterval time;
-    time = CFAbsoluteTimeGetCurrent();
-    m_flastTime=time;
+    m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f)
+        target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)applicationWillResignActive:(UIApplication *)application{
     
     [m_pTimer invalidate];
     [m_pRootViewController.m_pMainController Pause:YES];
     [m_pPrSettings Save];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)applicationWillTerminate:(UIApplication *)application{
 	
     [m_pTimer invalidate];
 	[m_pPrSettings Save];
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
 	NSLog(@"memory warning");
 }
-//------------------------------------------------------------------------------------------------------
+
 - (void)dealloc {
 	
 	[m_pTimer invalidate];
@@ -115,6 +135,5 @@
 	
     [super dealloc];
 }
-//------------------------------------------------------------------------------------------------------
 
 @end
