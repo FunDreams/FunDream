@@ -34,6 +34,4 @@
     #import "Mega_tree.h"
 	#import "MKStoreManager.h"
 
-    #import "UniCell.h"
-
 #endif

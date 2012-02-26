@@ -72,6 +72,7 @@
 		18F86DE6129A9A4E0068A469 /* StaticObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F86DE5129A9A4E0068A469 /* StaticObject.mm */; };
 		18FCA0D9149F943600C011F8 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FCA0D8149F943600C011F8 /* Default.png */; };
 		18FCA0DD149F951C00C011F8 /* Default-Landscape~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */; };
+		18FF881114EB9ED500B7412D /* OB_MiniParticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */; };
 		18FFC80E121597520092C8F5 /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18FFC80D121597520092C8F5 /* CFNetwork.framework */; };
 		1D3623260D0F684500981E51 /* EngineAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* EngineAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
@@ -189,6 +190,8 @@
 		18FCA0D8149F943600C011F8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
 		18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		18FF880F14EB9ED500B7412D /* OB_MiniParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OB_MiniParticle.h; path = objects/OB_MiniParticle.h; sourceTree = "<group>"; };
+		18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OB_MiniParticle.mm; path = objects/OB_MiniParticle.mm; sourceTree = "<group>"; };
 		18FFC80D121597520092C8F5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* EngineAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EngineAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* EngineAppDelegate.m */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = EngineAppDelegate.m; sourceTree = "<group>"; };
@@ -340,6 +343,8 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				18FF880F14EB9ED500B7412D /* OB_MiniParticle.h */,
+				18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */,
 				18EB608414E81B930089C409 /* ObjectBullet.h */,
 				18EB608514E81B940089C409 /* ObjectBullet.mm */,
 				18EB608614E81B950089C409 /* ObjectPSimple.h */,
@@ -594,6 +599,7 @@
 				18EB608314E8141D0089C409 /* ObjectGameSpaun.mm in Sources */,
 				18EB608814E81B970089C409 /* ObjectBullet.mm in Sources */,
 				18EB608914E81B970089C409 /* ObjectPSimple.mm in Sources */,
+				18FF881114EB9ED500B7412D /* OB_MiniParticle.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

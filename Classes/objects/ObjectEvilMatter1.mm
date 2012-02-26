@@ -54,12 +54,12 @@
         ASSIGN_STAGE(@"Idle",@"Idle:",nil);
         
         ASSIGN_STAGE(@"AchivePoint",@"Mirror2Dvector:",
-                     LINK_VECTOR_V(m_vStartPos,@"pStartV"),
-                     LINK_VECTOR_V(m_vEndPos,@"pFinishV"),
-                     LINK_VECTOR_V(m_pCurPosition,@"pDestV"),
-                     SET_FLOAT_V(0,@"pfStartF"),
-                     SET_FLOAT_V(1,@"pfFinishF"),
-                     LINK_FLOAT_V(m_fCurPosSlader2,@"pfSrc"));
+                     LINK_VECTOR_V(m_vStartPos,@"StartV"),
+                     LINK_VECTOR_V(m_vEndPos,@"FinishV"),
+                     LINK_VECTOR_V(m_pCurPosition,@"DestV"),
+                     SET_FLOAT_V(0,@"StartF"),
+                     SET_FLOAT_V(1,@"FinishF"),
+                     LINK_FLOAT_V(m_fCurPosSlader2,@"SrcF"));
     
     [self END_QUEUE:pProc name:@"Mirror"];
     
@@ -140,15 +140,27 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareBirth:(ProcStage_ex *)pStage{
 
-    for(int i=0;i<50;i++){
-        CREATE_NEW_OBJECT(@"ObjectPSimple", @"PushSimple",
-            SET_VECTOR_V(Vector3DMake(((float)(RND%40)-20),((float)(RND%40)-20),0),@"m_pCurPosition"));
-        
+    float W=500;
+
+    int iCountUp=100;
+    float Step=W/iCountUp;
+    float StartPoint=-W/2;
+
+    for(int i=0;i<iCountUp;i++){
+        CREATE_NEW_OBJECT(@"OB_MiniParticle", @"Up",
+            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+            SET_STRING_V(@"Down", @"m_pStrType"),
+            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,-40+(float)(RND%60-30),0),@"End_Vector"));
     }
 
-    for(int i=0;i<50;i++){
-        CREATE_NEW_OBJECT(@"ObjectBullet", @"Bullet",
-                          SET_VECTOR_V(Vector3DMake(((float)(RND%40)-20),((float)(RND%40)-20),0),@"m_pCurPosition"));
+    int iCountDown=100;
+    Step=W/iCountDown;
+    
+    for(int i=0;i<iCountDown;i++){
+        CREATE_NEW_OBJECT(@"OB_MiniParticle", @"Down",
+            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+            SET_STRING_V(@"Up", @"m_pStrType"),
+            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,40+(float)(RND%60-30),0),@"End_Vector"));
     }
 
     CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);

@@ -95,7 +95,7 @@
 
 	[super Start];
     
-    GET_TEXTURE(mTextureId,m_pNameTexture);
+//    GET_TEXTURE(mTextureId,m_pNameTexture);
 
     //   [self SetTouch:YES];//интерактивность
         

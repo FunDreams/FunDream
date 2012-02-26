@@ -58,6 +58,13 @@
                       SET_INT_V(1, @"m_INumLoadTextures"),
                       SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
 
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesMini",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
+
 	[super Start];
 }
 //------------------------------------------------------------------------------------------------------

@@ -706,37 +706,46 @@
     NSString *NameParam=nil;
     
     //линкуем параметры
-    NameParam=[NSString stringWithFormat:@"%@pFinishV",TmpStr];
-    pStage->VectorsValues[0]=GET_VECTOR_V(NameParam);
-    if(pStage->VectorsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
-    
-    NameParam=[NSString stringWithFormat:@"%@pStartV",TmpStr];
-    pStage->VectorsValues[1]=GET_VECTOR_V(NameParam);
-    if(pStage->VectorsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
-    
-    NameParam=[NSString stringWithFormat:@"%@pDestV",TmpStr];
-    pStage->VectorsValues[2]=GET_VECTOR_V(NameParam);
-    if(pStage->VectorsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
-
-    NameParam=[NSString stringWithFormat:@"%@pfStartF",TmpStr];
+    NameParam=[NSString stringWithFormat:@"%@SrcF",TmpStr];
     pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
-    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
-    
-    NameParam=[NSString stringWithFormat:@"%@pfFinishF",TmpStr];
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);    
+
+    NameParam=[NSString stringWithFormat:@"%@StartF",TmpStr];
     pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
     if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
     
-    NameParam=[NSString stringWithFormat:@"%@pfSrc",TmpStr];
+    NameParam=[NSString stringWithFormat:@"%@FinishF",TmpStr];
     pStage->FloatsValues[2]=GET_FLOAT_V(NameParam);
-    if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);    
+    if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    
+    NameParam=[NSString stringWithFormat:@"%@DestV",TmpStr];
+    pStage->VectorsValues[0]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+
+    NameParam=[NSString stringWithFormat:@"%@StartV",TmpStr];
+    pStage->VectorsValues[1]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@FinishV",TmpStr];
+    pStage->VectorsValues[2]=GET_VECTOR_V(NameParam);
+    if(pStage->VectorsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - (void)Mirror2Dvector:(Processor_ex *)pProc{
-
+    
     ProcStage_ex * pStage=pProc->m_CurStage;
+    
+//    Vector3D *V1=pStage->VectorsValues[0];
+//    Vector3D *V2=pStage->VectorsValues[1];
+//    Vector3D *V3=pStage->VectorsValues[2];
+//
+//    float *F1=pStage->FloatsValues[0];
+//    float *F2=pStage->FloatsValues[1];
+//    float *F3=pStage->FloatsValues[2];
 
-    Vector3D Dir=Vector3DMake(pStage->VectorsValues[0]->x-pStage->VectorsValues[1]->x,
-                              pStage->VectorsValues[0]->y-pStage->VectorsValues[1]->y,0);
+    Vector3D Dir=Vector3DMake(pStage->VectorsValues[2]->x-pStage->VectorsValues[1]->x,
+                              pStage->VectorsValues[2]->y-pStage->VectorsValues[1]->y,0);
     
     float Magnitude = sqrtf(Dir.x*Dir.x+Dir.y*Dir.y);
     
@@ -745,11 +754,83 @@
         Dir.x/=Magnitude;
         Dir.y/=Magnitude;
         
-        float K=((*pStage->FloatsValues[2]-*pStage->FloatsValues[0])*
-                 (Magnitude/(*pStage->FloatsValues[1]-*pStage->FloatsValues[0])));
+        float K=((*pStage->FloatsValues[0]-*pStage->FloatsValues[1])*
+                 (Magnitude/(*pStage->FloatsValues[2]-*pStage->FloatsValues[1])));
         
-        pStage->VectorsValues[2]->x=Dir.x*K+pStage->VectorsValues[1]->x;
-        pStage->VectorsValues[2]->y=Dir.y*K+pStage->VectorsValues[1]->y;
+        pStage->VectorsValues[0]->x=Dir.x*K+pStage->VectorsValues[1]->x;
+        pStage->VectorsValues[0]->y=Dir.y*K+pStage->VectorsValues[1]->y;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)InitMirror4DColor:(ProcStage_ex *)pStage{
+    
+    NSString *TmpStr=[NSString stringWithFormat:@"%@%@%@",
+                      m_strName,pStage->pParent->m_pNameProcessor,pStage->NameStage];
+    
+    NSString *NameParam=nil;
+    
+    //линкуем параметры
+    NameParam=[NSString stringWithFormat:@"%@SrcF",TmpStr];
+    pStage->FloatsValues[0]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@StartF",TmpStr];
+    pStage->FloatsValues[1]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@FinishF",TmpStr];
+    pStage->FloatsValues[2]=GET_FLOAT_V(NameParam);
+    if(pStage->FloatsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    
+    NameParam=[NSString stringWithFormat:@"%@DestC",TmpStr];
+    pStage->ColorsValues[0]=GET_COLOR_V(NameParam);
+    if(pStage->ColorsValues[0]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@StartC",TmpStr];
+    pStage->ColorsValues[1]=GET_COLOR_V(NameParam);
+    if(pStage->ColorsValues[1]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+    
+    NameParam=[NSString stringWithFormat:@"%@FinishC",TmpStr];
+    pStage->ColorsValues[2]=GET_COLOR_V(NameParam);
+    if(pStage->ColorsValues[2]==0)NSLog(@"Error:Can't link Value:%@",NameParam);
+}
+//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+- (void)Mirror4DColor:(Processor_ex *)pProc{
+	
+    //	float *pfSrc=GET_FLOAT_V(@"SrcF");
+    //	Color3D *pfDest=GET_COLOR_V(@"DestC");
+    
+    //	float pfStartF=(float )[RESIVE(@"StartF") floatValue];
+    //	float pfFinishF=(float )[RESIVE(@"FinishF") floatValue];
+    //	
+    //	Color3D *pStartV=RESIVE_COLOR(@"StartC");
+    //	Color3D *pFinishV=RESIVE_COLOR(@"FinishC");
+    //	
+    ProcStage_ex * pStage=pProc->m_CurStage;
+    
+    Color3D Dir=Color3DMake(pStage->ColorsValues[2]->red-pStage->ColorsValues[1]->red,
+                            pStage->ColorsValues[2]->green-pStage->ColorsValues[1]->green,
+                            pStage->ColorsValues[2]->blue-pStage->ColorsValues[1]->blue,
+                            pStage->ColorsValues[2]->alpha-pStage->ColorsValues[1]->alpha);
+    
+    float Magnitude = sqrtf(Dir.red*Dir.red+Dir.green*Dir.green+
+                            Dir.blue*Dir.blue+Dir.alpha*Dir.alpha);
+    
+    if(Magnitude>0)
+    {
+        Dir.red/=Magnitude;
+        Dir.green/=Magnitude;
+        Dir.blue/=Magnitude;
+        Dir.alpha/=Magnitude;
+        
+        float K=((*pStage->FloatsValues[0]-*pStage->FloatsValues[1])*
+                 (Magnitude/(*pStage->FloatsValues[2]-*pStage->FloatsValues[1])));
+        
+        pStage->ColorsValues[0]->red=Dir.red*K+pStage->ColorsValues[1]->red;
+        pStage->ColorsValues[0]->green=Dir.green*K+pStage->ColorsValues[1]->green;
+        pStage->ColorsValues[0]->blue=Dir.blue*K+pStage->ColorsValues[1]->blue;
+        pStage->ColorsValues[0]->alpha=Dir.alpha*K+pStage->ColorsValues[1]->alpha;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -914,39 +995,6 @@
 //		pfCurInst->x = pFinish->x;
 //		pfCurInst->y = pFinish->y;
 //		NEXT_STAGE;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Mirror4DColorStatic:(Processor_ex *)pProc{
-	
-//	float *pfSrc=(float *)RESIVE(@"SrcF");
-//	Color3D *pfDest=(Color3D *)RESIVE(@"DestC");
-//	
-//	float pfStartF=(float )[RESIVE(@"StartF") floatValue];
-//	float pfFinishF=(float )[RESIVE(@"FinishF") floatValue];
-//	
-//	Color3D *pStartV=RESIVE_COLOR(@"StartC");
-//	Color3D *pFinishV=RESIVE_COLOR(@"FinishC");
-//	
-//	Color3D Dir=Color3DMake(pFinishV->red-pStartV->red,pFinishV->green-pStartV->green,
-//							pFinishV->blue-pStartV->blue,pFinishV->alpha-pStartV->alpha);
-//	
-//	float Magnitude = sqrtf(Dir.red*Dir.red+Dir.green*Dir.green+
-//							Dir.blue*Dir.blue+Dir.alpha*Dir.alpha);
-//	
-//	if(Magnitude>0)
-//	{
-//		Dir.red/=Magnitude;
-//		Dir.green/=Magnitude;
-//		Dir.blue/=Magnitude;
-//		Dir.alpha/=Magnitude;
-//		
-//		float K=((*pfSrc-pfStartF)*(Magnitude/(pfFinishF-pfStartF)));
-//		
-//		pfDest->red=Dir.red*K+pStartV->red;
-//		pfDest->green=Dir.green*K+pStartV->green;
-//		pfDest->blue=Dir.blue*K+pStartV->blue;
-//		pfDest->alpha=Dir.alpha*K+pStartV->alpha;
 //	}
 }
 //------------------------------------------------------------------------------------------------------

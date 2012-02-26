@@ -35,12 +35,11 @@
 //   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
     
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
-//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"));
+//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    mTextureId = [m_pParent GetTextureId:m_pNameTexture];
     //   GET_DIM_FROM_TEXTURE(@"");
 	mWidth  = 50;
 	mHeight = 50;
@@ -48,6 +47,7 @@
 	[super Start];
 
     //   [self SetTouch:YES];//интерактивность
+    GET_TEXTURE(mTextureId, m_pNameTexture);
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг

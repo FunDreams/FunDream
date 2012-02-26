@@ -25,7 +25,9 @@
     
     Processor_ex *pProc = [self START_QUEUE:@"Proc"];
         //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-        ASSIGN_STAGE(@"Spaun",@"Spaun:",nil);
+        ASSIGN_STAGE(@"Spaun",@"Spaun:",
+                     SET_INT_V(5000,@"TimeBaseDelay"),
+                     SET_INT_V(100,@"TimeRndDelay"));
     
     [self END_QUEUE:pProc];
     
@@ -46,17 +48,15 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
-- (void)Spaun{}
+- (void)Spaun{
+    CREATE_NEW_OBJECT(@"ObjectPSimple",@"PSimple",nil);
+}
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun:(Processor_ex *)pProc{
     
-    m_fCurrntPeriod-=DELTA;
-    
-    if(m_fCurrntPeriod<0){
-        
-        [self Spaun];
-        m_fCurrntPeriod=m_fStartPeriod;
-    }
+    [self Spaun];
+    m_fCurrntPeriod=m_fStartPeriod;
+    NEXT_STAGE;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

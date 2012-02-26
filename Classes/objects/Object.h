@@ -203,9 +203,6 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 //processors--------------------------------------------------------------------------------------------
 - (void)timerWaitNextStage:(Processor_ex *)pProc;//ждём время, а потом переходим на следующую стадию
 
-- (void)InitAchiveLineFloat:(ProcStage_ex *)pStage;//изменение float значения с параметнами
-- (void)AchiveLineFloat:(Processor_ex *)pProc;
-
 - (void)InitAnimate:(ProcStage_ex *)pStage;//линейная анимация (до фиксированого кадра)
 - (void)Animate:(Processor_ex *)pProc;
 
@@ -218,34 +215,43 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)InitMirror2Dvector:(ProcStage_ex *)pStage;//отражение вектора (2д)/числа
 - (void)Mirror2Dvector:(Processor_ex *)pProc;
 
+- (void)InitMirror4DColor:(ProcStage_ex *)pStage;//отражение цвета (4д)/числа
+- (void)Mirror4DColor:(Processor_ex *)pProc;
+
 - (void)InitParabola1:(ProcStage_ex *)pStage;//Преобразование по кривой параболы
 - (void)Parabola1:(Processor_ex *)pProc;
 
 - (void)InitParabola2:(ProcStage_ex *)pStage;//Преобразование по кривой параболы
 - (void)Parabola2:(Processor_ex *)pProc;
 
+- (void)InitAchiveLineFloat:(ProcStage_ex *)pStage;//достижение float значения с параметнами
+- (void)AchiveLineFloat:(Processor_ex *)pProc;
+
 - (void)InitAchive1Dvector:(ProcStage_ex *)pStage;//изменение float как вектора.
 - (void)Achive1Dvector:(Processor_ex *)pProc;
 
 - (void)Idle:(Processor_ex *)pProc;//процессор простаивания
 
-- (void)DestroySelfUpdate:(Processor_ex *)pProc;
-- (void)DestroySelf:(Processor_ex *)pProc;
-- (void)UpdateScreen:(Processor_ex *)pProc;
-- (void)HideSelf:(Processor_ex *)pProc;
-- (void)ShowSelf:(Processor_ex *)pProc;
-- (void)TouchYes:(Processor_ex *)pProc;
-- (void)TouchNo:(Processor_ex *)pProc;
+- (void)DestroySelfUpdate:(Processor_ex *)pProc;//уничтожить объект и сделать Update для отрисовки
+- (void)DestroySelf:(Processor_ex *)pProc;//уничтожить объект и перейти на следующую стадию
+- (void)UpdateScreen:(Processor_ex *)pProc;//Обновление объектов отрисовки
+- (void)HideSelf:(Processor_ex *)pProc;//спрятать объект
+- (void)ShowSelf:(Processor_ex *)pProc;//показать объект
+- (void)TouchYes:(Processor_ex *)pProc;//Установить интерактивность
+- (void)TouchNo:(Processor_ex *)pProc;//спросить интерактивность
 
 - (void)SelfTimer:(Processor_ex *)pProc;//задержка активации объекта
 - (void)SelfTimerProc:(Processor_ex *)pProc;//время для процесса
 
-- (Processor_ex*)START_QUEUE:(id) NAME;
-- (void)END_QUEUE:(Processor_ex*)pProc name:(id) NAME;
-- (void)END_QUEUE:(Processor_ex*)pProc;
+- (Processor_ex*)START_QUEUE:(id) NAME;//Начало процесса
+- (void)END_QUEUE:(Processor_ex*)pProc name:(id) NAME;//конец процесса(старый вариант, не нужен)
+- (void)END_QUEUE:(Processor_ex*)pProc;//конец процесса
+
+//постать объекту сообщение
 - (void)OBJECT_PERFORM_SEL:(NSString*)NameObject selector:(NSString*)SelectorName;
 
 //utils------------------------------------------------------------------------------------------------
+//возвращает NSArray символов таймера
 - (void)ParseTime:(float)fTime OutSec:(int *)fSec OutMin:(int *)fMin OutHour:(int *)fHour;
 - (NSMutableArray *)ParseIntValue:(int)iValue;
 

@@ -76,12 +76,12 @@
         //   ASSIGN_STAGE(@"Idle",@"Idle:",nil);
         
         ASSIGN_STAGE(@"AchivePoint",@"Mirror2Dvector:",
-                     LINK_VECTOR_V(m_vStartPos,@"pStartV"),
-                     LINK_VECTOR_V(m_vEndPos,@"pFinishV"),
-                     LINK_VECTOR_V(m_pCurPosition,@"pDestV"),
-                     SET_FLOAT_V(0,@"pfStartF"),
-                     SET_FLOAT_V(1,@"pfFinishF"),
-                     LINK_FLOAT_V(m_fCurPosSlader2,@"pfSrc"));
+                     LINK_VECTOR_V(m_vStartPos,@"StartV"),
+                     LINK_VECTOR_V(m_vEndPos,@"FinishV"),
+                     LINK_VECTOR_V(m_pCurPosition,@"DestV"),
+                     SET_FLOAT_V(0,@"StartF"),
+                     SET_FLOAT_V(1,@"FinishF"),
+                     LINK_FLOAT_V(m_fCurPosSlader2,@"SrcF"));
     
     [self END_QUEUE:pProc name:@"Mirror"];
     

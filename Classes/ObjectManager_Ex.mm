@@ -470,6 +470,8 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs{
 	
+    if(pTmpOb==nil)return;
+
 	for (int i=0; i<[Parametrs count]; i++) {
 		
 		UniCell* pParams = (UniCell*)[Parametrs objectAtIndex:i];

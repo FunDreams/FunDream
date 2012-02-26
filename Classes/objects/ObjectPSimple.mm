@@ -91,11 +91,14 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-    GET_TEXTURE(mTextureId,@"Bullet_Up.png");
+//    GET_TEXTURE(mTextureId,@"Bullet_Up.png");
 
+    m_pCurPosition.x=(float)(RND%500)-250;
+    m_pCurPosition.y=300;
+    
     VelRotate = (float)(RND%20)-10;
     m_fVelMove=(float)(RND%20)+50;
-    m_pCurAngle.z=RND%360;
+//    m_pCurAngle.z=RND%360;
 
     m_vEndPos=Vector3DMake(300, 0, 0);
     
@@ -107,13 +110,10 @@
     
     m_fCurPosSlader=0;
     m_fCurPosSlader2=0;
-    
- //   m_pCurAngle.z=RND%360;
 
     mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
     mColor.alpha=0.0f;
-    //[self SetTouch:YES];//интерактивность
-    
+     
     SET_STAGE_EX(NAME(self), @"Proc", @"Show");
     SET_STAGE_EX(NAME(self), @"Mirror", @"Idle");
     SET_STAGE_EX(NAME(self), @"Parabola", @"Idle"); 
