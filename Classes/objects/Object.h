@@ -86,7 +86,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	NSMutableString *m_strName;
 
 	//имена групп
-	Dictionary_Ex *m_Groups;
+	NSMutableDictionary *m_Groups;
 
 	//флаг. указвает что на объект не действует глобальная пауза
 	bool m_bNonStop;
@@ -168,9 +168,6 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 //функция установки взаимодействия объекта
 - (void)SetTouch:(bool)bTouch;
 
-//удаление из словаря взаимодействий
-- (void)RomoveFromTouch;
-
 //деструктор
 - (void)dealloc;
 
@@ -232,9 +229,11 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 
 - (void)Idle:(Processor_ex *)pProc;//процессор простаивания
 
-- (void)DestroySelfUpdate:(Processor_ex *)pProc;//уничтожить объект и сделать Update для отрисовки
+//Показать/Скрыть объект
+- (void)ShowObject;
+- (void)HideObject;
+
 - (void)DestroySelf:(Processor_ex *)pProc;//уничтожить объект и перейти на следующую стадию
-- (void)UpdateScreen:(Processor_ex *)pProc;//Обновление объектов отрисовки
 - (void)HideSelf:(Processor_ex *)pProc;//спрятать объект
 - (void)ShowSelf:(Processor_ex *)pProc;//показать объект
 - (void)TouchYes:(Processor_ex *)pProc;//Установить интерактивность

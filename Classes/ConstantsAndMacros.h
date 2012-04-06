@@ -18,11 +18,14 @@
 #define DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) / 180.0 * M_PI)
 
 #define NAME(OB) OB->m_strName
-#define UPDATE m_pObjMng->m_bNeedUppdate=YES;
+#define SHOW [self ShowObject];
+#define HIDE [self HideObject];
 #define PARAMS_APP m_pObjMng->m_pParent.m_pPrSettings
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //макрос для создания и управления объектами
 #define CREATE_NEW_OBJECT(NAMECLASS,NAMEOBJECT,...) [m_pParent.m_pObjMng CreateNewObject:NAMECLASS WithNameObject:NAMEOBJECT WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
+
+#define UNFROZE_OBJECT(NAMECLASS,...) [m_pParent.m_pObjMng UnfrozeObject:NAMECLASS WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 
 #define OBJECT_SET_PARAMS(OB_NAME,...) [m_pObjMng SetParams:[m_pObjMng GetObjectByName:OB_NAME] WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil]];
 

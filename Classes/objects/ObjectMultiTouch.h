@@ -13,6 +13,7 @@
 /** Шаблонный класс для объектов**/
 @interface ObjectMultiTouch : GObject {
     GObject *TmpLastNearOb;
+    Vector3D m_vLastPos;
 }
 
 /** Инициализирует объект **/

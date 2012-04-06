@@ -95,7 +95,6 @@
 
 	[self UpdateScore];
     
-	UPDATE;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetColorSym{
@@ -103,7 +102,6 @@
 	for(GObject *pOb in m_pChildrenbjectsArr)
 		OBJECT_SET_PARAMS(pOb->m_strName,SET_COLOR_V(mColor,@"mColor"));
 	
-	UPDATE;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateScore{
@@ -146,9 +144,7 @@
 
         OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
         OBJECT_PERFORM_SEL(NAME(pOb), @"Move:");
-    }
-    
-	UPDATE;
+    }    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RezetScore{

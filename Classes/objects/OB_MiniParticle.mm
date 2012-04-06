@@ -20,7 +20,6 @@
         if(pParticle==nil){
             
             pParticle=[[Particle alloc] Init:self];
-            [pParticle AddToContainer:@"ParticlesMini"];
             m_bHiden=YES;
         }
     }
@@ -43,7 +42,7 @@
 //====//процессоры для объекта==========================================================================
     
     Processor_ex *pProc = [self START_QUEUE:@"Stages"];
-        
+
         ASSIGN_STAGE(@"ShowStage",@"Show:",
                      //отражения позиции
                      LINK_FLOAT_V(mColor.alpha, @"SrcF"),
@@ -80,7 +79,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    //GET_DIM_FROM_TEXTURE(@"");
+    [pParticle AddToContainer:@"ParticlesMini"];
+
 	mWidth  = 30;
 	mHeight = 30;
 
@@ -149,20 +149,20 @@
     
     m_fCurPosSlader=0;
 }
-//--------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------
 - (void)InitPlacement:(ProcStage_ex *)pStage{
     [self InitMirror2Dvector:pStage];
     [self InitMirror4DColor:pStage];
 }
-//--------------------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------------------------
 - (void)Placement:(Processor_ex *)pProc{
     
     m_fCurPosSlader2+=DELTA*.3f;
 
     m_fCurPosSlader=pow(m_fCurPosSlader2,8);
     
-    if(m_fCurPosSlader>1){
-        m_fCurPosSlader=1;
+    if(m_fCurPosSlader>0.999f){
+        m_fCurPosSlader=0.999f;
     }
     
     [self Mirror2Dvector:pProc];
@@ -171,7 +171,7 @@
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
     
-    if(m_fCurPosSlader==1){
+    if(m_fCurPosSlader==0.999f){
         NEXT_STAGE;
     }
 }
@@ -188,7 +188,7 @@
 - (void)sin:(Processor_ex *)pProc{
     
     m_fPhase+=m_fVelPhase*0.01f*DELTA;
-    m_pCurPosition.y=m_fPosSin+10*sin(m_fPhase);
+   m_pCurPosition.y=m_fPosSin+10*sin(m_fPhase);
 
     m_pCurPosition.x+=m_fVelMove*DELTA;
     

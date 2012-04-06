@@ -51,6 +51,10 @@
 		189268FF140B197800AFE0DD /* PreviewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268FC140B197800AFE0DD /* PreviewController-ipad.xib */; };
 		189EB338125B052200262E27 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189EB337125B052200262E27 /* StoreKit.framework */; };
 		18A5E3FB140D27AD005F14ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A5E3FA140D27AD005F14ED /* Foundation.framework */; };
+		18B60EA1152CCFC800E98973 /* Ob_PensilPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18B60E9E152CCFC800E98973 /* Ob_PensilPar.mm */; };
+		18B60EA2152CCFC800E98973 /* Ob_Shape.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18B60EA0152CCFC800E98973 /* Ob_Shape.mm */; };
+		18B60EA5152CCFDD00E98973 /* Obj_FormPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18B60EA4152CCFDD00E98973 /* Obj_FormPar.mm */; };
+		18B60EAE152D5A4A00E98973 /* CGroups.m in Sources */ = {isa = PBXBuildFile; fileRef = 18B60EAD152D5A4A00E98973 /* CGroups.m */; };
 		18B6656B14778F3E0039E5C7 /* 57x57.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6656A14778F3E0039E5C7 /* 57x57.png */; };
 		18B6656D14778F430039E5C7 /* 114x114.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6656C14778F430039E5C7 /* 114x114.png */; };
 		18B6656F14778F4C0039E5C7 /* 72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6656E14778F4C0039E5C7 /* 72x72.png */; };
@@ -153,6 +157,14 @@
 		189268FC140B197800AFE0DD /* PreviewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PreviewController-ipad.xib"; path = "resources/SeaFight/Resources-iPad/PreviewController-ipad.xib"; sourceTree = SOURCE_ROOT; };
 		189EB337125B052200262E27 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		18A5E3FA140D27AD005F14ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
+		18B60E9D152CCFC800E98973 /* Ob_PensilPar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_PensilPar.h; path = objects/Ob_PensilPar.h; sourceTree = "<group>"; };
+		18B60E9E152CCFC800E98973 /* Ob_PensilPar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_PensilPar.mm; path = objects/Ob_PensilPar.mm; sourceTree = "<group>"; };
+		18B60E9F152CCFC800E98973 /* Ob_Shape.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Shape.h; path = objects/Ob_Shape.h; sourceTree = "<group>"; };
+		18B60EA0152CCFC800E98973 /* Ob_Shape.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Shape.mm; path = objects/Ob_Shape.mm; sourceTree = "<group>"; };
+		18B60EA3152CCFDD00E98973 /* Obj_FormPar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Obj_FormPar.h; path = objects/Obj_FormPar.h; sourceTree = "<group>"; };
+		18B60EA4152CCFDD00E98973 /* Obj_FormPar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Obj_FormPar.mm; path = objects/Obj_FormPar.mm; sourceTree = "<group>"; };
+		18B60EAC152D5A4A00E98973 /* CGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGroups.h; sourceTree = "<group>"; };
+		18B60EAD152D5A4A00E98973 /* CGroups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGroups.m; sourceTree = "<group>"; };
 		18B6656A14778F3E0039E5C7 /* 57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 57x57.png; sourceTree = "<group>"; };
 		18B6656C14778F430039E5C7 /* 114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 114x114.png; sourceTree = "<group>"; };
 		18B6656E14778F4C0039E5C7 /* 72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72x72.png; sourceTree = "<group>"; };
@@ -239,6 +251,8 @@
 				18E9F5971255DD1600423916 /* objects */,
 				1D3623240D0F684500981E51 /* EngineAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EngineAppDelegate.m */,
+				18B60EAC152D5A4A00E98973 /* CGroups.h */,
+				18B60EAD152D5A4A00E98973 /* CGroups.m */,
 				186E0CC114E04BD0008B4290 /* PVRTexture.h */,
 				186E0CC214E04BD0008B4290 /* PVRTexture.m */,
 				18D79551127B29C800BD5445 /* GLView.h */,
@@ -343,6 +357,12 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				18B60EA3152CCFDD00E98973 /* Obj_FormPar.h */,
+				18B60EA4152CCFDD00E98973 /* Obj_FormPar.mm */,
+				18B60E9D152CCFC800E98973 /* Ob_PensilPar.h */,
+				18B60E9E152CCFC800E98973 /* Ob_PensilPar.mm */,
+				18B60E9F152CCFC800E98973 /* Ob_Shape.h */,
+				18B60EA0152CCFC800E98973 /* Ob_Shape.mm */,
 				18FF880F14EB9ED500B7412D /* OB_MiniParticle.h */,
 				18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */,
 				18EB608414E81B930089C409 /* ObjectBullet.h */,
@@ -600,6 +620,10 @@
 				18EB608814E81B970089C409 /* ObjectBullet.mm in Sources */,
 				18EB608914E81B970089C409 /* ObjectPSimple.mm in Sources */,
 				18FF881114EB9ED500B7412D /* OB_MiniParticle.mm in Sources */,
+				18B60EA1152CCFC800E98973 /* Ob_PensilPar.mm in Sources */,
+				18B60EA2152CCFC800E98973 /* Ob_Shape.mm in Sources */,
+				18B60EA5152CCFDD00E98973 /* Obj_FormPar.mm in Sources */,
+				18B60EAE152D5A4A00E98973 /* CGroups.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

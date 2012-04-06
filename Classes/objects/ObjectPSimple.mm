@@ -26,21 +26,19 @@
     [super LinkValues];
     
     [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_vEndPos,m_strName,@"m_vEndPos")];
-    
-    
+
     Processor_ex *pProc = [self START_QUEUE:@"Proc"];
-    
+
         ASSIGN_STAGE(@"Show",@"AchiveLineFloat:",
                      LINK_FLOAT_V(mColor.alpha,@"Instance"),
-                     SET_FLOAT_V(0.6f,@"finish_Instance"),
+                     SET_FLOAT_V(1.0f,@"finish_Instance"),
                      LINK_FLOAT_V(m_fVelMovePos,@"Vel"));
-        
-        ASSIGN_STAGE(@"Position",@"Position:",
-                     LINK_FLOAT_V(m_fCurPosSlader,@"Instance"),
-                     SET_FLOAT_V(1,@"finish_Instance"),
-                     SET_FLOAT_V(0.5f,@"Vel"));
-        
-        ASSIGN_STAGE(@"Wait",@"Wait:",nil);
+    
+    
+//        ASSIGN_STAGE(@"Position",@"Position:",
+//                     LINK_FLOAT_V(m_fCurPosSlader,@"Instance"),
+//                     SET_FLOAT_V(1,@"finish_Instance"),
+//                     SET_FLOAT_V(0.5f,@"Vel"));
         
         ASSIGN_STAGE(@"PrepareMove", @"PrepareMove:", nil);
         ASSIGN_STAGE(@"Move",@"AchiveLineFloatBall:",
@@ -94,16 +92,16 @@
 //    GET_TEXTURE(mTextureId,@"Bullet_Up.png");
 
     m_pCurPosition.x=(float)(RND%500)-250;
-    m_pCurPosition.y=300;
+    m_pCurPosition.y=260;
     
     VelRotate = (float)(RND%20)-10;
     m_fVelMove=(float)(RND%20)+50;
-//    m_pCurAngle.z=RND%360;
+    m_pCurAngle.z=0;//RND%360;
 
     m_vEndPos=Vector3DMake(300, 0, 0);
     
-    mWidth  = 30;
-	mHeight = 30;
+    mWidth  = 80;
+	mHeight = 80;
     mRadius = 90;
 
 	[super Start];
@@ -116,7 +114,7 @@
      
     SET_STAGE_EX(NAME(self), @"Proc", @"Show");
     SET_STAGE_EX(NAME(self), @"Mirror", @"Idle");
-    SET_STAGE_EX(NAME(self), @"Parabola", @"Idle"); 
+    SET_STAGE_EX(NAME(self), @"Parabola", @"Idle");
     
     m_fStartScale=m_pCurScale.x;
     m_fEndScale=m_fStartScale*0.6f;
@@ -253,7 +251,6 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
-    UPDATE;
     
     [pParticle RemoveFromContainer];
     [pParticle release];

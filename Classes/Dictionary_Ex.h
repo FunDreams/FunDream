@@ -18,11 +18,13 @@
 }
 
 -(id)init;
--(NSEnumerator *)objectEnumerator;
+//-(NSEnumerator *)objectEnumerator;
+//-(NSEnumerator *)keyEnumerator;
+
 - (id)removeObjectForKey_Ex:(id)aKey;
 - (id)objectForKey:(id)aKey;
 - (id)setObject_Ex:(id)anObject forKey:(id)aKey;
-- (void)SynhData;
+- (int)SynhData;
 - (void)dealloc;
 
 @end

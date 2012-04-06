@@ -36,7 +36,7 @@
     
         ASSIGN_STAGE(@"Idle",@"Idle:",nil);
         ASSIGN_STAGE(@"Delay",@"Idle:",
-                     SET_INT_V(3000, @"TimeBaseTimer"));
+                     SET_INT_V(4000, @"TimeBaseTimer"));
         ASSIGN_STAGE(@"SelParticle",@"SelParticle:",nil);
     
     [self END_QUEUE:pProc name:@"GameProgress"];
@@ -44,27 +44,6 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
-                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Down_Bullet.png",@"m_pNameTexture"));
-
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesUp",
-                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
-
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesMini",
-                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
-
 	[super Start];
 }
 //------------------------------------------------------------------------------------------------------

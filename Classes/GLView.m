@@ -144,6 +144,9 @@
 - (void)drawView
 {
 //    if(controller->m_bPause==NO){
+    
+        [controller.m_pObjMng UpdateObjects];
+
         // Make sure that you are drawing to the current context
         [EAGLContext setCurrentContext:context];
             

@@ -5,6 +5,7 @@
 //  Created by Konstantin on 24.04.11.
 //  Copyright 2011 FunDreams. All rights reserved.
 //
+#import "Object.h"
 
 @implementation Dictionary_Ex
 //------------------------------------------------------------------------------------------------------
@@ -19,12 +20,23 @@
 
     return self;
 }
-//------------------------------------------------------------------------------------------------------
--(NSEnumerator *)objectEnumerator
-{
-    NSEnumerator *pEn= [pDic objectEnumerator];
-    return pEn;
-}
+////------------------------------------------------------------------------------------------------------
+//-(NSEnumerator *)objectEnumerator
+//{
+//    return [pDic objectEnumerator];
+
+//    NSEnumerator *pEn= [self->pDic objectEnumerator];
+//    
+//    GObject *trhvdt = [pEn nextObject];
+//    int m=0;
+//    
+//    return [pEn retait];
+//}
+////------------------------------------------------------------------------------------------------------
+//-(NSEnumerator *)keyEnumerator
+//{
+//    return [pDic keyEnumerator];
+//}
 //------------------------------------------------------------------------------------------------------
 - (id)removeObjectForKey_Ex:(id)aKey
 {
@@ -58,27 +70,30 @@
     return pOb;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SynhData
+- (int)SynhData
 {    
+    if(m_bNotSyn==YES){
     NSEnumerator *Key_enumerator = [pDicTemp keyEnumerator];
-    id aKey;
+    NSString *aKey;
     
-    while ((aKey = [Key_enumerator nextObject])) {
+        while ((aKey = [Key_enumerator nextObject])) {
+            
+            id pObject = [pDicTemp objectForKey:aKey];
+            if ([pObject isKindOfClass:[NSString class]] && [(NSString*)pObject isEqualToString:@"delete"])
+            {
+                [pDic removeObjectForKey:aKey];
+            }
+            else
+            {
+                [pDic setObject:pObject forKey:aKey];
+            }
+        }
         
-        id pObject = [pDicTemp objectForKey:aKey];
-        if ([pObject isKindOfClass:[NSString class]] && [(NSString*)pObject isEqualToString:@"delete"])
-        {
-            [pDic removeObjectForKey:aKey];
-        }
-        else
-        {
-            [pDic removeObjectForKey:aKey];
-            [pDic setObject:pObject forKey:aKey];
-        }
+        [pDicTemp removeAllObjects];
+        m_bNotSyn=NO;
+        return [pDic count];
     }
-    
-    [pDicTemp removeAllObjects];
-    m_bNotSyn=NO;
+    return 0;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)dealloc

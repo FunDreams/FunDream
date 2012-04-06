@@ -10,6 +10,7 @@
 #import "Object.h"
 #import "GameLogicObject.h"
 #import "GLView.h"
+#import "CGroups.h"
 
 @class CPhysics;
 @class Mega_tree;
@@ -82,8 +83,6 @@ typedef enum tagLayerTouchID {
     //время для апдейта
     float fTimeOneSecondUpdate;
     
-	//флаг для апдейта массива отрисовки
-	bool m_bNeedUppdate;
 	//глобальная пауза
 	bool m_bGlobalPause;		
 	//родитель-уровень для данного класса
@@ -96,12 +95,13 @@ typedef enum tagLayerTouchID {
 	CPhysics* m_pPhysics;
 
 	//динамический массив объектов(здесь будут содержаться все объекты приложения
-	//игровый объектры, объекты хранения информации, triggers, actions, events, объекты управления, синхронизации
+	//игровый объектры, объекты хранения информации, triggers, actions, events, объекты управления,
+    //синхронизации
 	//и т.д. другими словами все объекты приложения. Которые будут ответственны за весь процесс)	
 	NSMutableArray* m_pObjectList;
 
 	//словарь сгрупированых объектов
-	NSMutableDictionary* m_pGroups;
+	CGroups* m_pGroups;
 
 	//словарь для всех объектов
 	NSMutableDictionary* m_pAllObjects;
@@ -124,9 +124,6 @@ typedef enum tagLayerTouchID {
 
 	//слои
 	NSMutableArray *pLayers;
-	
-	//слои
-	NSMutableArray *pDrawArray;
 
     //Mega tree
     Mega_tree *pMegaTree;
@@ -151,20 +148,20 @@ typedef enum tagLayerTouchID {
 - (NSString *)GetNameObject:(NSString*) NameObject;
 
 //функции управления объектами (создание/изменение/доступа параметров)
--(void) CreateNewObject:(NSString*)className withName:(NSString*)objectName objects: (id)firstObj, ... NS_REQUIRES_NIL_TERMINATION;
-
 - (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObject WithParams:(NSArray *)Parametrs;
+
+- (id)UnfrozeObject:(NSString *)NameClass WithParams:(NSArray *)Parametrs;
+
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs;
 - (GObject *)GetFreeObjectByClass:(NSString*)NameClass;
 - (GObject *)GetObjectByName:(NSString*)NameObject;
 - (NSString *)GetNameObject:(NSString*)NameObject;
 
-- (void)Update;
 - (id)DestroyObject:(GObject *)pObject;
 
 - (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject;
 - (void)RemoveFromGroup:(NSString*)NameGroup Object:(GObject *)pObject;
-- (void)RemoveFromGroups:(Dictionary_Ex *)NamesGroup Object:(GObject *)pObject;
+- (void)RemoveFromGroups:(GObject *)pObject;
 - (NSMutableArray *)GetGroup:(NSString*)NameGroup;
 	
 

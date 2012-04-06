@@ -27,7 +27,7 @@
         m_pObjMng=m_pParent.m_pObjMng;
 	
         m_strName= [[NSMutableString alloc] initWithString:strName];
-        m_Groups=[[Dictionary_Ex alloc] init];
+        m_Groups=[[NSMutableDictionary alloc] init];
 
         m_bNonStop=NO;
         m_bHiden=NO;
@@ -225,49 +225,53 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)RomoveFromTouch{
-    
-	[[m_pParent.m_pObjMng->m_pObjectTouches objectAtIndex:m_iLayerTouch] removeObjectForKey:m_strName];
-}
-//------------------------------------------------------------------------------------------------------
 - (Processor_ex *)FindProcByName:(NSString *)Name{
 	
 	return [m_pProcessor_ex objectForKey:Name];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)AddToDraw{
+    
+    Dictionary_Ex *pCurrentLayer=[m_pObjMng->pLayers objectAtIndex:m_iLayer];
 	
-	NSMutableDictionary *pCurrentLayer=[m_pObjMng->pLayers objectAtIndex:m_iLayer];
-	
-	if (pCurrentLayer && m_strName)
-		[pCurrentLayer setObject:self forKey:m_strName];
+	if (pCurrentLayer){
+		[pCurrentLayer setObject_Ex:self forKey:m_strName];
+        m_bHiden=NO;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DeleteFromDraw{
+
+    Dictionary_Ex *pCurrentLayer=[m_pObjMng->pLayers objectAtIndex:m_iLayer];
 	
-	NSMutableDictionary *pCurrentLayer=[m_pObjMng->pLayers objectAtIndex:m_iLayer];
-	
-	if (pCurrentLayer && m_strName!=nil)
-		[pCurrentLayer removeObjectForKey:m_strName];
-	
+	if (pCurrentLayer){
+		[pCurrentLayer removeObjectForKey_Ex:m_strName];
+        m_bHiden=YES;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)ShowObject{
+    [self AddToDraw];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)HideObject{
+    [self DeleteFromDraw];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetLayer:(int)iLayer{
 	
-	if (m_strName){
-		[self DeleteFromDraw];
-		m_iLayer=iLayer;
-		[self AddToDraw];
-	}
+    if(m_bHiden==NO){
+        if (m_strName){
+            [self DeleteFromDraw];
+            m_iLayer=iLayer;
+            [self AddToDraw];
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetLayerAndChild:(int)iLayer{
 	
-	if (m_strName){
-		[self DeleteFromDraw];
-		m_iLayer=iLayer;
-		[self AddToDraw];
-	}
+    [self SetLayer:iLayer];
     
     for (GObject *pOb in m_pChildrenbjectsArr) {
         [pOb SetLayer:iLayer];
@@ -1064,22 +1068,9 @@
 //	*pfDest=((*pfSrc-pfStartF1)*((pfinishF2-pfStartF2)/(pfFinishF1-pfStartF1)))+pfStartF2;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)UpdateScreen:(Processor_ex *)pProc
-{
-    m_pObjMng->m_bNeedUppdate=YES;
-    [pProc NextStage];
-}
-//------------------------------------------------------------------------------------------------------
 - (void)DestroySelf:(Processor_ex *)pProc
 {
     [m_pObjMng DestroyObject:self];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)DestroySelfUpdate:(Processor_ex *)pProc
-{
-    [m_pObjMng DestroyObject:self];
-    m_pObjMng->m_bNeedUppdate=YES;
-    [pProc NextStage];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Reset:(Processor_ex *)pProc
@@ -1088,12 +1079,12 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HideSelf:(Processor_ex *)pProc{
-    m_bHiden=YES;
+    [self HideObject];
     [pProc NextStage];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ShowSelf:(Processor_ex *)pProc{
-    m_bHiden=NO;
+    [self ShowObject];
     [pProc NextStage];
 }
 //------------------------------------------------------------------------------------------------------

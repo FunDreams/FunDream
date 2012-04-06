@@ -127,71 +127,95 @@
         }
     }
     NEXT_STAGE;
-    UPDATE;
 }
-//------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    return;
+//    return;
 //    if(pOb){
 //        DESTROY_OBJECT(pOb);
 //        pOb=nil;
 //    }
 
-    if([self GetNearDist:Point]>40){
-        
-        Point=[self CoppectPoint:Point];
-        
-        PLAY_SOUND(@"StartTouch.wav");
-        CREATE_NEW_OBJECT(@"ObjectBullet", @"Bullet",
-                          SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
+    GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
+                      SET_VECTOR_V(Vector3DMake(Point.x,Point.y+70,0),@"m_pCurPosition"));
+    
+    [m_pChildrenbjectsArr addObject:pOb];
 
-    }
+    m_vLastPos=pOb->m_pCurPosition;
+    
+//    if([self GetNearDist:Point]>40){
+//
+//        Point=[self CoppectPoint:Point];
+//
+//        PLAY_SOUND(@"StartTouch.wav");
+//        CREATE_NEW_OBJECT(@"ObjectBullet", @"Bullet",
+//                          SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    GObject *pObject = [self GetNear:Point];
-
-    if(pObject!=nil){
-
-        Point=[self CoppectPoint:Point];
+    float fDist=(Point.x-m_vLastPos.x)*(Point.x-m_vLastPos.x)+(Point.y+70-m_vLastPos.y)*(Point.y+70-m_vLastPos.y);
+    
+    if(sqrt(fDist)>40){
+        GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
+                          SET_VECTOR_V(Vector3DMake(Point.x,Point.y+70,0),@"m_pCurPosition"));
+        m_vLastPos=pOb->m_pCurPosition;
         
-        OBJECT_SET_PARAMS(NAME(pObject),
-                          SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
-        
-        [pObject Update];
+        [m_pChildrenbjectsArr addObject:pOb];
     }
+
+//    GObject *pObject = [self GetNear:Point];
+//
+//    if(pObject!=nil){
+//
+//        Point=[self CoppectPoint:Point];
+//        
+//        OBJECT_SET_PARAMS(NAME(pObject),
+//                          SET_VECTOR_V(Vector3DMake(Point.x, Point.y, 0),@"m_pCurPosition"));
+//        
+//        [pObject Update];
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
         
-    GObject *pObject = [self GetNear:Point];
-
-    [m_pObjMng RemoveFromGroup:@"StartBullet" Object:pObject];
-
-    if(m_pParent->m_CountTouch==[m_pParent->mpCurtouches count]){
-        
-        if(pObject!=nil){SET_STAGE_EX(NAME(pObject),@"Proc",@"Move");}
-        
-        NSArray * pBullets=[m_pObjMng GetGroup:@"MustDie"];
-
-        int iCount=[pBullets count];
-        for (int i=0;i<iCount;i++) {
-            
-            GObject *pObt=(GObject *)[pBullets objectAtIndex:0];
-            
-            SET_STAGE_EX(NAME(pObt),@"Proc",@"Move");
-            [m_pObjMng RemoveFromGroup:@"MustDie" Object:pObt];
-        }
+    int iCount=[m_pChildrenbjectsArr count];
+    for (int i=0; i<iCount; i++) {
+        GObject *pOb=[m_pChildrenbjectsArr objectAtIndex:i];
+        NEXT_STAGE_EX(pOb->m_strName, @"Proc");
     }
-    else
-    {
-        SET_STAGE_EX(NAME(self),@"TimeDie",@"TimerDie");
-        if(pObject!=nil)[m_pObjMng AddToGroup:@"MustDie" Object:pObject];
-    }
+    
+    [m_pChildrenbjectsArr removeAllObjects];
+    
+    
+//    GObject *pObject = [self GetNear:Point];
+//
+//    [m_pObjMng RemoveFromGroup:@"StartBullet" Object:pObject];
+//
+//    if(m_pParent->m_CountTouch==[m_pParent->mpCurtouches count]){
+//        
+//        if(pObject!=nil){SET_STAGE_EX(NAME(pObject),@"Proc",@"Move");}
+//        
+//        NSArray * pBullets=[m_pObjMng GetGroup:@"MustDie"];
+//
+//        int iCount=[pBullets count];
+//        for (int i=0;i<iCount;i++) {
+//            
+//            GObject *pObt=(GObject *)[pBullets objectAtIndex:0];
+//            
+//            SET_STAGE_EX(NAME(pObt),@"Proc",@"Move");
+//            [m_pObjMng RemoveFromGroup:@"MustDie" Object:pObt];
+//        }
+//    }
+//    else
+//    {
+//        SET_STAGE_EX(NAME(self),@"TimeDie",@"TimerDie");
+//        if(pObject!=nil)[m_pObjMng AddToGroup:@"MustDie" Object:pObject];
+//    }
 }
+//------------------------------------------------------------------------------------------------------
+- (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
 @end

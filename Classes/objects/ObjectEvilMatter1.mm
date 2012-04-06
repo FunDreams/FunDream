@@ -37,8 +37,8 @@
     
     Processor_ex* pProc = [self START_QUEUE:@"Proc"];
 
-        ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-        
+    ASSIGN_STAGE(@"Proc",@"Proc:",SET_INT_V(1000,@"TimeRndDelay"));
+
         ASSIGN_STAGE(@"Move",@"AchiveLineFloat:",
                      LINK_FLOAT_V(m_fCurPosSlader,@"Instance"),
                      SET_FLOAT_V(1,@"finish_Instance"),
@@ -139,7 +139,7 @@ repeate:
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareBirth:(ProcStage_ex *)pStage{
-
+    
     float W=500;
 
     int iCountUp=100;
@@ -147,7 +147,7 @@ repeate:
     float StartPoint=-W/2;
 
     for(int i=0;i<iCountUp;i++){
-        CREATE_NEW_OBJECT(@"OB_MiniParticle", @"Up",
+        UNFROZE_OBJECT(@"OB_MiniParticle",
             SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
             SET_STRING_V(@"Down", @"m_pStrType"),
             SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,-40+(float)(RND%60-30),0),@"End_Vector"));
@@ -157,7 +157,7 @@ repeate:
     Step=W/iCountDown;
     
     for(int i=0;i<iCountDown;i++){
-        CREATE_NEW_OBJECT(@"OB_MiniParticle", @"Down",
+        UNFROZE_OBJECT(@"OB_MiniParticle",
             SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
             SET_STRING_V(@"Up", @"m_pStrType"),
             SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,40+(float)(RND%60-30),0),@"End_Vector"));

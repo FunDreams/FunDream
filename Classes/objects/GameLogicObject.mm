@@ -47,7 +47,7 @@
                       SET_STRING_V(@"First", @"m_strStartStage"),
 					  SET_INT_V(layerNumber,@"m_iLayer"));
     
-    //interface======================================================================
+//interface======================================================================
 	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
 					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
 					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
@@ -57,7 +57,48 @@
                       SET_STRING_V(@"StartGame",@"m_strNameStage"),
                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
-    //===============================================================================
+//===============================================================================
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
+                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Down_Bullet.png",@"m_pNameTexture"));
+    
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesUp",
+                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
+    
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesMini",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
+    
+    for (int k=0; k<300; k++) {	
+		NSString *NameOb= [[[NSString alloc] initWithFormat:@"MinPar%d",k] autorelease];
+		RESERV_NEW_OBJECT(@"OB_MiniParticle",NameOb,nil);
+	}
+    
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesPensil",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
+
+    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesShapes",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
+//===============================================================================
+
 	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
     
@@ -68,10 +109,10 @@
     //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
     //	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
     
-    for (int k=0; k<40; k++) {	
-		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectPSimple%d",k] autorelease];
-		RESERV_NEW_OBJECT(@"ObjectPSimple",NameOb,nil);
-	}
+//    for (int k=0; k<40; k++) {	
+//		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectPSimple%d",k] autorelease];
+//		RESERV_NEW_OBJECT(@"ObjectPSimple",NameOb,nil);
+//	}
     
     PLAY_SOUND(@"papper.wav");
 }
