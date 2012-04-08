@@ -138,7 +138,7 @@
 //    }
 
     GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
-                      SET_VECTOR_V(Vector3DMake(Point.x,Point.y+70,0),@"m_pCurPosition"));
+                      SET_VECTOR_V(Vector3DMake(Point.x,Point.y+110,0),@"m_pCurPosition"));
     
     [m_pChildrenbjectsArr addObject:pOb];
 
@@ -156,11 +156,11 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    float fDist=(Point.x-m_vLastPos.x)*(Point.x-m_vLastPos.x)+(Point.y+70-m_vLastPos.y)*(Point.y+70-m_vLastPos.y);
+    float fDist=(Point.x-m_vLastPos.x)*(Point.x-m_vLastPos.x)+(Point.y+110-m_vLastPos.y)*(Point.y+110-m_vLastPos.y);
     
     if(sqrt(fDist)>40){
         GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
-                          SET_VECTOR_V(Vector3DMake(Point.x,Point.y+70,0),@"m_pCurPosition"));
+                          SET_VECTOR_V(Vector3DMake(Point.x,Point.y+110,0),@"m_pCurPosition"));
         m_vLastPos=pOb->m_pCurPosition;
         
         [m_pChildrenbjectsArr addObject:pOb];
@@ -214,6 +214,17 @@
 //        SET_STAGE_EX(NAME(self),@"TimeDie",@"TimerDie");
 //        if(pObject!=nil)[m_pObjMng AddToGroup:@"MustDie" Object:pObject];
 //    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    int iCount=[m_pChildrenbjectsArr count];
+    for (int i=0; i<iCount; i++) {
+        GObject *pOb=[m_pChildrenbjectsArr objectAtIndex:i];
+        NEXT_STAGE_EX(pOb->m_strName, @"Proc");
+    }
+    
+    [m_pChildrenbjectsArr removeAllObjects];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

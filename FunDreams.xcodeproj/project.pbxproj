@@ -20,10 +20,12 @@
 		1852D3D513D18B2C00180809 /* texture in Resources */ = {isa = PBXBuildFile; fileRef = 1852D3D413D18B2B00180809 /* texture */; };
 		1852D3D813D1F29500180809 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 1852D3D613D1F29500180809 /* sounds */; };
 		1859FF791295BEEB00898BFE /* GameLogicObject.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1859FF781295BEEB00898BFE /* GameLogicObject.mm */; };
+		185FBA5D152F1EE200DB25C7 /* miniHelp in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5C152F1EE200DB25C7 /* miniHelp */; };
+		185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */; };
+		185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */; };
 		186E0CAD14DAAA6F008B4290 /* texturePVR in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CAC14DAAA6E008B4290 /* texturePVR */; };
 		186E0CAF14DBA80C008B4290 /* Help in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CAE14DBA80C008B4290 /* Help */; };
 		186E0CC314E04BD1008B4290 /* PVRTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 186E0CC214E04BD0008B4290 /* PVRTexture.m */; };
-		186E0CF514E169FB008B4290 /* icon.png in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CF414E169FB008B4290 /* icon.png */; };
 		186E0CF714E1994E008B4290 /* textureAtlas in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CF614E1994E008B4290 /* textureAtlas */; };
 		1878951F149FA4B900F9EE57 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1878951E149FA4B900F9EE57 /* Default@2x.png */; };
 		18789520149FA4DB00F9EE57 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */; };
@@ -43,12 +45,6 @@
 		189015FA129175060027418F /* ObjectManager_Ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 189015E8129175060027418F /* ObjectManager_Ex.mm */; };
 		189015FC129175060027418F /* MainController.m in Sources */ = {isa = PBXBuildFile; fileRef = 189015EC129175060027418F /* MainController.m */; };
 		1890161C129178860027418F /* Object.m in Sources */ = {isa = PBXBuildFile; fileRef = 18901615129178860027418F /* Object.m */; };
-		189268F7140B196800AFE0DD /* mainController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268F4140B196800AFE0DD /* mainController.xib */; };
-		189268F8140B196800AFE0DD /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268F5140B196800AFE0DD /* MainWindow.xib */; };
-		189268F9140B196800AFE0DD /* PreviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268F6140B196800AFE0DD /* PreviewController.xib */; };
-		189268FD140B197800AFE0DD /* mainController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268FA140B197800AFE0DD /* mainController-ipad.xib */; };
-		189268FE140B197800AFE0DD /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268FB140B197800AFE0DD /* MainWindow-iPad.xib */; };
-		189268FF140B197800AFE0DD /* PreviewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 189268FC140B197800AFE0DD /* PreviewController-ipad.xib */; };
 		189EB338125B052200262E27 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 189EB337125B052200262E27 /* StoreKit.framework */; };
 		18A5E3FB140D27AD005F14ED /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18A5E3FA140D27AD005F14ED /* Foundation.framework */; };
 		18B60EA1152CCFC800E98973 /* Ob_PensilPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18B60E9E152CCFC800E98973 /* Ob_PensilPar.mm */; };
@@ -62,6 +58,12 @@
 		18B6657314778FEF0039E5C7 /* 512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6657114778FEF0039E5C7 /* 512x512.png */; };
 		18D79553127B29C800BD5445 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D79552127B29C800BD5445 /* GLView.m */; };
 		18D79587127B2A4700BD5445 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D79586127B2A4700BD5445 /* OpenGLES.framework */; };
+		18D9810D152F438C00C9F37A /* mainController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D98106152F438C00C9F37A /* mainController-ipad.xib */; };
+		18D9810E152F438C00C9F37A /* MainWindow-iPad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D98107152F438C00C9F37A /* MainWindow-iPad.xib */; };
+		18D9810F152F438C00C9F37A /* PreviewController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D98108152F438C00C9F37A /* PreviewController-ipad.xib */; };
+		18D98110152F438D00C9F37A /* mainController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D9810A152F438C00C9F37A /* mainController.xib */; };
+		18D98111152F438D00C9F37A /* MainWindow.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D9810B152F438C00C9F37A /* MainWindow.xib */; };
+		18D98112152F438D00C9F37A /* PreviewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D9810C152F438C00C9F37A /* PreviewController.xib */; };
 		18E54D6D14E5560700E7BC2F /* ObjectCup.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D6B14E5560600E7BC2F /* ObjectCup.mm */; };
 		18E54D7014E585D100E7BC2F /* ObjectParticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D6F14E585CE00E7BC2F /* ObjectParticle.mm */; };
 		18E54D7314E6D8F600E7BC2F /* ObjectEvilMatter1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D7214E6D8F300E7BC2F /* ObjectEvilMatter1.mm */; };
@@ -111,13 +113,15 @@
 		1852D3D413D18B2B00180809 /* texture */ = {isa = PBXFileReference; lastKnownFileType = folder; path = texture; sourceTree = SOURCE_ROOT; };
 		1852D3D613D1F29500180809 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = SOURCE_ROOT; };
 		1859FF781295BEEB00898BFE /* GameLogicObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = GameLogicObject.mm; path = objects/GameLogicObject.mm; sourceTree = "<group>"; };
+		185FBA5C152F1EE200DB25C7 /* miniHelp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = miniHelp; sourceTree = "<group>"; };
+		185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "../Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
+		185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "../Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		186E0CAC14DAAA6E008B4290 /* texturePVR */ = {isa = PBXFileReference; lastKnownFileType = folder; path = texturePVR; sourceTree = SOURCE_ROOT; };
 		186E0CAE14DBA80C008B4290 /* Help */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Help; sourceTree = "<group>"; };
 		186E0CC114E04BD0008B4290 /* PVRTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTexture.h; sourceTree = "<group>"; };
 		186E0CC214E04BD0008B4290 /* PVRTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVRTexture.m; sourceTree = "<group>"; };
-		186E0CF414E169FB008B4290 /* icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon.png; sourceTree = "<group>"; };
 		186E0CF614E1994E008B4290 /* textureAtlas */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textureAtlas; sourceTree = SOURCE_ROOT; };
-		1878951E149FA4B900F9EE57 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		1878951E149FA4B900F9EE57 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
 		187D25CD13E5ABF600C82DBB /* Processor_ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor_ex.h; sourceTree = "<group>"; };
 		187D25CE13E5ABF600C82DBB /* Processor_ex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Processor_ex.mm; sourceTree = "<group>"; };
 		187E228D1165E9CB00EA912F /* SoundEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundEngine.cpp; sourceTree = "<group>"; };
@@ -149,12 +153,6 @@
 		18901614129178860027418F /* Object.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Object.h; path = objects/Object.h; sourceTree = "<group>"; };
 		18901615129178860027418F /* Object.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; lineEnding = 0; name = Object.m; path = objects/Object.m; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objc; };
 		1890164312917AE10027418F /* GameLogicObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = GameLogicObject.h; path = objects/GameLogicObject.h; sourceTree = "<group>"; };
-		189268F4140B196800AFE0DD /* mainController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = mainController.xib; path = resources/SeaFight/forms/mainController.xib; sourceTree = SOURCE_ROOT; };
-		189268F5140B196800AFE0DD /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = MainWindow.xib; path = resources/SeaFight/forms/MainWindow.xib; sourceTree = SOURCE_ROOT; };
-		189268F6140B196800AFE0DD /* PreviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = PreviewController.xib; path = resources/SeaFight/forms/PreviewController.xib; sourceTree = SOURCE_ROOT; };
-		189268FA140B197800AFE0DD /* mainController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "mainController-ipad.xib"; path = "resources/SeaFight/Resources-iPad/mainController-ipad.xib"; sourceTree = SOURCE_ROOT; };
-		189268FB140B197800AFE0DD /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "MainWindow-iPad.xib"; path = "resources/SeaFight/Resources-iPad/MainWindow-iPad.xib"; sourceTree = SOURCE_ROOT; };
-		189268FC140B197800AFE0DD /* PreviewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; name = "PreviewController-ipad.xib"; path = "resources/SeaFight/Resources-iPad/PreviewController-ipad.xib"; sourceTree = SOURCE_ROOT; };
 		189EB337125B052200262E27 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		18A5E3FA140D27AD005F14ED /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		18B60E9D152CCFC800E98973 /* Ob_PensilPar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_PensilPar.h; path = objects/Ob_PensilPar.h; sourceTree = "<group>"; };
@@ -165,16 +163,22 @@
 		18B60EA4152CCFDD00E98973 /* Obj_FormPar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Obj_FormPar.mm; path = objects/Obj_FormPar.mm; sourceTree = "<group>"; };
 		18B60EAC152D5A4A00E98973 /* CGroups.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CGroups.h; sourceTree = "<group>"; };
 		18B60EAD152D5A4A00E98973 /* CGroups.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CGroups.m; sourceTree = "<group>"; };
-		18B6656A14778F3E0039E5C7 /* 57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 57x57.png; sourceTree = "<group>"; };
-		18B6656C14778F430039E5C7 /* 114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 114x114.png; sourceTree = "<group>"; };
-		18B6656E14778F4C0039E5C7 /* 72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 72x72.png; sourceTree = "<group>"; };
-		18B6657014778FEF0039E5C7 /* 29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 29x29.png; sourceTree = "<group>"; };
-		18B6657114778FEF0039E5C7 /* 512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 512x512.png; sourceTree = "<group>"; };
+		18B6656A14778F3E0039E5C7 /* 57x57.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 57x57.png; path = ../../../../57x57.png; sourceTree = "<group>"; };
+		18B6656C14778F430039E5C7 /* 114x114.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 114x114.png; path = ../../../../114x114.png; sourceTree = "<group>"; };
+		18B6656E14778F4C0039E5C7 /* 72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 72x72.png; path = ../../../../72x72.png; sourceTree = "<group>"; };
+		18B6657014778FEF0039E5C7 /* 29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 29x29.png; path = ../../../../29x29.png; sourceTree = "<group>"; };
+		18B6657114778FEF0039E5C7 /* 512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 512x512.png; path = ../../../../512x512.png; sourceTree = "<group>"; };
 		18D79551127B29C800BD5445 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		18D79552127B29C800BD5445 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		18D79556127B29E600BD5445 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ConstantsAndMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18D79559127B2A0000BD5445 /* OpenGLCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = OpenGLCommon.h; sourceTree = "<group>"; };
 		18D79586127B2A4700BD5445 /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
+		18D98106152F438C00C9F37A /* mainController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "mainController-ipad.xib"; sourceTree = "<group>"; };
+		18D98107152F438C00C9F37A /* MainWindow-iPad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "MainWindow-iPad.xib"; sourceTree = "<group>"; };
+		18D98108152F438C00C9F37A /* PreviewController-ipad.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = "PreviewController-ipad.xib"; sourceTree = "<group>"; };
+		18D9810A152F438C00C9F37A /* mainController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainController.xib; sourceTree = "<group>"; };
+		18D9810B152F438C00C9F37A /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
+		18D9810C152F438C00C9F37A /* PreviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreviewController.xib; sourceTree = "<group>"; };
 		18E54D6B14E5560600E7BC2F /* ObjectCup.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectCup.mm; path = objects/ObjectCup.mm; sourceTree = "<group>"; };
 		18E54D6C14E5560600E7BC2F /* ObjectCup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectCup.h; path = objects/ObjectCup.h; sourceTree = "<group>"; };
 		18E54D6E14E585CC00E7BC2F /* ObjectParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectParticle.h; path = objects/ObjectParticle.h; sourceTree = "<group>"; };
@@ -199,9 +203,9 @@
 		18F86B2F129975A20068A469 /* ObjectTemplet.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectTemplet.mm; path = objects/ObjectTemplet.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18F86DE4129A9A4E0068A469 /* StaticObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = StaticObject.h; path = objects/StaticObject.h; sourceTree = "<group>"; };
 		18F86DE5129A9A4E0068A469 /* StaticObject.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = StaticObject.mm; path = objects/StaticObject.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
-		18FCA0D8149F943600C011F8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
-		18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Portrait~ipad.png"; sourceTree = "<group>"; };
-		18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-Landscape~ipad.png"; sourceTree = "<group>"; };
+		18FCA0D8149F943600C011F8 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Default.png; path = ../Default.png; sourceTree = "<group>"; };
+		18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait~ipad.png"; path = "../Default-Portrait~ipad.png"; sourceTree = "<group>"; };
+		18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape~ipad.png"; path = "../Default-Landscape~ipad.png"; sourceTree = "<group>"; };
 		18FF880F14EB9ED500B7412D /* OB_MiniParticle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OB_MiniParticle.h; path = objects/OB_MiniParticle.h; sourceTree = "<group>"; };
 		18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OB_MiniParticle.mm; path = objects/OB_MiniParticle.mm; sourceTree = "<group>"; };
 		18FFC80D121597520092C8F5 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -282,28 +286,6 @@
 			path = Classes;
 			sourceTree = "<group>";
 		};
-		1808F33112D9F82C00522EED /* forms */ = {
-			isa = PBXGroup;
-			children = (
-				189268F4140B196800AFE0DD /* mainController.xib */,
-				189268F5140B196800AFE0DD /* MainWindow.xib */,
-				189268F6140B196800AFE0DD /* PreviewController.xib */,
-			);
-			name = forms;
-			path = resources/funDreams1/forms;
-			sourceTree = "<group>";
-		};
-		1808F33B12D9F85700522EED /* Resources-iPad */ = {
-			isa = PBXGroup;
-			children = (
-				189268FA140B197800AFE0DD /* mainController-ipad.xib */,
-				189268FB140B197800AFE0DD /* MainWindow-iPad.xib */,
-				189268FC140B197800AFE0DD /* PreviewController-ipad.xib */,
-			);
-			name = "Resources-iPad";
-			path = "resources/funDreams1/Resources-iPad";
-			sourceTree = "<group>";
-		};
 		1808F34E12D9F94000522EED /* Art */ = {
 			isa = PBXGroup;
 			children = (
@@ -322,6 +304,11 @@
 		1808F36212D9F94100522EED /* icons */ = {
 			isa = PBXGroup;
 			children = (
+				18B6657014778FEF0039E5C7 /* 29x29.png */,
+				18B6657114778FEF0039E5C7 /* 512x512.png */,
+				18B6656E14778F4C0039E5C7 /* 72x72.png */,
+				18B6656C14778F430039E5C7 /* 114x114.png */,
+				18B6656A14778F3E0039E5C7 /* 57x57.png */,
 			);
 			path = icons;
 			sourceTree = "<group>";
@@ -329,6 +316,12 @@
 		182C1499140CB32C00D6E732 /* Splash */ = {
 			isa = PBXGroup;
 			children = (
+				18FCA0D8149F943600C011F8 /* Default.png */,
+				1878951E149FA4B900F9EE57 /* Default@2x.png */,
+				18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */,
+				185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */,
+				18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */,
+				185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */,
 			);
 			path = Splash;
 			sourceTree = SOURCE_ROOT;
@@ -352,6 +345,28 @@
 				189015711291684E0027418F /* readme.txt */,
 			);
 			path = MKStoreKit;
+			sourceTree = "<group>";
+		};
+		18D98105152F438C00C9F37A /* forms-iPad */ = {
+			isa = PBXGroup;
+			children = (
+				18D98106152F438C00C9F37A /* mainController-ipad.xib */,
+				18D98107152F438C00C9F37A /* MainWindow-iPad.xib */,
+				18D98108152F438C00C9F37A /* PreviewController-ipad.xib */,
+			);
+			name = "forms-iPad";
+			path = "resources/forms-iPad";
+			sourceTree = "<group>";
+		};
+		18D98109152F438C00C9F37A /* forms-iPhone */ = {
+			isa = PBXGroup;
+			children = (
+				18D9810A152F438C00C9F37A /* mainController.xib */,
+				18D9810B152F438C00C9F37A /* MainWindow.xib */,
+				18D9810C152F438C00C9F37A /* PreviewController.xib */,
+			);
+			name = "forms-iPhone";
+			path = "resources/forms-iPhone";
 			sourceTree = "<group>";
 		};
 		18E9F5971255DD1600423916 /* objects */ = {
@@ -429,17 +444,8 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				186E0CF414E169FB008B4290 /* icon.png */,
+				185FBA5C152F1EE200DB25C7 /* miniHelp */,
 				186E0CAE14DBA80C008B4290 /* Help */,
-				1878951E149FA4B900F9EE57 /* Default@2x.png */,
-				18FCA0DC149F951C00C011F8 /* Default-Landscape~ipad.png */,
-				18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */,
-				18FCA0D8149F943600C011F8 /* Default.png */,
-				18B6657014778FEF0039E5C7 /* 29x29.png */,
-				18B6657114778FEF0039E5C7 /* 512x512.png */,
-				18B6656E14778F4C0039E5C7 /* 72x72.png */,
-				18B6656C14778F430039E5C7 /* 114x114.png */,
-				18B6656A14778F3E0039E5C7 /* 57x57.png */,
 				1890156C1291684E0027418F /* MKStoreKit */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				187E228C1165E9CB00EA912F /* AudioSupport */,
@@ -465,9 +471,9 @@
 			isa = PBXGroup;
 			children = (
 				1808F62012DA0ECD00522EED /* FunDreams-Info.plist */,
+				18D98105152F438C00C9F37A /* forms-iPad */,
+				18D98109152F438C00C9F37A /* forms-iPhone */,
 				1808F34E12D9F94000522EED /* Art */,
-				1808F33B12D9F85700522EED /* Resources-iPad */,
-				1808F33112D9F82C00522EED /* forms */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -521,7 +527,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0420;
+				LastUpgradeCheck = 0430;
 				ORGANIZATIONNAME = FunDreams;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FunDreams" */;
@@ -552,12 +558,6 @@
 			files = (
 				1852D3D513D18B2C00180809 /* texture in Resources */,
 				1852D3D813D1F29500180809 /* sounds in Resources */,
-				189268F7140B196800AFE0DD /* mainController.xib in Resources */,
-				189268F8140B196800AFE0DD /* MainWindow.xib in Resources */,
-				189268F9140B196800AFE0DD /* PreviewController.xib in Resources */,
-				189268FD140B197800AFE0DD /* mainController-ipad.xib in Resources */,
-				189268FE140B197800AFE0DD /* MainWindow-iPad.xib in Resources */,
-				189268FF140B197800AFE0DD /* PreviewController-ipad.xib in Resources */,
 				1851808F1421C200009C879E /* sounds_loop in Resources */,
 				18B6656B14778F3E0039E5C7 /* 57x57.png in Resources */,
 				18B6656D14778F430039E5C7 /* 114x114.png in Resources */,
@@ -570,8 +570,16 @@
 				18789520149FA4DB00F9EE57 /* Default-Portrait~ipad.png in Resources */,
 				186E0CAD14DAAA6F008B4290 /* texturePVR in Resources */,
 				186E0CAF14DBA80C008B4290 /* Help in Resources */,
-				186E0CF514E169FB008B4290 /* icon.png in Resources */,
 				186E0CF714E1994E008B4290 /* textureAtlas in Resources */,
+				185FBA5D152F1EE200DB25C7 /* miniHelp in Resources */,
+				185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */,
+				185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */,
+				18D9810D152F438C00C9F37A /* mainController-ipad.xib in Resources */,
+				18D9810E152F438C00C9F37A /* MainWindow-iPad.xib in Resources */,
+				18D9810F152F438C00C9F37A /* PreviewController-ipad.xib in Resources */,
+				18D98110152F438D00C9F37A /* mainController.xib in Resources */,
+				18D98111152F438D00C9F37A /* MainWindow.xib in Resources */,
+				18D98112152F438D00C9F37A /* PreviewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

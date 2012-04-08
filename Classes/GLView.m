@@ -143,7 +143,7 @@
 // Updates the OpenGL view when the timer fires
 - (void)drawView
 {
-//    if(controller->m_bPause==NO){
+    if(controller->m_bPause==NO){
     
         [controller.m_pObjMng UpdateObjects];
 
@@ -160,7 +160,7 @@
         GLenum err = glGetError();
         if(err)
             NSLog(@"%x error", err);
- //   }
+    }
 }
 
 // Stop animating and release resources when they are no longer needed.

@@ -93,7 +93,7 @@
         [pArray addObject:TmpOb];
         
         [Dic removeObjectForKey:TmpOb->m_strName];
-        [m_pAllObjects removeObjectForKey:TmpOb->m_strName];
+ //       [m_pAllObjects removeObjectForKey:TmpOb->m_strName];
         
         [self RemoveFromGroups:TmpOb];
 	}
@@ -204,7 +204,7 @@
     glEnableClientState(GL_TEXTURE_COORD_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
     
-	int CountLayer2=[pLayers count];
+	int CountLayer=[pLayers count];
     
     if(fCurrentAngleRotateOffset!=fAngleRotateOffset){
         
@@ -235,40 +235,20 @@
         }
     }
     
-   if(m_pParent->previousOrientation==UIInterfaceOrientationLandscapeRight || 
-            m_pParent->previousOrientation==UIInterfaceOrientationLandscapeLeft)
-   {
-            for (int i=0; i<CountLayer2; i++) {
-               
-               Dictionary_Ex *pDic_Ex=[pLayers objectAtIndex:i];
-               NSEnumerator *pEnumerator=[pDic_Ex->pDic objectEnumerator];
-               
-               GObject *pObject;
-               
-               while ((pObject = [pEnumerator nextObject])) {
-                   
-                   glLoadIdentity();
-                   glRotatef(fCurrentAngleRotateOffset, 0, 0, 1);
+    for (int i=0; i<CountLayer; i++) {
+       
+       Dictionary_Ex *pDic_Ex=[pLayers objectAtIndex:i];
+       NSEnumerator *pEnumerator=[pDic_Ex->pDic objectEnumerator];
+       
+       GObject *pObject;
+       
+       while ((pObject = [pEnumerator nextObject])) {
+           
+           glLoadIdentity();
+           glRotatef(fCurrentAngleRotateOffset, 0, 0, 1);
 
-                   [pObject performSelector:pObject->m_sDraw];
-               }
-            }
-    }
-    else
-    {
-        for (int i=0; i<CountLayer2; i++) {
-            
-            Dictionary_Ex *pDic_Ex=[pLayers objectAtIndex:i];
-            NSEnumerator *pEnumerator=[pDic_Ex->pDic objectEnumerator];
-            
-            GObject *pObject;
-            
-            while ((pObject = [pEnumerator nextObject])) {
-                
-                glLoadIdentity();
-                [pObject performSelector:pObject->m_sDraw];
-            }
-        }
+           [pObject performSelector:pObject->m_sDraw];
+       }
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -351,6 +331,8 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (id)UnfrozeObject:(NSString *)NameClass WithParams:(NSArray *)Parametrs
 {
+    GObject *pObject = nil;
+
     NSString *pNameObject=[self GetNameObject:NameClass];
 	Class cls = NSClassFromString(NameClass);
 	if (cls != nil)
@@ -362,39 +344,41 @@ repeate:
 			[m_pObjectReserv setObject:pArray forKey:NameClass];
 		}
 
-        GObject *pObject = nil;
         if ([pArray count]>0)
         {
             pObject = [pArray objectAtIndex:0];            
             [pArray removeObjectAtIndex:0];
+            
+            pObject->m_bDeleted=NO;
+            
+            [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
+            [pObject SetDefault];        
+            [self SetParams:pObject WithParams:Parametrs];
+            
+            if (pObject->m_pOwner!=nil)
+                pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
+            
+            [pMusAddKeys addObject:pObject];
+            
+            [pObject Start];
+            
+            if(pObject->m_bHiden==NO)
+                [pObject AddToDraw];        
         }
-        else pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
-        
-        pObject->m_bDeleted=NO;
-        
-        [pObject SetDefault];        
-        [self SetParams:pObject WithParams:Parametrs];
-        
-        if (pObject->m_pOwner!=nil)
-            pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
-        
-        [pMusAddKeys addObject:pObject];
-        [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
-        
-        [pObject Start];
-        
-        if(pObject->m_bHiden==NO)
-            [pObject AddToDraw];        
-        
-        return pObject;
+        else
+        {
+            pObject = [self CreateNewObject:NameClass 
+                             WithNameObject:pNameObject WithParams:Parametrs];
+        }        
 	}
 	
-    return nil;
+    return pObject;
 }
 //------------------------------------------------------------------------------------------------------
 - (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp
            WithParams:(NSArray *)Parametrs
 {
+    GObject *pObject=nil;
     NSString *pNameObject=[self GetNameObject:NameObjectTmp];
 	Class cls = NSClassFromString(NameClass);
 	if (cls != nil)
@@ -406,7 +390,7 @@ repeate:
 			[m_pObjectReserv setObject:pArray forKey:NameClass];
 		}
 
-        GObject *pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
+        pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
         [pObject LinkValues];
 
 		if (m_bReserv)
@@ -421,6 +405,7 @@ repeate:
             pObject->m_bDeleted=NO;
         }
 
+        [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
         [pObject SetDefault];
         [self SetParams:pObject WithParams:Parametrs];
         
@@ -428,17 +413,14 @@ repeate:
             pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
 
         [pMusAddKeys addObject:pObject];
-        [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
         
         [pObject Start];
         
         if(pObject->m_bHiden==NO)
             [pObject AddToDraw];        
-        
-        return pObject;
 	}
 	
-    return nil;
+    return pObject;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs{

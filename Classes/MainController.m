@@ -137,22 +137,24 @@
 	[[UIAccelerometer sharedAccelerometer] setUpdateInterval:(1.0 / kAccelerometerFrequency)];
 	[[UIAccelerometer sharedAccelerometer] setDelegate:self];	
 
-	if(previousOrientation==UIInterfaceOrientationLandscapeLeft || previousOrientation==UIInterfaceOrientationLandscapeRight)
-	{
-		[[NSNotificationCenter defaultCenter] addObserver:self
-												 selector:@selector(didRotate)
-													 name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                    selector:@selector(didRotate)
+                                    name:@"UIDeviceOrientationDidChangeNotification" object:nil];
         
-        if(previousOrientation==UIInterfaceOrientationLandscapeRight){
-            m_pObjMng->fAngleRotateOffset=-90;
-            m_pObjMng->fCurrentAngleRotateOffset=-90;
-        }
+    if(previousOrientation==UIInterfaceOrientationLandscapeRight){
+        m_pObjMng->fAngleRotateOffset=-90;
+        m_pObjMng->fCurrentAngleRotateOffset=-90;
+    }
 
-        if(previousOrientation==UIInterfaceOrientationLandscapeLeft){
-            m_pObjMng->fAngleRotateOffset=90;
-            m_pObjMng->fCurrentAngleRotateOffset=90;
-        }
-	}
+    if(previousOrientation==UIInterfaceOrientationLandscapeLeft){
+        m_pObjMng->fAngleRotateOffset=90;
+        m_pObjMng->fCurrentAngleRotateOffset=90;
+    }
+    
+    if(previousOrientation==UIInterfaceOrientationPortraitUpsideDown){
+        m_pObjMng->fAngleRotateOffset=180;
+        m_pObjMng->fCurrentAngleRotateOffset=180;
+    }
 }
 
 -(void) createGLView
@@ -257,17 +259,33 @@ FullName:(NSString *)FullNameSound
 	
 	UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 		
-	if(previousOrientation==UIInterfaceOrientationLandscapeLeft && orientation==UIInterfaceOrientationLandscapeRight){
+	if(previousOrientation==UIInterfaceOrientationLandscapeLeft &&
+       orientation==UIInterfaceOrientationLandscapeRight){
 		
         m_pObjMng->fAngleRotateOffset=-90;
 		previousOrientation=UIInterfaceOrientationLandscapeRight;
 	}
 	
-	if(previousOrientation==UIInterfaceOrientationLandscapeRight && orientation==UIInterfaceOrientationLandscapeLeft){
+	if(previousOrientation==UIInterfaceOrientationLandscapeRight &&
+       orientation==UIInterfaceOrientationLandscapeLeft){
 		
         m_pObjMng->fAngleRotateOffset=90;
 		previousOrientation=UIInterfaceOrientationLandscapeLeft;
 	}
+    
+    if(previousOrientation==UIInterfaceOrientationPortrait &&
+       orientation==UIInterfaceOrientationPortraitUpsideDown){
+        
+        m_pObjMng->fAngleRotateOffset=180;
+		previousOrientation=UIInterfaceOrientationPortraitUpsideDown;
+    }
+    
+    if(previousOrientation==UIInterfaceOrientationPortraitUpsideDown &&
+       orientation==UIInterfaceOrientationPortrait){
+        
+        m_pObjMng->fAngleRotateOffset=0;
+		previousOrientation=UIInterfaceOrientationPortrait;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)didReceiveMemoryWarning {[super didReceiveMemoryWarning];}
@@ -388,23 +406,31 @@ FullName:(NSString *)FullNameSound
 	CGPoint tmpPointDif;
 	CGRect rect = self.view.bounds; 
 	
-	if (previousOrientation==UIInterfaceOrientationLandscapeLeft) {
+//    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
+
+	if (previousOrientation==UIInterfaceOrientationLandscapeRight) {
 		
 		tmpPointDif.x=(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
 		tmpPointDif.y=0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width);
 	}
-	else if (previousOrientation==UIInterfaceOrientationLandscapeRight) {
+	else if (previousOrientation==UIInterfaceOrientationLandscapeLeft) {
 		
 		tmpPointDif.x=-(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
 		tmpPointDif.y=-(0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width));
 	}
-	else{
+	else if (previousOrientation==UIInterfaceOrientationPortrait) {
+        
+        tmpPointDif.x=(InterPoint.x*VIEWPORT_W/rect.size.width-0.5f*VIEWPORT_W);
+		tmpPointDif.y=0.5*VIEWPORT_H-(InterPoint.y*VIEWPORT_H/rect.size.height)-10;
+    }
+    else if (previousOrientation==UIInterfaceOrientationPortraitUpsideDown) {
 		
-		tmpPointDif.x=(InterPoint.x*VIEWPORT_W/rect.size.width-0.5f*VIEWPORT_W);
-		tmpPointDif.y=0.5*VIEWPORT_H-(InterPoint.y*VIEWPORT_H/rect.size.height);
+		tmpPointDif.x=0.5f*VIEWPORT_W-InterPoint.x*VIEWPORT_W/rect.size.width;
+		tmpPointDif.y=-0.5f*VIEWPORT_H+InterPoint.y*VIEWPORT_H/rect.size.height+10;
 	}
 	
-	*pPoint = tmpPointDif;
+	pPoint->x = tmpPointDif.x;
+	pPoint->y = tmpPointDif.y;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
