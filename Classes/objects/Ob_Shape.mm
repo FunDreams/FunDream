@@ -43,8 +43,8 @@
 	[super Start];
     
     for (int i=0; i<10; i++) {
-        CREATE_NEW_OBJECT(@"Obj_FormPar",@"ParticleForm",
-        SET_VECTOR_V(Vector3DMake(m_pCurPosition.x+RND%30,m_pCurPosition.y+RND%30,0),@"m_pCurPosition"));
+        UNFROZE_OBJECT(@"Obj_FormPar",
+        SET_VECTOR_V(Vector3DMake(RND_I_F(m_pCurPosition.x,5),RND_I_F(m_pCurPosition.y,5),0),@"m_pCurPosition"));
     }
 }
 //------------------------------------------------------------------------------------------------------

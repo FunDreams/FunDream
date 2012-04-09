@@ -35,7 +35,7 @@
     Processor_ex* pProc = [self START_QUEUE:@"Proc"];
         ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
         ASSIGN_STAGE(@"PROC",@"Proc:",nil);
-    ASSIGN_STAGE(@"HIDEN",@"Hiden:",SET_INT_V(500,@"TimeBaseDelay"));
+        ASSIGN_STAGE(@"HIDEN",@"Hiden:",SET_INT_V(500,@"TimeBaseDelay"));
     [self END_QUEUE:pProc name:@"Proc"];
     
 //======различные параметры=============================================================================
@@ -56,6 +56,7 @@
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
     m_fVelMove=50;
+    SET_STAGE_EX(NAME(self),@"Proc",@"IDLE");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}

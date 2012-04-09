@@ -137,7 +137,7 @@
 //        pOb=nil;
 //    }
 
-    GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
+    GObject *pOb=UNFROZE_OBJECT(@"Ob_PensilPar",
                       SET_VECTOR_V(Vector3DMake(Point.x,Point.y+110,0),@"m_pCurPosition"));
     
     [m_pChildrenbjectsArr addObject:pOb];
@@ -159,7 +159,7 @@
     float fDist=(Point.x-m_vLastPos.x)*(Point.x-m_vLastPos.x)+(Point.y+110-m_vLastPos.y)*(Point.y+110-m_vLastPos.y);
     
     if(sqrt(fDist)>40){
-        GObject *pOb=CREATE_NEW_OBJECT(@"Ob_PensilPar", @"Pensil",
+        GObject *pOb=UNFROZE_OBJECT(@"Ob_PensilPar",
                           SET_VECTOR_V(Vector3DMake(Point.x,Point.y+110,0),@"m_pCurPosition"));
         m_vLastPos=pOb->m_pCurPosition;
         
