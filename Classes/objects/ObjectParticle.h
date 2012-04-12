@@ -15,6 +15,7 @@
 @public
     Vector3D *m_vPos;
     Vector3D *m_vScale;
+    Vector3D *m_vCurOffsetPos;
     float *m_fAngle;
     
     Color3D *m_cColor;
@@ -47,6 +48,7 @@
 -(void)UpdateParticle;
 
 -(void)UpdateParticleMatr;
+-(void)UpdateParticleMatrWihtOffset;
 
 -(void)UpdateParticleTex;
 -(void)UpdateParticleTex4Vertex;

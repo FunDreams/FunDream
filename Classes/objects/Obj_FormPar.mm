@@ -49,8 +49,7 @@
 
 	[super Start];
 
-    GET_TEXTURE(mTextureId, m_pNameTexture);
-
+    [self SetPosWithOffsetOwner];
     [pParticle SetFrame:0];
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
@@ -62,7 +61,11 @@
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{}
+- (void)Proc:(Processor_ex *)pProc{
+    
+    [self SetPosWithOffsetOwner];
+    [pParticle UpdateParticleMatr];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------

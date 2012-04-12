@@ -18,7 +18,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Int:(int *)parPoint withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType = [NSString stringWithString:@"i"];
@@ -37,7 +37,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Int:(int)Value withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"i"];
@@ -61,7 +61,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Float:(float *)parPoint withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"f"];
@@ -80,7 +80,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Float:(float)Value withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"f"];
@@ -104,7 +104,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Bool:(bool *)parPoint withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"b"];
@@ -123,7 +123,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Bool:(bool)Value withKey:(id)sKey,...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"b"];
@@ -147,7 +147,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Vector:(Vector3D *)parPoint withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"v"];
@@ -166,7 +166,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Vector:(Vector3D)Value withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"v"];
@@ -190,7 +190,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Color:(Color3D *)parPoint withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"c"];
@@ -209,7 +209,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Color:(Color3D)Value withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"c"];
@@ -233,7 +233,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Id:(id *)parPoint withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"id"];
@@ -253,7 +253,7 @@
 //------------------------------------------------------------------------------------------------------
 + (id) Link_String:(NSMutableString *)parPoint withKey:(id)sKey, ...
 {
-    UniCell* cell = [UniCell new];
+    UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
         cell->mpType=[NSString stringWithString:@"s"];

@@ -316,11 +316,13 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfOffsetVert:(Vertex3D)VOffset{
-	m_pOffsetVert=VOffset;
+    
+    Vertex3D TmpVector=Vector3DMake(VOffset.x-m_pOffsetVert.x,VOffset.y-m_pOffsetVert.y,0);
+    m_pOffsetVert=VOffset;
 	
 	for (int i=0; i<m_iCountVertex; i++) {
-		vertices[i].x+=VOffset.x;
-		vertices[i].y+=VOffset.y;
+		vertices[i].x+=TmpVector.x;
+		vertices[i].y+=TmpVector.y;
 	}
 }
 //------------------------------------------------------------------------------------------------------

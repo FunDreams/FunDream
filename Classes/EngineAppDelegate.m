@@ -43,7 +43,7 @@
 	
     [window makeKeyAndVisible];
 //--------------------------------------------------------------------------
-	m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f) target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
+//	m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f) target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
 
     m_flastTime = CFAbsoluteTimeGetCurrent();
 
@@ -102,7 +102,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application{
     
-    [m_pRootViewController.m_pMainController Pause:NO];
+    [m_pRootViewController.m_pMainController MegaPause:NO];
     
     m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f)
         target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];
@@ -111,7 +111,7 @@
 - (void)applicationWillResignActive:(UIApplication *)application{
     
     [m_pTimer invalidate];
-    [m_pRootViewController.m_pMainController Pause:YES];
+    [m_pRootViewController.m_pMainController MegaPause:YES];
     [m_pPrSettings Save];
 }
 

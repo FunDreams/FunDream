@@ -47,7 +47,8 @@
     bool m_bTouchGathe;
 
 	bool m_bMultiTouch;
-    bool m_bPause;
+    bool m_bPause;//пауза внутри игры
+    bool m_bMegaPause;//большая пауза, при положении прилоежения неактивным в IOs
 	SEL m_sPause;
 	SEL m_sNormal;
 	SEL m_SCurrentSel;
@@ -91,15 +92,15 @@
 	GLuint	texture[MAX_NUM_TEXTURE];
     UInt32 m_iCount;//индекс текстуры для загрузки
 }
-
-- (void)Pause:(bool)bPause;
-
 @property (nonatomic, retain) GLView *glView;
 @property (nonatomic, retain) RootViewController* m_pRootViewController;
 @property (nonatomic, retain) CObjectManager* m_pObjMng;
 @property (nonatomic, retain) CPrSettings* m_pPrSettings;
 @property (nonatomic) float m_fScacleController;
 @property (nonatomic) int m_CountTouch;
+
+- (void)Pause:(bool)bPause;
+- (void)MegaPause:(bool)bPause;
 
 //desc: самообработка для контроллера. в этой функции контроллер перебирает все объкты находящиеся в m_pObjectList
 //и вызывает функцию самообработки для каждого.

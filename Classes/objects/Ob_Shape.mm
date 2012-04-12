@@ -18,6 +18,7 @@
         m_iLayerTouch=layerTouch_0;//слой касания
         
         m_bHiden=YES;
+        iDiff=1;
     }
     
 	return self;
@@ -30,9 +31,13 @@
 //====//процессоры для объекта==========================================================================
     Processor_ex* pProc = [self START_QUEUE:@"Proc"];
   //      ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
-        ASSIGN_STAGE(@"PROC",@"Proc:",nil);
+        ASSIGN_STAGE(@"PROC1",@"Move1:",
+                     SET_INT_V(4000,@"TimeBaseDelay"));
+    
+        ASSIGN_STAGE(@"PROC2",@"Move2:",nil);
     [self END_QUEUE:pProc name:@"Proc"];
 //====//различные параметры=============================================================================
+    SET_CELL(LINK_INT_V(iDiff,m_strName,@"iDiff"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -41,23 +46,80 @@
 	mHeight = 50;
 
 	[super Start];
+
+    [m_pObjMng AddToGroup:@"Shapes" Object:self];
     
-    for (int i=0; i<10; i++) {
-        UNFROZE_OBJECT(@"Obj_FormPar",
-        SET_VECTOR_V(Vector3DMake(RND_I_F(m_pCurPosition.x,5),RND_I_F(m_pCurPosition.y,5),0),@"m_pCurPosition"));
+    NSMutableArray *pArrNearOb = [[NSMutableArray alloc] init];
+    NSMutableArray *pArr=[m_pObjMng GetGroup:@"UpPar"];
+ 
+    int countsds=0;
+    for (GObject *pOb in pArr) {
+
+        countsds++;
+        float fDist=fabs(pOb->m_pCurPosition.x-m_pCurPosition.x);
+        bool bAdd=NO;
+
+        for (int i=0;i<[pArrNearOb count];i++) {
+                
+            GObject *pObNear = [pArrNearOb objectAtIndex:i];
+            float fDistNearsInArr=fabs(pObNear->m_pCurPosition.x-m_pCurPosition.x);
+            
+            if(fDist<=fDistNearsInArr){
+                
+                GObject *pOBInArray=[pArrNearOb objectAtIndex:i];
+                
+                if(pOBInArray==pOb){
+                    [pArrNearOb removeObjectAtIndex:i];
+                }
+                
+                [pArrNearOb insertObject:pOb atIndex:i];
+                bAdd=YES;
+                break;
+            }
+        }
+        
+        if([pArrNearOb count]>iDiff){
+            [pArrNearOb removeLastObject];
+        }
+        
+        if(bAdd==NO && [pArrNearOb count]<iDiff){
+            
+            [pArrNearOb addObject:pOb];
+        }
+    }
+    
+    if([pArrNearOb count]>0){
+        for (GObject *pOb in pArrNearOb) {
+            
+            SET_STAGE_EX(NAME(pOb),@"Stages",@"Attract");
+            OBJECT_SET_PARAMS(NAME(pOb),LINK_ID_V(self,@"m_pOwner"));
+        }
     }
 }
-//------------------------------------------------------------------------------------------------------
-- (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{
-    //
+- (void)Move1:(Processor_ex *)pProc{
+    m_pCurPosition.y-=80*DELTA;
+
+    if(m_pCurPosition.y<0){
+//        for (int i=0; i<10; i++) {
+//            UNFROZE_OBJECT(@"Obj_FormPar",
+//                    SET_VECTOR_V(Vector3DMake(RND_I_F(0,30),RND_I_F(0,30),0),@"m_pOffsetCurPosition"),
+//                    LINK_ID_V(self,@"m_pOwner"));
+//        }
+        NEXT_STAGE;
+    }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Move2:(Processor_ex *)pProc{
+  //  int m=0;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Destroy{
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 @end

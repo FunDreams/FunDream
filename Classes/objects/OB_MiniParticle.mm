@@ -53,7 +53,7 @@
                      LINK_VECTOR_V(End_Vector, @"FinishV"));
 
         ASSIGN_STAGE(@"Placement",@"Placement:",
-                     SET_INT_V(1000,@"TimeBaseDelay"),
+                     SET_INT_V(10,@"TimeBaseDelay"),
                      LINK_FLOAT_V(m_fCurPosSlader, @"SrcF"),
                      SET_FLOAT_V(0, @"StartF"),
                      SET_FLOAT_V(1, @"FinishF"),
@@ -65,6 +65,8 @@
                      LINK_VECTOR_V(End_Vector, @"FinishV"));
 
         ASSIGN_STAGE(@"Sin",@"sin:",nil);
+
+        ASSIGN_STAGE(@"Attract",@"Attract:",nil);
 
         ASSIGN_STAGE(@"Stop",@"Idle:",nil); 
     
@@ -90,9 +92,14 @@
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
     
+    m_fPhase=0;
+    
+    if([m_pStrType isEqualToString:@"Up"]){
+        [m_pObjMng AddToGroup:@"UpPar" Object:self];
+        bUp=YES;
+    }
     SET_STAGE_EX(self->m_strName,@"Stages",@"ShowStage");
     SET_STAGE_EX(self->m_strName,@"Morphing",@"MirrorFirst");
-    m_fPhase=0;
 }
 //--------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -103,31 +110,31 @@
 //--------------------------------------------------------------------------------------------------------
 - (void)PrepareShow:(Processor_ex *)pProc{
     
-    if([m_pStrType isEqualToString:@"Up"]){
+    if(bUp==YES){
 
         mColor=Color3DMake(1, 0, 0, 0);
     }
     else{
         mColor=Color3DMake(0, 1, 0, 0);
-    }
+    }   
 }
 //--------------------------------------------------------------------------------------------------------
 - (void)Show:(Processor_ex *)pProc{
 
-    mColor.alpha+=DELTA*5;
+    mColor.alpha+=DELTA*10;
 
     if(mColor.alpha>1){
-        mColor.alpha=1;
+        mColor.alpha=0.999f;
     }
 
     [self Mirror2Dvector:pProc];
+    
+    if(mColor.alpha==0.999f){
+        NEXT_STAGE;
+    }
 
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
-
-    if(mColor.alpha==1){
-        NEXT_STAGE;
-    }
 }
 //--------------------------------------------------------------------------------------------------------
 - (void)PreparePlacement:(ProcStage_ex *)pStage{
@@ -135,15 +142,15 @@
     Start_Color=mColor;
     Start_Vector=m_pCurPosition;
     
-    if([m_pStrType isEqualToString:@"Up"]){
+    if(bUp==YES){
     
-        End_Vector=Vector3DMake(((float)(RND%580)-290), 300, 0);
+        End_Vector=Vector3DMake(RND_I_F(m_pCurPosition.x,30), 300, 0);
         End_Color=Color3DMake(1, 0, 0, 1);
         
     }
     else{
         
-        End_Vector=Vector3DMake(((float)(RND%580)-290), -430, 0);
+        End_Vector=Vector3DMake(RND_I_F(m_pCurPosition.x,30), -430, 0);
         End_Color=Color3DMake(0, 1, 0, 1);
     }
     
@@ -157,7 +164,7 @@
 //-------------------------------------------------------------------------------------------------------
 - (void)Placement:(Processor_ex *)pProc{
     
-    m_fCurPosSlader2+=DELTA*.3f;
+    m_fCurPosSlader2+=DELTA*3;//.3f;
 
     m_fCurPosSlader=pow(m_fCurPosSlader2,8);
     
@@ -167,20 +174,20 @@
     
     [self Mirror2Dvector:pProc];
     [self Mirror4DColor:pProc];
-
-    [pParticle UpdateParticleMatr];
-    [pParticle UpdateParticleColor];
     
     if(m_fCurPosSlader==0.999f){
         NEXT_STAGE;
     }
+    
+    [pParticle UpdateParticleMatr];
+    [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Preparesin:(ProcStage_ex *)pStage{
-    m_fVelPhase=RND%200+200;
+    m_fVelPhase=float(RND%200)+200;
     m_fPosSin=m_pCurPosition.y;
     
-    m_fVelMove=RND%10+10;
+    m_fVelMove=float(RND%30)+30;
     if(RND%2!=0)m_fVelMove=-m_fVelMove;
     m_fPhase=0;
 }
@@ -188,14 +195,70 @@
 - (void)sin:(Processor_ex *)pProc{
     
     m_fPhase+=m_fVelPhase*0.01f*DELTA;
-   m_pCurPosition.y=m_fPosSin+10*sin(m_fPhase);
+   m_pOffsetCurPosition.y=.5f*sin(m_fPhase);
 
     m_pCurPosition.x+=m_fVelMove*DELTA;
-    
+
     if(m_pCurPosition.x>300 && m_fVelMove>0)m_fVelMove=-m_fVelMove;
     if(m_pCurPosition.x<-300 && m_fVelMove<0)m_fVelMove=-m_fVelMove;
+
+    if(bUp==YES){
+        NSMutableArray *pArr= [m_pObjMng GetGroup:@"Shapes"];
+
+        if(pArr!=nil && [pArr count]>0){
+
+            for(GObject *pOb in pArr){
+                float fDelta=m_pCurPosition.x-pOb->m_pCurPosition.x;
+                
+                if(pOb->m_pCurPosition.y<260)continue;
+                
+                if(fabs(fDelta)<60){
+                    
+                    if(fDelta<0 && m_fVelMove>0){
+                        m_fVelMove=-m_fVelMove;
+                    }
+
+                    if(fDelta>0 && m_fVelMove<0){
+                        m_fVelMove=-m_fVelMove;
+                    }
+                }
+            }
+        }
+    }
+    [pParticle UpdateParticleMatrWihtOffset];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)PrepareAttract:(Processor_ex *)pProc{
     
-    [pParticle UpdateParticleMatr];
+    if(bUp==YES){
+        [m_pObjMng RemoveFromGroup:@"UpPar" Object:self];
+        
+        m_fStart=m_pCurPosition.x;
+        
+        m_fVelRotate=RND_I_F(0,100);
+        mColor=Color3DMake(1,1,1,1.0f);
+        [pParticle UpdateParticleColor];
+        m_fAmpl=0.5f;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Attract:(Processor_ex *)pProc{
+    
+    if(m_pOwner){
+        float Vel=(m_pOwner->m_pCurPosition.x-m_pCurPosition.x)*3.0f;
+        m_pCurPosition.x+=Vel*DELTA;
+
+		m_pCurPosition.y=m_pOwner->m_pCurPosition.y;
+	}
+
+    m_fAmpl+=DELTA;
+    if(m_fAmpl>1)m_fAmpl=1;
+
+    m_fPhase+=m_fVelPhase*0.01f*DELTA;
+    m_pOffsetCurPosition.y=m_fAmpl*sin(m_fPhase);
+    
+    m_pCurAngle.z+=DELTA*m_fVelRotate;
+    [pParticle UpdateParticleMatrWihtOffset];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

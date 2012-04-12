@@ -143,7 +143,7 @@
 // Updates the OpenGL view when the timer fires
 - (void)drawView
 {
-    if(controller->m_bPause==NO){
+    if(controller->m_bMegaPause==NO){
     
         [controller.m_pObjMng UpdateObjects];
 

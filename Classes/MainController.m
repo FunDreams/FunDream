@@ -11,11 +11,11 @@
 #import <sys/types.h>
 #import <sys/sysctl.h>
 #import "PVRTexture.h"
-
+#import "MainController.h"
 //------------------------------------------------------------------------------------------------------
 @implementation TextureContainer
 
-- (id)InitWithName:(NSString *)pNamet WithUint:(UInt32)TextureId 
+- (id)InitWithName:(NSString *)pNamet WithUint:(UInt32)TextureId
          WithWidth:(float)fWidth  WithWidth:(float)fHeight
 {
     self = [super init];
@@ -23,16 +23,14 @@
     {
         m_fWidth=fWidth;
         m_fHeight=fHeight;
-    
+
         m_iTextureId=TextureId;
         pName=[NSString stringWithString:pNamet];
     }
     
     return self;
 }
-
 @end
-
 //------------------------------------------------------------------------------------------------------
 @implementation MainController
 
@@ -292,8 +290,10 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMove:(double)DeltaTime{
 
-    NSNumber *NumDelta = [NSNumber numberWithDouble:DeltaTime];
- 	[m_pObjMng performSelector:m_SCurrentSel withObject:NumDelta];
+    if(m_bMegaPause==NO){
+        NSNumber *NumDelta = [NSNumber numberWithDouble:DeltaTime];
+        [m_pObjMng performSelector:m_SCurrentSel withObject:NumDelta];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc {
@@ -553,6 +553,11 @@ FullName:(NSString *)FullNameSound
 //		}
 //	}
 #endif
+}
+//------------------------------------------------------------------------------------------------------
+- (void)MegaPause:(bool)bPause
+{
+    m_bMegaPause=bPause;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Pause:(bool)bPause

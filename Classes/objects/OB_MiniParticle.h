@@ -14,11 +14,13 @@
 /** Шаблонный класс для объектов**/
 @interface OB_MiniParticle : GObject {
     Particle *pParticle;
+    bool bUp;
     
     int iFinishFrame;
     float InstFrameFloat;
     NSMutableString *m_pStrType;
     float m_fPosSin;
+    float m_fAmpl;
 }
 
 /** Инициализирует объект **/

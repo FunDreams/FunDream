@@ -19,6 +19,7 @@
         m_vScale=&pObParent->m_pCurScale;
         m_fAngle=&pObParent->m_pCurAngle.z;
         m_cColor=&pObParent->mColor;
+        m_vCurOffsetPos=&pObParent->m_pOffsetCurPosition;
 
         m_cColor1=Color3DMake(1,1,1,1);
         m_cColor2=Color3DMake(1,1,1,1);
@@ -102,6 +103,43 @@
         
         if ([ObjectParticle respondsToSelector:TmpSel])
             [ObjectParticle performSelector:TmpSel withObject:nil];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)UpdateParticleMatrWihtOffset{
+    Vertex3D *m_pVertices=(m_pParticleContainer->vertices+(m_iCurrentOffset)*6);
+    
+    //////координаты вершин
+    float fAngleRadians=*m_fAngle*3.14f/180;
+    
+    float fCos=cosf(fAngleRadians);//1
+    float fSin=sinf(fAngleRadians);//0
+    
+    //cos  -sin
+    //sin  cos
+    
+    float X1=m_vCurOffsetPos->x+1;
+    float X2=m_vCurOffsetPos->x-1;
+    float Y1=m_vCurOffsetPos->y+1;
+    float Y2=m_vCurOffsetPos->y-1;
+
+    m_pVertices[0]=Vector3DMake(X2*fCos-Y1*fSin,X2*fSin+Y1*fCos,0.0f);
+    m_pVertices[1]=Vector3DMake(X1*fCos-Y1*fSin,X1*fSin+Y1*fCos,0.0f);
+    m_pVertices[2]=Vector3DMake(X2*fCos-Y2*fSin,X2*fSin+Y2*fCos,0.0f);
+    m_pVertices[3]=Vector3DMake(X1*fCos-Y2*fSin,X1*fSin+Y2*fCos,0.0f);
+    
+    m_pVertices[4]=m_pVertices[2];
+    m_pVertices[5]=m_pVertices[1]; 
+
+    
+    for (int i=0; i<6; i++) {
+        m_pVertices[i].x*=m_vScale->x;
+        m_pVertices[i].y*=m_vScale->y;
+    }
+    
+    for (int i=0; i<6; i++) {
+        m_pVertices[i].x+=m_vPos->x;
+        m_pVertices[i].y+=m_vPos->y;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -270,7 +308,7 @@
 }
 @end
 //------------------------------------------------------------------------------------------------------
-@implementation ObjectParticle
+@implementation ObjectParticle//container
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
     self = [super Init:Parent WithName:strName];
@@ -554,7 +592,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
-//------------------------------------------------------------------------------------------------------//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+//------------------------------------------------------------------------------------------------------ (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc{
     [m_pParticle release];

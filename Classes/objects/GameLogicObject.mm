@@ -48,15 +48,15 @@
 					  SET_INT_V(layerNumber,@"m_iLayer"));
     
 //interface======================================================================
-	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
-					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
-					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
-					  SET_FLOAT_V(280,@"mWidth"),
-					  SET_FLOAT_V(300,@"mHeight"),
-                      SET_STRING_V(@"World",@"m_strNameObject"),
-                      SET_STRING_V(@"StartGame",@"m_strNameStage"),
-                      SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
+//	CREATE_NEW_OBJECT(@"ObjectButton",@"ButtonPlay",
+//					  SET_STRING_V(@"Button_Play_down@2x.png",@"m_DOWN"),
+//					  SET_STRING_V(@"Button_Play_up@2x.png",@"m_UP"),
+//					  SET_FLOAT_V(280,@"mWidth"),
+//					  SET_FLOAT_V(300,@"mHeight"),
+//                      SET_STRING_V(@"World",@"m_strNameObject"),
+//                      SET_STRING_V(@"StartGame",@"m_strNameStage"),
+//                      SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
 //===============================================================================
     CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
                       SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
@@ -99,8 +99,58 @@
                       SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
 //===============================================================================
 
-	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
+//	CREATE_NEW_OBJECT(@"ObjectCup",@"Cup",nil);
     CREATE_NEW_OBJECT(@"ObjectWorld",@"World",nil);
+    
+    
+    
+    
+////////////////////////StartGameTest////////////////////////////////////////////////
+    
+    CREATE_NEW_OBJECT(@"ObjectMultiTouch",@"OMultiTouch",nil);
+    
+    for (int i=0; i<10; i++) {
+        GObject *ObMatter = CREATE_NEW_OBJECT(@"ObjectEvilMatter1",@"EvilMater1",
+                                              SET_VECTOR_V(Vector3DMake(350,540,0),@"m_pCurPosition"));
+        
+        if(ObMatter!=nil)
+            [m_pChildrenbjectsArr addObject:ObMatter];
+    }
+    
+    NEXT_STAGE_EX(@"Cup", @"Proc");
+    
+    SET_STAGE_EX(self->m_strName,@"GameProgress", @"Delay");
+    
+    [m_pObjMng->pMegaTree SetCell:SET_BOOL_V(YES,@"FirstSoundParticle")];
+    
+    OBJECT_PERFORM_SEL(@"Score", @"RezetScore");
+
+    float W=500;
+    
+    int iCountUp=100;
+    float StartPoint=-W/2;
+    float Step=W/iCountUp;
+    
+    for(int i=0;i<iCountUp;i++){
+        UNFROZE_OBJECT(@"OB_MiniParticle",
+            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+            SET_STRING_V(@"Up", @"m_pStrType"),
+            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(40,10),0),@"End_Vector"));
+    }
+
+    int iCountDown=100;
+    Step=W/iCountDown;
+    
+    for(int i=0;i<iCountDown;i++){
+        UNFROZE_OBJECT(@"OB_MiniParticle",
+            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+            SET_STRING_V(@"Down", @"m_pStrType"),
+            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(-40,10),0),@"End_Vector"));
+    }
+
+    CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
+//===============================================================================
+    
     
     //    for (int i=0; i<100; i++) {
     //        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);

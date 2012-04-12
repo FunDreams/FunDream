@@ -26,8 +26,8 @@
     Processor_ex *pProc = [self START_QUEUE:@"Proc"];
         //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
         ASSIGN_STAGE(@"Spaun",@"Spaun:",
-                     SET_INT_V(100,@"TimeBaseDelay"),
-                     SET_INT_V(1000,@"TimeRndDelay"));
+                     SET_INT_V(4000,@"TimeBaseDelay"),
+                     SET_INT_V(100,@"TimeRndDelay"));
     
     [self END_QUEUE:pProc];
     
@@ -51,7 +51,8 @@
 - (void)Spaun{
     
     CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
-                      SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 300, 0),@"m_pCurPosition"));
+                      SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 300, 0),@"m_pCurPosition"),
+                      SET_INT_V(3,@"iDiff"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun:(Processor_ex *)pProc{

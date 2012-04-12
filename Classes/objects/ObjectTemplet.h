@@ -18,7 +18,6 @@
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
