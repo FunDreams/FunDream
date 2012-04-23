@@ -1,6 +1,6 @@
 
 //
-//  TestGameObject.h
+//  Ob_Templet.h
 //  Engine
 //
 //  Created by Konstantin on 21.11.10.
@@ -11,14 +11,11 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-/** Шаблонный класс для объектов**/
 @interface Ob_Templet : GObject {
 }
 
-/** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
-/** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
 -(void)Update;

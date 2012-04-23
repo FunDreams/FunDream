@@ -12,12 +12,14 @@
 #import "ObjectParticle.h"
 
 /** Шаблонный класс для объектов**/
-@interface ObjectTemplet : GObject {
+@interface Ob_FormPar : GObject {
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
+/** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
 -(void)Update;

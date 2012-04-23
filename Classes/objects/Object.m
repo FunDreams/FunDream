@@ -87,6 +87,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{}
+- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     
@@ -228,6 +229,38 @@
 - (Processor_ex *)FindProcByName:(NSString *)Name{
 	
 	return [m_pProcessor_ex objectForKey:Name];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)AddToProc{
+    
+    Dictionary_Ex *Dic = nil;
+    
+    if ([m_pObjMng->m_pObjectList count]<m_iDeep+1)
+    {
+        Dic = [[Dictionary_Ex alloc] init];
+        [m_pObjMng->m_pObjectList addObject:Dic];
+    }
+    else
+    {
+        Dic = [m_pObjMng->m_pObjectList objectAtIndex:m_iDeep];
+    }
+
+    [m_pProcessor_ex SynhData];
+    int iCountProc = [m_pProcessor_ex->pDic count];
+    
+    if(iCountProc>0)
+        [Dic setObject_Ex:self forKey:m_strName];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)DeleteFromProc{
+    
+    Dictionary_Ex *Dic = [m_pObjMng->m_pObjectList objectAtIndex:m_iDeep];
+    
+    NSString *NameClass= NSStringFromClass([self class]);
+    NSMutableArray *pArray = [m_pObjMng->m_pObjectReserv objectForKey:NameClass];
+    [pArray addObject:self];
+    
+    [Dic removeObjectForKey_Ex:m_strName];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)AddToDraw{
@@ -742,14 +775,6 @@
     
     ProcStage_ex * pStage=pProc->m_CurStage;
     
-//    Vector3D *V1=pStage->VectorsValues[0];
-//    Vector3D *V2=pStage->VectorsValues[1];
-//    Vector3D *V3=pStage->VectorsValues[2];
-//
-//    float *F1=pStage->FloatsValues[0];
-//    float *F2=pStage->FloatsValues[1];
-//    float *F3=pStage->FloatsValues[2];
-
     Vector3D Dir=Vector3DMake(pStage->VectorsValues[2]->x-pStage->VectorsValues[1]->x,
                               pStage->VectorsValues[2]->y-pStage->VectorsValues[1]->y,0);
     
@@ -803,26 +828,17 @@
 }
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 - (void)Mirror4DColor:(Processor_ex *)pProc{
-	
-    //	float *pfSrc=GET_FLOAT_V(@"SrcF");
-    //	Color3D *pfDest=GET_COLOR_V(@"DestC");
-    
-    //	float pfStartF=(float )[RESIVE(@"StartF") floatValue];
-    //	float pfFinishF=(float )[RESIVE(@"FinishF") floatValue];
-    //	
-    //	Color3D *pStartV=RESIVE_COLOR(@"StartC");
-    //	Color3D *pFinishV=RESIVE_COLOR(@"FinishC");
-    //	
+
     ProcStage_ex * pStage=pProc->m_CurStage;
-    
+
     Color3D Dir=Color3DMake(pStage->ColorsValues[2]->red-pStage->ColorsValues[1]->red,
                             pStage->ColorsValues[2]->green-pStage->ColorsValues[1]->green,
                             pStage->ColorsValues[2]->blue-pStage->ColorsValues[1]->blue,
                             pStage->ColorsValues[2]->alpha-pStage->ColorsValues[1]->alpha);
-    
+
     float Magnitude = sqrtf(Dir.red*Dir.red+Dir.green*Dir.green+
                             Dir.blue*Dir.blue+Dir.alpha*Dir.alpha);
-    
+
     if(Magnitude>0)
     {
         Dir.red/=Magnitude;
@@ -830,9 +846,9 @@
         Dir.blue/=Magnitude;
         Dir.alpha/=Magnitude;
         
-        float K=((*pStage->FloatsValues[0]-*pStage->FloatsValues[1])*
-                 (Magnitude/(*pStage->FloatsValues[2]-*pStage->FloatsValues[1])));
-        
+        float K=(*pStage->FloatsValues[0]-*pStage->FloatsValues[1])*
+                 (Magnitude/(*pStage->FloatsValues[2]-*pStage->FloatsValues[1]));
+    
         pStage->ColorsValues[0]->red=Dir.red*K+pStage->ColorsValues[1]->red;
         pStage->ColorsValues[0]->green=Dir.green*K+pStage->ColorsValues[1]->green;
         pStage->ColorsValues[0]->blue=Dir.blue*K+pStage->ColorsValues[1]->blue;
@@ -938,136 +954,6 @@
 		*pStage->FloatsValues[3] = *pStage->FloatsValues[2];
 		[pProc NextStage];
 	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Achive4DColorStatic:(Processor_ex *)pProc{
-	
-//	float pfCurVel=(float )[RESIVE(@"Vel") floatValue];
-//	
-//	Color3D *pStart=RESIVE_COLOR(@"Start");
-//	Color3D *pFinish=RESIVE_COLOR(@"Finish");
-//	
-//	Color3D *pfCurInst=(Color3D *)RESIVE(@"Instance");
-//	
-//	Color3D Dir=Color3DMake(pFinish->red-pStart->red,pFinish->green-pStart->green,
-//							pFinish->blue-pStart->blue,pFinish->alpha-pStart->alpha);
-//	
-//	float Magnitude = sqrtf(Dir.red*Dir.red+Dir.green*Dir.green+Dir.blue*Dir.blue+Dir.alpha*Dir.alpha);
-//	
-//	if(Magnitude>0){Dir.red/=Magnitude;Dir.green/=Magnitude;Dir.blue/=Magnitude;Dir.alpha/=Magnitude;}
-//	
-//	pfCurInst->red+=Dir.red*(pfCurVel)*DELTA;
-//	pfCurInst->green+=Dir.green*(pfCurVel)*DELTA;
-//	pfCurInst->blue+=Dir.blue*(pfCurVel)*DELTA;
-//	pfCurInst->alpha+=Dir.alpha*(pfCurVel)*DELTA;
-//	
-//	Color3D Dir2=Color3DMake(pfCurInst->red-pStart->red,pfCurInst->green-pStart->green,
-//							 pfCurInst->blue-pStart->blue,pfCurInst->alpha-pStart->alpha);
-//	
-//	float Magnitude2 = sqrtf(Dir2.red*Dir2.red+Dir2.green*Dir2.green+Dir2.blue*Dir2.blue+Dir2.alpha*Dir2.alpha);
-//	
-//	if(Magnitude2>=Magnitude)
-//	{
-//		pfCurInst->red = pFinish->red;
-//		pfCurInst->green = pFinish->green;
-//		pfCurInst->blue = pFinish->blue;
-//		pfCurInst->alpha = pFinish->alpha;
-//		NEXT_STAGE;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Achive2DvectorStatic:(Processor_ex *)pProc{
-	
-//	float pfCurVector=(float )[RESIVE(@"Vel") floatValue];
-//	
-//	Vector3D *pStart=RESIVE_VECOTOR(@"Start");
-//	Vector3D *pFinish=RESIVE_VECOTOR(@"Finish");
-//	
-//	Vector3D *pfCurInst=(Vector3D *)RESIVE(@"Instance");
-//	
-//	Vector3D Dir=Vector3DMake(pFinish->x-pStart->x,pFinish->y-pStart->y,0);
-//	float Magnitude = sqrtf(Dir.x*Dir.x+Dir.y*Dir.y);
-//	
-//	if(Magnitude>0){Dir.x/=Magnitude;Dir.y/=Magnitude;}
-//	
-//	pfCurInst->x+=Dir.x*(pfCurVector)*DELTA;
-//	pfCurInst->y+=Dir.y*(pfCurVector)*DELTA;
-//	
-//	Vector3D Dir2=Vector3DMake(pfCurInst->x-pStart->x,pfCurInst->y-pStart->y,0);
-//	float Magnitude2 = sqrtf(Dir2.x*Dir2.x+Dir2.y*Dir2.y);
-//	
-//	if(Magnitude2>=Magnitude)
-//	{
-//		pfCurInst->x = pFinish->x;
-//		pfCurInst->y = pFinish->y;
-//		NEXT_STAGE;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Mirror2DvectorDynVector:(Processor_ex *)pProc{
-	
-//	float *pfSrc=(float *)RESIVE(@"SrcF");
-//	Vector3D *pfDest=(Vector3D *)RESIVE(@"DestV");
-//	
-//	float pfStartF=(float )[RESIVE(@"StartF") floatValue];
-//	float pfFinishF=(float )[RESIVE(@"FinishF") floatValue];
-//	
-//	Vector3D *pStartV=(Vector3D *)RESIVE(@"StartV");
-//	Vector3D *pFinishV=(Vector3D *)RESIVE(@"FinishV");
-//	
-//	Vector3D Dir=Vector3DMake(pFinishV->x-pStartV->x,pFinishV->y-pStartV->y,0);
-//	float Magnitude = sqrtf(Dir.x*Dir.x+Dir.y*Dir.y);
-//	
-//	if(Magnitude>0)
-//	{
-//		Dir.x/=Magnitude;
-//		Dir.y/=Magnitude;
-//		
-//		float K=((*pfSrc-pfStartF)*(Magnitude/(pfFinishF-pfStartF)));
-//		
-//		pfDest->x=Dir.x*K+pStartV->x;
-//		pfDest->y=Dir.y*K+pStartV->y;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Mirror2DvectorStatic:(Processor_ex *)pProc{
-	
-//	float *pfSrc=(float *)RESIVE(@"SrcF");
-//	Vector3D *pfDest=(Vector3D *)RESIVE(@"DestV");
-//	
-//	float pfStartF=(float )[RESIVE(@"StartF") floatValue];
-//	float pfFinishF=(float )[RESIVE(@"FinishF") floatValue];
-//	
-//	Vector3D *pStartV=RESIVE_VECOTOR(@"StartV");
-//	Vector3D *pFinishV=RESIVE_VECOTOR(@"FinishV");
-//	
-//	Vector3D Dir=Vector3DMake(pFinishV->x-pStartV->x,pFinishV->y-pStartV->y,0);
-//	float Magnitude = sqrtf(Dir.x*Dir.x+Dir.y*Dir.y);
-//	
-//	if(Magnitude>0)
-//	{
-//		Dir.x/=Magnitude;
-//		Dir.y/=Magnitude;
-//		
-//		float K=((*pfSrc-pfStartF)*(Magnitude/(pfFinishF-pfStartF)));
-//		
-//		pfDest->x=Dir.x*K+pStartV->x;
-//		pfDest->y=Dir.y*K+pStartV->y;
-//	}
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Mirror1DFloatStatic:(Processor_ex *)pProc{
-	
-//	float *pfSrc=(float *)RESIVE(@"SrcF");
-//	float *pfDest=(float *)RESIVE(@"DestF");
-//	
-//	float pfStartF1=[RESIVE(@"StartF1") floatValue];
-//	float pfFinishF1=[RESIVE(@"FinishF1") floatValue];
-//	
-//	float pfStartF2=[RESIVE(@"StartF2") floatValue];
-//	float pfinishF2=[RESIVE(@"FinishF2") floatValue];
-//	
-//	*pfDest=((*pfSrc-pfStartF1)*((pfinishF2-pfStartF2)/(pfFinishF1-pfStartF1)))+pfStartF2;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DestroySelf:(Processor_ex *)pProc

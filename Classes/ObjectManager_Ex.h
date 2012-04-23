@@ -153,7 +153,6 @@ typedef enum tagLayerTouchID {
 - (id)UnfrozeObject:(NSString *)NameClass WithParams:(NSArray *)Parametrs;
 
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs;
-- (GObject *)GetFreeObjectByClass:(NSString*)NameClass;
 - (GObject *)GetObjectByName:(NSString*)NameObject;
 - (NSString *)GetNameObject:(NSString*)NameObject;
 

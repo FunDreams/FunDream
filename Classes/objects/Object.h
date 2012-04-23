@@ -190,11 +190,16 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 - (void)AddToDraw;
 - (void)DeleteFromDraw;
 
+//добавление/удаление объекта в обработку
+- (void)AddToProc;
+- (void)DeleteFromProc;
+
 - (void)SetLayer:(int)iLayer;//установить слой отрисовки
 - (void)SetLayerAndChild:(int)iLayer;//установить слой отрисовки и для детей объектов
 - (void)SelfOffsetVert:(Vertex3D)VOffset;//смещение меши объекта на вектор
 
 - (void)SetDefault;//установка переменный по умолчанию
+- (void)PostSetParams;//метод вызывается после установления параметров
 - (void)LinkValues;//линкование копирование параметров
 - (void)Destroy;//уничтожение объекта и перемещение его в резерв
 //processors--------------------------------------------------------------------------------------------

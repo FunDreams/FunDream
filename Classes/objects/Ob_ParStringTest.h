@@ -9,19 +9,18 @@
 
 #import <Foundation/Foundation.h>
 #import "Object.h"
+#import "ObjectParticle.h"
 
 /** Шаблонный класс для объектов**/
-@interface ObjectTest : GObject {
-	
+@interface Ob_ParStringTest : GObject {
+    Particle *pParticle;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
--(void)sfMove;
+-(void)Destroy;
 -(void)Start;
-
-- (void)timesel:(Processor_ex *)pProc;
-- (void)testAction:(Processor_ex *)pProc;
-
+-(void)Update;
+    
 @end

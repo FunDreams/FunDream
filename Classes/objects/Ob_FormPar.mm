@@ -6,9 +6,9 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "ObjectTemplet.h"
+#import "Ob_FormPar.h"
 
-@implementation ObjectTemplet
+@implementation Ob_FormPar
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
@@ -16,6 +16,12 @@
     {
         m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
+        
+        if(pParticle==nil){
+            
+            pParticle=[[Particle alloc] Init:self];
+            m_bHiden=YES;
+        }
     }
     
 	return self;
@@ -32,25 +38,21 @@
     [self END_QUEUE:pProc name:@"Proc"];
     
 //====//различные параметры=============================================================================
-//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
-    
-//    m_strNameObject=[NSMutableString stringWithString:@""];    
-//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    //   GET_DIM_FROM_TEXTURE(@"");
-	mWidth  = 50;
-	mHeight = 50;
+    [pParticle AddToContainer:@"ParticlesShapes"];
+
+	mWidth  = 10;
+	mHeight = 10;
 
 	[super Start];
 
-    //   [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId, m_pNameTexture);
-
-    //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
-    //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
+    [self SetPosWithOffsetOwner];
+    [pParticle SetFrame:0];
+    [pParticle UpdateParticleMatr];
+    [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -61,11 +63,10 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
     
-//    PLAY_SOUND(@"");
-//    STOP_SOUND(@"");
+    [self SetPosWithOffsetOwner];
+    [pParticle UpdateParticleMatr];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
-//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 @end

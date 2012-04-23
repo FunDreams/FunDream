@@ -87,10 +87,6 @@
 	mHeight = 30;
 
 	[super Start];
-
-    [pParticle SetFrame:0];
-    [pParticle UpdateParticleMatr];
-    [pParticle UpdateParticleColor];
     
     m_fPhase=0;
     
@@ -100,6 +96,15 @@
     }
     SET_STAGE_EX(self->m_strName,@"Stages",@"ShowStage");
     SET_STAGE_EX(self->m_strName,@"Morphing",@"MirrorFirst");
+    
+//    m_pCurPosition.x=RND_I_F(0, 200);
+//    m_pCurPosition.y=RND_I_F(0, 400);
+//    
+//    mColor=Color3DMake(1, 0, 0, 1);
+    
+    [pParticle SetFrame:0];
+    [pParticle UpdateParticleMatr];
+    [pParticle UpdateParticleColor];
 }
 //--------------------------------------------------------------------------------------------------------
 - (void)Update{}

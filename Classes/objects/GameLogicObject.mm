@@ -58,31 +58,31 @@
 //                      SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 //					  SET_VECTOR_V(Vector3DMake(180,330,0),@"m_pCurPosition"));
 //===============================================================================
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
-                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Down_Bullet.png",@"m_pNameTexture"));
+//    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesDown",
+//                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+//                      SET_INT_V(1, @"m_iCountX"),
+//                      SET_INT_V(1, @"m_iCountY"),
+//                      SET_INT_V(1, @"m_INumLoadTextures"),
+//                      SET_STRING_V(@"Down_Bullet.png",@"m_pNameTexture"));
+//    
+//    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesUp",
+//                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
+//                      SET_INT_V(1, @"m_iCountX"),
+//                      SET_INT_V(1, @"m_iCountY"),
+//                      SET_INT_V(1, @"m_INumLoadTextures"),
+//                      SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
     
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesUp",
-                      SET_VECTOR_V(Vector3DMake(128,128,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Up_Bullet.png",@"m_pNameTexture"));
+//    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesMini",
+//                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+//                      SET_INT_V(1, @"m_iCountX"),
+//                      SET_INT_V(1, @"m_iCountY"),
+//                      SET_INT_V(1, @"m_INumLoadTextures"),
+//                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
     
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesMini",
-                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
-                      SET_INT_V(1, @"m_iCountX"),
-                      SET_INT_V(1, @"m_iCountY"),
-                      SET_INT_V(1, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
-    
-    for (int k=0; k<300; k++) {	
-		NSString *NameOb= [[[NSString alloc] initWithFormat:@"MinPar%d",k] autorelease];
-		RESERV_NEW_OBJECT(@"OB_MiniParticle",NameOb,nil);
-	}
+//    for (int k=0; k<300; k++) {	
+//		NSString *NameOb= [[[NSString alloc] initWithFormat:@"MinPar%d",k] autorelease];
+//		RESERV_NEW_OBJECT(@"OB_MiniParticle",NameOb,nil);
+//	}
     
     CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesPensil",
                       SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
@@ -125,40 +125,56 @@
     
     OBJECT_PERFORM_SEL(@"Score", @"RezetScore");
 
-    float W=500;
-    
-    int iCountUp=100;
-    float StartPoint=-W/2;
-    float Step=W/iCountUp;
-    
-    for(int i=0;i<iCountUp;i++){
-        UNFROZE_OBJECT(@"OB_MiniParticle",
-            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-            SET_STRING_V(@"Up", @"m_pStrType"),
-            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(40,10),0),@"End_Vector"));
-    }
-
-    int iCountDown=100;
-    Step=W/iCountDown;
-    
-    for(int i=0;i<iCountDown;i++){
-        UNFROZE_OBJECT(@"OB_MiniParticle",
-            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-            SET_STRING_V(@"Down", @"m_pStrType"),
-            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(-40,10),0),@"End_Vector"));
-    }
+//    float W=500;
+//    
+//    int iCountUp=100;
+//    float StartPoint=-W/2;
+//    float Step=W/iCountUp;
+//    
+//    for(int i=0;i<iCountUp;i++){
+//        UNFROZE_OBJECT(@"OB_MiniParticle",
+//            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+//            SET_STRING_V(@"Up", @"m_pStrType"),
+//            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(40,10),0),@"End_Vector"));
+//    }
+//
+//    int iCountDown=100;
+//    Step=W/iCountDown;
+//    
+//    for(int i=0;i<iCountDown;i++){
+//        UNFROZE_OBJECT(@"OB_MiniParticle",
+//            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+//            SET_STRING_V(@"Down", @"m_pStrType"),
+//            SET_VECTOR_V(Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(-40,10),0),@"End_Vector"));
+//    }
 
     CREATE_NEW_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
 //===============================================================================
+    RESERV_NEW_OBJECT(@"ObjectBullets",@"ContainerBullet",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
     
+    UNFROZE_OBJECT(@"ObjectBullets",nil);
+
+    RESERV_NEW_OBJECT(@"ObjectEvilPar",@"ObjectEvilPar",
+                      SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                      SET_INT_V(1, @"m_iCountX"),
+                      SET_INT_V(1, @"m_iCountY"),
+                      SET_INT_V(1, @"m_INumLoadTextures"),
+                      SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
     
-    //    for (int i=0; i<100; i++) {
-    //        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
-    //    }
-    //физика приложения тут///////////////////////////////////////////////////////
-    //	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
-    //	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
-    
+    UNFROZE_OBJECT(@"ObjectEvilPar",nil);
+//===============================================================================
+//    CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);    
+//    for (int i=0; i<100; i++) {
+//        CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);
+//    }
+//физика приложения тут///////////////////////////////////////////////////////
+//	CREATE_NEW_OBJECT(@"CPhysics",@"Physics",nil);
+//	CREATE_NEW_OBJECT(@"CJumper",@"TestJumper",nil);
 //    for (int k=0; k<40; k++) {	
 //		NSString *NameOb= [[[NSString alloc] initWithFormat:@"ObjectPSimple%d",k] autorelease];
 //		RESERV_NEW_OBJECT(@"ObjectPSimple",NameOb,nil);

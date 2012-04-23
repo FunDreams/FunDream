@@ -9,18 +9,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Object.h"
-#import "ObjectParticle.h"
+#import "Ob_ParticleCont_Ex.h"
+
 
 /** Шаблонный класс для объектов**/
-@interface ObjectBullet : GObject {
-    Particle *pParticle;
-    
-    float VelRotate;
-    float m_fVelMovePos;
-    float m_fVelMoveTmp;
-    float m_iDir;
-    
-    float m_fPosSin;
+@interface ObjectBullets : Ob_ParticleCont_Ex {
+    int iCountPar;
 }
 
 /** Инициализирует объект **/
@@ -29,10 +23,19 @@
 /** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
--(void)Update;
-
-- (bool)IntersectBullet:(GObject *)pOb;
-
-- (void)AchiveLineFloat:(Processor_ex *)pProc;
     
+@end
+
+#define PARTICLE Particle_Bullet
+@interface PARTICLE : Particle_Ex {
+@public
+    
+    Vector3D vStart;
+    Vector3D vFinish;
+    float CurrentOffset;
+    float fPhase;
+    float fVelPhase;
+    float fVelMove;
+}
+-(void)UpdateParticleMatrWihtOffset;
 @end

@@ -10,9 +10,7 @@
 #import "Dictionary_Ex.h"
 
 @implementation CObjectManager
-
 @synthesize m_bReserv,m_pObjectList;
-
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent
 {
@@ -80,44 +78,25 @@
 		[m_pObjectAddToTouch removeAllObjects];
 	}
 	
-	int iCount = [pMustDelKeys count];
+	int iCount = [pMustDelKeys count];//удаление объктов
 	for (int i=0; i<iCount; i++) {
 
 		GObject * TmpOb=[pMustDelKeys objectAtIndex:0];
 		[pMustDelKeys removeObjectAtIndex:0];
-		
-		NSMutableDictionary *Dic = [m_pObjectList objectAtIndex:TmpOb->m_iDeep];
-		
-        NSString *NameClass= NSStringFromClass([TmpOb class]);
-        NSMutableArray *pArray = [m_pObjectReserv objectForKey:NameClass];
-        [pArray addObject:TmpOb];
-        
-        [Dic removeObjectForKey:TmpOb->m_strName];
- //       [m_pAllObjects removeObjectForKey:TmpOb->m_strName];
-        
+
+        [TmpOb DeleteFromProc];
         [self RemoveFromGroups:TmpOb];
 	}
 	
-	int iCount2 = [pMusAddKeys count];
+	int iCount2 = [pMusAddKeys count];//добавление объектов
 	for (int i=0; i<iCount2; i++) {
 		
 		GObject * TmpOb=[pMusAddKeys objectAtIndex:0];
 		[pMusAddKeys removeObjectAtIndex:0];
 		
-		NSMutableDictionary *Dic = nil;
-		
-		if ([m_pObjectList count]<TmpOb->m_iDeep+1)
-        {
-			Dic = [[NSMutableDictionary alloc] init];
-			[m_pObjectList addObject:Dic];
-		}
-		else
-        {
-            Dic = [m_pObjectList objectAtIndex:TmpOb->m_iDeep];
-		}
-        
-        [Dic setObject:TmpOb forKey:TmpOb->m_strName];
-	}
+        [TmpOb AddToProc];
+	}    
+/////синхронизация======================================================================================   
     
     int CountLayer=[pLayers count];
     for (int i=0; i<CountLayer; i++) {
@@ -128,6 +107,12 @@
     
     [pMegaTree SynhData];
     [m_pGroups SynhData];
+    
+    for (int i=0; i<[m_pObjectList count]; i++) {
+        
+		Dictionary_Ex *Dic = [m_pObjectList objectAtIndex:i];
+        [Dic SynhData];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMovePaused:(id)pDeltaTime{
@@ -139,9 +124,9 @@
     
 	for (int i=0; i<[m_pObjectList count]; i++) {
         
-		NSMutableDictionary *Dic = [m_pObjectList objectAtIndex:i];
+		Dictionary_Ex *Dic = [m_pObjectList objectAtIndex:i];
         
-		NSEnumerator *enumeratorObjects = [Dic objectEnumerator];
+		NSEnumerator *enumeratorObjects = [Dic->pDic objectEnumerator];
 		GObject *pObject;
         
 		while ((pObject = [enumeratorObjects nextObject])) {
@@ -155,9 +140,7 @@
                 while ((pProc_ex = [enumeratorProc nextObject]))
                 {
                     [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
-                }
-                
-                if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
+                }                
             }
 		}
 	}
@@ -174,9 +157,9 @@
 
 	for (int i=0; i<[m_pObjectList count]; i++) {
 
-		NSMutableDictionary *Dic = [m_pObjectList objectAtIndex:i];
+		Dictionary_Ex *Dic = [m_pObjectList objectAtIndex:i];
 
-		NSEnumerator *enumeratorObjects = [Dic objectEnumerator];
+		NSEnumerator *enumeratorObjects = [Dic->pDic objectEnumerator];
 		GObject *pObject;
 
 		while ((pObject = [enumeratorObjects nextObject])) {
@@ -187,8 +170,6 @@
             enumeratorProc = [pObject->m_pProcessor_ex->pDic objectEnumerator];
 			while ((pProc_ex = [enumeratorProc nextObject]))
                 [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
-            
-            if(pObject->m_pProcessor_ex->m_bNotSyn)[pObject->m_pProcessor_ex SynhData];
 		}
 	}
 
@@ -274,24 +255,6 @@
 	[super dealloc];
 }
 //------------------------------------------------------------------------------------------------------
-- (GObject *)GetFreeObjectByClass:(NSString*)NameClass{
-		
-	NSEnumerator *enumerator = [m_pObjectList objectEnumerator];
-	GObject *pObject;
-	
-	while ((pObject = [enumerator nextObject])) {			
-		
-		Class    clstmp     = [pObject class];
-		NSString *pNameClass=NSStringFromClass(clstmp);
-
-		if ([NameClass isEqualToString:pNameClass]) {
-			return pObject;
-		}
-	}
-	
-	return nil;
-}
-//------------------------------------------------------------------------------------------------------
 - (GObject *)GetObjectByName:(NSString*)NameObject{
 	
 	GObject *pObject = [m_pAllObjects objectForKey:NameObject];
@@ -346,14 +309,18 @@ repeate:
 
         if ([pArray count]>0)
         {
-            pObject = [pArray objectAtIndex:0];            
+            pObject = [pArray objectAtIndex:0];
             [pArray removeObjectAtIndex:0];
             
             pObject->m_bDeleted=NO;
             
             [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
-            [pObject SetDefault];        
-            [self SetParams:pObject WithParams:Parametrs];
+            
+            if([Parametrs count]>0){
+                [pObject SetDefault];        
+                [self SetParams:pObject WithParams:Parametrs];
+                [pObject PostSetParams];
+            }
             
             if (pObject->m_pOwner!=nil)
                 pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
@@ -393,6 +360,12 @@ repeate:
         pObject = [[cls alloc] Init:m_pParent WithName:pNameObject];
         [pObject LinkValues];
 
+        if([Parametrs count]>0){
+            [pObject SetDefault];
+            [self SetParams:pObject WithParams:Parametrs];
+            [pObject PostSetParams];
+        }
+
 		if (m_bReserv)
         {
 			pObject->m_bDeleted=YES;
@@ -406,9 +379,7 @@ repeate:
         }
 
         [m_pAllObjects setObject:pObject forKey:pObject->m_strName];
-        [pObject SetDefault];
-        [self SetParams:pObject WithParams:Parametrs];
-        
+
         if (pObject->m_pOwner!=nil)
             pObject->m_iDeep=pObject->m_pOwner->m_iDeep+1;
 
@@ -427,7 +398,8 @@ repeate:
 	
     if(pTmpOb==nil)return;
 
-	for (int i=0; i<[Parametrs count]; i++) {
+    int iCount=[Parametrs count];
+	for (int i=0; i<iCount; i++) {
 		
 		UniCell* pParams = (UniCell*)[Parametrs objectAtIndex:i];
         

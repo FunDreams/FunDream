@@ -9,11 +9,12 @@
 
 #import <Foundation/Foundation.h>
 #import "Object.h"
-#import "ObjectParticle.h"
+#import "Ob_ParticleCont_Ex.h"
+
 
 /** Шаблонный класс для объектов**/
-@interface Obj_FormPar : GObject {
-    Particle *pParticle;
+@interface ObjectEvilPar : Ob_ParticleCont_Ex {
+    int iCountPar;
 }
 
 /** Инициализирует объект **/
@@ -22,6 +23,19 @@
 /** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
--(void)Update;
     
+@end
+
+#define PARTICLE Particle_Evil
+@interface PARTICLE : Particle_Ex {
+@public
+    
+    Vector3D vStart;
+    Vector3D vFinish;
+    float CurrentOffset;
+    float fPhase;
+    float fVelPhase;
+    float fVelMove;
+}
+-(void)UpdateParticleMatrWihtOffset;
 @end

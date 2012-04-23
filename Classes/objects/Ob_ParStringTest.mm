@@ -6,9 +6,9 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Obj_FormPar.h"
+#import "Ob_ParStringTest.h"
 
-@implementation Obj_FormPar
+@implementation Ob_ParStringTest
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
@@ -44,15 +44,12 @@
     
     [pParticle AddToContainer:@"ParticlesShapes"];
 
-	mWidth  = 10;
-	mHeight = 10;
+	mWidth  = 50;
+	mHeight = 50;
 
 	[super Start];
-
-    [self SetPosWithOffsetOwner];
+    
     [pParticle SetFrame:0];
-    [pParticle UpdateParticleMatr];
-    [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -61,12 +58,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{
-    
-    [self SetPosWithOffsetOwner];
-    [pParticle UpdateParticleMatr];
-}
+- (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
+//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 @end

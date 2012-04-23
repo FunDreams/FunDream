@@ -49,10 +49,9 @@
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun{
-    
-    CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
-                      SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 300, 0),@"m_pCurPosition"),
-                      SET_INT_V(3,@"iDiff"));
+//    CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
+//                      SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 300, 0),@"m_pCurPosition"),
+//                      SET_INT_V(7,@"iDiff"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun:(Processor_ex *)pProc{
