@@ -16,12 +16,9 @@
     self = [super init];
     if (self)
     {
-        
         pOb=[pObject retain];
         pNameGroup=[[NSString alloc] initWithString:pName];
-
     }
-
     return self;
 }
 
@@ -34,7 +31,6 @@
 @end
 //--------------------------------------------------------------------------------------------------
 @implementation CGroups
-
 -(id) init {
 	if (!(self = [super init])) return nil;
 

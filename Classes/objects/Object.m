@@ -239,6 +239,7 @@
     {
         Dic = [[Dictionary_Ex alloc] init];
         [m_pObjMng->m_pObjectList addObject:Dic];
+        m_iDeep=[m_pObjMng->m_pObjectList count]-1;
     }
     else
     {

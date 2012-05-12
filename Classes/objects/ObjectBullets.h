@@ -19,7 +19,7 @@
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
-
+-(void)CreateNewParticle;
 /** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
@@ -36,6 +36,7 @@
     float fPhase;
     float fVelPhase;
     float fVelMove;
+    GObject *Owner;
 }
 -(void)UpdateParticleMatrWihtOffset;
 @end

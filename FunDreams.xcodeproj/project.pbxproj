@@ -13,7 +13,6 @@
 		183C009213CE09D80013CB08 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183C009113CE09D80013CB08 /* iAd.framework */; };
 		184087F51418A12300A4C9BF /* ObjectFade.mm in Sources */ = {isa = PBXBuildFile; fileRef = 184087F41418A12300A4C9BF /* ObjectFade.mm */; };
 		18408806141D1CA200A4C9BF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18408805141D1CA100A4C9BF /* CoreMotion.framework */; };
-		18424811153BF17D00156A16 /* Ob_ParStringTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18424810153BF17D00156A16 /* Ob_ParStringTest.mm */; };
 		18444D9B13D93A6C0058ADC9 /* Mega_tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 18444D9A13D93A6C0058ADC9 /* Mega_tree.m */; };
 		18444D9E13D93D8D0058ADC9 /* ObjectTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18444D9D13D93D8D0058ADC9 /* ObjectTest.mm */; };
 		1851808F1421C200009C879E /* sounds_loop in Resources */ = {isa = PBXBuildFile; fileRef = 1851808E1421C200009C879E /* sounds_loop */; };
@@ -25,6 +24,8 @@
 		185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */; };
 		185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */; };
 		186D5E1B1545CE6500DDC893 /* ObjectEvilPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E1A1545CE6500DDC893 /* ObjectEvilPar.mm */; };
+		186D5E1E154700B000DDC893 /* FunArrayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E1D154700B000DDC893 /* FunArrayData.m */; };
+		186D5E21154B080800DDC893 /* FractalString.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E20154B080800DDC893 /* FractalString.m */; };
 		186E0CAD14DAAA6F008B4290 /* texturePVR in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CAC14DAAA6E008B4290 /* texturePVR */; };
 		186E0CAF14DBA80C008B4290 /* Help in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CAE14DBA80C008B4290 /* Help */; };
 		186E0CC314E04BD1008B4290 /* PVRTexture.m in Sources */ = {isa = PBXBuildFile; fileRef = 186E0CC214E04BD0008B4290 /* PVRTexture.m */; };
@@ -106,8 +107,6 @@
 		184087F31418A12300A4C9BF /* ObjectFade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectFade.h; path = objects/ObjectFade.h; sourceTree = "<group>"; };
 		184087F41418A12300A4C9BF /* ObjectFade.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectFade.mm; path = objects/ObjectFade.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18408805141D1CA100A4C9BF /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
-		1842480F153BF17D00156A16 /* Ob_ParStringTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ParStringTest.h; path = objects/Ob_ParStringTest.h; sourceTree = "<group>"; };
-		18424810153BF17D00156A16 /* Ob_ParStringTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_ParStringTest.mm; path = objects/Ob_ParStringTest.mm; sourceTree = "<group>"; };
 		18444D9913D93A6C0058ADC9 /* Mega_tree.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Mega_tree.h; sourceTree = "<group>"; };
 		18444D9A13D93A6C0058ADC9 /* Mega_tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mega_tree.m; sourceTree = "<group>"; };
 		18444D9C13D93D8D0058ADC9 /* ObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectTest.h; path = objects/ObjectTest.h; sourceTree = "<group>"; };
@@ -123,6 +122,10 @@
 		185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "../Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
 		186D5E191545CE6500DDC893 /* ObjectEvilPar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectEvilPar.h; path = objects/ObjectEvilPar.h; sourceTree = "<group>"; };
 		186D5E1A1545CE6500DDC893 /* ObjectEvilPar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectEvilPar.mm; path = objects/ObjectEvilPar.mm; sourceTree = "<group>"; };
+		186D5E1C154700B000DDC893 /* FunArrayData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunArrayData.h; sourceTree = "<group>"; };
+		186D5E1D154700B000DDC893 /* FunArrayData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FunArrayData.m; sourceTree = "<group>"; };
+		186D5E1F154B080700DDC893 /* FractalString.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FractalString.h; sourceTree = "<group>"; };
+		186D5E20154B080800DDC893 /* FractalString.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FractalString.m; sourceTree = "<group>"; };
 		186E0CAC14DAAA6E008B4290 /* texturePVR */ = {isa = PBXFileReference; lastKnownFileType = folder; path = texturePVR; sourceTree = SOURCE_ROOT; };
 		186E0CAE14DBA80C008B4290 /* Help */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Help; sourceTree = "<group>"; };
 		186E0CC114E04BD0008B4290 /* PVRTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVRTexture.h; sourceTree = "<group>"; };
@@ -264,8 +267,6 @@
 				18E9F5971255DD1600423916 /* objects */,
 				1D3623240D0F684500981E51 /* EngineAppDelegate.h */,
 				1D3623250D0F684500981E51 /* EngineAppDelegate.m */,
-				18B60EAC152D5A4A00E98973 /* CGroups.h */,
-				18B60EAD152D5A4A00E98973 /* CGroups.m */,
 				186E0CC114E04BD0008B4290 /* PVRTexture.h */,
 				186E0CC214E04BD0008B4290 /* PVRTexture.m */,
 				18D79551127B29C800BD5445 /* GLView.h */,
@@ -282,6 +283,8 @@
 				189015EC129175060027418F /* MainController.m */,
 				189015EA129175060027418F /* ObjectManager_Ex.h */,
 				189015E8129175060027418F /* ObjectManager_Ex.mm */,
+				18B60EAC152D5A4A00E98973 /* CGroups.h */,
+				18B60EAD152D5A4A00E98973 /* CGroups.m */,
 				183C008E13CE08F60013CB08 /* Dictionary_Ex.h */,
 				183C008F13CE08F60013CB08 /* Dictionary_Ex.m */,
 				18444D9913D93A6C0058ADC9 /* Mega_tree.h */,
@@ -291,6 +294,10 @@
 				18D79556127B29E600BD5445 /* ConstantsAndMacros.h */,
 				5B74522314A44D6100A88178 /* UniCell.h */,
 				5B74522414A44D6100A88178 /* UniCell.m */,
+				186D5E1C154700B000DDC893 /* FunArrayData.h */,
+				186D5E1D154700B000DDC893 /* FunArrayData.m */,
+				186D5E1F154B080700DDC893 /* FractalString.h */,
+				186D5E20154B080800DDC893 /* FractalString.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -381,20 +388,18 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
+				18B60EA3152CCFDD00E98973 /* Ob_FormPar.h */,
+				18B60EA4152CCFDD00E98973 /* Ob_FormPar.mm */,
+				18B60E9F152CCFC800E98973 /* Ob_Shape.h */,
+				18B60EA0152CCFC800E98973 /* Ob_Shape.mm */,
 				186D5E191545CE6500DDC893 /* ObjectEvilPar.h */,
 				186D5E1A1545CE6500DDC893 /* ObjectEvilPar.mm */,
 				18F355AB1543226500E7ABBA /* ObjectBullets.h */,
 				18F355AC1543226500E7ABBA /* ObjectBullets.mm */,
 				18F355A81541D47800E7ABBA /* Ob_ParticleCont_Ex.h */,
 				18F355A91541D47800E7ABBA /* Ob_ParticleCont_Ex.mm */,
-				1842480F153BF17D00156A16 /* Ob_ParStringTest.h */,
-				18424810153BF17D00156A16 /* Ob_ParStringTest.mm */,
-				18B60EA3152CCFDD00E98973 /* Ob_FormPar.h */,
-				18B60EA4152CCFDD00E98973 /* Ob_FormPar.mm */,
 				18B60E9D152CCFC800E98973 /* Ob_PensilPar.h */,
 				18B60E9E152CCFC800E98973 /* Ob_PensilPar.mm */,
-				18B60E9F152CCFC800E98973 /* Ob_Shape.h */,
-				18B60EA0152CCFC800E98973 /* Ob_Shape.mm */,
 				18FF880F14EB9ED500B7412D /* OB_MiniParticle.h */,
 				18FF881014EB9ED500B7412D /* OB_MiniParticle.mm */,
 				18EB608614E81B950089C409 /* ObjectPSimple.h */,
@@ -646,10 +651,11 @@
 				18B60EA2152CCFC800E98973 /* Ob_Shape.mm in Sources */,
 				18B60EA5152CCFDD00E98973 /* Ob_FormPar.mm in Sources */,
 				18B60EAE152D5A4A00E98973 /* CGroups.m in Sources */,
-				18424811153BF17D00156A16 /* Ob_ParStringTest.mm in Sources */,
 				18F355AA1541D47900E7ABBA /* Ob_ParticleCont_Ex.mm in Sources */,
 				18F355AD1543226600E7ABBA /* ObjectBullets.mm in Sources */,
 				186D5E1B1545CE6500DDC893 /* ObjectEvilPar.mm in Sources */,
+				186D5E1E154700B000DDC893 /* FunArrayData.m in Sources */,
+				186D5E21154B080800DDC893 /* FractalString.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

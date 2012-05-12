@@ -14,10 +14,12 @@
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerTemplet;
+        m_iLayer = layerOb2;
+
+        mWidth  = 2;
+        mHeight = 2;
+
         m_iLayerTouch=layerTouch_0;//слой касания
-        
-        m_bHiden=YES;
         iDiff=1;
     }
     
@@ -29,97 +31,221 @@
 - (void)LinkValues{
     [super LinkValues];
 //====//процессоры для объекта==========================================================================
-    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
+    Processor_ex* pProc = [self START_QUEUE:@"Particle"];
+        ASSIGN_STAGE(@"PROC",@"Particle:",nil);
+        ASSIGN_STAGE(@"Idle",@"Idle:",nil);
+    [self END_QUEUE:pProc];
+
+    
+    pProc = [self START_QUEUE:@"Proc"];
   //      ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
         ASSIGN_STAGE(@"PROC1",@"Move1:",
                      SET_INT_V(4000,@"TimeBaseDelay"));
     
-        ASSIGN_STAGE(@"PROC2",@"Move2:",nil);
+        ASSIGN_STAGE(@"PROC2",@"Birth:",nil);
+    
+        ASSIGN_STAGE(@"PROC3",@"Move2:",
+                     SET_INT_V(4000,@"TimeBaseDelay"));
+
+        ASSIGN_STAGE(@"IDLE",@"Idle:",nil)
     [self END_QUEUE:pProc name:@"Proc"];
 //====//различные параметры=============================================================================
     SET_CELL(LINK_INT_V(iDiff,m_strName,@"iDiff"));
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Start{
+-(id)NewParticle{
+    Particle_Shape *pParticle=[[Particle_Shape alloc] Init:self];
+    pParticle->m_fSize=15;
+    pParticle->m_cColor=Color3DMake(1, 0, 0, 0);
+    pParticle->m_iStage=0;
     
-	mWidth  = 50;
-	mHeight = 50;
+    return pParticle;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Start{
 
 	[super Start];
 
     [m_pObjMng AddToGroup:@"Shapes" Object:self];
-    
-    NSMutableArray *pArrNearOb = [[NSMutableArray alloc] init];
-    NSMutableArray *pArr=[m_pObjMng GetGroup:@"UpPar"];
- 
-    int countsds=0;
-    for (GObject *pOb in pArr) {
 
-        countsds++;
-        float fDist=fabs(pOb->m_pCurPosition.x-m_pCurPosition.x);
-        bool bAdd=NO;
-
-        for (int i=0;i<[pArrNearOb count];i++) {
-                
-            GObject *pObNear = [pArrNearOb objectAtIndex:i];
-            float fDistNearsInArr=fabs(pObNear->m_pCurPosition.x-m_pCurPosition.x);
-            
-            if(fDist<=fDistNearsInArr){
-                
-                GObject *pOBInArray=[pArrNearOb objectAtIndex:i];
-                
-                if(pOBInArray==pOb){
-                    [pArrNearOb removeObjectAtIndex:i];
-                }
-                
-                [pArrNearOb insertObject:pOb atIndex:i];
-                bAdd=YES;
-                break;
-            }
-        }
-        
-        if([pArrNearOb count]>iDiff){
-            [pArrNearOb removeLastObject];
-        }
-        
-        if(bAdd==NO && [pArrNearOb count]<iDiff){
-            
-            [pArrNearOb addObject:pOb];
-        }
-    }
+    SET_CELL(LINK_ID_V(self,@"Shape"));
+    OBJECT_PERFORM_SEL(@"EvilPar",@"GetNear"); 
+    iCountParInShape=iDiff;
     
-    if([pArrNearOb count]>0){
-        for (GObject *pOb in pArrNearOb) {
-            
-            SET_STAGE_EX(NAME(pOb),@"Stages",@"Attract");
-            OBJECT_SET_PARAMS(NAME(pOb),LINK_ID_V(self,@"m_pOwner"));
-        }
-    }
+    pStrings = [[NSMutableArray alloc] init];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
+- (void)GenerateShape{
+
+    if(iCountParInShape>1){
+
+        FractalString *pStringX1FirstPoint=[[FractalString alloc] init];
+        [pStrings addObject:pStringX1FirstPoint];
+
+        FractalString *pStringY1FirstPoint=[[FractalString alloc] init];
+        [pStrings addObject:pStringY1FirstPoint];
+
+
+        FractalString *pStringXNeighbor;
+        FractalString *pStringYNeighbor;
+
+        for (int i=0; i<iCountParInShape; i++) {
+            
+            Particle_Shape *Par=[self CreateParticle];//создаём частицу
+            [Par SetFrame:0];
+            Par->m_iStage=0;
+
+            if(i==0)
+            {
+                pStringXNeighbor=pStringX1FirstPoint;
+                *pStringXNeighbor->S=0;//RND_I_F(0,10);
+                *pStringXNeighbor->F=RND_I_F(0,60);
+
+                pStringYNeighbor=pStringY1FirstPoint;
+                *pStringYNeighbor->S=0;//RND_I_F(0,10);
+                *pStringYNeighbor->F=RND_I_F(0,60);
+            }
+            
+            Par->X1=pStringXNeighbor->T;
+            Par->Y1=pStringYNeighbor->T;
+
+            if(i!=iCountParInShape-1){
+                
+                //создаём первую струну
+                FractalString *pStringX2=[[FractalString alloc] init];
+                *pStringX2->S=0;//RND_I_F(0,10);
+                Par->X2=pStringX2->T;
+                *pStringX2->F=RND_I_F(0,60);
+                
+                [pStrings addObject:pStringX2];
+                pStringXNeighbor=pStringX2;
+                
+                //создаём вторую струну
+                FractalString *pStringY2=[[FractalString alloc] init];
+                *pStringY2->S=0;//RND_I_F(0,10);
+                Par->Y2=pStringY2->T;
+                *pStringY2->F=RND_I_F(0,60);
+                
+                [pStrings addObject:pStringY2];
+                pStringYNeighbor=pStringY2;
+
+            }
+            else
+            {
+                Par->X2=pStringX1FirstPoint->T;
+                Par->Y2=pStringY1FirstPoint->T;
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Move1:(Processor_ex *)pProc{
     m_pCurPosition.y-=80*DELTA;
 
-    if(m_pCurPosition.y<0){
-//        for (int i=0; i<10; i++) {
-//            UNFROZE_OBJECT(@"Obj_FormPar",
-//                    SET_VECTOR_V(Vector3DMake(RND_I_F(0,30),RND_I_F(0,30),0),@"m_pOffsetCurPosition"),
-//                    LINK_ID_V(self,@"m_pOwner"));
-//        }
+    if(m_pCurPosition.y<199){
         NEXT_STAGE;
+        m_fCurPosSlader=0;
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move2:(Processor_ex *)pProc{
-  //  int m=0;
+
+    if(m_pCurPosition.y>0){
+        m_pCurPosition.y-=80*DELTA;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)PrepareBirth:(ProcStage_ex *)pStage{
+    [self GenerateShape];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Birth:(Processor_ex *)pProc{
+    
+    float V=(m_fCurPosSlader+0.01f)*6;
+//    m_pCurAngle.z+=200*DELTA;
+    
+    m_fCurPosSlader+=DELTA*V;
+    if(m_fCurPosSlader>1){
+        m_fCurPosSlader=1;
+        NEXT_STAGE;
+    }
+    for (FractalString *pString in pStrings) {
+        SET_MIRROR(m_fCurPosSlader, 1, 0, *pString->T, *pString->F, *pString->S);
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Particle:(Processor_ex *)pProc{
+    
+    for (Particle_Shape *pPar in m_pParticleInProc) {
+
+        switch (pPar->m_iStage){
+            case 0://show
+
+                pPar->m_cColor.alpha+=5*DELTA;
+                
+                if(pPar->m_cColor.alpha>1){
+                    pPar->m_cColor.alpha=1;
+                    pPar->m_iStage=1;
+                }
+                
+                pPar->m_vPos.x=*pPar->X1;
+                pPar->m_vPos.y=*pPar->Y1;
+
+                [pPar UpdateParticleMatrWithDoublePoint];
+                [pPar UpdateParticleColor];
+
+                break;
+                
+            case 1://place
+                pPar->m_vPos.x=*pPar->X1;
+                pPar->m_vPos.y=*pPar->Y1;
+
+                [pPar UpdateParticleMatrWithDoublePoint];
+
+                break;
+
+            default:
+                break;
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
+
+    for (Particle_Shape *pString in pStrings) {
+        [pString release];
+    }
+
+    [pStrings release];
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
 @end
+//------------------------------------------------------------------------------------------------------
+@implementation Particle_Shape
+//------------------------------------------------------------------------------------------------------
+-(void)UpdateParticleMatrWithDoublePoint{
+    
+    float deltaX=*X2-*X1;
+    float deltaY=*Y2-*Y1;
+
+    Vertex3D *m_pVertices=(m_pParticleContainer->vertices+(m_iCurrentOffset)*6);
+    
+    //получаем перпендикулярный вектор
+    Vector3D V=Vector3DMake(deltaY,-deltaX,0);
+    Vector3DNormalize(&V);
+
+    //координаты вершин
+    m_pVertices[0]=Vector3DMake((*X2+m_fSize*V.x),(*Y2+m_fSize*V.y), 0.0f);
+    m_pVertices[1]=Vector3DMake((*X2-m_fSize*V.x),(*Y2-m_fSize*V.y), 0.0f);
+    m_pVertices[2]=Vector3DMake((*X1+m_fSize*V.x),(*Y1+m_fSize*V.y), 0.0f);
+    m_pVertices[3]=Vector3DMake((*X1-m_fSize*V.x),(*Y1-m_fSize*V.y), 0.0f);
+    m_pVertices[4]=m_pVertices[2];
+    m_pVertices[5]=m_pVertices[1]; 
+}
+@end
+//------------------------------------------------------------------------------------------------------

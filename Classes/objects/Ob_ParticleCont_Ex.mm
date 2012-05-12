@@ -370,6 +370,7 @@
 
     [m_pParticleInFreeze addObject:pParticle];
     pParticle->m_vPos.x+=4000+RND;
+    pParticle->m_iStage=-1;
     [pParticle UpdateParticle];
 }
 //------------------------------------------------------------------------------------------------------

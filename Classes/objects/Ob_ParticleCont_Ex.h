@@ -9,6 +9,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Object.h"
+#import "FractalString.h"
 
 @interface Particle_Ex : NSObject {
 @public
@@ -16,7 +17,7 @@
     float m_fSize;
     Color3D m_cColor;
 
-    GObject* m_pParticleContainer;    
+    GObject* m_pParticleContainer;
 
     int m_iCurrentOffset;
     int m_iCurFrame;
@@ -38,8 +39,9 @@
 
 @interface Ob_ParticleCont_Ex : GObject {
 @public
-    NSMutableArray *m_pParticleInProc;
-    NSMutableArray *m_pParticleInFreeze;
+    NSMutableArray *pStrings;//контейнер для управляющих струн
+    NSMutableArray *m_pParticleInProc;//контейнер для отображающихся частиц
+    NSMutableArray *m_pParticleInFreeze;//контейнер для замороженых частиц.
     
     Vector3D m_vSize;
     int m_iCountX;

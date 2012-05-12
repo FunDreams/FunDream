@@ -26,7 +26,7 @@
     Processor_ex *pProc = [self START_QUEUE:@"Proc"];
         //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
         ASSIGN_STAGE(@"Spaun",@"Spaun:",
-                     SET_INT_V(4000,@"TimeBaseDelay"),
+                     SET_INT_V(10000,@"TimeBaseDelay"),
                      SET_INT_V(100,@"TimeRndDelay"));
     
     [self END_QUEUE:pProc];
@@ -49,9 +49,18 @@
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun{
-//    CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
-//                      SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 300, 0),@"m_pCurPosition"),
-//                      SET_INT_V(7,@"iDiff"));
+    int *CountSinPar=GET_INT_V(@"EvilPar",@"iCountParInSin");
+    
+    if (*CountSinPar>0) {
+        CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
+                          SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
+                          SET_INT_V(1, @"m_iCountX"),
+                          SET_INT_V(1, @"m_iCountY"),
+                          SET_INT_V(1, @"m_INumLoadTextures"),
+                          SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"),
+                          SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 320, 0),@"m_pCurPosition"),
+                          SET_INT_V(6,@"iDiff"));
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Spaun:(Processor_ex *)pProc{

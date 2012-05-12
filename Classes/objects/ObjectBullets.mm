@@ -35,21 +35,14 @@
     pProc = [self START_QUEUE:@"ProcBullet"];
         ASSIGN_STAGE(@"Show",@"Show:",nil);
         ASSIGN_STAGE(@"Placement",@"Placement:",nil);
-        ASSIGN_STAGE(@"Sin",@"Sin:",nil);
         ASSIGN_STAGE(@"Idle",@"Idle:",nil);
     [self END_QUEUE:pProc];
     
-    SET_CELL(LINK_INT_V(iCountPar,@"iCountPar"));
+    SET_CELL(LINK_INT_V(iCountPar,m_strName,@"iCountPar"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)PostSetParams{
     [super PostSetParams];
-
-    for (int i=0; i<iCountPar; i++) {
-
-        PARTICLE *Par=[self CreateParticle];
-        [Par SetFrame:0];
-    }
 }
 //------------------------------------------------------------------------------------------------------
 -(id)NewParticle{
@@ -64,28 +57,29 @@
     [super Start];
     
     mColor.alpha=0;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)CreateNewParticle{
     
     float W=500;
-    
-    int i=0;
     float StartPoint=-W/2;
     float Step=W/iCountPar;
-
-    for (PARTICLE *pPar in m_pParticleInProc) {
+    
+    for (int i=0; i<iCountPar; i++) {
         
-        pPar->vStart=m_pCurPosition;
-        pPar->m_vPos=m_pCurPosition;
+        PARTICLE *Par=[self CreateParticle];
+        [Par SetFrame:0];
+        Par->m_iStage=0;
+        Par->vStart=m_pCurPosition;
+        Par->m_vPos=m_pCurPosition;
         
-        pPar->m_iStage=0;
-
-        pPar->vFinish=Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(-120,30),0);
-        i++;
+        Par->vFinish=Vector3DMake(StartPoint+Step*i+Step*0.5f,RND_I_F(-120,30),0);
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show:(Processor_ex *)pProc{
     
-    mColor.alpha+=DELTA*2;
+    mColor.alpha+=DELTA*3;
     if(mColor.alpha>1){
         mColor.alpha=1;
         NEXT_STAGE;
@@ -95,15 +89,6 @@
 - (void)PreparePlacement:(ProcStage_ex *)pStage{
     
     m_fCurPosSlader=0;
-    
-    for (PARTICLE *pPar in m_pParticleInProc) {
-        
-        pPar->m_iStage=1;
-        pPar->vStart=pPar->m_vPos;
-        
-        pPar->vFinish.x=RND_I_F(pPar->vFinish.x, 30);
-        pPar->vFinish.y=-460;
-    }    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Placement:(Processor_ex *)pProc{
@@ -115,17 +100,6 @@
         NEXT_STAGE;
     }
 }
-//------------------------------------------------------------------------------------------------------
-- (void)PrepareSin:(ProcStage_ex *)pStage{
-    for (PARTICLE *pPar in m_pParticleInProc) {
-        pPar->m_iStage=2;
-        
-        pPar->fVelPhase=(RND_I_F(10,20))*0.1f;
-        pPar->fVelMove=(RND_I_F(0,20));
-    }
-}
-//------------------------------------------------------------------------------------------------------
-- (void)Sin:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)Particle:(Processor_ex *)pProc{
 
@@ -141,6 +115,15 @@
                 
                 [pPar UpdateParticleMatr];
                 [pPar UpdateParticleColor];
+                
+                if(mColor.alpha>=1){
+                    pPar->m_iStage=1;
+                    pPar->vStart=pPar->m_vPos;
+                    
+                    pPar->vFinish.x=RND_I_F(pPar->vFinish.x, 30);
+                    pPar->vFinish.y=-460;
+                }
+
                 break;
                 
             case 1://Placement
@@ -148,6 +131,17 @@
                 pPar->m_vPos.y=(pPar->vFinish.y-pPar->vStart.y)*m_fCurPosSlader+pPar->vStart.y;
                 
                 [pPar UpdateParticleMatr];
+                
+                if(m_fCurPosSlader>=1){
+                    
+                    pPar->m_iStage=2;
+                    
+                    pPar->fVelPhase=(RND_I_F(10,20))*0.1f;
+                    pPar->fVelMove=(RND_I_F(0,20));
+                    if(pPar->fVelMove>0)pPar->fVelMove+=20;
+                    if(pPar->fVelMove<=0)pPar->fVelMove-=20;
+                }
+
                 break;
                 
             case 2://Sin
@@ -186,6 +180,11 @@
     m_pVertices[3]=Vector3DMake( m_fSize+m_vPos.x, -m_fSize+m_vPos.y+CurrentOffset, 0.0f);
     m_pVertices[4]=m_pVertices[2];
     m_pVertices[5]=m_pVertices[1]; 
+}
+//------------------------------------------------------------------------------------------------------
+- (void)dealloc{
+    [Owner release];
+    [super dealloc];
 }
 //------------------------------------------------------------------------------------------------------
 @end

@@ -157,16 +157,19 @@
                       SET_INT_V(1, @"m_INumLoadTextures"),
                       SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
     
-    UNFROZE_OBJECT(@"ObjectBullets",nil);
-
-    RESERV_NEW_OBJECT(@"ObjectEvilPar",@"ObjectEvilPar",
+    RESERV_NEW_OBJECT(@"ObjectEvilPar",@"EvilPar",
                       SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
                       SET_INT_V(1, @"m_iCountX"),
                       SET_INT_V(1, @"m_iCountY"),
                       SET_INT_V(1, @"m_INumLoadTextures"),
                       SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"));
+
     
-    UNFROZE_OBJECT(@"ObjectEvilPar",nil);
+    GObject* PobBullet=UNFROZE_OBJECT(@"ObjectBullets",SET_INT_V(100,@"iCountPar"));
+    OBJECT_PERFORM_SEL(NAME(PobBullet), @"CreateNewParticle");
+    
+    GObject* PobEvil=UNFROZE_OBJECT(@"ObjectEvilPar",SET_INT_V(60,@"iCountPar"));
+    OBJECT_PERFORM_SEL(NAME(PobEvil), @"CreateNewParticle");
 //===============================================================================
 //    CREATE_NEW_OBJECT(@"ObjectTest",@"Test",nil);    
 //    for (int i=0; i<100; i++) {
