@@ -20,5 +20,14 @@
 
 /** **/
 - (void)Start;
+- (void)CreateObject_Debug;
+- (void)CreateObject_Release;
+- (void)CreateObject_Editor;
+- (void)LoadTextureAtlases;
+
+- (void)ClearAllObjects;
+
+- (void)RestartGame;
+- (void)LoadRedactor;
 
 @end

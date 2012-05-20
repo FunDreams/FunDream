@@ -13,6 +13,45 @@
 #import "PVRTexture.h"
 #import "MainController.h"
 //------------------------------------------------------------------------------------------------------
+@implementation SoundContainer
+- (id)InitWithName:(NSString *)pName WithUint:(UInt32)SoundId{
+    self = [super init];
+    if (self)
+    {
+    }
+    return self;
+}
+@end
+//------------------------------------------------------------------------------------------------------
+@implementation AtlasContainer
+
+- (id)InitWithName:(NSString *)pNamet
+         NameStartTexture:(NSString *)pNameStart
+         CountX:(int)iCountX
+         CountY:(int)iCountY
+         NumLoadTextures:(int)iNumLoadTextures
+         SizeAtlas:(Vector3D)vSize
+{
+    self = [super init];
+    if (self)
+    {
+        m_vSizeFrame=vSize;
+        m_INumLoadTextures=iNumLoadTextures;
+
+        m_iCountX=iCountX;
+        m_iCountY=iCountY;
+
+        m_fWidth=iCountX*m_vSizeFrame.x;
+        m_fHeight=iCountY*m_vSizeFrame.y;
+        
+        pAtlasName=[NSString stringWithString:pNamet];
+        m_psNameStartTexture=[NSString stringWithString:pNameStart];
+    }
+    
+    return self;
+}
+@end
+//------------------------------------------------------------------------------------------------------
 @implementation TextureContainer
 
 - (id)InitWithName:(NSString *)pNamet WithUint:(UInt32)TextureId
@@ -73,6 +112,7 @@
 
 	m_pSoundList = [[NSMutableDictionary alloc] init];
 	m_pTextureList = [[NSMutableDictionary alloc] init];
+	m_pTextureAtlasList = [[NSMutableDictionary alloc] init];
 
     fFactorInc=1;
     fFactorDec=1;
@@ -239,6 +279,20 @@ FullName:(NSString *)FullNameSound
 	return iSoundID;
 }
 //------------------------------------------------------------------------------------------------------
+-(void) SetVolumeSound:(NSString *)NameSound Volume:(float)Volume{
+
+    NSNumber *pNum = [m_pSoundList objectForKey:NameSound];
+
+    if(pNum!=nil)SoundEngine_SetEffectLevel([pNum intValue],Volume);
+}
+//------------------------------------------------------------------------------------------------------
+-(void) SetPitchSound: (NSString *)NameSound Pithc:(float)Pitch{
+    
+    NSNumber *pNum = [m_pSoundList objectForKey:NameSound];
+    
+    if(pNum!=nil)SoundEngine_SetEffectPitch([pNum intValue],Pitch);
+}
+//------------------------------------------------------------------------------------------------------
 -(void) PlaySound: (NSString *)NameSound{
     
     NSNumber *pNum = [m_pSoundList objectForKey:NameSound];
@@ -311,6 +365,7 @@ FullName:(NSString *)FullNameSound
 	glDeleteTextures(MAX_NUM_TEXTURE,texture);
 	
 	[m_pTextureList release];
+    [m_pTextureAtlasList release];
 
 #ifdef BANNER_IAD
 	[adView release];
@@ -869,10 +924,114 @@ FullName:(NSString *)FullNameSound
         
         NSString *REZ=[NSString stringWithString:@"texturePVR/"];
         REZ=[REZ stringByAppendingString:SubStr];
-        
+
         [self loadTexturePVR:REZ WithExt:SubStr1 NameFile:tString];
     }
 
+    [Error release];
+}
+//------------------------------------------------------------------------------------------------------
+-(void)LoadTextureAtlas:(AtlasContainer *)pAtlasContainer{
+    
+    int m_INumLoadTextures=pAtlasContainer->m_INumLoadTextures;
+    int IcureText=0;
+    GLuint Xstep=pAtlasContainer->m_vSizeFrame.x/pAtlasContainer->m_iCountX;
+    GLuint Ystep=pAtlasContainer->m_vSizeFrame.y/pAtlasContainer->m_iCountY;
+    
+    TextureContainer * TmpContainer=[m_pTextureAtlasList objectForKey:pAtlasContainer->pAtlasName];
+    
+    if(TmpContainer!=nil)
+        return;
+    
+    NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
+    bundleRoot=[bundleRoot stringByAppendingString:@"/textureAtlas"];
+    
+    NSError *Error=[[NSError alloc] init];
+    NSArray *dirContents = [[NSFileManager defaultManager] 
+                            contentsOfDirectoryAtPath:bundleRoot error:&Error];
+    
+    UInt32	m_iTextureId=-1;
+    
+    //		NSLog(NameTexture);
+    glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
+    
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+    
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    GLuint width = pAtlasContainer->m_vSizeFrame.x;
+    GLuint height = pAtlasContainer->m_vSizeFrame.y;
+    
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
+    void *imageData = malloc( height * width * 4 );
+    CGContextRef context = CGBitmapContextCreate(imageData, width, height, 8, 4 * width, colorSpace,kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big);
+    
+    // Flip the Y-axis
+    CGContextTranslateCTM (context, 0, height);
+    CGContextScaleCTM (context, 1.0, -1.0);
+    
+    CGColorSpaceRelease(colorSpace);
+    CGContextClearRect(context, CGRectMake( 0, 0, width, height));
+    bool mBstart=false;
+    
+    for (NSString *tString in dirContents){
+        
+        if(mBstart==false){
+            
+            if([tString isEqualToString:pAtlasContainer->m_psNameStartTexture]){
+                
+                mBstart=true;
+            }
+            else continue;
+        }
+        
+        NSRange toprange = [tString rangeOfString: @"."];
+        NSString *SubStr = [tString substringToIndex:toprange.location];
+        NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
+        
+        NSString *REZ=[NSString stringWithString:@"textureAtlas/"];
+        REZ=[REZ stringByAppendingString:SubStr];
+        //---------------------------------------------------------------
+        NSString *path = [[NSBundle mainBundle] pathForResource:REZ ofType:SubStr1];
+		
+        if(path!=nil)
+        {            
+            NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
+            UIImage *image = [[UIImage alloc] initWithData:texData];
+            
+            if (image == nil)
+                NSLog(@"Do real error checking here");
+            
+            float OffsetX=IcureText%pAtlasContainer->m_iCountX;
+            float OffsetY=IcureText/pAtlasContainer->m_iCountX;
+            
+            //копирование
+            CGContextDrawImage(context,
+                               CGRectMake(Xstep*OffsetX, Ystep*OffsetY, Xstep, Ystep ), image.CGImage );
+            
+            [image release];
+            [texData release];
+            
+            m_INumLoadTextures--;
+            IcureText++;
+            
+            if(m_INumLoadTextures==0)break;
+        }
+    }
+    
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);    
+    
+    m_iTextureId=texture[m_iCount];
+    m_iCount++;
+        
+    [m_pTextureAtlasList setObject:pAtlasContainer forKey:pAtlasContainer->pAtlasName];
+    pAtlasContainer->m_iTextureId=m_iTextureId;
+    
+    CGContextRelease(context);
+    free(imageData);
+    
     [Error release];
 }
 //------------------------------------------------------------------------------------------------------

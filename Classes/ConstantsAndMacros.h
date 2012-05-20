@@ -23,7 +23,8 @@
 #define CREATE_NEW_OBJECT(NAMECLASS,NAMEOBJECT,...) [m_pParent.m_pObjMng CreateNewObject:NAMECLASS WithNameObject:NAMEOBJECT WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 
 //выбирает из списка замороженых/удалённых объектов и выставляет на сцену
-#define UNFROZE_OBJECT(NAMECLASS,...) [m_pParent.m_pObjMng UnfrozeObject:NAMECLASS WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
+#define UNFROZE_OBJECT(NAMECLASS,NAMEOBJECT,...) [m_pParent.m_pObjMng UnfrozeObject:NAMECLASS\
+    WithNameObject:NAMEOBJECT WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 
 //устанавливает параметры для объекта
 #define OBJECT_SET_PARAMS(OB_NAME,...) [m_pObjMng SetParams:[m_pObjMng GetObjectByName:OB_NAME] WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil]];
@@ -49,10 +50,18 @@ if ([TmpObject respondsToSelector:TmpSel])[TmpObject performSelector:TmpSel with
 //воспроизведение/остановка звука
 #define PLAY_SOUND(PAR) [m_pParent PlaySound: PAR];
 #define STOP_SOUND(PAR) [m_pParent StopSound: PAR];
+//уставнока эффектов для звуков, скорости воспроизведения и громкости
+#define PITCH_SOUND(PAR,PITCH) [m_pParent SetPitchSound:PAR Pithc:PITCH];
+#define VOLUME_SOUND(PAR,VOLUME) [m_pParent SetVolumeSound:PAR Volume:VOLUME];
 
 //получить текстуру по идентификатору
 #define GET_TEXTURE(INS,NAMETEXTURE) if(NAMETEXTURE!=nil){\
 TextureContainer *pNum=[m_pParent->m_pTextureList objectForKey:NAMETEXTURE];\
+if(pNum!=nil){INS=pNum->m_iTextureId;}}
+
+//получить атлас текстуры по названию
+#define GET_ATLAS_TEXTURE(INS,NAMEATLAS) if(NAMEATLAS!=nil){\
+AtlasContainer *pNum=[m_pParent->m_pTextureAtlasList objectForKey:NAMEATLAS];\
 if(pNum!=nil){INS=pNum->m_iTextureId;}}
 
 //макрос для получения ширины и высоты для спрайта из параметров текстуры

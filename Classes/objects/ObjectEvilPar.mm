@@ -28,6 +28,10 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    m_bHiden=NO;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
     
@@ -64,6 +68,9 @@
     [super Start];
     
     mColor.alpha=0;
+    [ShapesX Reset];
+    
+    SET_STAGE_EX(NAME(self), @"ProcBullet", @"Show");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)CreateNewParticle{
@@ -158,6 +165,7 @@
     m_fCurPosSlader+=DELTA*V;
     if(m_fCurPosSlader>1){
         m_fCurPosSlader=1;
+        PLAY_SOUND(@"water.wav");
         NEXT_STAGE;
     }
 }
@@ -167,10 +175,9 @@
     float Vel;
     
     NSMutableArray *pArr= [m_pObjMng GetGroup:@"Shapes"];
-    
+
+    [ShapesX Reset];
     if(pArr!=nil && [pArr count]>0){
-        
-        [ShapesX Reset];
         
         for(GObject *pOb in pArr){
             
@@ -278,7 +285,8 @@
                 
                 if(pPar->m_cColor.alpha<0){
                     pPar->m_cColor.alpha=0;
-                    [self RemoveParticle:pPar];
+                    [self FrezeParticle:pPar];
+                    break;
                 }
                 
                 [pPar UpdateParticleMatrWihtOffset];
@@ -293,6 +301,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
 
+    [self RemoveAllParticles];
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

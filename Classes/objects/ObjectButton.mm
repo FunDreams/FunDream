@@ -24,6 +24,13 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
     mColor.alpha=1;
+    m_bHiden=NO;
+    
+    [m_DOWN setString:@""];
+    [m_UP setString:@""];
+    [m_strNameSound setString:@""];
+    [m_strNameStage setString:@""];
+    [m_strNameObject setString:@""];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -47,7 +54,6 @@
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_DOWN,m_strName,@"m_DOWN")];
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_UP,m_strName,@"m_UP")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_Disable,m_strName,@"m_Disable")];
-    
     
     Processor_ex* pProc = [self START_QUEUE:@"Proc"];
     
@@ -160,7 +166,7 @@
             
         [m_pParent PlaySound:m_strNameSound];
         
-        NEXT_STAGE_EX(self->m_strName, @"Proc");
+   //     NEXT_STAGE_EX(self->m_strName, @"Proc");
 
         //[[[m_pObjMng GetObjectByName:self->m_strName] FindProcByName:@"Proc"] NextStage];
     }

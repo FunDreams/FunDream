@@ -50,7 +50,7 @@
     [[GroupContainer alloc] InitWithName:NameGroup WithObject:pObject];
 
     [m_pAdd setObject:TmpContainerGroup forKey:pObject->m_strName];
-//    [TmpContainerGroup release];
+    [TmpContainerGroup release];
 
     TmpContainerGroup = [m_pRem objectForKey:pObject->m_strName];
     if(TmpContainerGroup!=nil)
@@ -68,7 +68,7 @@
     [[GroupContainer alloc] InitWithName:NameGroup WithObject:pObject];
 
     [m_pRem setObject:TmpContainerGroup forKey:pObject->m_strName];
-//    [TmpContainerGroup release];
+    [TmpContainerGroup release];
 
     TmpContainerGroup = [m_pAdd objectForKey:pObject->m_strName];
     if(TmpContainerGroup!=nil)

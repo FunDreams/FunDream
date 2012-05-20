@@ -22,6 +22,10 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    m_bHiden=NO;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];

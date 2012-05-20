@@ -53,7 +53,7 @@
 
 + (id) Link_Point:(void *)parPoint withKey:(id)sKey,...;
 
--(void)CrearCell;
+-(void)ClearCell;
 -(void)dealloc;
 
 @end

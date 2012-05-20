@@ -44,6 +44,8 @@
     
     m_fStartPeriod=3;
     m_fCurrntPeriod=m_fStartPeriod;
+    
+    SET_STAGE_EX(NAME(self), @"Proc", @"Spaun");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -51,13 +53,9 @@
 - (void)Spaun{
     int *CountSinPar=GET_INT_V(@"EvilPar",@"iCountParInSin");
     
-    if (*CountSinPar>0) {
+    if (CountSinPar && *CountSinPar>0) {
         CREATE_NEW_OBJECT(@"Ob_Shape",@"Shape",
-                          SET_VECTOR_V(Vector3DMake(32,32,0),@"m_vSize"),
-                          SET_INT_V(1, @"m_iCountX"),
-                          SET_INT_V(1, @"m_iCountY"),
-                          SET_INT_V(1, @"m_INumLoadTextures"),
-                          SET_STRING_V(@"Particle_001.png",@"m_pNameTexture"),
+                          SET_STRING_V(@"PensilAtl",@"m_pNameAtlas"),
                           SET_VECTOR_V(Vector3DMake(RND_I_F(0,250), 320, 0),@"m_pCurPosition"),
                           SET_INT_V(6,@"iDiff"));
     }

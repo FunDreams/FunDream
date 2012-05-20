@@ -256,11 +256,6 @@
 - (void)DeleteFromProc{
     
     Dictionary_Ex *Dic = [m_pObjMng->m_pObjectList objectAtIndex:m_iDeep];
-    
-    NSString *NameClass= NSStringFromClass([self class]);
-    NSMutableArray *pArray = [m_pObjMng->m_pObjectReserv objectForKey:NameClass];
-    [pArray addObject:self];
-    
     [Dic removeObjectForKey_Ex:m_strName];
 }
 //------------------------------------------------------------------------------------------------------

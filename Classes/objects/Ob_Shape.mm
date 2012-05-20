@@ -70,6 +70,10 @@
 
     SET_CELL(LINK_ID_V(self,@"Shape"));
     OBJECT_PERFORM_SEL(@"EvilPar",@"GetNear"); 
+    
+    PITCH_SOUND(@"Attract.wav",((float)(RND%20))*0.1f+0.5f);
+    PLAY_SOUND(@"Attract.wav");
+
     iCountParInShape=iDiff;
     
     pStrings = [[NSMutableArray alloc] init];
@@ -161,6 +165,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareBirth:(ProcStage_ex *)pStage{
     [self GenerateShape];
+    PLAY_SOUND(@"form_birth.wav");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Birth:(Processor_ex *)pProc{
@@ -192,17 +197,12 @@
                     pPar->m_iStage=1;
                 }
                 
-                pPar->m_vPos.x=*pPar->X1;
-                pPar->m_vPos.y=*pPar->Y1;
-
-                [pPar UpdateParticleMatrWithDoublePoint];
                 [pPar UpdateParticleColor];
 
+                [pPar UpdateParticleMatrWithDoublePoint];
                 break;
                 
             case 1://place
-                pPar->m_vPos.x=*pPar->X1;
-                pPar->m_vPos.y=*pPar->Y1;
 
                 [pPar UpdateParticleMatrWithDoublePoint];
 
@@ -221,6 +221,8 @@
     }
 
     [pStrings release];
+    
+    [self RemoveAllParticles];
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

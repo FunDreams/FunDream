@@ -43,12 +43,9 @@
     NSMutableArray *m_pParticleInProc;//контейнер для отображающихся частиц
     NSMutableArray *m_pParticleInFreeze;//контейнер для замороженых частиц.
     
-    Vector3D m_vSize;
-    int m_iCountX;
-    int m_iCountY;
+    NSMutableString *m_pNameAtlas;
+    AtlasContainer *m_pAtlasContainer;
     int m_ICountFrames;
-    int m_INumLoadTextures;
-    
     GLuint Xstep;
     GLuint Ystep;
 }
@@ -60,8 +57,9 @@
 -(id)NewParticle;
 -(id)CreateParticle;
 -(void)RemoveParticle:(Particle_Ex *)pParticle;
+-(void)FrezeParticle:(Particle_Ex *)pParticle;
+-(void)RemoveAllParticles;
 
--(UInt32)LoadTextureAtlas;
 /** заготовки =) **/
 -(void)Destroy;
 -(void)Start;

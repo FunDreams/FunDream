@@ -16,6 +16,7 @@
     NSMutableString *m_strNameSound;
     NSMutableString *m_strNameStage;
     NSMutableString *m_strNameObject;
+    NSMutableString *m_strStartStage;
 
 	NSMutableString *m_DOWN;
 	NSMutableString *m_UP;

@@ -102,7 +102,6 @@
     }
 
     [pParticle AddToContainer:@"ParticlesScore"];
-    
     [pParticle SetFrame:mTextureId];
 }
 //------------------------------------------------------------------------------------------------------
@@ -196,6 +195,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     
+    m_pOwner=nil;
     [pParticle RemoveFromContainer];
     [pParticle release];
     pParticle=nil;

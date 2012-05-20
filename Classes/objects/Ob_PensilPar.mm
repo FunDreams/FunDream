@@ -17,17 +17,12 @@
         m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
         
-        if(pParticle==nil){
-            
-            pParticle=[[Particle alloc] Init:self];
-            m_bHiden=YES;
-        }
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)SetDefault{}
+- (void)SetDefault{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
@@ -43,15 +38,19 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    [pParticle AddToContainer:@"ParticlesPensil"];
-
 	mWidth  = 50;
 	mHeight = 50;
 
 	[super Start];
-
+    
+    if(pParticle==nil){
+        
+        pParticle=[[Particle alloc] Init:self];
+        m_bHiden=YES;
+        [pParticle AddToContainer:@"ParticlesPensil"];
+    }
     mColor.alpha=1;
-
+    
     [pParticle SetFrame:0];
     [pParticle UpdateParticleMatr];
     [pParticle UpdateParticleColor];
@@ -89,7 +88,14 @@
     [pParticle UpdateParticleColor];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    m_pOwner=nil;
+    [pParticle RemoveFromContainer];
+    [pParticle release];
+    pParticle=nil;
+
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 @end

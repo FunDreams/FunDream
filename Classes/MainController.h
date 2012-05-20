@@ -15,6 +15,36 @@
 
 #define MAX_NUM_TEXTURE 600
 //------------------------------------------------------------------------------------------------------
+@interface SoundContainer : NSObject {
+@public
+}
+- (id)InitWithName:(NSString *)pName WithUint:(UInt32)SoundId;
+@end
+//------------------------------------------------------------------------------------------------------
+@interface AtlasContainer : NSObject {
+@public
+	float m_fWidth;
+	float m_fHeight;
+    
+    UInt32	m_iTextureId;
+    NSString *pAtlasName;
+    
+    Vector3D m_vSizeFrame;
+    int      m_iCountX;
+    int      m_iCountY;
+    int      m_INumLoadTextures;
+    NSString *m_psNameStartTexture;
+}
+
+- (id)InitWithName:(NSString *)pNamet
+  NameStartTexture:(NSString *)pNameStart
+            CountX:(int)iCountX
+            CountY:(int)iCountY
+   NumLoadTextures:(int)iNumLoadTextures
+         SizeAtlas:(Vector3D)vSize;
+
+@end
+//------------------------------------------------------------------------------------------------------
 @interface TextureContainer : NSObject {
 @public
 	float m_fWidth;
@@ -71,6 +101,9 @@
 	//все Id для текстур
 	NSMutableDictionary* m_pTextureList;
 
+    //все Id для атлосов
+	NSMutableDictionary* m_pTextureAtlasList;
+
 	int m_CountTouch;
 	
 	UIInterfaceOrientation previousOrientation;
@@ -119,11 +152,14 @@
 
 -(void) PlaySound: (NSString *)NameSound;
 -(void) StopSound: (NSString *)NameSound;
+-(void) SetPitchSound: (NSString *)NameSound Pithc:(float)Pitch;
+-(void) SetVolumeSound: (NSString *)NameSound Volume:(float)Volume;
 
 -(BOOL)isDeviceAniPad;
 - (void)ConvPoint:(CGPoint *)pPoint;
 -(void)LoadAllTextures;
 -(void)LoadAllSounds;
+-(void)LoadTextureAtlas:(AtlasContainer *)pAtlasContainer;
 
 -(NSString *)GetNameWithLocale:(NSString *)NameTexture Ext:(NSString *)Ext;
 

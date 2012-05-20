@@ -14,8 +14,6 @@
 	self=[super Init:Parent WithName:strName];
     if (self != nil)
     {
-
-        m_bHiden=TRUE;
         m_iLayer = layerInvisible;
 
         mWidth  = 50;
@@ -30,6 +28,10 @@
     }
     
 	return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    m_bHiden=YES;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -59,13 +61,6 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-    CREATE_NEW_OBJECT(@"ObjectParticle",@"ParticlesScore",
-                      SET_VECTOR_V(Vector3DMake(512,1024,0),@"m_vSize"),
-                      SET_INT_V(10, @"m_iCountX"),
-                      SET_INT_V(10, @"m_iCountY"),
-                      SET_INT_V(100, @"m_INumLoadTextures"),
-                      SET_STRING_V(@"0-01@2x.png",@"m_pNameTexture"));
-
 	[super Start];
 
     iCountScore=PARAMS_APP->m_iCurRecord;
@@ -74,18 +69,18 @@
 
 	for (int i=0; i<10; i++) {
 		
-		GObject *Ob = CREATE_NEW_OBJECT(@"ObjectAlNumber",([NSString stringWithFormat:@"sym%d", i]),
-                                SET_STRING_V(m_pNameTexture, @"m_pNameTexture"),
-                                LINK_ID_V(self,@"m_pOwner"),
-                                SET_INT_V(0,@"m_iCurrentSym"),
-                    SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-                                SET_BOOL_V(YES,@"m_bHiden"),
-                                SET_BOOL_V(m_bNoOffset,@"m_bNoOffset"),
-//                                SET_BOOL_V(YES, @"m_bDimFromTexture"),
-                                SET_FLOAT_V(WSym,@"mWidth"),
-                                SET_FLOAT_V(HSym,@"mHeight"),
-                                SET_BOOL_V(m_bNoOffset, @"m_bNoOffset"),
-                                SET_INT_V(m_iLayer+1,@"m_iLayer"));
+		GObject *Ob = UNFROZE_OBJECT(@"ObjectAlNumber",([NSString stringWithFormat:@"sym%d", i]),
+                        SET_STRING_V(m_pNameTexture, @"m_pNameTexture"),
+                        LINK_ID_V(self,@"m_pOwner"),
+                        SET_INT_V(0,@"m_iCurrentSym"),
+                        SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
+                        SET_BOOL_V(YES,@"m_bHiden"),
+                        SET_BOOL_V(m_bNoOffset,@"m_bNoOffset"),
+//                      SET_BOOL_V(YES, @"m_bDimFromTexture"),
+                        SET_FLOAT_V(WSym,@"mWidth"),
+                        SET_FLOAT_V(HSym,@"mHeight"),
+                        SET_BOOL_V(m_bNoOffset, @"m_bNoOffset"),
+                        SET_INT_V(m_iLayer+1,@"m_iLayer"));
 
         SET_STAGE_EX(NAME(Ob), @"Proc", m_strStartStage);
 		[m_pChildrenbjectsArr addObject:Ob];
@@ -95,6 +90,10 @@
 
 	[self UpdateScore];
     
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Destroy{
+    [m_pChildrenbjectsArr removeAllObjects];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetColorSym{
@@ -138,9 +137,9 @@
     {
         GObject *pOb=(GObject *)[TmpArr objectAtIndex:i];
         
-    OBJECT_SET_PARAMS(pOb->m_strName,
-        SET_INT_V([[pArrayScore objectAtIndex:i] intValue],@"m_iCurrentSym"),
-                SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"));
+        OBJECT_SET_PARAMS(pOb->m_strName,
+            SET_INT_V([[pArrayScore objectAtIndex:i] intValue],@"m_iCurrentSym"),
+            SET_VECTOR_V(Vector3DMake(m_fStartPos-i*m_fWNumber,0,0),@"m_pOffsetCurPosition"));
 
         OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
         OBJECT_PERFORM_SEL(NAME(pOb), @"Move:");

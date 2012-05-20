@@ -4,12 +4,13 @@
 
 #ifdef __OBJC__
 
-//	#define FPS
+	#define FPS
     #define FADE_NO
     #define MULTITOUCH
 //  #define BANNER_IAD
 
     #import <Foundation/Foundation.h>
+    #import <AVFoundation/AVFoundation.h>
     #import <UIKit/UIKit.h>
 
 	#import <OpenGLES/EAGL.h>

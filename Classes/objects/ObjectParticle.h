@@ -66,14 +66,10 @@
 /** Шаблонный класс для объектов**/
 @interface ObjectParticle : GObject {
 @public
+    NSMutableString *m_pNameAtlas;
     NSMutableDictionary *m_pParticle;
-    
-    Vector3D m_vSize;
-    int m_iCountX;
-    int m_iCountY;
+    AtlasContainer *m_pAtlasContainer;
     int m_ICountFrames;
-    int m_INumLoadTextures;
-    
     GLuint Xstep;
     GLuint Ystep;
 }
@@ -84,8 +80,6 @@
 -(void)AddParticle;
 -(void)RemoveParticle;
 
--(UInt32)LoadTextureAtlas;
-/** заготовки =) **/
 -(void)Destroy;
 -(void)Start;
 

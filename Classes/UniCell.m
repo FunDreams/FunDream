@@ -32,7 +32,6 @@
     }
 
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Int:(int)Value withKey:(id)sKey,...
@@ -56,7 +55,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Float:(float *)parPoint withKey:(id)sKey,...
@@ -75,7 +73,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Float:(float)Value withKey:(id)sKey,...
@@ -99,7 +96,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Bool:(bool *)parPoint withKey:(id)sKey,...
@@ -118,7 +114,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Bool:(bool)Value withKey:(id)sKey,...
@@ -142,7 +137,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Vector:(Vector3D *)parPoint withKey:(id)sKey, ...
@@ -161,7 +155,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Vector:(Vector3D)Value withKey:(id)sKey, ...
@@ -185,7 +178,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Color:(Color3D *)parPoint withKey:(id)sKey, ...
@@ -204,7 +196,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_Color:(Color3D)Value withKey:(id)sKey, ...
@@ -228,7 +219,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Id:(id *)parPoint withKey:(id)sKey, ...
@@ -248,7 +238,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_String:(NSMutableString *)parPoint withKey:(id)sKey, ...
@@ -267,7 +256,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Set_String:(NSString *)Value withKey:(id)sKey, ...
@@ -286,7 +274,6 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
 + (id) Link_Point:(void *)parPoint withKey:(id)sKey, ...
@@ -305,14 +292,13 @@
     }
     
     return cell;
-//    return [cell autorelease];
 }
 //------------------------------------------------------------------------------------------------------
--(void) CrearCell
+-(void) ClearCell
 {
     if ([mpType isEqualToString:@"id"] || [mpType isEqualToString:@"s"])
     {
-        [mpIdPoint release];
+        if(mpIdPoint!=nil)[mpIdPoint release];
     }
     else
     {
@@ -325,7 +311,7 @@
 //------------------------------------------------------------------------------------------------------
 -(void) dealloc
 {
-    [self CrearCell];
+    [self ClearCell];
     [super dealloc];
 }
 //------------------------------------------------------------------------------------------------------

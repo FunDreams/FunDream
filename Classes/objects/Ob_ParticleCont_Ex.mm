@@ -31,12 +31,12 @@
         m_iCurFrame=iFrame;
         GLfloat *m_pTexCoords=(m_pParticleContainer->texCoords+(m_iCurrentOffset)*12);
 
-        float OffsetX=iFrame%((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_iCountX;
-        float OffsetY=iFrame/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_iCountX;
+        float OffsetX=iFrame%((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_pAtlasContainer->m_iCountX;
+        float OffsetY=iFrame/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_pAtlasContainer->m_iCountX;
 
-        float TmpStepX=((Ob_ParticleCont_Ex *)m_pParticleContainer)->Xstep/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_vSize.x;
+        float TmpStepX=((Ob_ParticleCont_Ex *)m_pParticleContainer)->Xstep/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.x;
 
-        float TmpStepY=((Ob_ParticleCont_Ex *)m_pParticleContainer)->Ystep/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_vSize.y;
+        float TmpStepY=((Ob_ParticleCont_Ex *)m_pParticleContainer)->Ystep/((Ob_ParticleCont_Ex *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.y;
 
         CGRect R= CGRectMake(TmpStepX*OffsetX,TmpStepY*OffsetY,
         TmpStepX*(OffsetX+1),TmpStepY*(OffsetY+1) );
@@ -148,165 +148,38 @@
         mColor = Color3DMake(1.0f,1.0f,1.0f,1.0f);
         
         m_iCountVertex=0;
-
-        m_vSize=Vector3DMake(128,128,0);
-        m_iCountX=1;
-        m_iCountY=1;
-        m_INumLoadTextures=1;
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    m_bHiden=NO;
+    [m_pNameAtlas setString:@""];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
 
-    [m_pObjMng->pMegaTree SetCell:LINK_VECTOR_V(m_vSize,m_strName,@"m_vSize")];
-    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCountX,m_strName,@"m_iCountX")];
-    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCountY,m_strName,@"m_iCountY")];
-    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_INumLoadTextures,m_strName,@"m_INumLoadTextures")];
-    
-    //START_QUEUE(@"Proc");
-    //	ASSIGN_STAGE(@"Idle",@"Idle:",nil);
-    //   ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-    //END_QUEUE(@"Proc");
-}
-//------------------------------------------------------------------------------------------------------
-- (void)PostSetParams{
-    
-    if(m_INumLoadTextures>1){
-        
-        m_ICountFrames=m_iCountY*m_iCountX;
-        
-        Xstep=m_vSize.x/m_iCountX;
-        Ystep=m_vSize.y/m_iCountY;
-        
-        mTextureId=[self LoadTextureAtlas];
-    }
-    else {
-        GET_TEXTURE(mTextureId,m_pNameTexture);
-        m_vSize=Vector3DMake(mWidth,mHeight,0);
-        
-        m_ICountFrames=m_iCountY*m_iCountX;
-        
-        Xstep=m_vSize.x/m_iCountX;
-        Ystep=m_vSize.y/m_iCountY;
-        
-    }
+    m_pNameAtlas=[NSMutableString stringWithString:@""];
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_pNameAtlas,m_strName,@"m_pNameAtlas")];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-	[super Start];
+	[super Start]; 
+        
+    m_pAtlasContainer=[m_pParent->m_pTextureAtlasList objectForKey:m_pNameAtlas];
     
-//  m_iLayerTouch=layerTouch_0;//слой касания
-//  [self SetTouch:YES];//интерактивность
-
-    //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
-    //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
-}
-//------------------------------------------------------------------------------------------------------
--(UInt32)LoadTextureAtlas{
-    
-    int IcureText=0;
-
-    TextureContainer * TmpContainer=[m_pParent->m_pTextureList objectForKey:m_pNameTexture];
-    
-    if(TmpContainer!=nil)
-        return TmpContainer->m_iTextureId;
-
-    NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
-    bundleRoot=[bundleRoot stringByAppendingString:@"/textureAtlas"];
-    
-    NSError *Error=[[NSError alloc] init];
-    NSArray *dirContents = [[NSFileManager defaultManager] 
-                            contentsOfDirectoryAtPath:bundleRoot error:&Error];
-    
-    UInt32	m_iTextureId=-1;
-    
-    //		NSLog(NameTexture);
-    glBindTexture(GL_TEXTURE_2D, m_pParent->texture[m_pParent->m_iCount]);
-    
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
-    GLuint width = m_vSize.x;
-    GLuint height = m_vSize.y;
-            
-    CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();
-    void *imageData = malloc( height * width * 4 );
-    CGContextRef context = CGBitmapContextCreate( imageData, width, height, 8, 4 * width, colorSpace,kCGImageAlphaPremultipliedLast | kCGBitmapByteOrder32Big );
-    
-    // Flip the Y-axis
-    CGContextTranslateCTM (context, 0, height);
-    CGContextScaleCTM (context, 1.0, -1.0);
-    
-    CGColorSpaceRelease( colorSpace );
-    CGContextClearRect( context, CGRectMake( 0, 0, width, height ) );
-    bool mBstart=false;
-
-    for (NSString *tString in dirContents) {
-
-        if(mBstart==false){
-            
-            if([tString isEqualToString:m_pNameTexture]){
-                
-                mBstart=true;
-            }
-            else continue;
-        }
-
-        NSRange toprange = [tString rangeOfString: @"."];
-        NSString *SubStr = [tString substringToIndex:toprange.location];
-        NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
-
-        NSString *REZ=[NSString stringWithString:@"textureAtlas/"];
-        REZ=[REZ stringByAppendingString:SubStr];
-//---------------------------------------------------------------
-        NSString *path = [[NSBundle mainBundle] pathForResource:REZ ofType:SubStr1];
-		
-        if(path!=nil)
-        {            
-            NSData *texData = [[NSData alloc] initWithContentsOfFile:path];
-            UIImage *image = [[UIImage alloc] initWithData:texData];
-
-            if (image == nil)
-                NSLog(@"Do real error checking here");
-
-            float OffsetX=IcureText%m_iCountX;
-            float OffsetY=IcureText/m_iCountX;
-            
-            //копирование
-            CGContextDrawImage( context,
-                CGRectMake( Xstep*OffsetX, Ystep*OffsetY, Xstep, Ystep ), image.CGImage );
-            
-            [image release];
-            [texData release];
-            
-            m_INumLoadTextures--;
-            IcureText++;
-            
-            if(m_INumLoadTextures==0)break;
-        }
+    if(m_pAtlasContainer!=nil){
+        
+        m_ICountFrames=m_pAtlasContainer->m_iCountY*m_pAtlasContainer->m_iCountX;
+        
+        Xstep=m_pAtlasContainer->m_vSizeFrame.x/m_pAtlasContainer->m_iCountX;
+        Ystep=m_pAtlasContainer->m_vSizeFrame.y/m_pAtlasContainer->m_iCountY;
+        
+        GET_ATLAS_TEXTURE(mTextureId,m_pNameAtlas);
     }
-    
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);    
-    
-    m_iTextureId=m_pParent->texture[m_pParent->m_iCount];
-    m_pParent->m_iCount++;
-    
-    TmpContainer=[[TextureContainer alloc] InitWithName:m_pNameTexture WithUint:m_iTextureId WithWidth:width WithWidth:height];
-    
-    [m_pParent->m_pTextureList setObject:TmpContainer forKey:m_pNameTexture];
-    
-    CGContextRelease(context);
-    free(imageData);
-
-    [Error release];
-    return m_iTextureId;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
@@ -329,6 +202,7 @@
 //------------------------------------------------------------------------------------------------------
 -(id)NewParticle{
     Particle_Ex *pParticle=[[Particle_Ex alloc] Init:self];
+    pParticle->m_iStage=0;
     return pParticle;
 }
 //------------------------------------------------------------------------------------------------------
@@ -367,30 +241,59 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)RemoveParticle:(Particle_Ex *)pParticle{
+    
+    int iCount=[m_pParticleInProc count]-1;
+    
+    Particle_Ex *pParticleLast=(Particle_Ex *)[m_pParticleInProc objectAtIndex:iCount];
+//------------------------------------------------------------------------------------------------------
+    Vertex3D *m_pVerticesS=(vertices+(pParticleLast->m_iCurrentOffset)*6);
+    Vertex3D *m_pVerticesD=(vertices+(pParticle->m_iCurrentOffset)*6);
+    
+    memcpy(m_pVerticesD, m_pVerticesS, 72);
+    
+    GLfloat *m_pTexCoordsS=(texCoords+(pParticleLast->m_iCurrentOffset)*12);
+    GLfloat *m_pTexCoordsD=(texCoords+(pParticle->m_iCurrentOffset)*12);
+    
+    memcpy(m_pTexCoordsD, m_pTexCoordsS, 48);
+    
+    GLubyte *m_pSquareColorsS=(squareColors+(pParticleLast->m_iCurrentOffset)*24);
+    GLubyte *m_pSquareColorsD=(squareColors+(pParticle->m_iCurrentOffset)*24);
+    
+    memcpy(m_pSquareColorsD, m_pSquareColorsS, 24);
+    
+    pParticleLast->m_iCurrentOffset=pParticle->m_iCurrentOffset;
+    
+    [m_pParticleInProc replaceObjectAtIndex:pParticle->m_iCurrentOffset withObject:pParticleLast];
+    [m_pParticleInProc removeLastObject];
+    
+    pParticle->m_pParticleContainer=nil;
+    
+    m_iCountVertex=6*(iCount);
+    
+    if(pParticle->m_iStage==-1){
+        [m_pParticleInFreeze removeLastObject];
+    }
+    
+    vertices=(Vertex3D *)realloc(vertices,m_iCountVertex*sizeof(Vertex3D));
+    texCoords=(GLfloat *)realloc(texCoords,m_iCountVertex*2*sizeof(GLfloat));
+    squareColors=(GLubyte *)realloc(squareColors,m_iCountVertex*4*sizeof(GLubyte));
+}
+//------------------------------------------------------------------------------------------------------
+-(void)RemoveAllParticles{
+    int iCount=[m_pParticleInProc count];
+    
+    for (int i=0;i<iCount;i++) {
+        Particle_Ex *pPar=[m_pParticleInProc objectAtIndex:0];
+        [self RemoveParticle:pPar];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)FrezeParticle:(Particle_Ex *)pParticle{
 
     [m_pParticleInFreeze addObject:pParticle];
     pParticle->m_vPos.x+=4000+RND;
     pParticle->m_iStage=-1;
     [pParticle UpdateParticle];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)TestSel:(Processor_ex *)pProc{
-
-    m_pCurPosition.x+=30*DELTA;
-    m_pCurAngle.z+=30*DELTA;
-
-    m_pCurScale.x+=3*DELTA;
-}
-//------------------------------------------------------------------------------------------------------
-- (void)InitProc:(ProcStage_ex *)pStage{}
-//------------------------------------------------------------------------------------------------------
-- (void)PrepareProc:(ProcStage_ex *)pStage{}
-//------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{
-    m_pCurPosition.y-=15*DELTA;
-    m_pCurAngle.z-=-10*DELTA;
-    
-//    m_pCurScale.y+=3*DELTA;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

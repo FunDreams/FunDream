@@ -88,6 +88,9 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 	//имена групп
 	NSMutableDictionary *m_Groups;
 
+    //флаг. указвает что на объект не действует destroy
+	bool m_bImmortal;
+
 	//флаг. указвает что на объект не действует глобальная пауза
 	bool m_bNonStop;
 	

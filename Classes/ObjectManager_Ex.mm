@@ -255,6 +255,16 @@
 	[super dealloc];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)DestroyAllObjects{
+
+    NSEnumerator *enumeratorObjects = [m_pAllObjects objectEnumerator];
+    GObject *pObject;
+    
+    while ((pObject = [enumeratorObjects nextObject])) {
+        [self DestroyObject:pObject];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (GObject *)GetObjectByName:(NSString*)NameObject{
 	
 	GObject *pObject = [m_pAllObjects objectForKey:NameObject];
@@ -281,22 +291,26 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (id)DestroyObject:(GObject *)pObject{
 
-    if(pObject->m_bDeleted==NO){
+    if(pObject->m_bDeleted==NO && pObject->m_bImmortal==NO){
         [pMustDelKeys addObject:pObject];
         pObject->m_bDeleted=YES;
 
         [pObject DeleteFromDraw];
         [pObject Destroy];
+        
+        NSString *NameClass= NSStringFromClass([pObject class]);
+        NSMutableArray *pArray = [m_pObjectReserv objectForKey:NameClass];
+        [pArray addObject:pObject];
     }
     
 	return pObject;
 }
 //------------------------------------------------------------------------------------------------------
-- (id)UnfrozeObject:(NSString *)NameClass WithParams:(NSArray *)Parametrs
+- (id)UnfrozeObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp
+         WithParams:(NSArray *)Parametrs
 {
     GObject *pObject = nil;
 
-    NSString *pNameObject=[self GetNameObject:NameClass];
 	Class cls = NSClassFromString(NameClass);
 	if (cls != nil)
     {
@@ -335,7 +349,7 @@ repeate:
         else
         {
             pObject = [self CreateNewObject:NameClass 
-                             WithNameObject:pNameObject WithParams:Parametrs];
+                             WithNameObject:NameObjectTmp WithParams:Parametrs];
         }        
 	}
 	

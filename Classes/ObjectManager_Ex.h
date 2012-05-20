@@ -128,6 +128,7 @@ typedef enum tagLayerTouchID {
     //Mega tree
     Mega_tree *pMegaTree;
     
+    //delta локальная
 	double m_fDeltaTime;
 }
 
@@ -148,15 +149,19 @@ typedef enum tagLayerTouchID {
 - (NSString *)GetNameObject:(NSString*) NameObject;
 
 //функции управления объектами (создание/изменение/доступа параметров)
-- (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObject WithParams:(NSArray *)Parametrs;
+- (id)CreateNewObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp
+           WithParams:(NSArray *)Parametrs;
+//создаём объект из кеша, если кеш пустой, создаём новый
+- (id)UnfrozeObject:(NSString *)NameClass WithNameObject:(NSString *)NameObjectTmp
+         WithParams:(NSArray *)Parametrs;
 
-- (id)UnfrozeObject:(NSString *)NameClass WithParams:(NSArray *)Parametrs;
-
+//устанавливаем параметры для объекта
 - (void)SetParams:(GObject *)pTmpOb WithParams:(NSArray *)Parametrs;
-- (GObject *)GetObjectByName:(NSString*)NameObject;
-- (NSString *)GetNameObject:(NSString*)NameObject;
+- (GObject *)GetObjectByName:(NSString*)NameObject;//получить объект по имени
+- (NSString *)GetNameObject:(NSString*)NameObject;//получить уникальное имя для объекта
 
-- (id)DestroyObject:(GObject *)pObject;
+- (id)DestroyObject:(GObject *)pObject;//убрать один объект в кеш
+- (void)DestroyAllObjects;//убрать все объекты в кеш
 
 - (void)AddToGroup:(NSString*)NameGroup Object:(GObject *)pObject;
 - (void)RemoveFromGroup:(NSString*)NameGroup Object:(GObject *)pObject;
