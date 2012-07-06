@@ -10,9 +10,19 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 
+//тип кнопки
+typedef enum tagTypeButton {
+    bSimple=0,
+    bCheckBox,
+    bRadioBox,
+} EGP_TypeButton;
+
 /** Шаблонный класс для объектов**/
 @interface ObjectButton : GObject {
-	
+@public
+    int m_iType;
+    bool m_bPush;
+    bool m_bCheck;
     NSMutableString *m_strNameSound;
     NSMutableString *m_strNameStage;
     NSMutableString *m_strNameObject;
@@ -39,5 +49,8 @@
 -(void)Start;
 
 - (void)Proc:(Processor_ex *)pProc;
+
+- (void)SetUnPush;
+- (void)SetPush;
 
 @end

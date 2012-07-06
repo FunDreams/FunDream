@@ -3,7 +3,7 @@
 //  Engine
 //
 //  Created by Konstantin on 02.04.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 #import <Foundation/Foundation.h>
 #import "PlManager.h"

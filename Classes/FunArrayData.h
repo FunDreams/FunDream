@@ -13,6 +13,7 @@
     void *pData;
     int iCount;
     int iCountInArray;
+    int iCoundAdd;
     int iType;
 }
 

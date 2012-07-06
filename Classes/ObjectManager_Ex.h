@@ -3,7 +3,7 @@
 //  Engine
 //
 //  Created by svp on 17.04.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
@@ -11,6 +11,7 @@
 #import "GameLogicObject.h"
 #import "GLView.h"
 #import "CGroups.h"
+#import "StringContainer.h"
 
 @class CPhysics;
 @class Mega_tree;
@@ -111,7 +112,10 @@ typedef enum tagLayerTouchID {
 	
 	//список объектов которые учавствуют в касаниях
 	NSMutableDictionary* m_pObjectAddToTouch;
-
+    
+    //контейнер струн
+    StringContainer* pStringContainer;
+    
 	//список объектов которые учавствуют в касаниях
 	NSMutableDictionary* m_pObjectReserv;
 

@@ -85,66 +85,66 @@
 //------------------------------------------------------------------------------------------------------
 - (void)GenerateShape{
 
-    if(iCountParInShape>1){
-
-        FractalString *pStringX1FirstPoint=[[FractalString alloc] init];
-        [pStrings addObject:pStringX1FirstPoint];
-
-        FractalString *pStringY1FirstPoint=[[FractalString alloc] init];
-        [pStrings addObject:pStringY1FirstPoint];
-
-
-        FractalString *pStringXNeighbor;
-        FractalString *pStringYNeighbor;
-
-        for (int i=0; i<iCountParInShape; i++) {
-            
-            Particle_Shape *Par=[self CreateParticle];//создаём частицу
-            [Par SetFrame:0];
-            Par->m_iStage=0;
-
-            if(i==0)
-            {
-                pStringXNeighbor=pStringX1FirstPoint;
-                *pStringXNeighbor->S=0;//RND_I_F(0,10);
-                *pStringXNeighbor->F=RND_I_F(0,60);
-
-                pStringYNeighbor=pStringY1FirstPoint;
-                *pStringYNeighbor->S=0;//RND_I_F(0,10);
-                *pStringYNeighbor->F=RND_I_F(0,60);
-            }
-            
-            Par->X1=pStringXNeighbor->T;
-            Par->Y1=pStringYNeighbor->T;
-
-            if(i!=iCountParInShape-1){
-                
-                //создаём первую струну
-                FractalString *pStringX2=[[FractalString alloc] init];
-                *pStringX2->S=0;//RND_I_F(0,10);
-                Par->X2=pStringX2->T;
-                *pStringX2->F=RND_I_F(0,60);
-                
-                [pStrings addObject:pStringX2];
-                pStringXNeighbor=pStringX2;
-                
-                //создаём вторую струну
-                FractalString *pStringY2=[[FractalString alloc] init];
-                *pStringY2->S=0;//RND_I_F(0,10);
-                Par->Y2=pStringY2->T;
-                *pStringY2->F=RND_I_F(0,60);
-                
-                [pStrings addObject:pStringY2];
-                pStringYNeighbor=pStringY2;
-
-            }
-            else
-            {
-                Par->X2=pStringX1FirstPoint->T;
-                Par->Y2=pStringY1FirstPoint->T;
-            }
-        }
-    }
+//    if(iCountParInShape>1){
+//
+//        FractalString *pStringX1FirstPoint=[[FractalString alloc] init];
+//        [pStrings addObject:pStringX1FirstPoint];
+//
+//        FractalString *pStringY1FirstPoint=[[FractalString alloc] init];
+//        [pStrings addObject:pStringY1FirstPoint];
+//
+//
+//        FractalString *pStringXNeighbor;
+//        FractalString *pStringYNeighbor;
+//
+//        for (int i=0; i<iCountParInShape; i++) {
+//            
+//            Particle_Shape *Par=[self CreateParticle];//создаём частицу
+//            [Par SetFrame:0];
+//            Par->m_iStage=0;
+//
+//            if(i==0)
+//            {
+//                pStringXNeighbor=pStringX1FirstPoint;
+//                *pStringXNeighbor->S=0;//RND_I_F(0,10);
+//                *pStringXNeighbor->F=RND_I_F(0,60);
+//
+//                pStringYNeighbor=pStringY1FirstPoint;
+//                *pStringYNeighbor->S=0;//RND_I_F(0,10);
+//                *pStringYNeighbor->F=RND_I_F(0,60);
+//            }
+//            
+//            Par->X1=pStringXNeighbor->T;
+//            Par->Y1=pStringYNeighbor->T;
+//
+//            if(i!=iCountParInShape-1){
+//                
+//                //создаём первую струну
+//                FractalString *pStringX2=[[FractalString alloc] init];
+//                *pStringX2->S=0;//RND_I_F(0,10);
+//                Par->X2=pStringX2->T;
+//                *pStringX2->F=RND_I_F(0,60);
+//                
+//                [pStrings addObject:pStringX2];
+//                pStringXNeighbor=pStringX2;
+//                
+//                //создаём вторую струну
+//                FractalString *pStringY2=[[FractalString alloc] init];
+//                *pStringY2->S=0;//RND_I_F(0,10);
+//                Par->Y2=pStringY2->T;
+//                *pStringY2->F=RND_I_F(0,60);
+//                
+//                [pStrings addObject:pStringY2];
+//                pStringYNeighbor=pStringY2;
+//
+//            }
+//            else
+//            {
+//                Par->X2=pStringX1FirstPoint->T;
+//                Par->Y2=pStringY1FirstPoint->T;
+//            }
+//        }
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move1:(Processor_ex *)pProc{
@@ -165,6 +165,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareBirth:(ProcStage_ex *)pStage{
     [self GenerateShape];
+    
+//    PITCH_SOUND(@"form_birth.wav",((float)(RND%20))*0.1f+0.5f);
     PLAY_SOUND(@"form_birth.wav");
 }
 //------------------------------------------------------------------------------------------------------
@@ -178,9 +180,9 @@
         m_fCurPosSlader=1;
         NEXT_STAGE;
     }
-    for (FractalString *pString in pStrings) {
-        SET_MIRROR(m_fCurPosSlader, 1, 0, *pString->T, *pString->F, *pString->S);
-    }
+//    for (FractalString *pString in pStrings) {
+//        SET_MIRROR(m_fCurPosSlader, 1, 0, *pString->T, *pString->F, *pString->S);
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Particle:(Processor_ex *)pProc{

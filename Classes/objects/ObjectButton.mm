@@ -17,14 +17,21 @@
     {
         m_Disable=false;
         m_iLayer = layerInterfaceSpace5;
+        m_iType=bSimple;
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
+    mColor.red=1;
+    mColor.green=1;
+    mColor.blue=1;
     mColor.alpha=1;
+    
     m_bHiden=NO;
+    m_bPush=NO;
+    m_bCheck=NO;
     
     [m_DOWN setString:@""];
     [m_UP setString:@""];
@@ -38,6 +45,8 @@
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY")];
+
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iType,m_strName,@"m_iType")];
     
     m_strNameSound=[NSMutableString stringWithString:@""];
     m_strNameStage=[NSMutableString stringWithString:@""];
@@ -108,7 +117,6 @@
     if(m_bDimFromTexture){GET_DIM_FROM_TEXTURE(m_DOWN);}
     
 	[super Start];
-    
     [self SetTouch:YES];
 
     if(m_bDimMirrorX==YES){m_pCurScale.x=-m_pCurScale.x;}
@@ -128,30 +136,72 @@
     m_vEndPos.y-=1000;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetCheck{
+    m_bCheck=YES;
+    m_bPush=YES;
+    mTextureId=m_TextureDown;
+    
+    mColor.green=0;
+    mColor.blue=0;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetUnCheck{
+    m_bCheck=NO;
+    m_bPush=NO;
+    mTextureId=m_TextureUP;
+    
+    mColor.green=1;
+    mColor.blue=1;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetUnPush{
+    m_bPush=NO;
+    mTextureId=m_TextureUP;
+    
+    mColor.green=1;
+    mColor.blue=1;
+
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetPush{
+    
+    m_bPush=YES;
+    mTextureId=m_TextureDown;
+    
+    mColor.green=0;
+    mColor.blue=0;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-		mTextureId=m_TextureDown;
+	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
+        if(m_iType!=bCheckBox)
+            [self SetPush];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
     
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-		mTextureId=m_TextureDown;
+	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
+        if(m_iType!=bCheckBox)
+            [self SetPush];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-		mTextureId=m_TextureUP;
+	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
+        if(m_iType!=bCheckBox)
+            [self SetUnPush];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -159,17 +209,38 @@
     if(m_bLookTouch==YES)LOCK_TOUCH;
 
 	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-	{
-		mTextureId=m_TextureUP;
-
-        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-            
+	{            
         [m_pParent PlaySound:m_strNameSound];
         
-   //     NEXT_STAGE_EX(self->m_strName, @"Proc");
-
+        if(m_iType==bSimple){
+            [self SetUnPush];
+        }
+        else{
+            
+            if(m_bCheck==NO){
+                m_bCheck=YES;
+                [self SetPush];
+            }
+            else if(m_bCheck==YES){
+                m_bCheck=NO;
+                [self SetUnPush];
+            }
+        }
+        if(m_iType==bRadioBox){
+            [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+        }
+        
+        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        
+        //NEXT_STAGE_EX(self->m_strName, @"Proc");
         //[[[m_pObjMng GetObjectByName:self->m_strName] FindProcByName:@"Proc"] NextStage];
     }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    if(m_iType!=bCheckBox)
+        [self SetUnPush];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{

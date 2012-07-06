@@ -3,7 +3,7 @@
 //  ProgSettingsManager
 //
 //  Created by svp on 01.04.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Copyright 2010 FunDreams. All rights reserved.
 //
 
 #import "PlManager.h"

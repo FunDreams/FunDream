@@ -160,7 +160,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Placement:(Processor_ex *)pProc{
-    float V=(m_fCurPosSlader+0.1f)*6;//0.00001f
+    float V=(m_fCurPosSlader+0.1f)*10;//0.00001f
     
     m_fCurPosSlader+=DELTA*V;
     if(m_fCurPosSlader>1){

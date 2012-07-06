@@ -14,7 +14,7 @@ typedef enum tagRootViewControllerState {
 } EGP_RootViewController;
 //------------------------------------------------------------------------------------------------------
 @interface RootViewController : UIViewController {
-	
+	@public
 	EGP_RootViewController m_iCurrentView;
 	MainController *m_pMainController;
 	PreviewController *m_pPreviewController;

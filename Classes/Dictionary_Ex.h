@@ -3,7 +3,7 @@
 //  sudoku
 //
 //  Created by Konstantin on 24.04.11.
-//  Copyright 2011 FunDreams. All rights reserved.
+//  Copyright 2011 __FunDreamsInc__. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>

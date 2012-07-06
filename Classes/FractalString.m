@@ -10,23 +10,201 @@
 
 @implementation FractalString
 
-- (id)init{
-	self = [super init];
+//------------------------------------------------------------------------------------------------------
+- (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
+   WithContainer:(StringContainer *)pContainer{
+    
+    self = [super init];
 	if (self != nil)
     {
+        pParent=Parent;
+        if(pParent!=nil){
+            [pParent->aStrings addObject:self];
+        }
+
+        aStrings = [[NSMutableArray alloc] init];
+        
         S=(float *)malloc(4);
         T=(float *)malloc(4);
         F=(float *)malloc(4);
+        
+        m_iType=tLine;
+        
+        strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
+
+        [pContainer->DicStrings setObject:self forKey:strUID];
+        
+        for (int i=0; i<[pStrSource->aStrings count]; i++) {
+            
+            FractalString *TmpStr=[pStrSource->aStrings objectAtIndex:i];
+            [[FractalString alloc] initAsCopy:TmpStr 
+                WithParent:self WithContainer:pContainer];
+        }
     }
     
     return self;
 }
+//------------------------------------------------------------------------------------------------------
+- (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        pParent=Parent;
+        aStrings = [[NSMutableArray alloc] init];
+        
+        S=(float *)malloc(4);
+        T=(float *)malloc(4);
+        F=(float *)malloc(4);
 
+        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
+        [pContainer->DicStrings setObject:self forKey:strUID];
+    }
+    
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
+     WithContainer:(StringContainer *)pContainer{
+
+	self = [super init];
+	if (self != nil)
+    {
+        pParent=Parent;      
+        if(pParent!=nil){
+            [pParent->aStrings addObject:self];
+        }
+        
+        strUID = [[NSString alloc] initWithString:NameString];
+                
+        S=(float *)malloc(4);
+        T=(float *)malloc(4);
+        F=(float *)malloc(4);
+        
+        m_iType=tLine;
+
+        aStrings = [[NSMutableArray alloc] init];        
+        
+        [pContainer->DicStrings setObject:self forKey:strUID];
+    }
+
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos 
+            WithContainer:(StringContainer *)pContainer{
+    
+    //Name
+    NSRange Range = { *iCurReadingPos, sizeof(int)};
+    int iLen;
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+    unichar* ucBuff = (unichar*)calloc(iLen, sizeof(unichar));
+    
+    [pData getBytes:ucBuff range:Range];
+    
+    *iCurReadingPos += iLen*sizeof(unichar);
+    
+    NSString *sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    free(ucBuff);
+    
+    strUID = [[NSString alloc] initWithString:sValue];
+    
+    //float value
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:S range:Range];
+    *iCurReadingPos += sizeof(float);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:T range:Range];
+    *iCurReadingPos += sizeof(float);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:F range:Range];
+    *iCurReadingPos += sizeof(float);
+
+    //child string
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    int iCount=0;
+    [pData getBytes:&iCount range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    for (int i=0; i<iCount; i++) {
+        
+        FractalString *FChild=[[FractalString alloc] initWithData:pData
+                WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
+        
+        [aStrings addObject:FChild];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)selfSave:(NSMutableData *)m_pData WithVer:(int)iVersion
+{
+    switch (iVersion) {
+        case 1:
+        {
+            //Name
+            unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
+            
+            [strUID getCharacters:ucBuff];
+            int Len=[strUID length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+            
+            free(ucBuff);
+
+            //float value
+            [m_pData appendBytes:S length:sizeof(float)];
+            [m_pData appendBytes:T length:sizeof(float)];
+            [m_pData appendBytes:F length:sizeof(float)];
+            
+            //child string
+            int iCount=[aStrings count];
+            [m_pData appendBytes:&iCount length:sizeof(int)];
+            
+            for (int i=0; i<iCount; i++) {
+                FractalString *FChild= [aStrings objectAtIndex:i];
+                [FChild selfSave:m_pData WithVer:iVersion];
+            }
+        }
+        break;
+            
+        default:
+        break;
+    }    
+}
+//------------------------------------------------------------------------------------------------------
+-(void)UpDate:(float)fDelta{
+    
+    switch (m_iType) {
+        case tLine:
+            
+            for (FractalString *pFStringChild in aStrings){
+                [pFStringChild UpDate:fDelta];
+                
+            ////mirror
+            }
+
+            break;
+            
+        default:
+            break;
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
     free(S);
     free(T);
     free(F);
+
+    [aStrings release];
+    [strUID release];
+    
     [super dealloc];
 }
+//------------------------------------------------------------------------------------------------------
 @end

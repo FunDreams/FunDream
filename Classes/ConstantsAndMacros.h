@@ -90,6 +90,11 @@ mHeight=pNum->m_fHeight;}
 //фактор масштабирования для универсального приложения iPhone/iPad
 #define FACTOR_SCALE 1.11f
 
+#define FACTOR_INC    m_pParent->fFactorInc
+#define FACTOR_DEC    m_pParent->fFactorDec
+#define FACTOR_INC_INV    m_pParent->fFactorIncInv
+#define FACTOR_DEC_INV    m_pParent->fFactorDecInv
+
 //установка преобразования, для процесса
 #define SET_MIRROR(pfsourceX,pfSourceF2,pfSourceF1,pfdestY,pfDestF2,pfDestF1)    \
 pfdestY=(((float)pfsourceX-(float)pfSourceF1)*(((float)pfDestF1-(float)pfDestF2)/((float)pfSourceF1-(float)pfSourceF2)))+(float)pfDestF1;

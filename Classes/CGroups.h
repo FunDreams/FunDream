@@ -3,7 +3,7 @@
 //  SeaFight
 //
 //  Created by Konstantin Maximov on 06.03.12.
-//  Copyright (c) 2012 High Gear. All rights reserved.
+//  Copyright (c) 2012 __FunDreamsInc__. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

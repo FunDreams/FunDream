@@ -21,6 +21,8 @@
         m_bGlobalPause=false;
         
         m_pParent = Parent;
+        
+        pStringContainer = [[StringContainer alloc] init:self];
         m_pObjectList = [[NSMutableArray alloc] init];
         m_pObjectReserv = [[NSMutableDictionary alloc] init];
         m_pGroups = [[CGroups alloc] init];
@@ -58,6 +60,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateObjects{
 	    
+    [pStringContainer Update:(float)m_fDeltaTime];
+    
 	if([m_pObjectAddToTouch count])
 	{
 		NSEnumerator *enumerator = [m_pObjectAddToTouch objectEnumerator];
@@ -137,10 +141,8 @@
                 
                 Processor_ex *pProc_ex;
                 enumeratorProc = [pObject->m_pProcessor_ex->pDic objectEnumerator];
-                while ((pProc_ex = [enumeratorProc nextObject]))
-                {
+                while ((pProc_ex = [enumeratorProc nextObject]) && pObject->m_bDeleted==false)
                     [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
-                }                
             }
 		}
 	}
@@ -168,8 +170,9 @@
             
             Processor_ex *pProc_ex;
             enumeratorProc = [pObject->m_pProcessor_ex->pDic objectEnumerator];
-			while ((pProc_ex = [enumeratorProc nextObject]))
+			while ((pProc_ex = [enumeratorProc nextObject]) && pObject->m_bDeleted==false)
                 [pObject performSelector:pProc_ex->m_CurStage->m_selector withObject:pProc_ex];
+            
 		}
 	}
 
@@ -223,7 +226,7 @@
        
        GObject *pObject;
        
-       while ((pObject = [pEnumerator nextObject])) {
+       while ((pObject = [pEnumerator nextObject]) && pObject->m_bDeleted==false) {
            
            glLoadIdentity();
            glRotatef(fCurrentAngleRotateOffset, 0, 0, 1);
@@ -235,6 +238,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {		
+    [pStringContainer release];
 	[m_pObjectList release];
 	[m_pObjectReserv release];
 	[m_pObjectAddToTouch release];

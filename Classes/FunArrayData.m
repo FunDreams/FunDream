@@ -16,6 +16,7 @@
 
     if(self){
 
+        iCoundAdd=5;
         iCountInArray=0;
         iCount=iCopasity;
         iType=i_Type;
@@ -35,7 +36,7 @@
 
 - (void)AddData:(void *)pDataValue{
     if(iCount==iCountInArray){
-        iCount+=5;
+        iCount+=iCoundAdd;
         pData = realloc(pData, (iType*iCount));
     }
 

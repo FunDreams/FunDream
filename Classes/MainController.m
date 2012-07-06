@@ -465,23 +465,23 @@ FullName:(NSString *)FullNameSound
 
 	if (previousOrientation==UIInterfaceOrientationLandscapeRight) {
 		
-		tmpPointDif.x=(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
-		tmpPointDif.y=0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width);
+		tmpPointDif.x=-(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
+		tmpPointDif.y=-0.5*VIEWPORT_W+(InterPoint.x*VIEWPORT_W/rect.size.width);
 	}
 	else if (previousOrientation==UIInterfaceOrientationLandscapeLeft) {
 		
-		tmpPointDif.x=-(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
-		tmpPointDif.y=-(0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width));
+		tmpPointDif.x=(0.5f*VIEWPORT_H-InterPoint.y*VIEWPORT_H/rect.size.height);
+		tmpPointDif.y=(0.5*VIEWPORT_W-(InterPoint.x*VIEWPORT_W/rect.size.width));
 	}
 	else if (previousOrientation==UIInterfaceOrientationPortrait) {
         
         tmpPointDif.x=(InterPoint.x*VIEWPORT_W/rect.size.width-0.5f*VIEWPORT_W);
-		tmpPointDif.y=0.5*VIEWPORT_H-(InterPoint.y*VIEWPORT_H/rect.size.height)-10;
+		tmpPointDif.y=0.5*VIEWPORT_H-(InterPoint.y*VIEWPORT_H/rect.size.height);
     }
     else if (previousOrientation==UIInterfaceOrientationPortraitUpsideDown) {
 		
 		tmpPointDif.x=0.5f*VIEWPORT_W-InterPoint.x*VIEWPORT_W/rect.size.width;
-		tmpPointDif.y=-0.5f*VIEWPORT_H+InterPoint.y*VIEWPORT_H/rect.size.height+10;
+		tmpPointDif.y=-0.5f*VIEWPORT_H+InterPoint.y*VIEWPORT_H/rect.size.height;
 	}
 	
 	pPoint->x = tmpPointDif.x;
@@ -1037,7 +1037,7 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)setupView:(GLView*)view
 {
-	glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
 	
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);

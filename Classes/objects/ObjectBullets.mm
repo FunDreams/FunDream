@@ -103,6 +103,7 @@
     m_fCurPosSlader+=DELTA*V;
     if(m_fCurPosSlader>1){
         m_fCurPosSlader=1;
+        PLAY_SOUND(@"falling_of_particles4.wav");
         NEXT_STAGE;
     }
 }

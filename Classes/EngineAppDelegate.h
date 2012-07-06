@@ -3,7 +3,7 @@
 //  Engine
 //
 //  Created by Konstantin on 01.04.10.
-//  Copyright __MyCompanyName__ 2010. All rights reserved.
+//  Copyright __FunDreamsInc__ 2010. All rights reserved.
 //
 #define MIN_DELTA_TIME 0.011f
 

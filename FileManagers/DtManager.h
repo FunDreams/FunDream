@@ -1,33 +1,46 @@
 //
-//  PlManager.h
+//  DtManager.h
 //  ProgSettingsManager
 //
-//  Created by svp on 01.04.10.
-//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//  Created by Konstantin on 29.05.12.
+//  Copyright 2012 FunDreams. All rights reserved.
 //
 
+#import <DropboxSDK/DropboxSDK.h>
 #import <Foundation/Foundation.h>
 
 /** Класс для работы записи и ситывание данных из файлов **/
-@interface CDataManager : NSObject {
+@interface CDataManager : NSObject <DBRestClientDelegate,DBSessionDelegate> {
+@public
+    DBRestClient* restClient;//клиент для загрузки
 	/** Хранит полный путь к файлу**/
 	NSString* m_sFullFileName;
+	NSString* m_sFullFileNameDropBox;
 	/** Объект-буфер отвечающий за загрузку и сохранение данных **/
-	NSMutableData* m_pData;
+	NSMutableData* m_pDataDmp;
 	/** Отвечает за текущую позицию считывания**/
 	int m_iCurReadingPos;
+    
+    NSString *relinkUserId;//user id
+    DBMetadata *m_pMetaData;
 }
 
 /** Инициализирует объект и загружает данные из файла который находится в ресурсах приложения
  @param sFileName  Определяет название файла 
  @return Возвращает созданный объект если считывание удачно и nil в противоположном случае
  **/
--(CDataManager*) InitWithFileFromRes: (NSString*) sFileName;
+-(CDataManager*) InitWithFileFromCash: (NSString*) sFileName;
+-(CDataManager*) InitWithFileFromRes:(NSString*) sFileName;
 
 /** Сохраняет данные миз буфера в файл
  @return Возвращает TRUE если запись удачно и FALSE в противоположном случае
  **/
 -(bool) Save;
+
+/** Загружает данные миз файла в буфер
+ @return Возвращает TRUE если загрузка удачно и FALSE в противоположном случае
+ **/
+-(bool) Load;
 
 /** Очищает буфер данных и обнуляет позицию для считывания
  **/
@@ -36,6 +49,10 @@
 /** Обнуляет позицию для считывания для повторного считывания
  **/
 -(void) ResetReading;
+
+/** устанавливаем позицию для чтения файла
+ **/
+-(void) SetPosReading:(int)iPos;
 
 
 /** Добавляет данные в буфер из строки
@@ -99,5 +116,9 @@
  **/
 -(BOOL) GetBoolValue;
 
+-(void)initDropBox;//инициализация dropBox
+-(void)UpLoad;//Загрузка файла на сервер
+-(void)DownLoad;//Загрузка файла с сервера
+-(void)Link;//подключение акка
 
 @end
