@@ -12,6 +12,7 @@
 @interface StringContainer : NSObject{
 @public
     NSMutableArray *ArrayStrings;
+    FunArrayData *ArrayPoints;
     NSMutableArray *ArrayActiveStrings;
     NSMutableDictionary *DicStrings;
     
@@ -21,7 +22,8 @@
     //массив менеджеров данных файла
     int m_iCurFile;
     NSMutableArray *ArrayDumpFiles;
-    CDataManager *pDataCurManagerTmp;    
+    CDataManager *pDataCurManagerTmp;
+    
 }
 
 -(id)init:(id)Parent;

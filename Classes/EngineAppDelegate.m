@@ -117,7 +117,7 @@
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application{
-    int m=0;
+    
 #ifdef EDITOR
     [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
 #endif

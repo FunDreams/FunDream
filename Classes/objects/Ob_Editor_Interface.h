@@ -15,8 +15,8 @@
     
     NSMutableArray *aProp;
     NSMutableArray *aObjects;
-    NSMutableArray *aObSliders;
-
+    NSMutableArray *aObSliders;    
+    NSMutableArray *aObPoints;    
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -27,9 +27,14 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
+- (void)UpdatePoints;
+
+- (void)CreateNewPoint;
+- (void)DelPoint;
 
 - (void)CreateNewObject;
 - (void)CheckObject;
+- (void)CheckPoint;
 - (void)DelObject;
 
 -(void)dealloc;

@@ -22,15 +22,17 @@
             [pParent->aStrings addObject:self];
         }
 
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
         aStrings = [[NSMutableArray alloc] init];
         
         S=(float *)malloc(4);
-        T=(float *)malloc(4);
+  //      T=(float *)malloc(4);
         F=(float *)malloc(4);
         
         m_iType=tLine;
         
         strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
+        strName = [[NSString alloc] initWithString:pStrSource->strName];
 
         [pContainer->DicStrings setObject:self forKey:strUID];
         
@@ -40,26 +42,6 @@
             [[FractalString alloc] initAsCopy:TmpStr 
                 WithParent:self WithContainer:pContainer];
         }
-    }
-    
-    return self;
-}
-//------------------------------------------------------------------------------------------------------
-- (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
-        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
-    
-    self = [super init];
-	if (self != nil)
-    {
-        pParent=Parent;
-        aStrings = [[NSMutableArray alloc] init];
-        
-        S=(float *)malloc(4);
-        T=(float *)malloc(4);
-        F=(float *)malloc(4);
-
-        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
-        [pContainer->DicStrings setObject:self forKey:strUID];
     }
     
     return self;
@@ -76,19 +58,53 @@
             [pParent->aStrings addObject:self];
         }
         
-        strUID = [[NSString alloc] initWithString:NameString];
+        NSString *StrRndName = [pContainer GetRndName];
+        id TmpId=[pContainer->DicStrings objectForKey:NameString];
+        
+        if(TmpId==nil){
+            strName = [[NSString alloc] initWithString:NameString];
+            strUID = [[NSString alloc] initWithString:NameString];
+        }
+        else
+        {
+            strName = [[NSString alloc] initWithString:StrRndName];
+            strUID = [[NSString alloc] initWithString:StrRndName];
+        }
+
                 
         S=(float *)malloc(4);
-        T=(float *)malloc(4);
+    //    T=(float *)malloc(4);
         F=(float *)malloc(4);
         
         m_iType=tLine;
 
-        aStrings = [[NSMutableArray alloc] init];        
+        aStrings = [[NSMutableArray alloc] init]; 
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
 
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        pParent=Parent;
+        aStrings = [[NSMutableArray alloc] init];
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
+        
+        S=(float *)malloc(4);
+  //      T=(float *)malloc(4);
+        F=(float *)malloc(4);
+        
+        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
+        [pContainer->DicStrings setObject:self forKey:strUID];
+    }
+    
     return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -116,10 +132,6 @@
     //float value
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
     [pData getBytes:S range:Range];
-    *iCurReadingPos += sizeof(float);
-
-    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
-    [pData getBytes:T range:Range];
     *iCurReadingPos += sizeof(float);
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
@@ -158,7 +170,6 @@
 
             //float value
             [m_pData appendBytes:S length:sizeof(float)];
-            [m_pData appendBytes:T length:sizeof(float)];
             [m_pData appendBytes:F length:sizeof(float)];
             
             //child string
@@ -198,11 +209,13 @@
 - (void)dealloc
 {
     free(S);
-    free(T);
     free(F);
 
     [aStrings release];
+    [ArrayPoints release];
+    
     [strUID release];
+    [strName release];
     
     [super dealloc];
 }

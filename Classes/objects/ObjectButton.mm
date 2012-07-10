@@ -239,7 +239,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    if(m_iType!=bCheckBox)
+    if(m_iType!=bCheckBox && m_iType!=bRadioBox)
         [self SetUnPush];
 }
 //------------------------------------------------------------------------------------------------------

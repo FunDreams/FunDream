@@ -16,10 +16,11 @@
 
     if(self){
 
-        iCoundAdd=5;
+        m_bValue=NO;
+        iCountInc=5;
         iCountInArray=0;
         iCount=iCopasity;
-        iType=i_Type;
+        iType=4;
 
         pData = malloc(iType*iCount);
     }
@@ -30,31 +31,51 @@
 - (void)Reserv:(int)NewSize{
     iCount=NewSize;
 
-    if(iCount>iCountInArray)iCountInArray=iCount;
+    if(iCount<iCountInArray)iCountInArray=iCount;
     pData = realloc(pData, iType*iCount);
 }
 
-- (void)AddData:(void *)pDataValue{
+- (void *)AddData:(void *)pDataValue{
     if(iCount==iCountInArray){
-        iCount+=iCoundAdd;
-        pData = realloc(pData, (iType*iCount));
+        
+        iCount+=iCountInc;
+        pData=realloc(pData,iCount*iType);
     }
 
-    iCountInArray++;
-    memcpy(pData+(iCountInArray*iType), pDataValue, iType);
+    float *TmpLink;
+    if(m_bValue){
+        TmpLink=(float *)malloc(iType);
+        *TmpLink=*(float *)pDataValue;
+    }
+    else TmpLink=pDataValue;
+    
+    memcpy((float *)(pData+iCountInArray*4),&TmpLink, 4);
+
+    float **fRet=(float **)(pData+iCountInArray*4);
+    iCountInArray++;    
+
+    return *fRet;
 }
 
 - (void)RemoveDataAtIndex:(int)iIndex{
-    memcpy(pData+(iIndex*iType), pData+(iCountInArray*iType), iType);
+    
+    if(m_bValue==YES){
+
+        float **TmpLink=(float **)(pData+iIndex*4);
+        float *TmpLink2=*TmpLink;
+        free(TmpLink2);
+    }
+
     iCountInArray--;
+    memcpy((float *)(pData+iIndex*4), (float *)(pData+iCountInArray*4), 4);
 }
 
 - (void *)GetDataAtIndex:(int)iIndex{
     if(iIndex>iCountInArray)return 0;
     
-    void *fRet=pData+(iCountInArray*iType);
+    float **fRet=((float **)(pData+iCountInArray));
 
-    return fRet;
+    return *fRet;
 }
 
 - (void)Reset{

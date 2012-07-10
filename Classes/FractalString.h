@@ -18,21 +18,28 @@ typedef enum tagTypeString {
 } EGP_TypeString;
 
 
+@interface FractalPoint : NSObject{
+@public
+    float *T;//параметр.
+}
+@end
+
 @interface FractalString : NSObject{
 @public
     int m_iType;
 
     FractalString *pParent;//струна родитель
-    NSString *strUID;//уникальный идентификатор струны
+    NSString *strName;//Имя
+    NSString *strUID;//уникальный идентификатор струны (случайное имя дня словаря)
     int m_iDeep;//вложенность
 
     int iType;//тип струны  линия/кривая/круг
     
     NSMutableArray *aStrings;
+    FunArrayData *ArrayPoints;//ссылки на значения параметров
     
-    float *S;//стартовое значение параметра
-    float *T;//последний параметр.
-    float *F;//конечное значение параметра
+    float *S;//начальная граница параметра
+    float *F;//конечная граница параметра
 
     //точки необходимы для преобразования координат (отражение)
     //в зависимости от типа струны нужно определённое количество точек.

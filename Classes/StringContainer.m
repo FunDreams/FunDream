@@ -16,6 +16,10 @@
 
     if(self){
         
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:100 CountByte:4];
+        ArrayPoints->iCountInc=1;
+        ArrayPoints->m_bValue=YES;
+
         DicStrings = [[NSMutableDictionary alloc] init];
         ArrayStrings = [[NSMutableArray alloc] init];
         ArrayActiveStrings = [[NSMutableArray alloc] init];
@@ -199,6 +203,8 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
+    [ArrayPoints release];
+    
     for (CDataManager *pManager in ArrayDumpFiles) {
         [pManager release];
     }

@@ -70,6 +70,10 @@
 
     UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
 
+    CREATE_NEW_OBJECT(@"Ob_ParticleCont_ForStr",@"SpriteContainer",
+                      SET_STRING_V(@"PensilAtl",@"m_pNameAtlas"),
+                      SET_VECTOR_V(Vector3DMake(0, 0, 0),@"m_pCurPosition"));
+
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonRestart",
 //                   SET_STRING_V(@"ButtonRestart_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
