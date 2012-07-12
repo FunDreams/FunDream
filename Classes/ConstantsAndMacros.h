@@ -95,7 +95,7 @@ mHeight=pNum->m_fHeight;}
 #define FACTOR_INC_INV    m_pParent->fFactorIncInv
 #define FACTOR_DEC_INV    m_pParent->fFactorDecInv
 
-//установка преобразования, для процесса
+//установка преобразования, для процесса (инвариант преобразования информации)
 #define SET_MIRROR(pfsourceX,pfSourceF2,pfSourceF1,pfdestY,pfDestF2,pfDestF1)    \
 pfdestY=(((float)pfsourceX-(float)pfSourceF1)*(((float)pfDestF1-(float)pfDestF2)/((float)pfSourceF1-(float)pfSourceF2)))+(float)pfDestF1;
 

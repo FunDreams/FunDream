@@ -24,6 +24,7 @@
     NSMutableArray *ArrayDumpFiles;
     CDataManager *pDataCurManagerTmp;
     
+    float  *fZeroPoint;
 }
 
 -(id)init:(id)Parent;

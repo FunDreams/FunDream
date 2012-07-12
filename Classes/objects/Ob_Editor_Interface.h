@@ -17,6 +17,7 @@
     NSMutableArray *aObjects;
     NSMutableArray *aObSliders;    
     NSMutableArray *aObPoints;    
+    int IndexCheckPoint;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

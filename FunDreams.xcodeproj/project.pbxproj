@@ -30,6 +30,7 @@
 		185FBA5D152F1EE200DB25C7 /* miniHelp in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5C152F1EE200DB25C7 /* miniHelp */; };
 		185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */; };
 		185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */; };
+		1866EC5615AD504200195271 /* Ob_B_Slayder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1866EC5515AD504100195271 /* Ob_B_Slayder.mm */; };
 		1869E08A158B17090022055A /* StringContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1869E089158B17090022055A /* StringContainer.m */; };
 		186D5E1B1545CE6500DDC893 /* ObjectEvilPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E1A1545CE6500DDC893 /* ObjectEvilPar.mm */; };
 		186D5E1E154700B000DDC893 /* FunArrayData.m in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E1D154700B000DDC893 /* FunArrayData.m */; };
@@ -135,6 +136,8 @@
 		185FBA5C152F1EE200DB25C7 /* miniHelp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = miniHelp; sourceTree = "<group>"; };
 		185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "../Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "../Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		1866EC5415AD504100195271 /* Ob_B_Slayder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_B_Slayder.h; path = objects/Ob_B_Slayder.h; sourceTree = "<group>"; };
+		1866EC5515AD504100195271 /* Ob_B_Slayder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_B_Slayder.mm; path = objects/Ob_B_Slayder.mm; sourceTree = "<group>"; };
 		1869E088158B17090022055A /* StringContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringContainer.h; sourceTree = "<group>"; };
 		1869E089158B17090022055A /* StringContainer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StringContainer.m; sourceTree = "<group>"; };
 		186D5E191545CE6500DDC893 /* ObjectEvilPar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectEvilPar.h; path = objects/ObjectEvilPar.h; sourceTree = "<group>"; };
@@ -383,6 +386,8 @@
 				1817D5C5156C069C00ED0758 /* Ob_Editor_Interface.mm */,
 				181F2BA612D5019E008A6482 /* ObjectButton.h */,
 				181F2BA512D5019E008A6482 /* ObjectButton.mm */,
+				1866EC5415AD504100195271 /* Ob_B_Slayder.h */,
+				1866EC5515AD504100195271 /* Ob_B_Slayder.mm */,
 				18DEE3CD158A4AF300C4DAB5 /* Ob_Slayder.h */,
 				18DEE3CE158A4AF400C4DAB5 /* Ob_Slayder.mm */,
 				1817D5C1156C065000ED0758 /* Ob_EditorTouch.h */,
@@ -688,6 +693,7 @@
 				18DEE3CF158A4AF400C4DAB5 /* Ob_Slayder.mm in Sources */,
 				1869E08A158B17090022055A /* StringContainer.m in Sources */,
 				1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */,
+				1866EC5615AD504200195271 /* Ob_B_Slayder.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

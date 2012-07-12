@@ -59,7 +59,7 @@
 
 - (void)RemoveDataAtIndex:(int)iIndex{
     
-    if(m_bValue==YES){
+    if(m_bValue==YES){ 
 
         float **TmpLink=(float **)(pData+iIndex*4);
         float *TmpLink2=*TmpLink;
@@ -73,7 +73,7 @@
 - (void *)GetDataAtIndex:(int)iIndex{
     if(iIndex>iCountInArray)return 0;
     
-    float **fRet=((float **)(pData+iCountInArray));
+    float **fRet=((float **)(pData+iIndex*4));
 
     return *fRet;
 }

@@ -22,12 +22,11 @@
             [pParent->aStrings addObject:self];
         }
 
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
         aStrings = [[NSMutableArray alloc] init];
-        
-        S=(float *)malloc(4);
-  //      T=(float *)malloc(4);
-        F=(float *)malloc(4);
+
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
+
+        [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
         
         m_iType=tLine;
         
@@ -48,7 +47,8 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
-     WithContainer:(StringContainer *)pContainer{
+     WithContainer:(StringContainer *)pContainer
+                 S:(float *)fS F:(float *)fF{
 
 	self = [super init];
 	if (self != nil)
@@ -71,15 +71,12 @@
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
 
-                
-        S=(float *)malloc(4);
-    //    T=(float *)malloc(4);
-        F=(float *)malloc(4);
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
+        [self SetLimmitStringS:fS F:fF];
         
         m_iType=tLine;
 
         aStrings = [[NSMutableArray alloc] init]; 
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
@@ -88,24 +85,36 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
-        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer
+        S:(float *)fS F:(float *)fF{
     
     self = [super init];
 	if (self != nil)
     {
         pParent=Parent;
         aStrings = [[NSMutableArray alloc] init];
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
         
-        S=(float *)malloc(4);
-  //      T=(float *)malloc(4);
-        F=(float *)malloc(4);
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
+        [self SetLimmitStringS:fS F:fF];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
     
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetLimmitStringS:(float *)fS F:(float *)fF{
+//    float X=RND_I_F(240,240);
+//    
+//    float *pX=(float *)[m_pObjMng->pStringContainer->
+//                        ArrayPoints AddData:&X];
+//    
+//    [CurSringInProp->ArrayPoints AddData:pX];
+//    Par->X=pX;
+    
+    S=fS;
+    F=fF;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos 
@@ -146,10 +155,10 @@
     
     for (int i=0; i<iCount; i++) {
         
-        FractalString *FChild=[[FractalString alloc] initWithData:pData
-                WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
+//        FractalString *FChild=[[FractalString alloc] initWithData:pData
+//                WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
         
-        [aStrings addObject:FChild];
+//        [aStrings addObject:FChild];
     }
 }
 //------------------------------------------------------------------------------------------------------

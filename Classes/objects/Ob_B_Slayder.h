@@ -10,17 +10,25 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 #import "ObjectParticle.h"
-#import "Ob_B_Slayder.h"
 
-@interface Ob_Slayder : GObject {
+@interface Ob_B_Slayder : GObject {
 @public
-    Ob_B_Slayder *pOb_BSlayder;
+    Vector3D m_vStartTouchPoint;
+    Vector3D m_vCurrentTouchPoint;
+    Vector3D m_vCurrentOffsetPos;
+    bool m_bTouchButton;
+    float *m_fLink;
+    
+    FractalString *pInsideString;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
+-(void)Show;
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
+-(void)ProcMove:(CGPoint)Point;
+-(void)setStartPos;
     
 @end

@@ -14,7 +14,7 @@
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerTemplet;
+        m_iLayer = layerInterfaceSpace3;
         m_iLayerTouch=layerTouch_0;//слой касания
         mWidth=200;
         mHeight=18;
@@ -55,6 +55,11 @@
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
+    
+    pOb_BSlayder=UNFROZE_OBJECT(@"Ob_B_Slayder",@"B_Slayder",
+                SET_VECTOR_V(Vector3DMake(0, 0, 0),@"m_pCurPosition"),
+                LINK_ID_V(self,@"m_pOwner"),
+                SET_STRING_V(@"Ob_B_Slayder.png",@"m_pNameTexture"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -69,7 +74,10 @@
 //    STOP_SOUND(@"");
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    DESTROY_OBJECT(pOb_BSlayder);
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 @end

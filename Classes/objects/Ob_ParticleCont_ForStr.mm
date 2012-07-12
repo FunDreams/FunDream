@@ -162,6 +162,20 @@
 
     m_pNameAtlas=[NSMutableString stringWithString:@""];
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_pNameAtlas,m_strName,@"m_pNameAtlas")];
+    
+    Processor_ex *pProc = [self START_QUEUE:@"TimeDie"];
+        ASSIGN_STAGE(@"Proc",@"Proc:",nil);
+    [self END_QUEUE:pProc name:@"TimeDie"];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Proc:(Processor_ex *)pProc{
+    
+    int iCount=[m_pParticleInProc count];
+    
+    for (int i=0;i<iCount;i++) {
+        Particle_ForStr *pPar=[m_pParticleInProc objectAtIndex:i];
+        [pPar UpdateParticle];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{

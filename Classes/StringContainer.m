@@ -28,6 +28,9 @@
         
         [self SetTemplateString];
         
+        float fZero=0;
+        fZeroPoint=(float *)[self->ArrayPoints AddData:&fZero];
+        
 #ifdef DEBUG
         
         ArrayDumpFiles = [[NSMutableArray alloc] init];
@@ -51,41 +54,67 @@
 -(void)SetTemplateString{
 
     FractalString *pFStringZero=[[FractalString alloc] 
-                    initWithName:@"Zero" WithParent:nil WithContainer:self];
+         initWithName:@"Zero" WithParent:nil WithContainer:self  S:fZeroPoint F:fZeroPoint];
 
     FractalString *pFStringEditor=[[FractalString alloc]
-                    initWithName:@"Editor" WithParent:pFStringZero WithContainer:self];
+        initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:fZeroPoint F:fZeroPoint];
 ///////////////////////////////////////////
     pFStringObjects=[[FractalString alloc]
-                     initWithName:@"Object" WithParent:pFStringEditor WithContainer:self];
+        initWithName:@"Object" WithParent:pFStringEditor WithContainer:self S:fZeroPoint F:fZeroPoint];
     
     FractalString *pFStringProp=[[FractalString alloc]
-                    initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self];    
+        initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self  S:fZeroPoint F:fZeroPoint];    
 //------------------------------------------------------------------------------------------------------
     FractalString *pFStringXY=[[FractalString alloc]
-                    initWithName:@"XY" WithParent:pFStringProp WithContainer:self];
+        initWithName:@"XY" WithParent:pFStringProp WithContainer:self  S:fZeroPoint F:fZeroPoint];
     
-    [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self];
-    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self];
+    float X1=0;
+    float *pX1=(float *)[self->ArrayPoints AddData:&X1];
+
+    float X2=480;
+    float *pX2=(float *)[self->ArrayPoints AddData:&X2];
+
+    float Y1=-320;
+    float *pY1=(float *)[self->ArrayPoints AddData:&Y1];
+    
+    float Y2=320;
+    float *pY2=(float *)[self->ArrayPoints AddData:&Y2];
+
+    [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self
+                S:pX1 F:pX2];
+    
+    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self 
+                S:pY1 F:pY2];
+    
+    
     
     FractalString *pFStringColor=[[FractalString alloc]
-                    initWithName:@"Color" WithParent:pFStringProp WithContainer:self];
+                    initWithName:@"Color" WithParent:pFStringProp WithContainer:self
+                                  S:fZeroPoint F:fZeroPoint];
 
-    [[FractalString alloc] initWithName:@"R" WithParent:pFStringColor WithContainer:self];
-    [[FractalString alloc] initWithName:@"G" WithParent:pFStringColor WithContainer:self];
-    [[FractalString alloc] initWithName:@"B" WithParent:pFStringColor WithContainer:self];
-    [[FractalString alloc] initWithName:@"A" WithParent:pFStringColor WithContainer:self];
+    [[FractalString alloc] initWithName:@"R" WithParent:pFStringColor
+                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+    
+    [[FractalString alloc] initWithName:@"G" WithParent:pFStringColor
+                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+    
+    [[FractalString alloc] initWithName:@"B" WithParent:pFStringColor
+                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+    
+    [[FractalString alloc] initWithName:@"A" WithParent:pFStringColor
+                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
 
     FractalString *pFStringT=[[FractalString alloc]
-                    initWithName:@"Timer" WithParent:pFStringProp WithContainer:self];
+        initWithName:@"Timer" WithParent:pFStringProp WithContainer:self  S:fZeroPoint F:fZeroPoint];
 
-    [[FractalString alloc] initWithName:@"T" WithParent:pFStringT WithContainer:self];
+    [[FractalString alloc] initWithName:@"T" WithParent:pFStringT WithContainer:self  S:fZeroPoint F:fZeroPoint];
 //------------------------------------------------------------------------------------------------------
 }
 //------------------------------------------------------------------------------------------------------
 -(void)AddObject{
     
-    [[FractalString alloc] initWithName:@"Prop" WithParent:pFStringObjects WithContainer:self];
+    [[FractalString alloc] initWithName:@"Prop" WithParent:pFStringObjects
+                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
 }
 //------------------------------------------------------------------------------------------------------
 -(NSString *)GetRndName{
@@ -129,9 +158,9 @@ repeate:
         switch (iLenVersion) {
             case 1:
             {
-                [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
-                            WithCurRead:&pDataCurManager->m_iCurReadingPos
-                                         WithParent:nil WithContainer:self];
+//                [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
+//                            WithCurRead:&pDataCurManager->m_iCurReadingPos
+//                                         WithParent:nil WithContainer:self];
             }
             break;
                 

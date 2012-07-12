@@ -10,6 +10,9 @@
 #import "StringContainer.h"
 #import "ObjectButton.h"
 #import "Ob_ParticleCont_ForStr.h"
+#import "Ob_B_Slayder.h"
+#import "Ob_Slayder.h"
+#import "ObjectButton.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -24,7 +27,7 @@
         aProp = [[NSMutableArray alloc] init];
         aObjects = [[NSMutableArray alloc] init];
         aObSliders = [[NSMutableArray alloc] init];
-        aObPoints = [[NSMutableArray alloc] init];
+        aObPoints = [[NSMutableArray alloc] init];        
     }
     
 	return self;
@@ -151,22 +154,28 @@
            }
         }
     }
-    [self UpdateSlider];
+
     [self UpdatePoints];
+    [self UpdateSlider];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckPoint{
     
     id pObTmp = GET_ID_V(@"ObCheck");
+    int Index=0;
     
     if(pObTmp!=nil){
-        for (GObject *pOb in aObPoints) {
+        for (ObjectButton *pOb in aObPoints) {
             if(pOb==pObTmp){
+                if(pOb->m_bCheck==YES)
+                    IndexCheckPoint=Index;
+                else IndexCheckPoint=-1; 
                 continue;
             }
             else{
                 OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnCheck");
             }
+            Index++;
         }
     }
     [self UpdateSlider];
@@ -307,16 +316,18 @@
                                     switch (j)
                                     {
                                         case 0:{
+
+                             //       [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
+                                    [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
                                             
-                                            [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
-                                            [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
                                         }
                                         break;
                                             
                                         case 1:{
                                             
-                                            [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2+1];
-                                            [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
+                            //        [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
+                                    [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
+                                            
                                         }
                                         break;
                                             
@@ -357,7 +368,9 @@ EXIT:
         FractalString *pFStringCurObj=[[FractalString alloc] 
                        initWithName:[m_pObjMng->pStringContainer GetRndName]  
                        WithParent:pFStringObjects 
-                       WithContainer:m_pObjMng->pStringContainer];
+                        WithContainer:m_pObjMng->pStringContainer 
+                                       S:m_pObjMng->pStringContainer->fZeroPoint 
+                                       F:m_pObjMng->pStringContainer->fZeroPoint];
 
         int Step=0;
         for (ObjectButton *pOb in aProp)
@@ -469,9 +482,9 @@ EXIT:
             [aObjects addObject:pOb];
         }
     }    
-    
-    [self UpdateSlider];
+
     [self UpdatePoints];
+    [self UpdateSlider];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdatePoints{
@@ -543,22 +556,39 @@ EXIT:
 
                     for (int k=0; k<[fStrCheck->aStrings count]; k++) {
 
-                        FractalString *fStrPropInOb = [fStrCheck->aStrings objectAtIndex:k];                        
-                        
+                        FractalString *fStrPropInOb = [fStrCheck->aStrings objectAtIndex:k];
+
                         if(fStrPropInOb!=nil){
 
                             for (int j=0; j<[fStrPropInOb->aStrings count]; j++) {
-                                GObject *pOb=UNFROZE_OBJECT(@"Ob_Slayder",@"SlayderX",
+                                
+                                Ob_Slayder *pObSl=UNFROZE_OBJECT(@"Ob_Slayder",@"SlayderX",
                                     SET_VECTOR_V(Vector3DMake(-120, fStartPos, 0),@"m_pCurPosition"),
                                     SET_STRING_V(@"Back_Slayder.png",@"m_pNameTexture"));
+                                
+                                FractalString *fStrPropInProp = [fStrPropInOb->aStrings objectAtIndex:j];
+                                
+                                if(fStrPropInProp->ArrayPoints->iCountInArray>0 && IndexCheckPoint!=-1){
+                                    float *fLinkTmp = (float *)[fStrPropInProp->ArrayPoints
+                                                       GetDataAtIndex:IndexCheckPoint];
+                                    
+                                    pObSl->pOb_BSlayder->m_fLink=fLinkTmp;
+                                    pObSl->pOb_BSlayder->pInsideString=fStrPropInProp;
+                                }
+                                else
+                                {
+                                    pObSl->pOb_BSlayder->pInsideString=0;
+                                    pObSl->pOb_BSlayder->m_fLink=0;
+                                }
+
+                                OBJECT_PERFORM_SEL(NAME(pObSl->pOb_BSlayder), @"Show");
 
                                 fStartPos-=40;
-                                [aObSliders addObject:pOb];
+                                [aObSliders addObject:pObSl];
                             }
                         }
                         fStartPos-=40;
                     }
-
                     break;
                 }
                 iStep++;

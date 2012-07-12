@@ -189,7 +189,7 @@
     if(m_bLookTouch==YES)LOCK_TOUCH;
     
 	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
-        if(m_iType!=bCheckBox)
+        if(m_iType!=bCheckBox && m_iType!=bRadioBox)
             [self SetPush];
     }
 }
@@ -199,7 +199,7 @@
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
 	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
-        if(m_iType!=bCheckBox)
+        if(m_iType!=bCheckBox && m_iType!=bRadioBox)
             [self SetUnPush];
     }
 }
