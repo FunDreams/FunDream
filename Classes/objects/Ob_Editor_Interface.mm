@@ -104,8 +104,8 @@
                        SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
         
         UNFROZE_OBJECT(@"ObjectButton",@"ButtonTash",
-                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                       SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+                       SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
+                       SET_STRING_V(@"ButtonTash.png",@"m_UP"),
                        SET_FLOAT_V(54,@"mWidth"),
                        SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -115,8 +115,8 @@
                        SET_VECTOR_V(Vector3DMake(-440,40,0),@"m_pCurPosition"));
         
         UNFROZE_OBJECT(@"ObjectButton",@"ArLeft",
-                       //                   SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                       //                   SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+                       SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
+                       SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
                        SET_FLOAT_V(40,@"mWidth"),
                        SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -127,8 +127,8 @@
                        SET_VECTOR_V(Vector3DMake(-370,280,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ArRight",
-                   //SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                   //SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
                    SET_FLOAT_V(40,@"mWidth"),
                    SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -436,12 +436,29 @@ EXIT:
         int iCount=[pFStringProp->aStrings count];
         for (int i=0; i<iCount; i++) {
             
+            NSString *StrNamePropTex;
+            switch (i) {
+                case 0:
+                    StrNamePropTex=[NSString stringWithString:@"ButtonXY.png"];
+                    break;
+
+                case 1:
+                    StrNamePropTex=[NSString stringWithString:@"ButtonColor.png"];
+                    break;
+
+                case 2:
+                    StrNamePropTex=[NSString stringWithString:@"ButtonTime.png"];
+                    break;
+
+                default:
+                    break;
+            }
             NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
             GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                    //SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                    //SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
-                    SET_FLOAT_V(34,@"mWidth"),
-                    SET_FLOAT_V(34*FACTOR_DEC,@"mHeight"),
+                    SET_STRING_V(StrNamePropTex,@"m_DOWN"),
+                    SET_STRING_V(StrNamePropTex,@"m_UP"),
+                    SET_FLOAT_V(44,@"mWidth"),
+                    SET_FLOAT_V(44*FACTOR_DEC,@"mHeight"),
                     SET_BOOL_V(YES,@"m_bLookTouch"),
                     SET_INT_V(bCheckBox,@"m_iType"),
                     //SET_STRING_V(@"World",@"m_strNameObject"),
@@ -468,8 +485,8 @@ EXIT:
             
             NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
             GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                           SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                           SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+                           SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+                           SET_STRING_V(@"ButtonOb.png",@"m_UP"),
                            SET_FLOAT_V(54,@"mWidth"),
                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                            SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -512,8 +529,8 @@ EXIT:
                         NSString *pName = [NSString stringWithFormat:@"Prop%d",k];
                         
                         GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                            SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                            SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+                            SET_STRING_V(@"ButtonPoint.png",@"m_DOWN"),
+                            SET_STRING_V(@"ButtonPoint.png",@"m_UP"),
                             SET_FLOAT_V(54,@"mWidth"),
                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                             SET_BOOL_V(YES,@"m_bLookTouch"),
