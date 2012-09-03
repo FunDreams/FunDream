@@ -62,7 +62,6 @@
 
 - (void)timesel:(Processor_ex *)pProc{
 
-	fabs(8);
 	[pProc SetStage:pProc->m_CurStage->NameStage];
 }
 

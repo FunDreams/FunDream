@@ -7,84 +7,93 @@
 //
 
 #import "FunArrayData.h"
-
+//------------------------------------------------------------------------------------------
 @implementation FunArrayData
-
--(id)initWithCopasity:(int)iCopasity CountByte:(int)i_Type{
+//------------------------------------------------------------------------------------------
+-(id)initWithCopasity:(int)iCopasity{
 
     self = [super init];
 
     if(self){
 
-        m_bValue=NO;
-        iCountInc=5;
-        iCountInArray=0;
-        iCount=iCopasity;
-        iType=4;
+        iCountInc=1000;
+        iCount=0;
+        
+        m_iSize=sizeof(float);
 
-        pData = malloc(iType*iCount);
+        [self Increase:iCopasity];
     }
     
     return self;
 }
-
-- (void)Reserv:(int)NewSize{
-    iCount=NewSize;
-
-    if(iCount<iCountInArray)iCountInArray=iCount;
-    pData = realloc(pData, iType*iCount);
-}
-
-- (void *)AddData:(void *)pDataValue{
-    if(iCount==iCountInArray){
-        
-        iCount+=iCountInc;
-        pData=realloc(pData,iCount*iType);
-    }
-
-    float *TmpLink;
-    if(m_bValue){
-        TmpLink=(float *)malloc(iType);
-        *TmpLink=*(float *)pDataValue;
-    }
-    else TmpLink=pDataValue;
+//------------------------------------------------------------------------------------------
+- (void)Increase:(int)CountInc{
     
-    memcpy((float *)(pData+iCountInArray*4),&TmpLink, 4);
+    int FirstIndex=iCount;
+    iCount+=CountInc;
+    pData=realloc(pData,iCount*m_iSize);
+    pDataInt=realloc(pDataInt,iCount*sizeof(int));
+    
+    for (int i=0; i<CountInc; i++) {
+        NSNumber *pNum=[NSNumber numberWithInt:FirstIndex+i];
+        [pFreeArray addObject:pNum];
+    }
+}
+//------------------------------------------------------------------------------------------
+- (int)GetFree{
+    
+    if([pFreeArray count]==0){
+        [self Increase:iCountInc];
+    }
+    
+    NSNumber *pNum=[pFreeArray objectAtIndex:0];
+    int IndexFree=[pNum intValue];
+    return IndexFree;    
+}
+//------------------------------------------------------------------------------------------
+- (int)SetData:(float)DataValue{
 
-    float **fRet=(float **)(pData+iCountInArray*4);
-    iCountInArray++;    
-
+    int iIndex=[self GetFree];
+    
+    float *TmpLink=malloc(sizeof(float));
+    
+    memcpy(TmpLink,&DataValue, m_iSize);
+    memcpy(pData+iIndex,&TmpLink, m_iSize);
+    
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (void)IncDataAtIndex:(int)iIndex{
+    
+    (*((int *)pDataInt+iIndex))++;
+}
+//------------------------------------------------------------------------------------------
+- (void)DecDataAtIndex:(int)iIndex{
+    
+    int *TmpIndex=((int *)pDataInt+iIndex);
+    
+    (*TmpIndex)--;
+    if(*TmpIndex==0)
+    {
+        NSNumber *pNum=[NSNumber numberWithInt:*TmpIndex];
+        [pFreeArray addObject:pNum];
+    }
+}
+//------------------------------------------------------------------------------------------
+- (float *)GetDataAtIndex:(int)iIndex{
+    if(iIndex>iCount)return 0;
+    
+    float **fRet=((float **)(pData+iIndex));
+    
     return *fRet;
 }
-
-- (void)RemoveDataAtIndex:(int)iIndex{
-    
-    if(m_bValue==YES){ 
-
-        float **TmpLink=(float **)(pData+iIndex*4);
-        float *TmpLink2=*TmpLink;
-        free(TmpLink2);
-    }
-
-    iCountInArray--;
-    memcpy((float *)(pData+iIndex*4), (float *)(pData+iCountInArray*4), 4);
-}
-
-- (void *)GetDataAtIndex:(int)iIndex{
-    if(iIndex>iCountInArray)return 0;
-    
-    float **fRet=((float **)(pData+iIndex*4));
-
-    return *fRet;
-}
-
-- (void)Reset{
-    iCountInArray=0;
-}
-
+//------------------------------------------------------------------------------------------
 - (void)dealloc
 {
     free(pData);
+    free(pDataInt);
+
     [super dealloc];
 }
+//------------------------------------------------------------------------------------------
 @end

@@ -16,9 +16,8 @@
 
     if(self){
         
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:100 CountByte:4];
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:100];
         ArrayPoints->iCountInc=1;
-        ArrayPoints->m_bValue=YES;
 
         DicStrings = [[NSMutableDictionary alloc] init];
         ArrayStrings = [[NSMutableArray alloc] init];
@@ -28,8 +27,7 @@
         
         [self SetTemplateString];
         
-        float fZero=0;
-        fZeroPoint=(float *)[self->ArrayPoints AddData:&fZero];
+        iIndexZero=[self->ArrayPoints SetData:0.0f];
         
 #ifdef DEBUG
         
@@ -52,69 +50,73 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetTemplateString{
-
-    FractalString *pFStringZero=[[FractalString alloc] 
-         initWithName:@"Zero" WithParent:nil WithContainer:self  S:fZeroPoint F:fZeroPoint];
+    
+    FractalString *pFStringZero=[[FractalString alloc]
+         initWithName:@"Zero" WithParent:nil WithContainer:self  S:iIndexZero F:iIndexZero];
 
     FractalString *pFStringEditor=[[FractalString alloc]
-        initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:fZeroPoint F:fZeroPoint];
+        initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:iIndexZero F:iIndexZero];
 ///////////////////////////////////////////
     pFStringObjects=[[FractalString alloc]
-        initWithName:@"Object" WithParent:pFStringEditor WithContainer:self S:fZeroPoint F:fZeroPoint];
+        initWithName:@"Object" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
+
+    [[FractalString alloc]
+            initWithName:@"Ob1" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
+    [[FractalString alloc]
+            initWithName:@"Ob2" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
+    [[FractalString alloc]
+            initWithName:@"Ob3" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
+
+
     
+
     FractalString *pFStringProp=[[FractalString alloc]
-        initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self  S:fZeroPoint F:fZeroPoint];    
+        initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 //------------------------------------------------------------------------------------------------------
     FractalString *pFStringXY=[[FractalString alloc]
-        initWithName:@"XY" WithParent:pFStringProp WithContainer:self  S:fZeroPoint F:fZeroPoint];
+        initWithName:@"XY" WithParent:pFStringProp WithContainer:self  S:iIndexZero F:iIndexZero];
     
-    float X1=0;
-    float *pX1=(float *)[self->ArrayPoints AddData:&X1];
-
-    float X2=480;
-    float *pX2=(float *)[self->ArrayPoints AddData:&X2];
-
-    float Y1=-320;
-    float *pY1=(float *)[self->ArrayPoints AddData:&Y1];
-    
-    float Y2=320;
-    float *pY2=(float *)[self->ArrayPoints AddData:&Y2];
+    int iX1=[self->ArrayPoints SetData:0];
+    int iX2=[self->ArrayPoints SetData:480];
+    int iY1=[self->ArrayPoints SetData:-320];
+    int iY2=[self->ArrayPoints SetData:320];
 
     [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self
-                S:pX1 F:pX2];
+                S:iX1 F:iX2];
     
-    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self 
-                S:pY1 F:pY2];
-    
-    
-    
+    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self
+                S:iY1 F:iY2];
+
+
     FractalString *pFStringColor=[[FractalString alloc]
                     initWithName:@"Color" WithParent:pFStringProp WithContainer:self
-                                  S:fZeroPoint F:fZeroPoint];
+                                  S:iIndexZero F:iIndexZero];
 
     [[FractalString alloc] initWithName:@"R" WithParent:pFStringColor
-                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+                          WithContainer:self  S:iIndexZero F:iIndexZero];
     
     [[FractalString alloc] initWithName:@"G" WithParent:pFStringColor
-                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+                          WithContainer:self  S:iIndexZero F:iIndexZero];
     
     [[FractalString alloc] initWithName:@"B" WithParent:pFStringColor
-                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+                          WithContainer:self  S:iIndexZero F:iIndexZero];
     
     [[FractalString alloc] initWithName:@"A" WithParent:pFStringColor
-                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+                          WithContainer:self  S:iIndexZero F:iIndexZero];
 
     FractalString *pFStringT=[[FractalString alloc]
-        initWithName:@"Timer" WithParent:pFStringProp WithContainer:self  S:fZeroPoint F:fZeroPoint];
+        initWithName:@"Timer" WithParent:pFStringProp WithContainer:self
+                              S:iIndexZero F:iIndexZero];
 
-    [[FractalString alloc] initWithName:@"T" WithParent:pFStringT WithContainer:self  S:fZeroPoint F:fZeroPoint];
+    [[FractalString alloc] initWithName:@"T" WithParent:pFStringT WithContainer:self
+                                      S:iIndexZero F:iIndexZero];
 //------------------------------------------------------------------------------------------------------
 }
 //------------------------------------------------------------------------------------------------------
 -(void)AddObject{
     
     [[FractalString alloc] initWithName:@"Prop" WithParent:pFStringObjects
-                          WithContainer:self  S:fZeroPoint F:fZeroPoint];
+                          WithContainer:self  S:iIndexZero F:iIndexZero];
 }
 //------------------------------------------------------------------------------------------------------
 -(NSString *)GetRndName{
@@ -199,7 +201,7 @@ repeate:
     for (int i=0; i<iCount; i++) {
         
         FractalString *TmpStr=[strDel->pParent->aStrings objectAtIndex:i];
-        if(strDel==TmpStr){//нашли в струне парента
+        if(strDel==TmpStr){//нашли себя в струне парента
             
             int iCountTmp=[TmpStr->aStrings count];
             for (int j=0; j<iCountTmp; j++) {

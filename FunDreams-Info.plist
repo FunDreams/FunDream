@@ -59,7 +59,7 @@
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow-iPad</string>
 	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationLandscapeLeft</string>
+	<string>UIInterfaceOrientationLandscapeRight</string>
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>

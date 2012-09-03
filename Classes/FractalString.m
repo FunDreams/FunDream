@@ -23,13 +23,12 @@
         }
 
         aStrings = [[NSMutableArray alloc] init];
+        aStages = [[NSMutableArray alloc] init];
 
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
+        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
 
         [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
-        
-        m_iType=tLine;
-        
+                
         strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
         strName = [[NSString alloc] initWithString:pStrSource->strName];
 
@@ -48,7 +47,7 @@
 //------------------------------------------------------------------------------------------------------
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
      WithContainer:(StringContainer *)pContainer
-                 S:(float *)fS F:(float *)fF{
+                 S:(int)iS F:(int)iF{
 
 	self = [super init];
 	if (self != nil)
@@ -71,12 +70,10 @@
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
 
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
-        [self SetLimmitStringS:fS F:fF];
+        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
+        [self SetLimmitStringS:iS F:iF];
         
-        m_iType=tLine;
-
-        aStrings = [[NSMutableArray alloc] init]; 
+        aStrings = [[NSMutableArray alloc] init];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
@@ -86,7 +83,7 @@
 //------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
         WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer
-        S:(float *)fS F:(float *)fF{
+        S:(int)iS F:(int)iF{
     
     self = [super init];
 	if (self != nil)
@@ -94,8 +91,8 @@
         pParent=Parent;
         aStrings = [[NSMutableArray alloc] init];
         
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:1000 CountByte:4];
-        [self SetLimmitStringS:fS F:fF];
+        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
+        [self SetLimmitStringS:iS F:iF];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
         [pContainer->DicStrings setObject:self forKey:strUID];
@@ -104,17 +101,10 @@
     return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetLimmitStringS:(float *)fS F:(float *)fF{
-//    float X=RND_I_F(240,240);
-//    
-//    float *pX=(float *)[m_pObjMng->pStringContainer->
-//                        ArrayPoints AddData:&X];
-//    
-//    [CurSringInProp->ArrayPoints AddData:pX];
-//    Par->X=pX;
+- (void)SetLimmitStringS:(int)iS F:(int)iF{
     
-    S=fS;
-    F=fF;
+    S=iS;
+    F=iF;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos 
@@ -140,11 +130,11 @@
     
     //float value
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
-    [pData getBytes:S range:Range];
+    [pData getBytes:&S range:Range];
     *iCurReadingPos += sizeof(float);
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
-    [pData getBytes:F range:Range];
+    [pData getBytes:&F range:Range];
     *iCurReadingPos += sizeof(float);
 
     //child string
@@ -178,8 +168,8 @@
             free(ucBuff);
 
             //float value
-            [m_pData appendBytes:S length:sizeof(float)];
-            [m_pData appendBytes:F length:sizeof(float)];
+            [m_pData appendBytes:&S length:sizeof(int)];
+            [m_pData appendBytes:&F length:sizeof(int)];
             
             //child string
             int iCount=[aStrings count];
@@ -199,27 +189,26 @@
 //------------------------------------------------------------------------------------------------------
 -(void)UpDate:(float)fDelta{
     
-    switch (m_iType) {
-        case tLine:
-            
+//    switch (m_iType) {
+//        case tLine:
+//            
             for (FractalString *pFStringChild in aStrings){
                 [pFStringChild UpDate:fDelta];
-                
+            
             ////mirror
             }
-
-            break;
-            
-        default:
-            break;
-    }
+//
+//            break;
+//            
+//        default:
+//            break;
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
-//    free(S);
-//    free(F);
 
+    [aStages release];
     [aStrings release];
     [ArrayPoints release];
     

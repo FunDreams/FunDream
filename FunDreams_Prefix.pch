@@ -25,6 +25,7 @@
 	#import "SoundEngine.h"
     #import "UniCell.h"
     #import "FunArrayData.h"
+    #import "FunArrayDataIndexes.h"
 
 	#import "EngineAppDelegate.h"
 

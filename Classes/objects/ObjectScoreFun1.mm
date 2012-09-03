@@ -143,7 +143,7 @@
 
         OBJECT_PERFORM_SEL(NAME(pOb), @"ShowNum");
         OBJECT_PERFORM_SEL(NAME(pOb), @"Move:");
-    }    
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RezetScore{

@@ -857,7 +857,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"sounds/"];
+        NSString *REZ=@"sounds/";
         REZ=[REZ stringByAppendingString:SubStr];
 
         [self LoadSound:REZ WithExt:SubStr1 WithLoop:NO FullName:tString];
@@ -873,7 +873,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"sounds_loop/"];
+        NSString *REZ=@"sounds_loop/";
         REZ=[REZ stringByAppendingString:SubStr];
 
         [self LoadSound:REZ WithExt:SubStr1 WithLoop:YES FullName:tString];
@@ -901,7 +901,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"texture/"];
+        NSString *REZ=@"texture/";
         REZ=[REZ stringByAppendingString:SubStr];
         
         [self loadTexture:REZ WithExt:SubStr1 NameFile:tString];
@@ -922,7 +922,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"texturePVR/"];
+        NSString *REZ=@"texturePVR/";
         REZ=[REZ stringByAppendingString:SubStr];
 
         [self loadTexturePVR:REZ WithExt:SubStr1 NameFile:tString];
@@ -991,7 +991,7 @@ FullName:(NSString *)FullNameSound
         NSString *SubStr = [tString substringToIndex:toprange.location];
         NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
         
-        NSString *REZ=[NSString stringWithString:@"textureAtlas/"];
+        NSString *REZ=@"textureAtlas/";
         REZ=[REZ stringByAppendingString:SubStr];
         //---------------------------------------------------------------
         NSString *path = [[NSBundle mainBundle] pathForResource:REZ ofType:SubStr1];

@@ -28,6 +28,13 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    m_bHiden=NO;
+    m_fVelFade=1.2f;
+    m_fFinish=1;
+    m_fStartAlpha=0;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
 
     [super LinkValues];
@@ -82,6 +89,8 @@
     if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
     
     mColor.alpha=m_fStartAlpha;
+    
+    SET_STAGE(NAME(self), @"ShowStage");
     [self SetTouch:NO];
 }
 //------------------------------------------------------------------------------------------------------
@@ -107,7 +116,22 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Move{}
 //------------------------------------------------------------------------------------------------------
+- (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    if(m_bLookTouch==YES)LOCK_TOUCH;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    if(m_bLookTouch==YES)LOCK_TOUCH;
+}
+//------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    if(m_bLookTouch==YES)LOCK_TOUCH;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesBeganOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
 }
@@ -123,6 +147,10 @@
     }
     
     [m_pParent PlaySound:m_strNameSound];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    if(m_bLookTouch==YES)LOCK_TOUCH;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[self SetTouch:NO];}

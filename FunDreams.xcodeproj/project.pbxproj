@@ -13,8 +13,13 @@
 		1817D5C3156C065000ED0758 /* Ob_EditorTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1817D5C2156C065000ED0758 /* Ob_EditorTouch.mm */; };
 		1817D5C6156C069C00ED0758 /* Ob_Editor_Interface.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1817D5C5156C069C00ED0758 /* Ob_Editor_Interface.mm */; };
 		181F2BA712D5019E008A6482 /* ObjectButton.mm in Sources */ = {isa = PBXBuildFile; fileRef = 181F2BA512D5019E008A6482 /* ObjectButton.mm */; };
+		1824287715EDE33900C420AB /* FunArrayDataIndexes.m in Sources */ = {isa = PBXBuildFile; fileRef = 1824287615EDE33800C420AB /* FunArrayDataIndexes.m */; };
+		1824287A15EFC47A00C420AB /* Ob_GroupButtons.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824287915EFC47800C420AB /* Ob_GroupButtons.mm */; };
+		1824287D15F501CC00C420AB /* Ob_IconDrag.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824287C15F501C900C420AB /* Ob_IconDrag.mm */; };
+		1824893E15CED8AD006DABB3 /* Ob_Editor_Num.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */; };
 		182786E0157681F0002145F7 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 182786DF157681F0002145F7 /* DropboxSDK.framework */; };
 		182C14A2140CD60000D6E732 /* ObjectWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182C14A0140CD60000D6E732 /* ObjectWorld.mm */; };
+		182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */; };
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
 		183C009013CE08F60013CB08 /* Dictionary_Ex.m in Sources */ = {isa = PBXBuildFile; fileRef = 183C008F13CE08F60013CB08 /* Dictionary_Ex.m */; };
 		183C009213CE09D80013CB08 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183C009113CE09D80013CB08 /* iAd.framework */; };
@@ -112,9 +117,19 @@
 		181F2BA512D5019E008A6482 /* ObjectButton.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectButton.mm; path = objects/ObjectButton.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		181F2BA612D5019E008A6482 /* ObjectButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectButton.h; path = objects/ObjectButton.h; sourceTree = "<group>"; };
 		1820909A125DE2D8000CDB9D /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		1824287515EDE33700C420AB /* FunArrayDataIndexes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FunArrayDataIndexes.h; sourceTree = "<group>"; };
+		1824287615EDE33800C420AB /* FunArrayDataIndexes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FunArrayDataIndexes.m; sourceTree = "<group>"; };
+		1824287815EFC47700C420AB /* Ob_GroupButtons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_GroupButtons.h; path = objects/Ob_GroupButtons.h; sourceTree = "<group>"; };
+		1824287915EFC47800C420AB /* Ob_GroupButtons.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_GroupButtons.mm; path = objects/Ob_GroupButtons.mm; sourceTree = "<group>"; };
+		1824287B15F501C700C420AB /* Ob_IconDrag.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_IconDrag.h; path = objects/Ob_IconDrag.h; sourceTree = "<group>"; };
+		1824287C15F501C900C420AB /* Ob_IconDrag.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_IconDrag.mm; path = objects/Ob_IconDrag.mm; sourceTree = "<group>"; };
+		1824893C15CED8AC006DABB3 /* Ob_Editor_Num.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Editor_Num.h; path = objects/Ob_Editor_Num.h; sourceTree = "<group>"; };
+		1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Editor_Num.mm; path = objects/Ob_Editor_Num.mm; sourceTree = "<group>"; };
 		182786DF157681F0002145F7 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
 		182C14A0140CD60000D6E732 /* ObjectWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectWorld.mm; path = objects/ObjectWorld.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182C14A1140CD60000D6E732 /* ObjectWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectWorld.h; path = objects/ObjectWorld.h; sourceTree = "<group>"; };
+		182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_NumIndicator.h; path = objects/Ob_NumIndicator.h; sourceTree = "<group>"; };
+		182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_NumIndicator.mm; path = objects/Ob_NumIndicator.mm; sourceTree = "<group>"; };
 		1836A54E15A9DF03001B87AC /* Ob_ParticleCont_ForStr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ParticleCont_ForStr.h; path = objects/Ob_ParticleCont_ForStr.h; sourceTree = "<group>"; };
 		1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_ParticleCont_ForStr.mm; path = objects/Ob_ParticleCont_ForStr.mm; sourceTree = "<group>"; };
 		183C008E13CE08F60013CB08 /* Dictionary_Ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dictionary_Ex.h; sourceTree = "<group>"; };
@@ -158,6 +173,8 @@
 		187E228E1165E9CB00EA912F /* SoundEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEngine.h; sourceTree = "<group>"; };
 		187E22A51165EC3200EA912F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		187E22D31165ECA100EA912F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		188DD61015CFCD8500591A05 /* Копия Ob_Editor_Num.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Копия Ob_Editor_Num.h"; path = "objects/Копия Ob_Editor_Num.h"; sourceTree = "<group>"; };
+		188DD61115CFCD8500591A05 /* Копия Ob_Editor_Num.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "Копия Ob_Editor_Num.mm"; path = "objects/Копия Ob_Editor_Num.mm"; sourceTree = "<group>"; };
 		1890156D1291684E0027418F /* MKStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreManager.h; sourceTree = "<group>"; };
 		1890156E1291684E0027418F /* MKStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKStoreManager.m; sourceTree = "<group>"; };
 		1890156F1291684E0027418F /* MKStoreObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreObserver.h; sourceTree = "<group>"; };
@@ -378,6 +395,14 @@
 		18B839241564D74800A0DB6E /* Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				1890164312917AE10027418F /* GameLogicObject.h */,
+				1859FF781295BEEB00898BFE /* GameLogicObject.mm */,
+				188DD61015CFCD8500591A05 /* Копия Ob_Editor_Num.h */,
+				188DD61115CFCD8500591A05 /* Копия Ob_Editor_Num.mm */,
+				1824893C15CED8AC006DABB3 /* Ob_Editor_Num.h */,
+				1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */,
+				182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */,
+				182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */,
 				1817D5BE156C064500ED0758 /* Ob_Options.h */,
 				1817D5BF156C064500ED0758 /* Ob_Options.mm */,
 				18DEE3CA1581150500C4DAB5 /* Ob_EditorPoint.h */,
@@ -402,6 +427,12 @@
 				1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */,
 				186D5E1C154700B000DDC893 /* FunArrayData.h */,
 				186D5E1D154700B000DDC893 /* FunArrayData.m */,
+				1824287515EDE33700C420AB /* FunArrayDataIndexes.h */,
+				1824287615EDE33800C420AB /* FunArrayDataIndexes.m */,
+				1824287815EFC47700C420AB /* Ob_GroupButtons.h */,
+				1824287915EFC47800C420AB /* Ob_GroupButtons.mm */,
+				1824287B15F501C700C420AB /* Ob_IconDrag.h */,
+				1824287C15F501C900C420AB /* Ob_IconDrag.mm */,
 			);
 			name = Kernel;
 			sourceTree = "<group>";
@@ -470,8 +501,6 @@
 				18901615129178860027418F /* Object.m */,
 				18444D9C13D93D8D0058ADC9 /* ObjectTest.h */,
 				18444D9D13D93D8D0058ADC9 /* ObjectTest.mm */,
-				1890164312917AE10027418F /* GameLogicObject.h */,
-				1859FF781295BEEB00898BFE /* GameLogicObject.mm */,
 			);
 			name = objects;
 			sourceTree = "<group>";
@@ -581,7 +610,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0440;
 				ORGANIZATIONNAME = FunDreams;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "FunDreams" */;
@@ -694,6 +723,11 @@
 				1869E08A158B17090022055A /* StringContainer.m in Sources */,
 				1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */,
 				1866EC5615AD504200195271 /* Ob_B_Slayder.mm in Sources */,
+				182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */,
+				1824893E15CED8AD006DABB3 /* Ob_Editor_Num.mm in Sources */,
+				1824287715EDE33900C420AB /* FunArrayDataIndexes.m in Sources */,
+				1824287A15EFC47A00C420AB /* Ob_GroupButtons.mm in Sources */,
+				1824287D15F501CC00C420AB /* Ob_IconDrag.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -21,7 +21,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType = [NSString stringWithString:@"i"];
+        cell->mpType = @"i";
         cell->mpIdPoint = (id)parPoint;
         cell->mbLocal = NO;
         cell->mSize = 4;
@@ -39,7 +39,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"i"];
+        cell->mpType=@"i";
         
         cell->mSize=sizeof(int);
         int *TmpInt=malloc(cell->mSize);
@@ -62,7 +62,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"f"];
+        cell->mpType=@"f";
         cell->mpIdPoint=(id)parPoint;
         cell->mbLocal=NO;
         cell->mSize=4;
@@ -80,7 +80,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"f"];
+        cell->mpType=@"f";
         
         cell->mSize=sizeof(float);
         float *TmpV=malloc(cell->mSize);
@@ -103,7 +103,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"b"];
+        cell->mpType=@"b";
         cell->mpIdPoint=(id)parPoint;
         cell->mbLocal=NO;
         cell->mSize=sizeof(bool);
@@ -121,7 +121,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"b"];
+        cell->mpType=@"b";
         
         cell->mSize=sizeof(bool);
         bool *TmpV=malloc(cell->mSize);
@@ -144,7 +144,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"v"];
+        cell->mpType=@"v";
         cell->mpIdPoint=(id)parPoint;
         cell->mbLocal=NO;
         cell->mSize=sizeof(Vector3D);
@@ -162,7 +162,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"v"];
+        cell->mpType=@"v";
         
         cell->mSize=sizeof(Vector3D);
         Vector3D *TmpV=malloc(cell->mSize);
@@ -185,7 +185,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"c"];
+        cell->mpType=@"c";
         cell->mpIdPoint=(id)parPoint;
         cell->mbLocal=NO;
         cell->mSize=sizeof(Color3D);
@@ -203,7 +203,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"c"];
+        cell->mpType=@"c";
         
         cell->mSize=sizeof(Color3D);
         Color3D *TmpV=malloc(cell->mSize);
@@ -226,7 +226,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"id"];
+        cell->mpType=@"id";
         cell->mpIdPoint=[*parPoint retain];
         cell->mppIdPoint=parPoint;
         cell->mbLocal=NO;
@@ -245,7 +245,7 @@
     UniCell* cell = [UniCell alloc];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"s"];
+        cell->mpType=@"s";
         cell->mpIdPoint=[parPoint retain];
         cell->mbLocal=NO;
         cell->mSize=sizeof(NSMutableString *);
@@ -263,7 +263,7 @@
     UniCell* cell = [UniCell new];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"s"];    
+        cell->mpType=@"s";    
         cell->mpIdPoint=[[NSMutableString alloc] initWithString:Value];
         
         cell->mbLocal=YES;
@@ -281,7 +281,7 @@
     UniCell* cell = [UniCell new];
     if (cell != nil)
     {
-        cell->mpType=[NSString stringWithString:@"p"];
+        cell->mpType=@"p";
         cell->mpIdPoint=(id)parPoint;
         cell->mbLocal=NO;
         cell->mSize=sizeof(id);

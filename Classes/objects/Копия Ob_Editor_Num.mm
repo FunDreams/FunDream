@@ -6,28 +6,24 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_Slayder.h"
+#import "Ob_Editor_Num.h"
 #import "Ob_NumIndicator.h"
 
-@implementation Ob_Slayder
+@implementation Ob_Editor_Num
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerInterfaceSpace3;
+        m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
-        mWidth=200;
-        mHeight=18;
+        m_bHiden=YES;
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetDefault{
-    m_bHiden=NO;
-}
-//------------------------------------------------------------------------------------------------------
+//- (void)SetDefault{}
 //- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -41,54 +37,57 @@
 //====//различные параметры=============================================================================
 //   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
     
-//    m_strNameObject=[NSMutableString stringWithString:@""];
+//    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
     //   GET_DIM_FROM_TEXTURE(@"");
+	mWidth  = 50;
+	mHeight = 50;
 
 	[super Start];
 
     //   [self SetTouch:YES];//интерактивность
     GET_TEXTURE(mTextureId, m_pNameTexture);
 
+    pObInd = UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator1",
+                 SET_STRING_V(@"ParticlesFroIndicator",@"m_strNameContainer"),
+                 SET_VECTOR_V(Vector3DMake(-200,260,0),@"m_pOffsetCurPosition"),
+                 SET_FLOAT_V(1.5f,@"m_fScale"),
+                 LINK_ID_V(self,@"m_pOwner"));
+
+    pOb = UNFROZE_OBJECT(@"ObjectFade",@"Fade",
+                   SET_FLOAT_V(1024,@"mWidth"),
+                   SET_FLOAT_V(768,@"mHeight"),
+                   SET_INT_V(layerInterfaceSpace7,@"m_iLayer"),
+                   SET_INT_V(layerTouch_1N,@"m_iLayerTouch"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_BOOL_V(YES,@"m_bObTouch"),
+                   SET_FLOAT_V(5,@"m_fVelFade"),
+                   SET_COLOR_V(Color3DMake(0.4f, 0.4f, 0.4f, 1),@"mColor"));
+
+    pObBtnClose=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClose",
+                   SET_STRING_V(@"Close.png",@"m_DOWN"),
+                   SET_STRING_V(@"Close.png",@"m_UP"),
+                   SET_FLOAT_V(64,@"mWidth"),
+                   SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                   SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+                   SET_STRING_V(@"Close",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(440,280,0),@"m_pCurPosition"));
+
+    
+
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
-    
-    pOb_BSlayder=UNFROZE_OBJECT(@"Ob_B_Slayder",@"B_Slayder",
-                SET_VECTOR_V(Vector3DMake(0, 0, 0),@"m_pCurPosition"),
-                LINK_ID_V(self,@"m_pOwner"),
-                SET_STRING_V(@"Ob_B_Slayder.png",@"m_pNameTexture"));
-
-    pObInd1 = UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator1",
-                   SET_STRING_V(@"ParticlesScore",@"m_strNameContainer"),
-                   SET_VECTOR_V(Vector3DMake(-100,20,0),@"m_pOffsetCurPosition"),
-                   SET_FLOAT_V(0.4,@"m_fScale"),
-                   LINK_ID_V(self,@"m_pOwner"));
-
-    pObInd2 = UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator2",
-                   SET_STRING_V(@"ParticlesScore",@"m_strNameContainer"),
-                   SET_VECTOR_V(Vector3DMake(100,20,0),@"m_pOffsetCurPosition"),
-                   SET_FLOAT_V(0.4,@"m_fScale"),
-                   LINK_ID_V(self,@"m_pOwner"));
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetString{
-    
-    if(pOb_BSlayder->pInsideString!=nil){
-                
-        pObInd1->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
-                              GetDataAtIndex:pOb_BSlayder->pInsideString->S];
-        
-        pObInd2->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
-                              GetDataAtIndex:pOb_BSlayder->pInsideString->F];
-        
-        OBJECT_PERFORM_SEL(NAME(pObInd1), @"UpdateNum");
-        OBJECT_PERFORM_SEL(NAME(pObInd2), @"UpdateNum");
-    }
-}
+- (void)Close{DESTROY_OBJECT(self);}
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
 //------------------------------------------------------------------------------------------------------
@@ -103,9 +102,11 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
-    DESTROY_OBJECT(pOb_BSlayder);
-    DESTROY_OBJECT(pObInd1);
-    DESTROY_OBJECT(pObInd2);
+    
+    DESTROY_OBJECT(pOb);
+    DESTROY_OBJECT(pObBtnClose);
+    DESTROY_OBJECT(pObInd);
+    
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

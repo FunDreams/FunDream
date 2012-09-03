@@ -44,6 +44,12 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
+
+    pObIndicator=UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator",
+                                SET_FLOAT_V(0.4,@"m_fScale"),
+                                SET_STRING_V(@"ParticlesScore",@"m_strNameContainer"),
+                                LINK_ID_V(self,@"m_pOwner"));
+
     
     [m_pNameTexture setString:@"B_Slayder.png"];
     GET_TEXTURE(mTextureId, m_pNameTexture);
@@ -51,6 +57,8 @@
     mWidth=40;
     mHeight=40;
     m_bTouchButton=NO;
+    mColor=Color3DMake(0.4f, 0.4f, 0.4f, 1);
+    
     
 	[super Start];
 
@@ -63,27 +71,36 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
     if(m_fLink==0){
-        
+
         [self SetTouch:NO];//интерактивность
         [self DeleteFromDraw];        
     }
-    else {
-        
+    else{
+
         [self SetTouch:YES];//интерактивность
         [self AddToDraw];
         [self setStartPos];
+
+        pObIndicator->m_fCurValue=m_fLink;
+
+        [pObIndicator UpdateNum];
     }
+
+    [pObIndicator SetPosWithOffsetOwner];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)setStartPos{
 
     if(pInsideString!=0){
-        float WHalf=m_pOwner->mWidth*0.5f; 
-        SET_MIRROR(*m_fLink, *pInsideString->F, *pInsideString->S,m_pOffsetCurPosition.x, WHalf, -WHalf);
+        float WHalf=m_pOwner->mWidth*0.5f;
+        
+        float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
+        float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
+        SET_MIRROR(*m_fLink, *pF, *pS,m_pOffsetCurPosition.x, WHalf, -WHalf);
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{}
+- (void)Update{ [pObIndicator UpdateNum];}
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
@@ -102,7 +119,11 @@
     [self SetPosWithOffsetOwner];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    
+    DESTROY_OBJECT(pObIndicator);
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)ProcMove:(CGPoint)Point{
     
@@ -112,8 +133,14 @@
         m_vCurrentTouchPoint=Vector3DMake(Point.x, 0, 0);
         
         if(m_fLink!=0 && pInsideString!=0){
+            
+            float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
+            float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
+
             SET_MIRROR(m_pOffsetCurPosition.x, WHalf, -WHalf,
-                       *m_fLink, *pInsideString->F, *pInsideString->S);
+                       *m_fLink, *pF, *pS);
+            
+            [pObIndicator UpdateNum];
         }
     }
 }

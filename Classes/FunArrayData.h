@@ -10,21 +10,24 @@
 
 @interface FunArrayData : NSObject{
 @public
-    void *pData;//единый массив данных
-    int iType;//число байтов в значении
+    float *pData;//единый массив данных
+    void *pDataInt;//данные о копиях ячейки
+    int m_iSize;//число байтов в значении
     
     int iCount;//ёмкость массива
-    int iCountInArray;//число элементов
     int iCountInc;//шаг расширения массива
-    bool m_bValue;//Флаг который показывает что массив со значениями.
+    
+    NSMutableArray *pFreeArray;//массив со свободными индексами
 }
 
--(id) initWithCopasity:(int)iCopasity CountByte:(int)i_Type;
+-(id)initWithCopasity:(int)iCopasity;
+- (void)Increase:(int)CountInc;
+- (int)GetFree;
+- (int)SetData:(float)DataValue;
+- (void)IncDataAtIndex:(int)iIndex;
+- (void)DecDataAtIndex:(int)iIndex;
+- (float *)GetDataAtIndex:(int)iIndex;
 
--(void)Reserv:(int)NewSize;
--(void *)AddData:(void *)pDataValue;
--(void)RemoveDataAtIndex:(int)iIndex;
--(void *)GetDataAtIndex:(int)iIndex;
--(void)Reset;
+- (void)dealloc;
 
 @end

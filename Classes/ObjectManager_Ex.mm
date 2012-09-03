@@ -295,7 +295,7 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 - (id)DestroyObject:(GObject *)pObject{
 
-    if(pObject->m_bDeleted==NO && pObject->m_bImmortal==NO){
+    if(pObject != nil && pObject->m_bDeleted==NO && pObject->m_bImmortal==NO){
         [pMustDelKeys addObject:pObject];
         pObject->m_bDeleted=YES;
 

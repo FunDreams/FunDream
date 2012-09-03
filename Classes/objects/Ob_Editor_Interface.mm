@@ -27,7 +27,7 @@
         aProp = [[NSMutableArray alloc] init];
         aObjects = [[NSMutableArray alloc] init];
         aObSliders = [[NSMutableArray alloc] init];
-        aObPoints = [[NSMutableArray alloc] init];        
+        aObPoints = [[NSMutableArray alloc] init];
     }
     
 	return self;
@@ -70,17 +70,50 @@
                    SET_INT_V(layerBackground,@"m_iLayer"));
 
 //save/load
-//    UNFROZE_OBJECT(@"ObjectButton",@"ButtonSaveToDropBox",
-//                   SET_STRING_V(@"Button_To_box_Down.png",@"m_DOWN"),
-//                   SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
-//                   SET_FLOAT_V(64,@"mWidth"),
-//                   SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-//                   SET_BOOL_V(YES,@"m_bLookTouch"),
-//                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-//                   SET_STRING_V(@"Save",@"m_strNameStage"),
-//                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                   SET_VECTOR_V(Vector3DMake(-100,-285,0),@"m_pCurPosition"));
-//    
+
+    UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
+                   SET_VECTOR_V(Vector3DMake(-450,-60,0),@"m_pCurPosition"),
+                   SET_FLOAT_V(520,@"mHeight"),
+                   SET_INT_V(10,@"m_iNumButton"));
+    
+    
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
+                        SET_STRING_V(@"Close.png",@"m_DOWN"),
+                        SET_STRING_V(@"Close.png",@"m_UP"),
+                        SET_FLOAT_V(54,@"mWidth"),
+                        SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                        SET_BOOL_V(YES,@"m_bLookTouch"),
+                        //SET_INT_V(bCheckBox,@"m_iType"),
+                        //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                        //SET_STRING_V(@"Save",@"m_strNameStage"),
+                        SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                        SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
+
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
+                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   //SET_INT_V(bCheckBox,@"m_iType"),
+                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   //SET_STRING_V(@"Save",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-395,295,0),@"m_pCurPosition"));
+
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
+                   SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonTash.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   //SET_INT_V(bCheckBox,@"m_iType"),
+                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   //SET_STRING_V(@"Save",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-340,295,0),@"m_pCurPosition"));
+
+//
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoadDropBox",
 //                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
@@ -92,51 +125,51 @@
 //                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 //                   SET_VECTOR_V(Vector3DMake(-440,-285,0),@"m_pCurPosition"));
 
-        UNFROZE_OBJECT(@"ObjectButton",@"ButtonCreateOb",
-                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
-                       SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
-                       SET_FLOAT_V(64,@"mWidth"),
-                       SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-                       SET_BOOL_V(YES,@"m_bLookTouch"),
-                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                       SET_STRING_V(@"CreateNewObject",@"m_strNameStage"),
-                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                       SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
-        
-        UNFROZE_OBJECT(@"ObjectButton",@"ButtonTash",
-                       SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
-                       SET_STRING_V(@"ButtonTash.png",@"m_UP"),
-                       SET_FLOAT_V(54,@"mWidth"),
-                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                       SET_BOOL_V(YES,@"m_bLookTouch"),
-                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                       SET_STRING_V(@"DelObject",@"m_strNameStage"),
-                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                       SET_VECTOR_V(Vector3DMake(-440,40,0),@"m_pCurPosition"));
-        
-        UNFROZE_OBJECT(@"ObjectButton",@"ArLeft",
-                       SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
-                       SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
-                       SET_FLOAT_V(40,@"mWidth"),
-                       SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
-                       SET_BOOL_V(YES,@"m_bLookTouch"),
-                       SET_INT_V(0,@"m_iType"),
-                       SET_STRING_V(NAME(self),@"m_strNameObject"),
-                       SET_STRING_V(@"DelPoint",@"m_strNameStage"),
-                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                       SET_VECTOR_V(Vector3DMake(-370,280,0),@"m_pCurPosition"));
-
-    UNFROZE_OBJECT(@"ObjectButton",@"ArRight",
-                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
-                   SET_FLOAT_V(40,@"mWidth"),
-                   SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
-                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_INT_V(0,@"m_iType"),
-                   SET_STRING_V(NAME(self),@"m_strNameObject"),
-                   SET_STRING_V(@"CreateNewPoint",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-320,280,0),@"m_pCurPosition"));
+//        UNFROZE_OBJECT(@"ObjectButton",@"ButtonCreateOb",
+//                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
+//                       SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
+//                       SET_FLOAT_V(64,@"mWidth"),
+//                       SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+//                       SET_BOOL_V(YES,@"m_bLookTouch"),
+//                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+//                       SET_STRING_V(@"CreateNewObject",@"m_strNameStage"),
+//                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                       SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
+//        
+//        UNFROZE_OBJECT(@"ObjectButton",@"ButtonTash",
+//                       SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
+//                       SET_STRING_V(@"ButtonTash.png",@"m_UP"),
+//                       SET_FLOAT_V(54,@"mWidth"),
+//                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+//                       SET_BOOL_V(YES,@"m_bLookTouch"),
+//                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+//                       SET_STRING_V(@"DelObject",@"m_strNameStage"),
+//                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                       SET_VECTOR_V(Vector3DMake(-440,40,0),@"m_pCurPosition"));
+//        
+//        UNFROZE_OBJECT(@"ObjectButton",@"ArLeft",
+//                       SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
+//                       SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
+//                       SET_FLOAT_V(40,@"mWidth"),
+//                       SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
+//                       SET_BOOL_V(YES,@"m_bLookTouch"),
+//                       SET_INT_V(0,@"m_iType"),
+//                       SET_STRING_V(NAME(self),@"m_strNameObject"),
+//                       SET_STRING_V(@"DelPoint",@"m_strNameStage"),
+//                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                       SET_VECTOR_V(Vector3DMake(-370,280,0),@"m_pCurPosition"));
+//
+//    UNFROZE_OBJECT(@"ObjectButton",@"ArRight",
+//                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
+//                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
+//                   SET_FLOAT_V(40,@"mWidth"),
+//                   SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
+//                   SET_BOOL_V(YES,@"m_bLookTouch"),
+//                   SET_INT_V(0,@"m_iType"),
+//                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+//                   SET_STRING_V(@"CreateNewPoint",@"m_strNameStage"),
+//                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                   SET_VECTOR_V(Vector3DMake(-320,280,0),@"m_pCurPosition"));
 
     [self Update];
 }
@@ -213,39 +246,31 @@
                         int iCount = [CurSringTmp->aStrings count];
                         for (int j=0; j<iCount; j++){
                             
-                            FractalString *CurSringInProp=[CurSringTmp->aStrings objectAtIndex:j];
+                //            FractalString *CurSringInProp=[CurSringTmp->aStrings objectAtIndex:j];
                             
                             //float fTmpValue=0;
                             switch (j)
                             {
                                 case 0:{
-                                    float X=RND_I_F(240,240);
-                                    
-                                    float *pX=(float *)[m_pObjMng->pStringContainer->
-                                                        ArrayPoints AddData:&X];
-                                    
-                                    [CurSringInProp->ArrayPoints AddData:pX];
-                                    Par->X=pX;
-                                    
-//                                    fTmpValue=RND_I_F(240,240);
+//                                    float X=RND_I_F(240,240);
 //                                    
-//                                    float *ppValue = (float *)[m_pObjMng->pStringContainer->
-//                                                    ArrayPoints AddData:&fTmpValue];
+//                                    float *pX=(float *)[m_pObjMng->pStringContainer->
+//                                                        ArrayPoints AddData:&X];
 //                                    
-//                                    [CurSringInProp->ArrayPoints AddData:&ppValue];
-//                                    Par->X=ppValue;
+//                                    [CurSringInProp->ArrayPoints AddData:pX];
+//                                    Par->X=pX;
                                 }
                                 break;
                                     
                                 case 1:{
                                     
-                                    float Y=RND_I_F(0,320);
-                                    
-                                    float *pY=(float *)[m_pObjMng->pStringContainer->
-                                                        ArrayPoints AddData:&Y];
-                                    
-                                    [CurSringInProp->ArrayPoints AddData:pY];
-                                    Par->Y=pY;
+//                                    float Y=RND_I_F(0,320);
+//                                    
+//                                    float *pY=(float *)[m_pObjMng->pStringContainer->
+//                                                        ArrayPoints AddData:&Y];
+//                                    
+//                                    [CurSringInProp->ArrayPoints AddData:pY];
+//                                    Par->Y=pY;
 
 //                                    float *Y=(float *)malloc(sizeof(float));
 //                                    *Y=RND_I_F(0,320);
@@ -310,15 +335,15 @@
                                 int iCount = [CurSringTmpProp->aStrings count];
                                 for (int j=0; j<iCount; j++){
                                     
-                                    FractalString *CurSringInProp=[CurSringTmpProp->
-                                                        aStrings objectAtIndex:j];
+                 //                   FractalString *CurSringInProp=[CurSringTmpProp->
+                 //                                       aStrings objectAtIndex:j];
 
                                     switch (j)
                                     {
                                         case 0:{
 
                              //       [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
-                                    [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
+                              //      [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
                                             
                                         }
                                         break;
@@ -326,7 +351,7 @@
                                         case 1:{
                                             
                             //        [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
-                                    [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
+                             //       [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
                                             
                                         }
                                         break;
@@ -365,12 +390,12 @@ EXIT:
     
     if(pFStringProp!=nil && pFStringObjects!=nil && [aProp count]>0 && iCheck>0){
         
-        FractalString *pFStringCurObj=[[FractalString alloc] 
-                       initWithName:[m_pObjMng->pStringContainer GetRndName]  
-                       WithParent:pFStringObjects 
-                        WithContainer:m_pObjMng->pStringContainer 
-                                       S:m_pObjMng->pStringContainer->fZeroPoint 
-                                       F:m_pObjMng->pStringContainer->fZeroPoint];
+        FractalString *pFStringCurObj=[[FractalString alloc]
+                       initWithName:[m_pObjMng->pStringContainer GetRndName]
+                       WithParent:pFStringObjects
+                        WithContainer:m_pObjMng->pStringContainer
+                                       S:m_pObjMng->pStringContainer->iIndexZero
+                                       F:m_pObjMng->pStringContainer->iIndexZero];
 
         int Step=0;
         for (ObjectButton *pOb in aProp)
@@ -439,69 +464,69 @@ EXIT:
             NSString *StrNamePropTex;
             switch (i) {
                 case 0:
-                    StrNamePropTex=[NSString stringWithString:@"ButtonXY.png"];
+                    StrNamePropTex=@"ButtonXY.png";
                     break;
 
                 case 1:
-                    StrNamePropTex=[NSString stringWithString:@"ButtonColor.png"];
+                    StrNamePropTex=@"ButtonColor.png";
                     break;
 
                 case 2:
-                    StrNamePropTex=[NSString stringWithString:@"ButtonTime.png"];
+                    StrNamePropTex=@"ButtonTime.png";
                     break;
 
                 default:
                     break;
             }
-            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
-            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                    SET_STRING_V(StrNamePropTex,@"m_DOWN"),
-                    SET_STRING_V(StrNamePropTex,@"m_UP"),
-                    SET_FLOAT_V(44,@"mWidth"),
-                    SET_FLOAT_V(44*FACTOR_DEC,@"mHeight"),
-                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                    SET_INT_V(bCheckBox,@"m_iType"),
-                    //SET_STRING_V(@"World",@"m_strNameObject"),
-                    //SET_STRING_V(@"StartGame",@"m_strNameStage"),
-                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                    SET_VECTOR_V(Vector3DMake(-440,110+i*45,0),@"m_pCurPosition"));
+//            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
+//            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
+//                    SET_STRING_V(StrNamePropTex,@"m_DOWN"),
+//                    SET_STRING_V(StrNamePropTex,@"m_UP"),
+//                    SET_FLOAT_V(44,@"mWidth"),
+//                    SET_FLOAT_V(44*FACTOR_DEC,@"mHeight"),
+//                    SET_BOOL_V(YES,@"m_bLookTouch"),
+//                    SET_INT_V(bCheckBox,@"m_iType"),
+//                    //SET_STRING_V(@"World",@"m_strNameObject"),
+//                    //SET_STRING_V(@"StartGame",@"m_strNameStage"),
+//                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                    SET_VECTOR_V(Vector3DMake(-440,110+i*45,0),@"m_pCurPosition"));
             
-            [aProp addObject:pOb];
+ //           [aProp addObject:pOb];
         }
     }
 
-    FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-    
-    if(pFStringOb!=nil){
-        
-        for (GObject *pOb in aObjects) {
-            DESTROY_OBJECT(pOb);
-        }
-        
-        [aObjects removeAllObjects];
-
-        int iCount=[pFStringOb->aStrings count];
-        for (int i=0; i<iCount; i++) {
-            
-            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
-            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                           SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
-                           SET_STRING_V(@"ButtonOb.png",@"m_UP"),
-                           SET_FLOAT_V(54,@"mWidth"),
-                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                           SET_BOOL_V(YES,@"m_bLookTouch"),
-                           SET_INT_V(bRadioBox,@"m_iType"),
-                           SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                           SET_STRING_V(@"CheckObject",@"m_strNameStage"),
-                           SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                           SET_VECTOR_V(Vector3DMake(-370,210-i*55,0),@"m_pCurPosition"));
-
-            [aObjects addObject:pOb];
-        }
-    }    
-
-    [self UpdatePoints];
-    [self UpdateSlider];
+//    FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
+//    
+//    if(pFStringOb!=nil){
+//        
+//        for (GObject *pOb in aObjects) {
+//            DESTROY_OBJECT(pOb);
+//        }
+//        
+//        [aObjects removeAllObjects];
+//
+//        int iCount=[pFStringOb->aStrings count];
+//        for (int i=0; i<iCount; i++) {
+//            
+//            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
+//            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
+//                           SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+//                           SET_STRING_V(@"ButtonOb.png",@"m_UP"),
+//                           SET_FLOAT_V(54,@"mWidth"),
+//                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+//                           SET_BOOL_V(YES,@"m_bLookTouch"),
+//                           SET_INT_V(bRadioBox,@"m_iType"),
+//                           SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+//                           SET_STRING_V(@"CheckObject",@"m_strNameStage"),
+//                           SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                           SET_VECTOR_V(Vector3DMake(-370,210-i*55,0),@"m_pCurPosition"));
+//
+//            [aObjects addObject:pOb];
+//        }
+//    }    
+//
+//    [self UpdatePoints];
+//    [self UpdateSlider];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdatePoints{
@@ -514,35 +539,35 @@ EXIT:
     if([aObjects count]>0){
         
         FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-        float fStartPos=280;
+   //     float fStartPos=280;
         
         if(pFStringOb!=nil){
             int iStep=0;
             for (ObjectButton *pOb in aObjects) {
                 if(pOb->m_bCheck){
-                    FractalString *fStrCheck = [pFStringOb->aStrings objectAtIndex:iStep];
-                    FractalString *fStrFirst = [fStrCheck->aStrings objectAtIndex:0];
-                    FractalString *fStrPoints = [fStrFirst->aStrings objectAtIndex:0];
+             //       FractalString *fStrCheck = [pFStringOb->aStrings objectAtIndex:iStep];
+           //         FractalString *fStrFirst = [fStrCheck->aStrings objectAtIndex:0];
+          //          FractalString *fStrPoints = [fStrFirst->aStrings objectAtIndex:0];
                     
-                    for (int k=0; k<fStrPoints->ArrayPoints->iCountInArray; k++) {
-    
-                        NSString *pName = [NSString stringWithFormat:@"Prop%d",k];
-                        
-                        GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-                            SET_STRING_V(@"ButtonPoint.png",@"m_DOWN"),
-                            SET_STRING_V(@"ButtonPoint.png",@"m_UP"),
-                            SET_FLOAT_V(54,@"mWidth"),
-                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                            SET_BOOL_V(YES,@"m_bLookTouch"),
-                            SET_INT_V(bRadioBox,@"m_iType"),
-                            SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                            SET_STRING_V(@"CheckPoint",@"m_strNameStage"),
-                            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                            SET_VECTOR_V(Vector3DMake(-320,210-k*55,0),@"m_pCurPosition"));
-                        
-                        fStartPos-=40;
-                        [aObPoints addObject:pOb];
-                    }
+//                    for (int k=0; k<fStrPoints->ArrayPoints->iCountInArray; k++) {
+//    
+//                        NSString *pName = [NSString stringWithFormat:@"Prop%d",k];
+//                        
+//                        GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
+//                            SET_STRING_V(@"ButtonPoint.png",@"m_DOWN"),
+//                            SET_STRING_V(@"ButtonPoint.png",@"m_UP"),
+//                            SET_FLOAT_V(54,@"mWidth"),
+//                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+//                            SET_BOOL_V(YES,@"m_bLookTouch"),
+//                            SET_INT_V(bRadioBox,@"m_iType"),
+//                            SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+//                            SET_STRING_V(@"CheckPoint",@"m_strNameStage"),
+//                            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                            SET_VECTOR_V(Vector3DMake(-320,210-k*55,0),@"m_pCurPosition"));
+//                        
+//                        fStartPos-=40;
+//                        [aObPoints addObject:pOb];
+//                    }
                     
                     break;
                 }
@@ -580,23 +605,25 @@ EXIT:
                             for (int j=0; j<[fStrPropInOb->aStrings count]; j++) {
                                 
                                 Ob_Slayder *pObSl=UNFROZE_OBJECT(@"Ob_Slayder",@"SlayderX",
-                                    SET_VECTOR_V(Vector3DMake(-120, fStartPos, 0),@"m_pCurPosition"),
+                                    SET_VECTOR_V(Vector3DMake(-140, fStartPos, 0),@"m_pCurPosition"),
                                     SET_STRING_V(@"Back_Slayder.png",@"m_pNameTexture"));
                                 
-                                FractalString *fStrPropInProp = [fStrPropInOb->aStrings objectAtIndex:j];
+                  //              FractalString *fStrPropInProp = [fStrPropInOb->aStrings objectAtIndex:j];
                                 
-                                if(fStrPropInProp->ArrayPoints->iCountInArray>0 && IndexCheckPoint!=-1){
-                                    float *fLinkTmp = (float *)[fStrPropInProp->ArrayPoints
-                                                       GetDataAtIndex:IndexCheckPoint];
-                                    
-                                    pObSl->pOb_BSlayder->m_fLink=fLinkTmp;
-                                    pObSl->pOb_BSlayder->pInsideString=fStrPropInProp;
-                                }
-                                else
-                                {
-                                    pObSl->pOb_BSlayder->pInsideString=0;
-                                    pObSl->pOb_BSlayder->m_fLink=0;
-                                }
+//                                if(fStrPropInProp->ArrayPoints->iCountInArray>0 && IndexCheckPoint!=-1){
+//                                    float *fLinkTmp = (float *)[fStrPropInProp->ArrayPoints
+//                                                       GetDataAtIndex:IndexCheckPoint];
+//                                    
+//                                    pObSl->pOb_BSlayder->m_fLink=fLinkTmp;
+//                                    pObSl->pOb_BSlayder->pInsideString=fStrPropInProp;
+//                                    
+//                                    OBJECT_PERFORM_SEL(NAME(pObSl), @"SetString");
+//                                }
+//                                else
+//                                {
+//                                    pObSl->pOb_BSlayder->pInsideString=0;
+//                                    pObSl->pOb_BSlayder->m_fLink=0;
+//                                }
 
                                 OBJECT_PERFORM_SEL(NAME(pObSl->pOb_BSlayder), @"Show");
 

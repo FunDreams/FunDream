@@ -29,11 +29,10 @@
 - (void)LoadTextureAtlases
 {
     AtlasContainer *tmpAtlas=[[AtlasContainer alloc] InitWithName:@"NumbersAtl"
-                    NameStartTexture:@"0-01@2x.png" CountX:10 CountY:10 NumLoadTextures:100 SizeAtlas:Vector3DMake(512,1024,0)];
+                    NameStartTexture:@"0-01@2x.png" CountX:10 CountY:11 NumLoadTextures:102 SizeAtlas:Vector3DMake(512,1024,0)];
     
     [m_pParent LoadTextureAtlas:tmpAtlas];
     
-
      tmpAtlas=[[AtlasContainer alloc] InitWithName:@"PensilAtl"
                      NameStartTexture:@"Particle_001.png" CountX:1 CountY:1 NumLoadTextures:1 SizeAtlas:Vector3DMake(32,32,0)];
     
@@ -65,8 +64,17 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CreateObject_Editor{
-    
+
     [self ClearAllObjects];
+
+    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesScore",
+                   SET_INT_V(layerOb6,@"m_iLayer"),
+                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
+
+    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesForIndicator",
+                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
+    
 
     UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
 

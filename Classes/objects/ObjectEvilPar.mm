@@ -22,7 +22,7 @@
         mWidth  = 2;
         mHeight = 2;
         
-        ShapesX = [[FunArrayData alloc] initWithCopasity:6 CountByte:sizeof(float)];
+        ShapesX = [[FunArrayData alloc] initWithCopasity:6];
         m_iDeep=5;
     }
 	return self;
@@ -68,7 +68,7 @@
     [super Start];
     
     mColor.alpha=0;
-    [ShapesX Reset];
+//    [ShapesX Reset];
     
     SET_STAGE_EX(NAME(self), @"ProcBullet", @"Show");
 }
@@ -174,17 +174,17 @@
     
     float Vel;
     
-    NSMutableArray *pArr= [m_pObjMng GetGroup:@"Shapes"];
+//    NSMutableArray *pArr= [m_pObjMng GetGroup:@"Shapes"];
 
-    [ShapesX Reset];
-    if(pArr!=nil && [pArr count]>0){
-        
-        for(GObject *pOb in pArr){
-            
-            if(pOb->m_pCurPosition.y>260)
-                [ShapesX AddData:&pOb->m_pCurPosition.x];
-        }
-    }
+//    [ShapesX Reset];
+//    if(pArr!=nil && [pArr count]>0){
+//        
+//        for(GObject *pOb in pArr){
+//            
+//            if(pOb->m_pCurPosition.y>260)
+//                [ShapesX AddData:&pOb->m_pCurPosition.x];
+//        }
+//    }
 
     for (PARTICLE *pPar in m_pParticleInProc) {
     
@@ -233,20 +233,20 @@
                 pPar->fPhase+=DELTA*pPar->fVelPhase;
                 pPar->CurrentOffset=pPar->m_fAmpl*sin(pPar->fPhase);
                 
-                for(int i=0;i<ShapesX->iCountInArray;i++){
-                    float fDelta=pPar->m_vPos.x-*((float*)[ShapesX GetDataAtIndex:i]);
-                    
-                    if(fabs(fDelta)<60){
-                        
-                        if(fDelta<0 && pPar->fVelMove>0){
-                            pPar->fVelMove=-pPar->fVelMove;
-                        }
-                        
-                        if(fDelta>0 && pPar->fVelMove<0){
-                            pPar->fVelMove=-pPar->fVelMove;
-                        }
-                    }
-                }
+//                for(int i=0;i<ShapesX->iCountInArray;i++){
+//                    float fDelta=pPar->m_vPos.x-*((float*)[ShapesX GetDataAtIndex:i]);
+//                    
+//                    if(fabs(fDelta)<60){
+//                        
+//                        if(fDelta<0 && pPar->fVelMove>0){
+//                            pPar->fVelMove=-pPar->fVelMove;
+//                        }
+//                        
+//                        if(fDelta>0 && pPar->fVelMove<0){
+//                            pPar->fVelMove=-pPar->fVelMove;
+//                        }
+//                    }
+//                }
 
                 pPar->m_vPos.x+=pPar->fVelMove*DELTA;
                 

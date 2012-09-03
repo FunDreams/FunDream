@@ -20,6 +20,11 @@ typedef enum tagTypeButton {
 /** Шаблонный класс для объектов**/
 @interface ObjectButton : GObject {
 @public
+
+    bool m_bStartPush;
+    bool m_bDrag;
+    bool m_bDoubleTouch;
+
     int m_iType;
     bool m_bPush;
     bool m_bCheck;
@@ -27,6 +32,9 @@ typedef enum tagTypeButton {
     NSMutableString *m_strNameStage;
     NSMutableString *m_strNameObject;
     NSMutableString *m_strStartStage;
+    
+    NSMutableString *m_strNameStageDClick;
+    NSMutableString *m_strNameObjectDClick;
 
 	NSMutableString *m_DOWN;
 	NSMutableString *m_UP;
@@ -41,6 +49,8 @@ typedef enum tagTypeButton {
     bool m_bDimMirrorY;
     
     bool m_bLookTouch;
+    Color3D mColorBack;
+    bool m_bBack;
 }
 
 /** Инициализирует объект **/

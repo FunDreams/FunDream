@@ -32,7 +32,10 @@
     
     [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCurrenNumber,m_strName,@"m_iCurrentSym")];
     [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iPlace,m_strName,@"m_iPlace")];
+
     
+    m_strNameContainer=[NSMutableString stringWithString:@"ParticlesScore"];
+    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_strNameContainer,m_strName,@"m_strNameContainer")];
 //====================================================
     Processor_ex *pProc = [self START_QUEUE:@"Move"];
         ASSIGN_STAGE(@"Move", @"Move:", nil);
@@ -71,12 +74,14 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 	
+    m_pCurPosition.x = 30000;
+    
 	[super Start];
 	
-	m_fSpeedScale = 6+(RND%2-1);
-	m_fPhase=RND%10;
-
-	[self Move:nil];
+//	m_fSpeedScale = 6+(RND%2-1);
+//	m_fPhase=RND%10;
+//
+//	[self Move:nil];
 
 	m_pCurPosition.x=-284+m_iPlace%15*PLACEPER;
 	m_pCurPosition.y=428-m_iPlace/15*(PLACEPER+18);
@@ -86,9 +91,11 @@
     m_iCurrenNumberOld=m_iCurrenNumber;
     
     [self SetPosWithOffsetOwner];
-    SET_STAGE_EX(NAME(self), @"Proc", @"a10");
+    SET_STAGE_EX(NAME(self), @"Proc", @"Wait");
     
     if(pParticle==nil){pParticle=[[Particle alloc] Init:self];}
+    
+    [self Move:nil];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HideNum{
@@ -97,17 +104,21 @@
 //------------------------------------------------------------------------------------------------------
 - (void)ShowNum{
     
-    if(pParticle->m_pParticleContainer==nil){
-        SET_STAGE_EX(NAME(self), @"Proc", @"First");
-    }
+//    if(pParticle->m_pParticleContainer==nil){
+//        SET_STAGE_EX(NAME(self), @"Proc", @"First");
+//    }
 
-    [pParticle AddToContainer:@"ParticlesScore"];
+    [pParticle AddToContainer:m_strNameContainer];
+    mTextureId = m_iCurrenNumber;
+
     [pParticle SetFrame:mTextureId];
+    [pParticle UpdateParticleMatr];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareTexture:(Processor_ex *)pProc{
     
     m_iCurrentFrame=9;
+    m_iCurrentFrame=0;
 	mTextureId = m_iCurrenNumber*10+m_iCurrentFrame;
     
     [pParticle SetFrame:mTextureId];
@@ -134,19 +145,22 @@
 - (void)Move:(Processor_ex *)pProc{
 
     [self SetPosWithOffsetOwner];
-
-	if (pParticle!=nil && pParticle->m_pParticleContainer!=nil) {
-		m_fPhase+=DELTA*m_fSpeedScale;
-		float OffsetRotate=5.0f*sin(m_fPhase/2);
-		m_pCurAngle.z=OffsetRotate;
-		
-		float OffsetScale=2*cos(m_fPhase);
-		
-		m_pCurScale.x=mWidth*0.5f+OffsetScale;
-		m_pCurScale.y=mHeight*0.5f-OffsetScale;	
-        
+    
+    if(pParticle->m_pParticleContainer!=nil)
         [pParticle UpdateParticleMatr];
-	}
+
+//	if (pParticle!=nil && pParticle->m_pParticleContainer!=nil) {
+//		m_fPhase+=DELTA*m_fSpeedScale;
+//		float OffsetRotate=5.0f*sin(m_fPhase/2);
+//		m_pCurAngle.z=OffsetRotate;
+//		
+//		float OffsetScale=2*cos(m_fPhase);
+//		
+//		m_pCurScale.x=mWidth*0.5f+OffsetScale;
+//		m_pCurScale.y=mHeight*0.5f-OffsetScale;	
+//        
+//        [pParticle UpdateParticleMatr];
+//	}
 }
 //------------------------------------------------------------------------------------------------------
 - (void)HidenOb:(Processor_ex *)pProc{
@@ -158,11 +172,11 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Wait:(Processor_ex *)pProc{
     
-    if(m_iCurrenNumber!=m_iCurrenNumberOld){
-        
-        m_iCurrenNumberOld=m_iCurrenNumber;
-        NEXT_STAGE;
-    }
+//    if(m_iCurrenNumber!=m_iCurrenNumberOld){
+//        
+//        m_iCurrenNumberOld=m_iCurrenNumber;
+//        NEXT_STAGE;
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ChangePar:(Processor_ex *)pProc{

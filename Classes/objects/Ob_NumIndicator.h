@@ -10,15 +10,15 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 #import "ObjectParticle.h"
-#import "Ob_B_Slayder.h"
-#import "Ob_NumIndicator.h"
 
-@interface Ob_Slayder : GObject {
+@interface Ob_NumIndicator : GObject {
 @public
-    Ob_B_Slayder *pOb_BSlayder;
-    
-    Ob_NumIndicator *pObInd1;
-    Ob_NumIndicator *pObInd2;
+    float *m_fCurValue;
+    float m_fWNumber;
+    float WSym,HSym;
+    float m_fScale;
+    bool m_bDoubleTouch;
+    NSMutableString *m_strNameContainer;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -26,6 +26,6 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
-- (void)SetString;
-    
+-(void)UpdateNum;
+
 @end

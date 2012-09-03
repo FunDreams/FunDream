@@ -127,7 +127,7 @@
     self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerTemplet;
+        m_iLayer = layerOb6;
 
         mWidth  = 2;
         mHeight = 2;

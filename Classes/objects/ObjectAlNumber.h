@@ -28,6 +28,7 @@
     int iFinishFrame;
     float InstFrameFloat;
     
+    NSMutableString *m_strNameContainer;
     Particle *pParticle;
 }
 

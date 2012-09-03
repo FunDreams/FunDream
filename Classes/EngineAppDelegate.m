@@ -23,17 +23,7 @@
 
     // This variable is available if you add "CONFIGURATION_$(CONFIGURATION)"
     // to the Preprocessor Macros in the project settings to all configurations
-    
-//#if TARGET_IPHONE_SIMULATOR
-//#else
-//#if !defined (CONFIGURATION_AppStore_Distribution)
-//    [[BWHockeyManager sharedHockeyManager] setAppIdentifier:@"e3e0c655a45a89bed3d55c1c8ebb9f77"];
-//    [[BWHockeyManager sharedHockeyManager] setAlwaysShowUpdateReminder:YES];
-//    
-//    [[BWQuincyManager sharedQuincyManager] setAppIdentifier:@"e3e0c655a45a89bed3d55c1c8ebb9f77"];
-//#endif
-//#endif
-    
+        
 	m_pPrSettings = [[CPrSettings alloc] init];
 	[m_pPrSettings Load];
 
@@ -110,7 +100,7 @@
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application{
-    
+
     [m_pTimer invalidate];
     [m_pRootViewController.m_pMainController MegaPause:YES];
     [m_pPrSettings Save];
@@ -119,7 +109,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application{
     
 #ifdef EDITOR
-    [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
+   // [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
 #endif
     
 	[m_pPrSettings Save];
