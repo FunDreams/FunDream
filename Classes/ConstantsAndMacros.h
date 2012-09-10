@@ -153,7 +153,7 @@ WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
 //установка/удаление ячейки в MegaTree
 #define COPY_CELL(CELL) [m_pObjMng->pMegaTree CopyCell:CELL];
 #define SET_CELL(CELL) [m_pObjMng->pMegaTree SetCell:CELL];
-#define DEL_CELL(...) [m_pObjMng->pMegaTree RemoveCell:__VA_ARGS__,nil];
+#define DEL_CELL(...) [m_pObjMng->pMegaTree RemoveValue:__VA_ARGS__,nil];
 
 //линковка/копирование параметра INT в MegaTree
 #define LINK_INT_V(INT_V,...) [UniCell Link_Int:(int *)&INT_V withKey:__VA_ARGS__,nil]

@@ -29,7 +29,7 @@
 -(void *)GetPointValue:(id)sKey,...;
 
 - (void)RemoveCell:(id)sKey, ...;
--(void)RemoveValue:(NSString*)sKey;
+-(void)RemoveValue:(id)sKey, ...;
 -(void)dealloc;
 
 @end

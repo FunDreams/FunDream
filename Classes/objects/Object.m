@@ -217,6 +217,17 @@
 //	glCopyTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 0, 0, 16, 16, 0);
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetTouch:(bool)bTouch WithLayer:(int)iLayer{
+    
+    if(m_strName!=nil){
+        
+        m_bTouch=bTouch;
+        
+        NSNumber *pNum=[NSNumber numberWithInt:iLayer];
+        [m_pObjMng->m_pObjectChangeTouch setObject:pNum forKey:m_strName];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SetTouch:(bool)bTouch{
 
     if(m_strName!=nil){

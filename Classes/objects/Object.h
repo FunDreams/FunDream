@@ -170,6 +170,7 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 
 //функция установки взаимодействия объекта
 - (void)SetTouch:(bool)bTouch;
+- (void)SetTouch:(bool)bTouch WithLayer:(int)iLayer;
 
 //деструктор
 - (void)dealloc;

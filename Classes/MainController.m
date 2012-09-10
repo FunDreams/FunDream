@@ -525,13 +525,16 @@ FullName:(NSString *)FullNameSound
     mpCurtouches = [event allTouches];
     m_CountTouch=[mpCurtouches count];
 
+    int i=0,j=0;
     for (NSMutableDictionary *pDic in m_pObjMng->m_pObjectTouches) {
         
+        i++;
         NSEnumerator *enumerator = [pDic objectEnumerator];
         GObject *TmpOb;
         
         while ((TmpOb = [enumerator nextObject])) {
             
+            j++;
             if ((m_pObjMng->m_bGlobalPause==YES && !TmpOb->m_bNonStop)||TmpOb->m_bDeleted==YES)
                 continue;
 

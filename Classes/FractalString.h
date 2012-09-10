@@ -25,6 +25,8 @@
     int F;//конечная граница параметра
 
     int iIndexIcon;//иконка
+    float X;
+    float Y;
 //    int m_iFlags;
 }
 

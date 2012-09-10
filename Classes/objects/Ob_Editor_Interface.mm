@@ -75,19 +75,6 @@
                    SET_VECTOR_V(Vector3DMake(-450,-60,0),@"m_pCurPosition"),
                    SET_FLOAT_V(520,@"mHeight"),
                    SET_INT_V(10,@"m_iNumButton"));
-    
-    
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
-                        SET_STRING_V(@"Close.png",@"m_DOWN"),
-                        SET_STRING_V(@"Close.png",@"m_UP"),
-                        SET_FLOAT_V(54,@"mWidth"),
-                        SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                        SET_BOOL_V(YES,@"m_bLookTouch"),
-                        //SET_INT_V(bCheckBox,@"m_iType"),
-                        //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                        //SET_STRING_V(@"Save",@"m_strNameStage"),
-                        SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                        SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
                    SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
@@ -99,20 +86,36 @@
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-395,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
 
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonTash.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_BOOL_V(YES,@"m_bNotPush"),
                    //SET_INT_V(bCheckBox,@"m_iType"),
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-340,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-30,295,0),@"m_pCurPosition"));
 
+
+    UNFROZE_OBJECT(@"Ob_EmtyPlace",@"FrPerehod",
+//                   SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
+//                   SET_STRING_V(@"ButtonTash.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+//                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_BOOL_V(YES,@"m_bNotPush"),
+                   //SET_INT_V(bCheckBox,@"m_iType"),
+                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   //SET_STRING_V(@"Save",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-440,180,0),@"m_pCurPosition"));
+
+    
 //
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoadDropBox",
 //                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),

@@ -10,15 +10,9 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 
-//тип кнопки
-typedef enum tagTypeButton {
-    bSimple=0,
-    bCheckBox,
-    bRadioBox,
-} EGP_TypeButton;
 
 /** Шаблонный класс для объектов**/
-@interface ObjectButton : GObject {
+@interface ObjectB_Ob : GObject {
 @public
 
     Vector3D LastPointTouch;
@@ -27,7 +21,6 @@ typedef enum tagTypeButton {
     bool m_bDrag;
     bool m_bDoubleTouch;
 
-    int m_iType;
     bool m_bPush;
     bool m_bCheck;
     NSMutableString *m_strNameSound;
@@ -53,6 +46,9 @@ typedef enum tagTypeButton {
     bool m_bLookTouch;
     Color3D mColorBack;
     bool m_bBack;
+    
+    FractalString *pString;
+    GObject *pObEmptyPlace;
 }
 
 /** Инициализирует объект **/

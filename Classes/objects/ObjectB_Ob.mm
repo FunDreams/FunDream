@@ -6,10 +6,10 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "ObjectButton.h"
+#import "ObjectB_Ob.h"
 #import "UniCell.h"
 
-@implementation ObjectButton
+@implementation ObjectB_Ob
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
@@ -17,7 +17,6 @@
     {
         m_Disable=false;
         m_iLayer = layerInterfaceSpace5;
-        m_iType=bSimple;
         m_iLayerTouch=layerTouch_0;
     }
     
@@ -54,7 +53,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-
+    
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
 
@@ -63,8 +62,6 @@
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY")];
-
-    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iType,m_strName,@"m_iType")];
     
     m_strNameSound=[NSMutableString stringWithString:@""];
     m_strNameStage=[NSMutableString stringWithString:@""];
@@ -127,9 +124,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
     
-    if(m_iType!=bCheckBox || m_iType!=bCheckBox){
-        m_bCheck=NO;
-    }
+    m_bCheck=NO;
 
     m_bPush=NO;
     mTextureId=m_TextureUP;
@@ -141,9 +136,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetPush{
     
-    if(m_iType!=bCheckBox || m_iType!=bCheckBox){
-        m_bCheck=YES;
-    }
+    m_bCheck=YES;
 
     m_bPush=YES;
     mTextureId=m_TextureDown;
@@ -167,6 +160,15 @@
 //    }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetPlace{
+    
+    pObEmptyPlace = GET_ID_V(@"EmptyPlace");
+    if(pObEmptyPlace!=nil){
+        
+        m_pCurPosition=pObEmptyPlace->m_pCurPosition;
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
@@ -177,9 +179,8 @@
 	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
     {
         if(m_bNotPush==NO){
-            if(m_iType==bCheckBox || m_iType==bRadioBox){
                 
-              if(m_iType==bRadioBox && m_bDrag==YES){
+              if(m_bDrag==YES){
                    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
                   
                   if(m_iLayer==layerInterfaceSpace5){
@@ -200,21 +201,6 @@
                     [self SetPush];
                     OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
                 }
-                else if(m_bCheck==YES){
-                    
-                    if(m_iType==bCheckBox){
-                        [m_pParent PlaySound:m_strNameSound];
-                        [self SetUnPush];
-                        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-                    }
-                }
-            }
-            else
-            {
-                [m_pParent PlaySound:m_strNameSound];
-                [self SetPush];
-                OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-            }
         }
     }
 
@@ -270,41 +256,27 @@
 
     if(m_bLookTouch==YES)LOCK_TOUCH;
     m_bStartPush=NO;
-    
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-	{                    
-        if(m_iType==bSimple){
-            [self SetUnPush];
-        }
-    }
-    
-    if(m_iType==bRadioBox){
-        if(m_iLayer==layerInterfaceSpace6){
-            m_bLookTouch=YES;
 
-            [self SetLayer:m_iLayer-1];
-            [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-        }
+    if(m_iLayer==layerInterfaceSpace6){
+        m_bLookTouch=YES;
+
+        [self SetLayer:m_iLayer-1];
+        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
+        DEL_CELL(@"DragObject");
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    if(m_iType!=bCheckBox && m_iType!=bRadioBox){
-        [self SetUnPush];
-    }
-    
-    if(m_iType==bRadioBox){
-        
-        if(m_iLayer==layerInterfaceSpace6){
-            m_bLookTouch=YES;
-
-            [self SetLayer:m_iLayer-1];
-            [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-        }
-    }
-
     m_bStartPush=NO;
+
+    if(m_iLayer==layerInterfaceSpace6){
+        m_bLookTouch=YES;
+
+        [self SetLayer:m_iLayer-1];
+        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
+        DEL_CELL(@"DragObject");
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{

@@ -58,7 +58,7 @@
         initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:iIndexZero F:iIndexZero];
 ///////////////////////////////////////////
     pFStringObjects=[[FractalString alloc]
-        initWithName:@"Object" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
+        initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 
     [[FractalString alloc]
             initWithName:@"Ob1" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];

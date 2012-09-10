@@ -9,7 +9,17 @@
 #import "FractalString.h"
 
 @implementation FractalString
+//------------------------------------------------------------------------------------------------------
+- (void)SetDefault{
+    
+    aStrings = [[NSMutableArray alloc] init];
+    aStages = [[NSMutableArray alloc] init];
+    
+    ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
 
+    X=-300;
+    Y=200;
+}
 //------------------------------------------------------------------------------------------------------
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
    WithContainer:(StringContainer *)pContainer{
@@ -22,11 +32,7 @@
             [pParent->aStrings addObject:self];
         }
 
-        aStrings = [[NSMutableArray alloc] init];
-        aStages = [[NSMutableArray alloc] init];
-
-        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
-
+        [self SetDefault];
         [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
                 
         strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
@@ -70,11 +76,9 @@
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
 
-        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
+        [self SetDefault];
         [self SetLimmitStringS:iS F:iF];
-        
-        aStrings = [[NSMutableArray alloc] init];
-        
+                
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
 
@@ -89,9 +93,8 @@
 	if (self != nil)
     {
         pParent=Parent;
-        aStrings = [[NSMutableArray alloc] init];
         
-        ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
+        [self SetDefault];
         [self SetLimmitStringS:iS F:iF];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];

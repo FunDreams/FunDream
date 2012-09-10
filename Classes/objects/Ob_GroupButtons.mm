@@ -7,6 +7,7 @@
 //
 
 #import "Ob_GroupButtons.h"
+#import "ObjectB_Ob.h"
 
 @implementation Ob_GroupButtons
 //------------------------------------------------------------------------------------------------------
@@ -66,28 +67,30 @@
     
     m_iNumButton=[pInsideString->aStrings count];
     
-    if(m_iNumButton>10)m_iNumButton=10;
-    mHeight=m_iNumButton*56;
-    float Step=mHeight/m_iNumButton;
+//    if(m_iNumButton>10)m_iNumButton=10;
+ //   mHeight=m_iNumButton*56;
+//    float Step=mHeight/m_iNumButton;
     
-    float fOffset=-mHeight/2+Step*0.5f;
+//    float fOffset=-mHeight/2+Step*0.5f;
     
     for(int i=0;i<m_iNumButton;i++){
         
-        GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSaveToDropBox",
-                        SET_STRING_V(@"Button_To_box_Down.png",@"m_DOWN"),
-                        SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
-                        SET_FLOAT_V(54,@"mWidth"),
-                        SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                        SET_BOOL_V(YES,@"m_bLookTouch"),
-                        SET_INT_V(2,@"m_iType"),
-                        SET_STRING_V(NAME(self),@"m_strNameObject"),
-                        SET_STRING_V(@"Check",@"m_strNameStage"),
-                        SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                        SET_BOOL_V(YES,@"m_bDrag"),
-                        SET_VECTOR_V(Vector3DMake(m_pCurPosition.x,
-                           m_pCurPosition.y+i*Step+fOffset,0),@"m_pCurPosition"));
+        FractalString *pFrStr = [pInsideString->aStrings objectAtIndex:i];
+        ObjectB_Ob *pOb=UNFROZE_OBJECT(@"ObjectB_Ob",@"Object",
+            SET_STRING_V(@"Button_To_box_Down.png",@"m_DOWN"),
+            SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
+            SET_FLOAT_V(54,@"mWidth"),
+            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+            SET_BOOL_V(YES,@"m_bLookTouch"),
+            SET_INT_V(2,@"m_iType"),
+            SET_STRING_V(NAME(self),@"m_strNameObject"),
+            SET_STRING_V(@"Check",@"m_strNameStage"),
+            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+            SET_BOOL_V(YES,@"m_bDrag"),
+            SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
         
+        pOb->pString=pFrStr;
+
         [m_pChildrenbjectsArr addObject:pOb];
     }
 }
@@ -96,7 +99,7 @@
     
 	[super Start];
     
-    pInsideString = [m_pObjMng->pStringContainer GetString:@"Object"];
+    pInsideString = [m_pObjMng->pStringContainer GetString:@"Objects"];
 
     [self UpdateButt];
 }

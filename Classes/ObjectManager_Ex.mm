@@ -27,6 +27,7 @@
         m_pObjectReserv = [[NSMutableDictionary alloc] init];
         m_pGroups = [[CGroups alloc] init];
         m_pObjectAddToTouch = [[NSMutableDictionary alloc] init];
+        m_pObjectChangeTouch = [[NSMutableDictionary alloc] init];
         m_pAllObjects = [[NSMutableDictionary alloc] init];
         
         pMustDelKeys = [[NSMutableArray alloc] init];
@@ -81,6 +82,36 @@
 
 		[m_pObjectAddToTouch removeAllObjects];
 	}
+    
+    if([m_pObjectChangeTouch count])
+	{
+		NSEnumerator *enumerator = [m_pObjectChangeTouch keyEnumerator];
+		NSString *pKey;
+		
+		while ((pKey = [enumerator nextObject])) {
+            
+            GObject *pObject = [self GetObjectByName:pKey];
+            NSNumber *pNum=[m_pObjectChangeTouch objectForKey:pKey];
+            int iLayerTouchTmp=[pNum intValue];
+
+            if(pObject!=nil){
+                                
+                [[m_pObjectTouches objectAtIndex:pObject->m_iLayerTouch]
+                 removeObjectForKey:pObject->m_strName];
+
+                pObject->m_iLayerTouch=iLayerTouchTmp;
+                
+                if (pObject->m_bTouch==YES){
+                    
+					[[m_pObjectTouches objectAtIndex:pObject->m_iLayerTouch]
+                     setObject:pObject forKey:pObject->m_strName];
+                }
+            }
+        }
+        
+        [m_pObjectChangeTouch removeAllObjects];
+    }
+    
 	
 	int iCount = [pMustDelKeys count];//удаление объктов
 	for (int i=0; i<iCount; i++) {
@@ -242,6 +273,7 @@
 	[m_pObjectList release];
 	[m_pObjectReserv release];
 	[m_pObjectAddToTouch release];
+    [m_pObjectChangeTouch release];
 	
 	[m_pAIObj release];
 	[pMustDelKeys release];

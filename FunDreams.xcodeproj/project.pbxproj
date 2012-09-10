@@ -18,6 +18,7 @@
 		1824287D15F501CC00C420AB /* Ob_IconDrag.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824287C15F501C900C420AB /* Ob_IconDrag.mm */; };
 		1824893E15CED8AD006DABB3 /* Ob_Editor_Num.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */; };
 		182786E0157681F0002145F7 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 182786DF157681F0002145F7 /* DropboxSDK.framework */; };
+		1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */; };
 		182C14A2140CD60000D6E732 /* ObjectWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182C14A0140CD60000D6E732 /* ObjectWorld.mm */; };
 		182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */; };
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
@@ -35,6 +36,7 @@
 		185FBA5D152F1EE200DB25C7 /* miniHelp in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5C152F1EE200DB25C7 /* miniHelp */; };
 		185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */; };
 		185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */; };
+		186495DB15FB91D300C8F9B7 /* Ob_EmtyPlace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */; };
 		1866EC5615AD504200195271 /* Ob_B_Slayder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1866EC5515AD504100195271 /* Ob_B_Slayder.mm */; };
 		1869E08A158B17090022055A /* StringContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1869E089158B17090022055A /* StringContainer.m */; };
 		186D5E1B1545CE6500DDC893 /* ObjectEvilPar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186D5E1A1545CE6500DDC893 /* ObjectEvilPar.mm */; };
@@ -126,6 +128,8 @@
 		1824893C15CED8AC006DABB3 /* Ob_Editor_Num.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Editor_Num.h; path = objects/Ob_Editor_Num.h; sourceTree = "<group>"; };
 		1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Editor_Num.mm; path = objects/Ob_Editor_Num.mm; sourceTree = "<group>"; };
 		182786DF157681F0002145F7 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
+		1827F8BB15FE314200282A00 /* ObjectB_Ob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectB_Ob.h; path = objects/ObjectB_Ob.h; sourceTree = "<group>"; };
+		1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectB_Ob.mm; path = objects/ObjectB_Ob.mm; sourceTree = "<group>"; };
 		182C14A0140CD60000D6E732 /* ObjectWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectWorld.mm; path = objects/ObjectWorld.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182C14A1140CD60000D6E732 /* ObjectWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectWorld.h; path = objects/ObjectWorld.h; sourceTree = "<group>"; };
 		182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_NumIndicator.h; path = objects/Ob_NumIndicator.h; sourceTree = "<group>"; };
@@ -151,6 +155,8 @@
 		185FBA5C152F1EE200DB25C7 /* miniHelp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = miniHelp; sourceTree = "<group>"; };
 		185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "../Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "../Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		186495D915FB91D300C8F9B7 /* Ob_EmtyPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_EmtyPlace.h; path = objects/Ob_EmtyPlace.h; sourceTree = "<group>"; };
+		186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_EmtyPlace.mm; path = objects/Ob_EmtyPlace.mm; sourceTree = "<group>"; };
 		1866EC5415AD504100195271 /* Ob_B_Slayder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_B_Slayder.h; path = objects/Ob_B_Slayder.h; sourceTree = "<group>"; };
 		1866EC5515AD504100195271 /* Ob_B_Slayder.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_B_Slayder.mm; path = objects/Ob_B_Slayder.mm; sourceTree = "<group>"; };
 		1869E088158B17090022055A /* StringContainer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StringContainer.h; sourceTree = "<group>"; };
@@ -173,8 +179,6 @@
 		187E228E1165E9CB00EA912F /* SoundEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEngine.h; sourceTree = "<group>"; };
 		187E22A51165EC3200EA912F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		187E22D31165ECA100EA912F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
-		188DD61015CFCD8500591A05 /* Копия Ob_Editor_Num.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "Копия Ob_Editor_Num.h"; path = "objects/Копия Ob_Editor_Num.h"; sourceTree = "<group>"; };
-		188DD61115CFCD8500591A05 /* Копия Ob_Editor_Num.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = "Копия Ob_Editor_Num.mm"; path = "objects/Копия Ob_Editor_Num.mm"; sourceTree = "<group>"; };
 		1890156D1291684E0027418F /* MKStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreManager.h; sourceTree = "<group>"; };
 		1890156E1291684E0027418F /* MKStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKStoreManager.m; sourceTree = "<group>"; };
 		1890156F1291684E0027418F /* MKStoreObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreObserver.h; sourceTree = "<group>"; };
@@ -397,8 +401,6 @@
 			children = (
 				1890164312917AE10027418F /* GameLogicObject.h */,
 				1859FF781295BEEB00898BFE /* GameLogicObject.mm */,
-				188DD61015CFCD8500591A05 /* Копия Ob_Editor_Num.h */,
-				188DD61115CFCD8500591A05 /* Копия Ob_Editor_Num.mm */,
 				1824893C15CED8AC006DABB3 /* Ob_Editor_Num.h */,
 				1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */,
 				182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */,
@@ -409,6 +411,10 @@
 				18DEE3CB1581150500C4DAB5 /* Ob_EditorPoint.mm */,
 				1817D5C4156C069C00ED0758 /* Ob_Editor_Interface.h */,
 				1817D5C5156C069C00ED0758 /* Ob_Editor_Interface.mm */,
+				186495D915FB91D300C8F9B7 /* Ob_EmtyPlace.h */,
+				186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */,
+				1827F8BB15FE314200282A00 /* ObjectB_Ob.h */,
+				1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */,
 				181F2BA612D5019E008A6482 /* ObjectButton.h */,
 				181F2BA512D5019E008A6482 /* ObjectButton.mm */,
 				1866EC5415AD504100195271 /* Ob_B_Slayder.h */,
@@ -728,6 +734,8 @@
 				1824287715EDE33900C420AB /* FunArrayDataIndexes.m in Sources */,
 				1824287A15EFC47A00C420AB /* Ob_GroupButtons.mm in Sources */,
 				1824287D15F501CC00C420AB /* Ob_IconDrag.mm in Sources */,
+				186495DB15FB91D300C8F9B7 /* Ob_EmtyPlace.mm in Sources */,
+				1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

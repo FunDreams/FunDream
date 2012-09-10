@@ -110,9 +110,14 @@ typedef enum tagLayerTouchID {
 	//список объектов которые учавствуют в касаниях
 	NSMutableArray* m_pObjectTouches;
 	
-	//список объектов которые учавствуют в касаниях
+	//список объектов которые будут добавлены/удалены из массива
+    //интерактивных объектов
 	NSMutableDictionary* m_pObjectAddToTouch;
-    
+
+    //список объектов которые будут добавлены/удалены из массива
+    //интерактивных объектов с учётом слоя касания
+	NSMutableDictionary* m_pObjectChangeTouch;
+
     //контейнер струн
     StringContainer* pStringContainer;
     
