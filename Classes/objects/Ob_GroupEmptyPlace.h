@@ -11,16 +11,14 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-@interface Ob_IconDrag : GObject {
-@public
-    FractalString *pInsideString;
+@interface Ob_GroupEmptyPlace : GObject {
+    int m_iNumButton;
+    int m_iCurrentSelect;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 -(void)Destroy;
 -(void)Start;
-
-- (void)EndObject;
     
 @end

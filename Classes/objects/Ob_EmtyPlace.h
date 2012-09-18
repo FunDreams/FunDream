@@ -34,12 +34,13 @@
     bool m_bDimFromTexture;
     bool m_bDimMirrorX;
     bool m_bDimMirrorY;
+    bool m_bIsPush;
     
     bool m_bLookTouch;
     Color3D mColorBack;
     bool m_bBack;
     
-    ObjectB_Ob *pOb;
+    ObjectB_Ob *pObOb;
 }
 
 /** Инициализирует объект **/

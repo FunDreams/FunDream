@@ -13,6 +13,7 @@
 
 @interface Ob_GroupButtons : GObject {
     int m_iNumButton;
+    int m_iCurrentSelect;
     FractalString *pInsideString;
 }
 

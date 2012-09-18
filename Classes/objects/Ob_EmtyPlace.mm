@@ -51,6 +51,8 @@
 - (void)LinkValues{
     [super LinkValues];
 
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bIsPush,m_strName,@"m_bIsPush")];
+
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
 
@@ -94,11 +96,13 @@
     if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
 
 	m_vStartPos=m_pCurPosition;
-	
     
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
+    
+    if(m_bIsPush)
+        [self SetPush];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
@@ -107,7 +111,6 @@
     
     mColor.green=1;
     mColor.blue=1;
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetPush{
@@ -126,36 +129,43 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
-- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    [self SetPush];
+    
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
+    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
+
     [self SetPush];
+
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
+    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    [self SetUnPush];
+
+//    [self SetUnPush];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
 
-     pOb = GET_ID_V(@"DragObject");
-    
-    if(pOb!=nil){
-        
-        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"EmptyPlace"))];
+    pObOb = GET_ID_V(@"DragObject");
 
-        OBJECT_PERFORM_SEL(NAME(pOb), @"SetPlace");
-    }
-    
-    [self SetUnPush];
+    if(pObOb!=nil){
+
+        mTextureId=pObOb->mTextureId;
+
+        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"EmptyPlace"))];
+        OBJECT_PERFORM_SEL(NAME(pObOb), @"SetPlace");
+    }    
 }
-//------------------------------------------------------------------------------------------------------
-- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    [self SetUnPush];
-}
+////----------------------------------------------------------------------------------------------------
+//- (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+//    
+//    [self SetUnPush];
+//}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     
@@ -163,5 +173,4 @@
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
-
 @end

@@ -22,6 +22,7 @@ typedef enum tagTypeButton {
 @public
 
     Vector3D LastPointTouch;
+    bool m_bIsPush;
     bool m_bNotPush;
     bool m_bStartPush;
     bool m_bDrag;

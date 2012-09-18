@@ -32,6 +32,7 @@
     
     m_pOwner=nil;
     
+    m_bIsPush=NO;
     m_bNotPush=NO;
     m_bHiden=NO;
     m_bPush=NO;
@@ -63,6 +64,8 @@
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY")];
+
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bIsPush,m_strName,@"m_bIsPush")];
 
     [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iType,m_strName,@"m_iType")];
     
@@ -123,11 +126,15 @@
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
+    
+    if(m_bIsPush==YES){
+        [self SetPush];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
     
-    if(m_iType!=bCheckBox || m_iType!=bCheckBox){
+    if(m_iType==bCheckBox || m_iType==bCheckBox){
         m_bCheck=NO;
     }
 
@@ -141,7 +148,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetPush{
     
-    if(m_iType!=bCheckBox || m_iType!=bCheckBox){
+    if(m_iType==bCheckBox || m_iType==bCheckBox){
         m_bCheck=YES;
     }
 
@@ -252,8 +259,12 @@
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
+	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
+    {
+        if(m_iType==bSimple){
+
             [self SetUnPush];
+        }
     }
     
     if(m_bDrag==YES && m_bStartPush==YES){

@@ -44,7 +44,7 @@
     [self END_QUEUE:pProc name:@"Proc"];
     
 //====//различные параметры=============================================================================
-//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+   [m_pObjMng->pMegaTree SetCell:(LINK_INT_V(m_iMode,@"m_iMode"))];
     
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
@@ -54,12 +54,12 @@
 
 	[super Start];
         
-//    UNFROZE_OBJECT(@"StaticObject",@"Sl1",
-//                   SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-//                   SET_FLOAT_V(480,@"mWidth"),
-//                   SET_FLOAT_V(5,@"mHeight"),
-//                   SET_VECTOR_V(Vector3DMake(-240,0,0),@"m_pCurPosition"),
-//                   SET_INT_V(layerBackground,@"m_iLayer"));
+    UNFROZE_OBJECT(@"StaticObject",@"Sl1",
+                   SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                   SET_FLOAT_V(480,@"mWidth"),
+                   SET_FLOAT_V(5,@"mHeight"),
+                   SET_VECTOR_V(Vector3DMake(-240,202,0),@"m_pCurPosition"),
+                   SET_INT_V(layerBackground,@"m_iLayer"));
 
     UNFROZE_OBJECT(@"StaticObject",@"Sl2",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
@@ -77,12 +77,12 @@
                    SET_INT_V(10,@"m_iNumButton"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
-                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
+                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   //SET_INT_V(bCheckBox,@"m_iType"),
+                   SET_INT_V(bCheckBox,@"m_iType"),
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
@@ -99,24 +99,53 @@
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-30,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
 
 
-    UNFROZE_OBJECT(@"Ob_EmtyPlace",@"FrPerehod",
-//                   SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
-//                   SET_STRING_V(@"ButtonTash.png",@"m_UP"),
+    UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
+                   SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
+    
+//===============================режими==============================================
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
+                   SET_STRING_V(@"ButtonPoint_Up.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonPoint_Up.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-//                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V(YES,@"m_bNotPush"),
-                   //SET_INT_V(bCheckBox,@"m_iType"),
-                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                   //SET_STRING_V(@"Save",@"m_strNameStage"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   //SET_BOOL_V(YES,@"m_bNotPush"),
+                   SET_BOOL_V(YES,@"m_bIsPush"),
+                   SET_INT_V(bRadioBox,@"m_iType"),
+                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   SET_STRING_V(@"CheckMove",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-440,180,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
 
-    
-//
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
+                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   //SET_BOOL_V(YES,@"m_bNotPush"),
+                   SET_INT_V(bRadioBox,@"m_iType"),
+                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   SET_STRING_V(@"CheckCopy",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
+
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
+                   SET_STRING_V(@"ButtonTime.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonTime.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   //SET_BOOL_V(YES,@"m_bNotPush"),
+                   SET_INT_V(bRadioBox,@"m_iType"),
+                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   SET_STRING_V(@"CheckLink",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
+//===================================================================================
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoadDropBox",
 //                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
@@ -175,6 +204,30 @@
 //                   SET_VECTOR_V(Vector3DMake(-320,280,0),@"m_pCurPosition"));
 
     [self Update];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CheckMove{
+    
+    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+    
+    m_iMode=0;//move
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CheckCopy{
+
+    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+    
+    m_iMode=1;//copy
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CheckLink{
+
+    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
+    
+    m_iMode=2;//link
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckObject{

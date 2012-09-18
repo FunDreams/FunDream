@@ -18,6 +18,7 @@
     NSMutableArray *aObSliders;    
     NSMutableArray *aObPoints;    
     int IndexCheckPoint;
+    int m_iMode;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -37,6 +38,10 @@
 - (void)CheckObject;
 - (void)CheckPoint;
 - (void)DelObject;
+
+- (void)CheckMove;
+- (void)CheckCopy;
+- (void)CheckLink;
 
 -(void)dealloc;
     

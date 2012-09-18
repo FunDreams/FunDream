@@ -17,8 +17,8 @@
     
     ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
 
-    X=-300;
-    Y=200;
+    X=-440;
+    Y=170;
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent

@@ -8,6 +8,7 @@
 
 #import "ObjectB_Ob.h"
 #import "UniCell.h"
+#import "Ob_IconDrag.h"
 
 @implementation ObjectB_Ob
 //------------------------------------------------------------------------------------------------------
@@ -15,9 +16,8 @@
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_Disable=false;
         m_iLayer = layerInterfaceSpace5;
-        m_iLayerTouch=layerTouch_0;
+        m_iLayerTouch=layerTouch_1N;
     }
     
 	return self;
@@ -34,7 +34,6 @@
     m_bNotPush=NO;
     m_bHiden=NO;
     m_bPush=NO;
-    m_bCheck=NO;
     m_bDrag=NO;
     m_bStartPush=NO;
     
@@ -58,10 +57,6 @@
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
 
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bNotPush,m_strName,@"m_bNotPush")];
-
-    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimFromTexture,m_strName,@"m_bDimFromTexture")];
-    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorX,m_strName,@"m_bDimMirrorX")];
-    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY")];
     
     m_strNameSound=[NSMutableString stringWithString:@""];
     m_strNameStage=[NSMutableString stringWithString:@""];
@@ -84,29 +79,19 @@
     
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_DOWN,m_strName,@"m_DOWN")];
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_UP,m_strName,@"m_UP")];
-    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_Disable,m_strName,@"m_Disable")];
 
+    
+//////--------------------------------------------------------------------------------------------------
     Processor_ex *pProc = [self START_QUEUE:@"DTouch"];
         ASSIGN_STAGE(@"Idle", @"Idle:",nil)
-        ASSIGN_STAGE(@"DoubleTouch", @"DoubleTouch:",SET_INT_V(300,@"TimeBaseDelay"));
+        ASSIGN_STAGE(@"DoubleTouch",@"DoubleTouch:",SET_INT_V(300,@"TimeBaseDelay"));
     [self END_QUEUE:pProc name:@"DTouch"];
-
-    pProc = [self START_QUEUE:@"Proc"];
-    
-        ASSIGN_STAGE(@"Idle",@"Proc:",nil);
-    
-    [self END_QUEUE:pProc name:@"Proc"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-	
-    if(m_bDimFromTexture){GET_DIM_FROM_TEXTURE(m_DOWN);}
-    
+	    
 	[super Start];
     [self SetTouch:YES];
-
-    if(m_bDimMirrorX==YES){m_pCurScale.x=-m_pCurScale.x;}
-    if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
 
 	m_vStartPos=m_pCurPosition;
 	
@@ -124,22 +109,15 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
     
-    m_bCheck=NO;
-
     m_bPush=NO;
-    mTextureId=m_TextureUP;
     
     mColor.green=1;
     mColor.blue=1;
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetPush{
-    
-    m_bCheck=YES;
 
     m_bPush=YES;
-    mTextureId=m_TextureDown;
     
     mColor.green=0;
     mColor.blue=0;
@@ -163,10 +141,9 @@
 - (void)SetPlace{
     
     pObEmptyPlace = GET_ID_V(@"EmptyPlace");
-    if(pObEmptyPlace!=nil){
-        
-        m_pCurPosition=pObEmptyPlace->m_pCurPosition;
-    }
+//    if(pObEmptyPlace!=nil){
+//        
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -176,32 +153,26 @@
     LastPointTouch.x=Point.x;
     LastPointTouch.y=Point.y;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-    {
-        if(m_bNotPush==NO){
-                
-              if(m_bDrag==YES){
-                   [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+    if(m_bNotPush==NO){
+            
+          if(m_bDrag==YES){
+               [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+              
+              if(m_iLayer==layerInterfaceSpace5){
+
+                  m_bStartPush=YES;
+                  [self SetLayer:m_iLayer+1];
+                  [self SetTouch:YES WithLayer:m_iLayerTouch-1];
+                  m_bLookTouch=NO;
                   
-                  if(m_iLayer==layerInterfaceSpace5){
-
-                      m_bStartPush=YES;
-                      [self SetLayer:m_iLayer+1];
-                      [self SetTouch:YES WithLayer:m_iLayerTouch-1];
-                      m_bLookTouch=NO;
-                      
-                      [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
-                    }
+                  [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
                 }
-
-                if(m_bCheck==NO){
-                    
-                    [m_pParent PlaySound:m_strNameSound];
-                    
-                    [self SetPush];
-                    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-                }
-        }
+            }
+                
+            [m_pParent PlaySound:m_strNameSound];
+            
+            OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+            [self SetPush];
     }
 
     if(m_bDoubleTouch==YES)
@@ -216,67 +187,98 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+-(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn{
+    
+    int *pMode=GET_INT_V(@"m_iMode");
+    if(*pMode==0){
+        
+        if(m_bDrag==YES && m_bStartPush==YES){
+            
+            m_pCurPosition.x-=LastPointTouch.x-Point.x;
+            m_pCurPosition.y-=LastPointTouch.y-Point.y;
+            
+            LastPointTouch.x=Point.x;
+            LastPointTouch.y=Point.y;
+            
+            if(m_pCurPosition.x<-440)m_pCurPosition.x=-440;
+            if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
+            
+            if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
+            if(m_pCurPosition.y>170)m_pCurPosition.y=170;
+            
+            pString->X=m_pCurPosition.x;
+            pString->Y=m_pCurPosition.y;
+        }
+    }
+    else
+    {
+        if(m_bStartMove==NO && bMoveIn==YES){
+            
+            Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
+                           SET_FLOAT_V(54,@"mWidth"),
+                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                           SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+                           SET_INT_V(mTextureId,@"mTextureId"));
+            
+            pOb->pInsideString=pString;
+
+            m_bStartMove=YES;
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
  //   if(m_bLookTouch==YES)LOCK_TOUCH;
     
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
-            [self SetPush];
-    }
+    [self SetPush];
     
-    if(m_bDrag==YES && m_bStartPush==YES){
-        
-        m_pCurPosition.x-=LastPointTouch.x-Point.x;
-        m_pCurPosition.y-=LastPointTouch.y-Point.y;
-
-        LastPointTouch.x=Point.x;
-        LastPointTouch.y=Point.y;
-    }
+    [self MoveObject:Point WithMode:YES];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
-            [self SetUnPush];
-    }
+//    if(m_bStartPush==NO)[self SetUnPush];
     
-    if(m_bDrag==YES && m_bStartPush==YES){
+//    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+    
+    [self MoveObject:Point WithMode:NO];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)EndTouch{
         
-        m_pCurPosition.x-=LastPointTouch.x-Point.x;
-        m_pCurPosition.y-=LastPointTouch.y-Point.y;
+    m_bStartPush=NO;
+    m_bStartMove=NO;
+    
+    if(m_iLayer==layerInterfaceSpace6){
+        m_bLookTouch=YES;
         
-        LastPointTouch.x=Point.x;
-        LastPointTouch.y=Point.y;
+        GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+        CGPoint Point;
+        Point.x=m_pCurPosition.x;
+        Point.y=m_pCurPosition.y;
+        
+        if([pOb Intersect:Point]){
+            
+            [m_pObjMng->pStringContainer DelString:pString];
+        }
+
+        [self SetLayer:m_iLayer-1];
+        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
+        DEL_CELL(@"DragObject");
+        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-
-    if(m_bLookTouch==YES)LOCK_TOUCH;
-    m_bStartPush=NO;
-
-    if(m_iLayer==layerInterfaceSpace6){
-        m_bLookTouch=YES;
-
-        [self SetLayer:m_iLayer-1];
-        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-        DEL_CELL(@"DragObject");
-    }
+    [self EndTouch];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
-    m_bStartPush=NO;
-
-    if(m_iLayer==layerInterfaceSpace6){
-        m_bLookTouch=YES;
-
-        [self SetLayer:m_iLayer-1];
-        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-        DEL_CELL(@"DragObject");
-    }
+    [self EndTouch];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{

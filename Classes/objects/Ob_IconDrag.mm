@@ -31,8 +31,7 @@
   //      ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
         ASSIGN_STAGE(@"PROC",@"Proc:",nil);
     [self END_QUEUE:pProc name:@"Proc"];
-    
-    
+
     [m_pObjMng->pMegaTree SetCell:LINK_INT_V(mTextureId,m_strName,@"mTextureId")];
 //====//различные параметры=============================================================================
 //   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
@@ -51,7 +50,35 @@
 //    GET_TEXTURE(mTextureId, m_pNameTexture);
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Update{}
+- (void)EndObject{
+    
+    GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+    CGPoint Point;
+    Point.x=m_pCurPosition.x;
+    Point.y=m_pCurPosition.y;
+
+    if([pOb Intersect:Point]){        
+    }
+    else if(m_pCurPosition.y<202){
+        FractalString *pParent=pInsideString->pParent;
+
+        FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                               WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
+        
+        pNewString->X=m_pCurPosition.x;
+        pNewString->Y=m_pCurPosition.y;
+        
+        if(pNewString->X<-440)pNewString->X=-440;
+        if(pNewString->X>-40)pNewString->X=-40;
+        
+        if(pNewString->Y<-280)pNewString->Y=-280;
+        if(pNewString->Y>170)pNewString->Y=170;
+
+        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+    }
+    
+    DESTROY_OBJECT(self);
+}
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
@@ -76,11 +103,13 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    DESTROY_OBJECT(self);
+    
+    [self EndObject];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    DESTROY_OBJECT(self);
+    
+    [self EndObject];    
 }
 //------------------------------------------------------------------------------------------------------
 @end

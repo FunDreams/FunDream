@@ -1,4 +1,3 @@
-
 //
 //  TestGameObject.h
 //  Engine
@@ -20,9 +19,9 @@
     bool m_bStartPush;
     bool m_bDrag;
     bool m_bDoubleTouch;
+    bool m_bStartMove;
 
     bool m_bPush;
-    bool m_bCheck;
     NSMutableString *m_strNameSound;
     NSMutableString *m_strNameStage;
     NSMutableString *m_strNameObject;
@@ -36,14 +35,9 @@
 	
 	UInt32 m_TextureDown;
 	UInt32 m_TextureUP;	
-	
-	bool m_Disable;
-    
-    bool m_bDimFromTexture;
-    bool m_bDimMirrorX;
-    bool m_bDimMirrorY;
-    
+
     bool m_bLookTouch;
+
     Color3D mColorBack;
     bool m_bBack;
     
@@ -56,9 +50,10 @@
 
 -(void)Start;
 
-- (void)Proc:(Processor_ex *)pProc;
+-(void)Proc:(Processor_ex *)pProc;
+-(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn;
 
 - (void)SetUnPush;
 - (void)SetPush;
-
+- (void)EndTouch;
 @end

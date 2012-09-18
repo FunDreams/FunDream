@@ -19,6 +19,7 @@
 		1824893E15CED8AD006DABB3 /* Ob_Editor_Num.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1824893D15CED8AD006DABB3 /* Ob_Editor_Num.mm */; };
 		182786E0157681F0002145F7 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 182786DF157681F0002145F7 /* DropboxSDK.framework */; };
 		1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */; };
+		1827F8C015FF34FF00282A00 /* Ob_GroupEmptyPlace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */; };
 		182C14A2140CD60000D6E732 /* ObjectWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182C14A0140CD60000D6E732 /* ObjectWorld.mm */; };
 		182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */; };
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
@@ -130,6 +131,8 @@
 		182786DF157681F0002145F7 /* DropboxSDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = DropboxSDK.framework; sourceTree = "<group>"; };
 		1827F8BB15FE314200282A00 /* ObjectB_Ob.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectB_Ob.h; path = objects/ObjectB_Ob.h; sourceTree = "<group>"; };
 		1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectB_Ob.mm; path = objects/ObjectB_Ob.mm; sourceTree = "<group>"; };
+		1827F8BE15FF34FF00282A00 /* Ob_GroupEmptyPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_GroupEmptyPlace.h; path = objects/Ob_GroupEmptyPlace.h; sourceTree = "<group>"; };
+		1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_GroupEmptyPlace.mm; path = objects/Ob_GroupEmptyPlace.mm; sourceTree = "<group>"; };
 		182C14A0140CD60000D6E732 /* ObjectWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectWorld.mm; path = objects/ObjectWorld.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182C14A1140CD60000D6E732 /* ObjectWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectWorld.h; path = objects/ObjectWorld.h; sourceTree = "<group>"; };
 		182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_NumIndicator.h; path = objects/Ob_NumIndicator.h; sourceTree = "<group>"; };
@@ -437,6 +440,8 @@
 				1824287615EDE33800C420AB /* FunArrayDataIndexes.m */,
 				1824287815EFC47700C420AB /* Ob_GroupButtons.h */,
 				1824287915EFC47800C420AB /* Ob_GroupButtons.mm */,
+				1827F8BE15FF34FF00282A00 /* Ob_GroupEmptyPlace.h */,
+				1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */,
 				1824287B15F501C700C420AB /* Ob_IconDrag.h */,
 				1824287C15F501C900C420AB /* Ob_IconDrag.mm */,
 			);
@@ -736,6 +741,7 @@
 				1824287D15F501CC00C420AB /* Ob_IconDrag.mm in Sources */,
 				186495DB15FB91D300C8F9B7 /* Ob_EmtyPlace.mm in Sources */,
 				1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */,
+				1827F8C015FF34FF00282A00 /* Ob_GroupEmptyPlace.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
