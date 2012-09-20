@@ -41,6 +41,9 @@
     bool m_bBack;
     
     ObjectB_Ob *pObOb;
+    FractalString *pStr;
+    bool m_bStartMove;
+    bool m_bStartPush;
 }
 
 /** Инициализирует объект **/
@@ -50,6 +53,7 @@
 
 - (void)Proc:(Processor_ex *)pProc;
 
+- (void)SetEmpty;
 - (void)SetUnPush;
 - (void)SetPush;
 

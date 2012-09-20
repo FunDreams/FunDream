@@ -72,8 +72,8 @@
         
         FractalString *pFrStr = [pInsideString->aStrings objectAtIndex:i];
         ObjectB_Ob *pOb=UNFROZE_OBJECT(@"ObjectB_Ob",@"Object",
-            SET_STRING_V(@"Button_To_box_Down.png",@"m_DOWN"),
-            SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
+            SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+            SET_STRING_V(@"ButtonOb.png",@"m_UP"),
             SET_FLOAT_V(54,@"mWidth"),
             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
             SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -89,12 +89,27 @@
         [m_pChildrenbjectsArr addObject:pOb];
     }
     
-    if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
-        m_iCurrentSelect=[m_pChildrenbjectsArr count]-1;
+    if([m_pChildrenbjectsArr count]>0){
+        if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
+            m_iCurrentSelect=[m_pChildrenbjectsArr count]-1;
+        
+        ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
+        
+        OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
+    }    
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetString:(FractalString *)Str{
     
-    ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
+    FractalString *pStr = Str;
+
+    if(pStr!=nil)
+        pInsideString=pStr;
+    else{
+        pInsideString=[m_pObjMng->pStringContainer GetString:@"Objects"];
+    }
     
-    OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(pInsideString,@"ParentString")];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -102,6 +117,7 @@
 	[super Start];
     
     pInsideString = [m_pObjMng->pStringContainer GetString:@"Objects"];
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(pInsideString,@"ParentString")];
 
     [self UpdateButt];
 }

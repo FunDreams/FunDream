@@ -196,7 +196,7 @@
                       [self SetTouch:YES WithLayer:m_iLayerTouch-1];
                       m_bLookTouch=NO;
                       
-                      [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
+              //        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
                     }
                 }
 
@@ -241,9 +241,9 @@
     
  //   if(m_bLookTouch==YES)LOCK_TOUCH;
     
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
-            [self SetPush];
-    }
+//	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO){
+//            [self SetPush];
+//    }
     
     if(m_bDrag==YES && m_bStartPush==YES){
         
@@ -259,13 +259,13 @@
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
-	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
-    {
-        if(m_iType==bSimple){
-
-            [self SetUnPush];
-        }
-    }
+//	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
+//    {
+//        if(m_iType==bSimple){
+//
+//            [self SetUnPush];
+//        }
+//    }
     
     if(m_bDrag==YES && m_bStartPush==YES){
         

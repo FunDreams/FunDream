@@ -181,12 +181,9 @@
             TmpFloat=TmpValue+TmpFloat2;
         }
         
-        
         *pObInd->m_fCurValue=TmpFloat;
-        
         [pObInd UpdateNum];
     }
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Click0{

@@ -7,6 +7,7 @@
 //
 
 #import "Ob_IconDrag.h"
+#import "ObjectB_Ob.h"
 
 @implementation Ob_IconDrag
 //------------------------------------------------------------------------------------------------------
@@ -50,31 +51,68 @@
 //    GET_TEXTURE(mTextureId, m_pNameTexture);
 }
 //------------------------------------------------------------------------------------------------------
+- (void)PrepareString:(FractalString *)pNewString{
+    
+    pNewString->X=m_pCurPosition.x;
+    pNewString->Y=m_pCurPosition.y;
+    
+    if(pNewString->X<-440)pNewString->X=-440;
+    if(pNewString->X>-40)pNewString->X=-40;
+    
+    if(pNewString->Y<-280)pNewString->Y=-280;
+    if(pNewString->Y>170)pNewString->Y=170;
+    
+    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+
+}
+//------------------------------------------------------------------------------------------------------
 - (void)EndObject{
     
     GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+    
+    FractalString *pParent = GET_ID_V(@"ParentString");
+
     CGPoint Point;
     Point.x=m_pCurPosition.x;
     Point.y=m_pCurPosition.y;
 
-    if([pOb Intersect:Point]){        
+    GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
+    
+    if(pObGroup!=nil)
+    {
+        for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+        {
+            if([pObob Intersect:Point])
+            {
+                pParent=pObob->pString;
+                
+                goto Exit;
+            }
+        }
+    }
+Exit:
+    
+    if([pOb Intersect:Point]){
+    }
+    else if(m_pCurPosition.y<202 && pInsideString!=nil){
+
+        if(pParent!=pInsideString){
+            FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                                   WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
+            
+            [self PrepareString:pNewString];
+        }
     }
     else if(m_pCurPosition.y<202){
-        FractalString *pParent=pInsideString->pParent;
 
-        FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                               WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
-        
-        pNewString->X=m_pCurPosition.x;
-        pNewString->Y=m_pCurPosition.y;
-        
-        if(pNewString->X<-440)pNewString->X=-440;
-        if(pNewString->X>-40)pNewString->X=-40;
-        
-        if(pNewString->Y<-280)pNewString->Y=-280;
-        if(pNewString->Y>170)pNewString->Y=170;
+        FractalString *pNewString =[[FractalString alloc]initWithName:@"EmptyOb" WithParent:pParent
+         WithContainer:m_pObjMng->pStringContainer
+            S:m_pObjMng->pStringContainer->iIndexZero F:m_pObjMng->pStringContainer->iIndexZero];
 
-        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+        [self PrepareString:pNewString];
+        
+        DEL_CELL(@"DragObject");
+        DEL_CELL(@"EmptyOb");
     }
     
     DESTROY_OBJECT(self);
@@ -109,7 +147,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    [self EndObject];    
+    [self EndObject];
 }
 //------------------------------------------------------------------------------------------------------
 @end

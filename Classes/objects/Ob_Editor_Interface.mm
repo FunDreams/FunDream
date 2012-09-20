@@ -104,7 +104,6 @@
 
     UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
-    
 //===============================режими==============================================
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
                    SET_STRING_V(@"ButtonPoint_Up.png",@"m_DOWN"),

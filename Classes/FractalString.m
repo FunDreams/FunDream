@@ -52,8 +52,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
-     WithContainer:(StringContainer *)pContainer
-                 S:(int)iS F:(int)iF{
+     WithContainer:(StringContainer *)pContainer S:(int)iS F:(int)iF{
 
 	self = [super init];
 	if (self != nil)

@@ -7,7 +7,8 @@
 //
 
 #import "Ob_GroupEmptyPlace.h"
-#import "ObjectB_Ob.h"
+#import "Ob_EmtyPlace.h"
+#import "Ob_GroupButtons.h"
 
 @implementation Ob_GroupEmptyPlace
 //------------------------------------------------------------------------------------------------------
@@ -40,9 +41,20 @@
     
     int i=0;
     if(pObTmp!=nil){
-        for (GObject *pOb in m_pChildrenbjectsArr) {
+        for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
             if(pOb==pObTmp){
                 m_iCurrentSelect=i;
+                
+                FractalString *StringTmp=pOb->pStr;
+                
+                Ob_GroupButtons *GrButt = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
+
+                if(GrButt!=nil){
+                    [GrButt SetString:StringTmp];
+                }
+                
+                OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+
                 continue;
             }
             else{
@@ -50,7 +62,7 @@
             }
             i++;
         }
-    }
+    }    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{

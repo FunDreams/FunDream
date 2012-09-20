@@ -14,7 +14,7 @@
 @public
     FractalString *pParent;//струна родитель
     NSString *strName;//Имя
-    NSString *strUID;//уникальный идентификатор струны (случайное имя дня словаря)
+    NSString *strUID;//уникальный идентификатор струны (случайное имя для словаря)
     int m_iDeep;//вложенность
 
     NSMutableArray *aStages;//Состояния

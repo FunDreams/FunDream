@@ -19,6 +19,7 @@
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
+-(void)SetString:(FractalString *)Str;
 -(void)Destroy;
 -(void)Start;
     

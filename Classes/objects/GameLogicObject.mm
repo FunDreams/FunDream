@@ -74,7 +74,6 @@
     UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesForIndicator",
                    SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                    SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
-    
 
     UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
 

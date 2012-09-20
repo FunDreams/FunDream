@@ -140,7 +140,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetPlace{
     
-    pObEmptyPlace = GET_ID_V(@"EmptyPlace");
+//    pObEmptyPlace = GET_ID_V(@"EmptyPlace");
 //    if(pObEmptyPlace!=nil){
 //        
 //    }
@@ -261,11 +261,35 @@
         Point.x=m_pCurPosition.x;
         Point.y=m_pCurPosition.y;
         
-        if([pOb Intersect:Point]){
-            
+        if([pOb Intersect:Point])
+        {
             [m_pObjMng->pStringContainer DelString:pString];
         }
+        else
+        {
+            GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
 
+            if(pObGroup!=nil)
+            {
+                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+                {
+                    if(pObob==self)continue;
+                    else
+                    {
+                        if([pObob Intersect:Point])
+                        {
+                            [[FractalString alloc] initAsCopy:pString
+                                WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
+                            
+                            [m_pObjMng->pStringContainer DelString:pString];
+                            goto Exit;
+                        }
+                    }
+                }
+            }
+        }
+        
+Exit:
         [self SetLayer:m_iLayer-1];
         [self SetTouch:YES WithLayer:m_iLayerTouch+1];
         DEL_CELL(@"DragObject");
