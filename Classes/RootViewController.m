@@ -7,8 +7,8 @@
 @synthesize m_pMainController;
 @synthesize m_pPreviewController;
 //------------------------------------------------------------------------------------------------------
-- (void)viewDidLoad {
-	
+- (void)viewDidLoad
+{	
 	m_pPrSettings = nil;
 	m_pMainController = nil;
 	m_pPreviewController = nil;

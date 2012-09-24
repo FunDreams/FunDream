@@ -8,11 +8,19 @@
 
 #import "EngineAppDelegate.h"
 
+#ifdef EDITOR
+#import <DropboxSDK/DropboxSDK.h>
+#endif
+
 //#if !defined (CONFIGURATION_AppStore_Distribution)
 //#import "BWHockeyManager.h"
 //#import "BWQuincyManager.h"
 //#endif
 
+#ifdef EDITOR
+@interface EngineAppDelegate () <DBSessionDelegate, DBNetworkRequestDelegate>
+@end
+#endif
 
 @implementation EngineAppDelegate
 
@@ -21,6 +29,53 @@
 //------------------------------------------------------------------------------------------------------
 - (void)applicationDidFinishLaunching:(UIApplication *)application {    
 
+#ifdef EDITOR
+    // Set these variables before launching the app
+    NSString* appKey = @"4mrgtc1jg1k1gub";
+	NSString* appSecret = @"6tyvjyni3p0zpp3";
+    
+	NSString *root = kDBRootAppFolder; // Should be set to either kDBRootAppFolder or kDBRootDropbox
+	// You can determine if you have App folder access or Full Dropbox along with your consumer key/secret
+	// from https://dropbox.com/developers/apps
+	
+	// Look below where the DBSession is created to understand how to use DBSession in your app
+	
+	NSString* errorMsg = nil;
+	if ([appKey rangeOfCharacterFromSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]].location != NSNotFound) {
+		errorMsg = @"Make sure you set the app key correctly in DBRouletteAppDelegate.m";
+	} else if ([appSecret rangeOfCharacterFromSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]].location != NSNotFound) {
+		errorMsg = @"Make sure you set the app secret correctly in DBRouletteAppDelegate.m";
+	} else if ([root length] == 0) {
+		errorMsg = @"Set your root to use either App Folder of full Dropbox";
+	} else {
+		NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
+		NSData *plistData = [NSData dataWithContentsOfFile:plistPath];
+		NSDictionary *loadedPlist =
+        [NSPropertyListSerialization
+         propertyListFromData:plistData mutabilityOption:0 format:NULL errorDescription:NULL];
+		NSString *scheme = [[[[loadedPlist objectForKey:@"CFBundleURLTypes"] objectAtIndex:0] objectForKey:@"CFBundleURLSchemes"] objectAtIndex:0];
+		if ([scheme isEqual:@"db-APP_KEY"]) {
+			errorMsg = @"Set your URL scheme correctly in DBRoulette-Info.plist";
+		}
+	}
+	
+	DBSession* session =
+    [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
+	session.delegate = self; // DBSessionDelegate methods allow you to handle re-authenticating
+	[DBSession setSharedSession:session];
+    [session release];
+	
+	[DBRequest setNetworkRequestDelegate:self];
+    
+	if (errorMsg != nil) {
+		[[[[UIAlertView alloc]
+		   initWithTitle:@"Error Configuring Session" message:errorMsg
+		   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]
+		  autorelease]
+		 show];
+	}
+#endif
+    
     // This variable is available if you add "CONFIGURATION_$(CONFIGURATION)"
     // to the Preprocessor Macros in the project settings to all configurations
         
@@ -38,6 +93,11 @@
 
     m_flastTime = CFAbsoluteTimeGetCurrent();
 
+#ifdef EDITOR
+    if (![[DBSession sharedSession] isLinked])
+		[[DBSession sharedSession] linkFromController:m_pRootViewController];
+ //   else [[DBSession sharedSession] unlinkAll];
+#endif
 //	[MKStoreManager sharedManager];
 }
 //main timer------------------------------------------------------------------------------------------
@@ -109,7 +169,7 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application{
     
 #ifdef EDITOR
-   // [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
+    [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
 #endif
     
 	[m_pPrSettings Save];
@@ -141,5 +201,62 @@
 	
     [super dealloc];
 }
+
+#ifdef EDITOR
+- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
+	if ([[DBSession sharedSession] handleOpenURL:url]) {
+		if ([[DBSession sharedSession] isLinked]) {
+            NSLog(@"Link Success");
+			//[navigationController pushViewController:rootViewController.photoViewController animated:YES];
+		}
+		return YES;
+	}
+	
+	return NO;
+}
+
+#pragma mark -
+#pragma mark DBSessionDelegate methods
+
+- (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId {
+//	relinkUserId = [userId retain];
+//	[[[[UIAlertView alloc]
+//	   initWithTitle:@"Dropbox Session Ended" message:@"Do you want to relink?" delegate:self
+//	   cancelButtonTitle:@"Cancel" otherButtonTitles:@"Relink", nil]
+//	  autorelease]
+//	 show];
+}
+
+
+#pragma mark -
+#pragma mark UIAlertViewDelegate methods
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)index {
+//	if (index != alertView.cancelButtonIndex) {
+//		[[DBSession sharedSession] linkUserId:relinkUserId fromController:rootViewController];
+//	}
+//	[relinkUserId release];
+//	relinkUserId = nil;
+}
+
+#pragma mark -
+#pragma mark DBNetworkRequestDelegate methods
+
+static int outstandingRequests;
+
+- (void)networkRequestStarted {
+	outstandingRequests++;
+	if (outstandingRequests == 1) {
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+	}
+}
+
+- (void)networkRequestStopped {
+	outstandingRequests--;
+	if (outstandingRequests == 0) {
+		[[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+	}
+}
+#endif
 
 @end

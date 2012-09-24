@@ -47,7 +47,7 @@
     
     mColorBack = Color3DMake(0, 1, 0, 1);
     
-    pStr = [m_pObjMng->pStringContainer GetString:@"Object"];
+    pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
 
     m_bBack=NO;
 }
@@ -175,7 +175,7 @@
 //}
 //------------------------------------------------------------------------------------------------------
 - (void)SetEmpty{
-    pStr = nil;
+    pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
     mTextureId=-1;
     pObOb=nil;
 }

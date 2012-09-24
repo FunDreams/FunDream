@@ -20,5 +20,7 @@
 
 -(void)Destroy;
 -(void)Start;
+
+- (void)ReLinkEmptyPlace;
     
 @end

@@ -59,6 +59,22 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)Hide{
+
+    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
+        [pOb SetTouch:NO];
+        [pOb DeleteFromDraw];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Show{
+    
+    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
+        [pOb SetTouch:YES];
+        [pOb AddToDraw];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{
     
     for (GObject *pOb in m_pChildrenbjectsArr) {
@@ -105,10 +121,9 @@
 
     if(pStr!=nil)
         pInsideString=pStr;
-    else{
+    else
         pInsideString=[m_pObjMng->pStringContainer GetString:@"Objects"];
-    }
-    
+
     [m_pObjMng->pMegaTree SetCell:LINK_ID_V(pInsideString,@"ParentString")];
 }
 //------------------------------------------------------------------------------------------------------

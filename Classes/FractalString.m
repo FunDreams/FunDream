@@ -85,8 +85,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
-        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer
-        S:(int)iS F:(int)iF{
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
     
     self = [super init];
 	if (self != nil)
@@ -94,7 +93,6 @@
         pParent=Parent;
         
         [self SetDefault];
-        [self SetLimmitStringS:iS F:iF];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
         [pContainer->DicStrings setObject:self forKey:strUID];
@@ -131,12 +129,28 @@
     strUID = [[NSString alloc] initWithString:sValue];
     
     //float value
-    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&S range:Range];
-    *iCurReadingPos += sizeof(float);
+    *iCurReadingPos += sizeof(int);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&F range:Range];
+    *iCurReadingPos += sizeof(int);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iIndexIcon range:Range];
+    *iCurReadingPos += sizeof(int);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&m_iDeep range:Range];
+    *iCurReadingPos += sizeof(int);
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
-    [pData getBytes:&F range:Range];
+    [pData getBytes:&X range:Range];
+    *iCurReadingPos += sizeof(float);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:&Y range:Range];
     *iCurReadingPos += sizeof(float);
 
     //child string
@@ -147,10 +161,10 @@
     
     for (int i=0; i<iCount; i++) {
         
-//        FractalString *FChild=[[FractalString alloc] initWithData:pData
-//                WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
+        FractalString *FChild=[[FractalString alloc] initWithData:pData
+                WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
         
-//        [aStrings addObject:FChild];
+        [aStrings addObject:FChild];
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -158,7 +172,7 @@
 {
     switch (iVersion) {
         case 1:
-        {
+        {            
             //Name
             unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
             
@@ -172,13 +186,19 @@
             //float value
             [m_pData appendBytes:&S length:sizeof(int)];
             [m_pData appendBytes:&F length:sizeof(int)];
+
+            [m_pData appendBytes:&iIndexIcon length:sizeof(int)];
+            [m_pData appendBytes:&m_iDeep length:sizeof(int)];
+
+            [m_pData appendBytes:&X length:sizeof(float)];
+            [m_pData appendBytes:&Y length:sizeof(float)];
             
             //child string
             int iCount=[aStrings count];
             [m_pData appendBytes:&iCount length:sizeof(int)];
             
             for (int i=0; i<iCount; i++) {
-                FractalString *FChild= [aStrings objectAtIndex:i];
+                FractalString *FChild=[aStrings objectAtIndex:i];
                 [FChild selfSave:m_pData WithVer:iVersion];
             }
         }

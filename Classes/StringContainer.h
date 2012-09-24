@@ -37,7 +37,7 @@
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
 
--(void)LoadContainer;
+-(bool)LoadContainer;
 -(void)SaveContainer;
 -(void)Synhronize;
 

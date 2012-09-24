@@ -34,8 +34,7 @@
      WithContainer:(StringContainer *)pContainer S:(int)iS F:(int)iF;
 
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
-        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer 
-                 S:(int)iS F:(int)iF;
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer;
 
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
    WithContainer:(StringContainer *)pContainer;

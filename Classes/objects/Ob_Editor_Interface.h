@@ -10,8 +10,15 @@
 #import <Foundation/Foundation.h>
 #import "Object.h"
 #import "ObjectParticle.h"
+#import "Ob_GroupEmptyPlace.h"
+#import "Ob_GroupButtons.h"
+#import "ObjectButton.h"
 
 @interface Ob_Editor_Interface : GObject {
+    
+    Ob_GroupButtons *ButtonGroup;
+    Ob_GroupEmptyPlace *Eplace;
+    ObjectButton *pDropBox;
     
     NSMutableArray *aProp;
     NSMutableArray *aObjects;
@@ -23,6 +30,8 @@
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
+- (void)DownLoad;
+- (void)UpLoad;
 - (void)Save;
 - (void)Load;
 
@@ -38,6 +47,7 @@
 - (void)CheckObject;
 - (void)CheckPoint;
 - (void)DelObject;
+- (void)SetDropBox;
 
 - (void)CheckMove;
 - (void)CheckCopy;

@@ -24,33 +24,41 @@
         ArrayActiveStrings = [[NSMutableArray alloc] init];
         
         m_pObjMng=Parent;
-        
-        [self SetTemplateString];
-        
+
         iIndexZero=[self->ArrayPoints SetData:0.0f];
-        
-#ifdef DEBUG
-        
+
+#ifdef EDITOR
+
         ArrayDumpFiles = [[NSMutableArray alloc] init];
-                                 
-        for (int i=0; i<10; i++) {
-            NSString *strNameContainer = [[NSString alloc]
-                    initWithFormat:@"FractalDump%d",i];
-            
-            CDataManager *pDataManager = [[CDataManager alloc] InitWithFileFromRes:strNameContainer];
-            // [m_pDataManager initDropBox];
-            
-            [ArrayDumpFiles addObject:pDataManager];
-            [strNameContainer release];
-        }
+
+        CDataManager *pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"MainDump"];
+        [ArrayDumpFiles addObject:pDataManager];
+
+        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"Upload"];
+        [ArrayDumpFiles addObject:pDataManager];
+
+        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"Download"];
+        [ArrayDumpFiles addObject:pDataManager];
         
+//        for (int i=0; i<10; i++) {
+//            NSString *strNameContainer = [[NSString alloc]
+//                    initWithFormat:@"FractalDump%d",i];
+//
+//            CDataManager *pDataManager=[[CDataManager alloc] InitWithFileFromRes:strNameContainer];
+//
+//            [ArrayDumpFiles addObject:pDataManager];
+//            [strNameContainer release];
+//        }
+
+        m_iCurFile=0;
+        pDataCurManagerTmp=[ArrayDumpFiles objectAtIndex:m_iCurFile];
 #endif
     }
     return self;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetTemplateString{
-    
+
     FractalString *pFStringZero=[[FractalString alloc]
          initWithName:@"Zero" WithParent:nil WithContainer:self  S:iIndexZero F:iIndexZero];
 
@@ -67,15 +75,12 @@
     [[FractalString alloc]
             initWithName:@"Ob3" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
 
-
-    
-
     FractalString *pFStringProp=[[FractalString alloc]
         initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 //------------------------------------------------------------------------------------------------------
     FractalString *pFStringXY=[[FractalString alloc]
         initWithName:@"XY" WithParent:pFStringProp WithContainer:self  S:iIndexZero F:iIndexZero];
-    
+
     int iX1=[self->ArrayPoints SetData:0];
     int iX2=[self->ArrayPoints SetData:480];
     int iY1=[self->ArrayPoints SetData:-320];
@@ -83,10 +88,9 @@
 
     [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self
                 S:iX1 F:iX2];
-    
+
     [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self
                 S:iY1 F:iY2];
-
 
     FractalString *pFStringColor=[[FractalString alloc]
                     initWithName:@"Color" WithParent:pFStringProp WithContainer:self
@@ -94,13 +98,13 @@
 
     [[FractalString alloc] initWithName:@"R" WithParent:pFStringColor
                           WithContainer:self  S:iIndexZero F:iIndexZero];
-    
+
     [[FractalString alloc] initWithName:@"G" WithParent:pFStringColor
                           WithContainer:self  S:iIndexZero F:iIndexZero];
-    
+
     [[FractalString alloc] initWithName:@"B" WithParent:pFStringColor
                           WithContainer:self  S:iIndexZero F:iIndexZero];
-    
+
     [[FractalString alloc] initWithName:@"A" WithParent:pFStringColor
                           WithContainer:self  S:iIndexZero F:iIndexZero];
 
@@ -145,14 +149,16 @@ repeate:
     //      [m_pDataManager UpLoad];
 }
 //------------------------------------------------------------------------------------------------------
--(void)LoadContainer{
+-(bool)LoadContainer{
     
     CDataManager* pDataCurManager =[ArrayDumpFiles objectAtIndex:m_iCurFile];
 
-    [pDataCurManager Load];
+    bool Rez=[pDataCurManager Load];
     
     [DicStrings removeAllObjects];
 
+    if([pDataCurManager->m_pDataDmp length]==0)Rez=false;
+        
     if([pDataCurManager->m_pDataDmp length]!=0){
         
         int iLenVersion = [pDataCurManager GetIntValue];
@@ -160,9 +166,9 @@ repeate:
         switch (iLenVersion) {
             case 1:
             {
-//                [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
-//                            WithCurRead:&pDataCurManager->m_iCurReadingPos
-//                                         WithParent:nil WithContainer:self];
+                [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
+                                WithCurRead:&pDataCurManager->m_iCurReadingPos
+                                WithParent:nil WithContainer:self];
             }
             break;
                 
@@ -170,6 +176,7 @@ repeate:
                 break;
         }
     }
+    return Rez;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SaveContainer{
@@ -177,7 +184,7 @@ repeate:
     //версия дампа для сохранения струн
     int iVersion=1;
     
-    CDataManager* pDataCurManager =[ArrayDumpFiles objectAtIndex:m_iCurFile];
+    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:m_iCurFile];
     
     if(pDataCurManager->m_pDataDmp!=nil)
     {

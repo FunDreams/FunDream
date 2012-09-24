@@ -25,7 +25,15 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)SetDefault{}
+- (void)ReLinkEmptyPlace{
+    
+    for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
+        
+        pOb->pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
+        [pOb SetEmpty];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 //- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -71,8 +79,7 @@
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArr removeAllObjects];
-                      
-        
+
     if(m_iNumButton>10)m_iNumButton=10;
     mWidth=m_iNumButton*56;
     float Step=mWidth/m_iNumButton;

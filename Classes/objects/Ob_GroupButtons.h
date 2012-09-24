@@ -22,5 +22,8 @@
 -(void)SetString:(FractalString *)Str;
 -(void)Destroy;
 -(void)Start;
-    
+
+- (void)Hide;
+- (void)Show;
+
 @end

@@ -52,6 +52,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
+    [self Load];
 	[super Start];
         
     UNFROZE_OBJECT(@"StaticObject",@"Sl1",
@@ -68,25 +69,13 @@
                    SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pCurPosition"),
                    SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
                    SET_INT_V(layerBackground,@"m_iLayer"));
-
+    
 //save/load
-
-    UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
+    
+    ButtonGroup = UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
                    SET_VECTOR_V(Vector3DMake(-450,-60,0),@"m_pCurPosition"),
                    SET_FLOAT_V(520,@"mHeight"),
                    SET_INT_V(10,@"m_iNumButton"));
-
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonNew",
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_INT_V(bCheckBox,@"m_iType"),
-                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                   //SET_STRING_V(@"Save",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
@@ -101,10 +90,21 @@
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
 
-
-    UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
+    Eplace = UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
 //===============================режими==============================================
+    pDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
+                               SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
+                               SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
+                               SET_FLOAT_V(54,@"mWidth"),
+                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                               SET_BOOL_V(YES,@"m_bLookTouch"),
+                               SET_INT_V(bRadioBox,@"m_iType"),
+                               SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                               SET_STRING_V(@"SetDropBox",@"m_strNameStage"),
+                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                               SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
+
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
                    SET_STRING_V(@"ButtonPoint_Up.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonPoint_Up.png",@"m_UP"),
@@ -145,16 +145,27 @@
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
 //===================================================================================
-//    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoadDropBox",
-//                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),
-//                   SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
-//                   SET_FLOAT_V(64,@"mWidth"),
-//                   SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-//                   SET_BOOL_V(YES,@"m_bLookTouch"),
-//                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-//                   SET_STRING_V(@"Load",@"m_strNameStage"),
-//                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                   SET_VECTOR_V(Vector3DMake(-440,-285,0),@"m_pCurPosition"));
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoad",
+                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_From_box_Down.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   SET_STRING_V(@"DownLoad",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-160,295,0),@"m_pCurPosition"));
+
+    UNFROZE_OBJECT(@"ObjectButton",@"ButtonUpLoad",
+                   SET_STRING_V(@"Button_From_box_Up.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
+                   SET_FLOAT_V(54,@"mWidth"),
+                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                   SET_STRING_V(@"UpLoad",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
 
 //        UNFROZE_OBJECT(@"ObjectButton",@"ButtonCreateOb",
 //                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
@@ -166,67 +177,48 @@
 //                       SET_STRING_V(@"CreateNewObject",@"m_strNameStage"),
 //                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 //                       SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
-//        
-//        UNFROZE_OBJECT(@"ObjectButton",@"ButtonTash",
-//                       SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
-//                       SET_STRING_V(@"ButtonTash.png",@"m_UP"),
-//                       SET_FLOAT_V(54,@"mWidth"),
-//                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-//                       SET_BOOL_V(YES,@"m_bLookTouch"),
-//                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-//                       SET_STRING_V(@"DelObject",@"m_strNameStage"),
-//                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                       SET_VECTOR_V(Vector3DMake(-440,40,0),@"m_pCurPosition"));
-//        
-//        UNFROZE_OBJECT(@"ObjectButton",@"ArLeft",
-//                       SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
-//                       SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
-//                       SET_FLOAT_V(40,@"mWidth"),
-//                       SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
-//                       SET_BOOL_V(YES,@"m_bLookTouch"),
-//                       SET_INT_V(0,@"m_iType"),
-//                       SET_STRING_V(NAME(self),@"m_strNameObject"),
-//                       SET_STRING_V(@"DelPoint",@"m_strNameStage"),
-//                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                       SET_VECTOR_V(Vector3DMake(-370,280,0),@"m_pCurPosition"));
-//
-//    UNFROZE_OBJECT(@"ObjectButton",@"ArRight",
-//                   SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
-//                   SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
-//                   SET_FLOAT_V(40,@"mWidth"),
-//                   SET_FLOAT_V(40*FACTOR_DEC,@"mHeight"),
-//                   SET_BOOL_V(YES,@"m_bLookTouch"),
-//                   SET_INT_V(0,@"m_iType"),
-//                   SET_STRING_V(NAME(self),@"m_strNameObject"),
-//                   SET_STRING_V(@"CreateNewPoint",@"m_strNameStage"),
-//                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                   SET_VECTOR_V(Vector3DMake(-320,280,0),@"m_pCurPosition"));
 
     [self Update];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
-    
-    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+
+    OBJECT_PERFORM_SEL(@"ButtonCopy",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonLink",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
     
     m_iMode=0;//move
+    [self Update];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckCopy{
 
-    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonMove",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonLink",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
     
     m_iMode=1;//copy
+    [self Update];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckLink{
 
-    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonMove",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonCopy",   @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
     
     m_iMode=2;//link
+    [self Update];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetDropBox{
+
+    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
+    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+
+    m_iMode=3;//DropBox    
+    [self Update];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckObject{
@@ -492,96 +484,39 @@ EXIT:
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)DownLoad{
+    [m_pObjMng->pStringContainer->pDataCurManagerTmp DownLoad];
+    [self Load];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)UpLoad{
+    
+    [self Save];
+    [m_pObjMng->pStringContainer->pDataCurManagerTmp UpLoad];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Load{
+    bool bLoad = [m_pObjMng->pStringContainer LoadContainer];
+
+    if(bLoad==NO)[m_pObjMng->pStringContainer SetTemplateString];
+
+    OBJECT_PERFORM_SEL(@"GroupPlaces",@"ReLinkEmptyPlace");
+    
+    [ButtonGroup SetString:[m_pObjMng->pStringContainer GetString:@"Objects"]];
+    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Save{
     [m_pObjMng->pStringContainer SaveContainer];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Load{
-    [m_pObjMng->pStringContainer LoadContainer];
-    [self Update];
-}
-//------------------------------------------------------------------------------------------------------
 - (void)Update{
-
-    FractalString *pFStringProp = [m_pObjMng->pStringContainer GetString:@"Prop"];
     
-    if(pFStringProp!=nil){
+    if(pDropBox->m_bPush==YES){
         
-        for (GObject *pOb in aProp) {
-            DESTROY_OBJECT(pOb);
-        }
-        
-        [aProp removeAllObjects];
-        
-        int iCount=[pFStringProp->aStrings count];
-        for (int i=0; i<iCount; i++) {
-            
-            NSString *StrNamePropTex;
-            switch (i) {
-                case 0:
-                    StrNamePropTex=@"ButtonXY.png";
-                    break;
-
-                case 1:
-                    StrNamePropTex=@"ButtonColor.png";
-                    break;
-
-                case 2:
-                    StrNamePropTex=@"ButtonTime.png";
-                    break;
-
-                default:
-                    break;
-            }
-//            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
-//            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-//                    SET_STRING_V(StrNamePropTex,@"m_DOWN"),
-//                    SET_STRING_V(StrNamePropTex,@"m_UP"),
-//                    SET_FLOAT_V(44,@"mWidth"),
-//                    SET_FLOAT_V(44*FACTOR_DEC,@"mHeight"),
-//                    SET_BOOL_V(YES,@"m_bLookTouch"),
-//                    SET_INT_V(bCheckBox,@"m_iType"),
-//                    //SET_STRING_V(@"World",@"m_strNameObject"),
-//                    //SET_STRING_V(@"StartGame",@"m_strNameStage"),
-//                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                    SET_VECTOR_V(Vector3DMake(-440,110+i*45,0),@"m_pCurPosition"));
-            
- //           [aProp addObject:pOb];
-        }
+        [ButtonGroup Hide];
     }
-
-//    FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-//    
-//    if(pFStringOb!=nil){
-//        
-//        for (GObject *pOb in aObjects) {
-//            DESTROY_OBJECT(pOb);
-//        }
-//        
-//        [aObjects removeAllObjects];
-//
-//        int iCount=[pFStringOb->aStrings count];
-//        for (int i=0; i<iCount; i++) {
-//            
-//            NSString *pName = [NSString stringWithFormat:@"Prop%d",i];
-//            GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-//                           SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
-//                           SET_STRING_V(@"ButtonOb.png",@"m_UP"),
-//                           SET_FLOAT_V(54,@"mWidth"),
-//                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-//                           SET_BOOL_V(YES,@"m_bLookTouch"),
-//                           SET_INT_V(bRadioBox,@"m_iType"),
-//                           SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-//                           SET_STRING_V(@"CheckObject",@"m_strNameStage"),
-//                           SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                           SET_VECTOR_V(Vector3DMake(-370,210-i*55,0),@"m_pCurPosition"));
-//
-//            [aObjects addObject:pOb];
-//        }
-//    }    
-//
-//    [self UpdatePoints];
-//    [self UpdateSlider];
+    else  [ButtonGroup Show];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdatePoints{

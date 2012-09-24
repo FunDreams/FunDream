@@ -7,6 +7,8 @@
 //
 
 #import "DtManager.h"
+@interface CDataManager () <DBRestClientDelegate>
+@end
 
 @implementation CDataManager
 //--------------------------------------------------------
@@ -15,11 +17,17 @@
     self = [super init];
     if (self)
     {        
+        restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+        restClient.delegate = self;
+        [restClient loadMetadata:@"/"];
+
         m_sFullFileNameDropBox=[[NSString alloc] initWithString:sFileName];
         
         m_iCurReadingPos = 0;
         
-        NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+        NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains
+            (NSDocumentDirectory, NSUserDomainMask, YES);
+        
         NSString *cacheDirectory = [cacheDirectories objectAtIndex:0];
         NSString* FileName = [cacheDirectory stringByAppendingPathComponent:sFileName];
         m_sFullFileName=[[NSString alloc] initWithString:FileName];
@@ -44,12 +52,18 @@
 {
     self = [super init];
     if (self)
-    {        
+    {
+        restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+        restClient.delegate = self;
+        [restClient loadMetadata:@"/"];
+
         m_sFullFileNameDropBox=[[NSString alloc] initWithString:sFileName];
 
         m_iCurReadingPos = 0;
         
-        NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+        NSArray *cacheDirectories = NSSearchPathForDirectoriesInDomains
+                    (NSCachesDirectory, NSUserDomainMask, YES);
+        
         NSString *cacheDirectory = [cacheDirectories objectAtIndex:0];
         NSString* FileName = [cacheDirectory stringByAppendingPathComponent:sFileName];
         m_sFullFileName=[[NSString alloc] initWithString:FileName];
@@ -70,89 +84,46 @@
     return self;
 }
 //--------------------------------------------------------
-- (void) initDropBox{
-    
-    // Set these variables before launching the app
-    NSString* appKey = @"4mrgtc1jg1k1gub";
-	NSString* appSecret = @"6tyvjyni3p0zpp3";
-	NSString *root = kDBRootAppFolder; // Should be set to either kDBRootAppFolder or kDBRootDropbox
-	// You can determine if you have App folder access or Full Dropbox along with your consumer key/secret
-	// from https://dropbox.com/developers/apps 
-	
-	// Look below where the DBSession is created to understand how to use DBSession in your app
-	
-	NSString* errorMsg = nil;
-	if ([appKey rangeOfCharacterFromSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]].location != NSNotFound) {
-		errorMsg = @"Make sure you set the app key correctly in DBRouletteAppDelegate.m";
-	} else if ([appSecret rangeOfCharacterFromSet:[[NSCharacterSet alphanumericCharacterSet] invertedSet]].location != NSNotFound) {
-		errorMsg = @"Make sure you set the app secret correctly in DBRouletteAppDelegate.m";
-	} else if ([root length] == 0) {
-		errorMsg = @"Set your root to use either App Folder of full Dropbox";
-	} else {
-		NSString *plistPath = [[NSBundle mainBundle] pathForResource:@"Info" ofType:@"plist"];
-		NSData *plistData = [NSData dataWithContentsOfFile:plistPath];
-		NSDictionary *loadedPlist = 
-        [NSPropertyListSerialization 
-         propertyListFromData:plistData mutabilityOption:0 format:NULL errorDescription:NULL];
-		NSString *scheme = [[[[loadedPlist objectForKey:@"CFBundleURLTypes"] objectAtIndex:0]objectForKey:@"CFBundleURLSchemes"] objectAtIndex:0];
-		if ([scheme isEqual:@"db-APP_KEY"]) {
-			errorMsg = @"Set your URL scheme correctly in DBRoulette-Info.plist";
-		}
-	}
-	
-	DBSession* session = 
-    [[DBSession alloc] initWithAppKey:appKey appSecret:appSecret root:root];
-	session.delegate = self; // DBSessionDelegate methods allow you to handle re-authenticating
-	[DBSession setSharedSession:session];
-	    
-	if (errorMsg != nil) {
-		[[[[UIAlertView alloc]
-		   initWithTitle:@"Error Configuring Session" message:errorMsg 
-		   delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]
-		  autorelease]
-		 show];
-	}
-
-  //  return;
-    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-    restClient.delegate = self;
-    
-    [restClient loadMetadata:@"/"];
-    [self DownLoad];
-}
-//--------------------------------------------------------
 -(void)Link{
     
-    if (![[DBSession sharedSession] isLinked])
-    [[DBSession sharedSession] link];
+//    if (![[DBSession sharedSession] isLinked])
+  //  [[DBSession sharedSession] link];
 }
 //--------------------------------------------------------
 -(void)UpLoad
 {    
     if(m_pMetaData==nil)return;
-    
+
     NSString *destDir = @"/";
-//    [restClient uploadFile:m_sFullFileNameDropBox toPath:destDir
-//                  withParentRev:nil fromPath:m_sFullFileName];
-    
+
+    bool bSave=NO;
     for(DBMetadata *child in m_pMetaData.contents)
     {
         NSString *folderName = [[child.path pathComponents] lastObject];
-        if ([folderName isEqualToString:m_sFullFileNameDropBox]) {
+        if ([folderName isEqualToString:m_sFullFileNameDropBox])
+        {
+            bSave=YES;
             [restClient uploadFile:m_sFullFileNameDropBox toPath:destDir
-                     withParentRev:child.rev fromPath:m_sFullFileName];
+                withParentRev:child.rev fromPath:m_sFullFileName];
         }
     }
     
+    if(bSave==NO){
+        [restClient uploadFile:m_sFullFileNameDropBox toPath:destDir
+                     withParentRev:nil fromPath:m_sFullFileName];
+    }
+
     [m_pMetaData release];
     m_pMetaData=nil;
-    
-//    [restClient moveFrom:fromPath toPath:destDir];  // Rename
+
+    [restClient loadMetadata:@"/"];
+
+//    [restClient moveFrom:m_sFullFileName toPath:destDir];//Rename
 //    [restClient deletePath:@"/FractalCode"];
 }
 //--------------------------------------------------------
 -(void)DownLoad
-{    
+{
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm createFileAtPath:m_sFullFileName contents:m_pDataDmp attributes:nil];
 
@@ -194,7 +165,7 @@
     
     NSLog(@"Error loading metadata: %@", error);
 }
-//--------------------------------------------------------
+////--------------------------------------------------------
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId {
 	relinkUserId = [userId retain];
     
@@ -203,16 +174,6 @@
        delegate:nil cancelButtonTitle:@"OK" otherButtonTitles:nil]
       autorelease]
      show];
-}
-//--------------------------------------------------------
-- (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url {
-	if ([[DBSession sharedSession] handleOpenURL:url]) {
-		if ([[DBSession sharedSession] isLinked]) {
-		}
-		return YES;
-	}
-	
-	return NO;
 }
 //--------------------------------------------------------
 -(bool)Save

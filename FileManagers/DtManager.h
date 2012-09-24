@@ -10,7 +10,7 @@
 #import <Foundation/Foundation.h>
 
 /** Класс для работы записи и ситывание данных из файлов **/
-@interface CDataManager : NSObject <DBRestClientDelegate,DBSessionDelegate> {
+@interface CDataManager : NSObject {
 @public
     DBRestClient* restClient;//клиент для загрузки
 	/** Хранит полный путь к файлу**/
@@ -116,9 +116,9 @@
  **/
 -(BOOL) GetBoolValue;
 
--(void)initDropBox;//инициализация dropBox
+//-(void)initDropBox;//инициализация dropBox
 -(void)UpLoad;//Загрузка файла на сервер
 -(void)DownLoad;//Загрузка файла с сервера
--(void)Link;//подключение акка
+//-(void)Link;//подключение акка
 
 @end
