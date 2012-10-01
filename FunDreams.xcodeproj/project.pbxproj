@@ -87,6 +87,8 @@
 		18E54D7014E585D100E7BC2F /* ObjectParticle.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D6F14E585CE00E7BC2F /* ObjectParticle.mm */; };
 		18E54D7314E6D8F600E7BC2F /* ObjectEvilMatter1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D7214E6D8F300E7BC2F /* ObjectEvilMatter1.mm */; };
 		18E54D7614E6DB4900E7BC2F /* ObjectAlNumber.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E54D7514E6DB4600E7BC2F /* ObjectAlNumber.mm */; };
+		18E654181613679F009B3E90 /* DropBoxMng.m in Sources */ = {isa = PBXBuildFile; fileRef = 18E654171613679D009B3E90 /* DropBoxMng.m */; };
+		18E6541B16175879009B3E90 /* ObB_DropBox.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18E6541A16175875009B3E90 /* ObB_DropBox.mm */; };
 		18EB607F14E809D70089C409 /* ObjectMultiTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB607C14E809D70089C409 /* ObjectMultiTouch.mm */; };
 		18EB608014E809D70089C409 /* ObjectScoreFun1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB607E14E809D70089C409 /* ObjectScoreFun1.mm */; };
 		18EB608314E8141D0089C409 /* ObjectGameSpaun.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB608214E8141D0089C409 /* ObjectGameSpaun.mm */; };
@@ -242,6 +244,10 @@
 		18E54D7214E6D8F300E7BC2F /* ObjectEvilMatter1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectEvilMatter1.mm; path = objects/ObjectEvilMatter1.mm; sourceTree = "<group>"; };
 		18E54D7414E6DB4400E7BC2F /* ObjectAlNumber.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectAlNumber.h; path = objects/ObjectAlNumber.h; sourceTree = "<group>"; };
 		18E54D7514E6DB4600E7BC2F /* ObjectAlNumber.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectAlNumber.mm; path = objects/ObjectAlNumber.mm; sourceTree = "<group>"; };
+		18E654161613679B009B3E90 /* DropBoxMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DropBoxMng.h; sourceTree = "<group>"; };
+		18E654171613679D009B3E90 /* DropBoxMng.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DropBoxMng.m; sourceTree = "<group>"; };
+		18E6541916175873009B3E90 /* ObB_DropBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObB_DropBox.h; path = objects/ObB_DropBox.h; sourceTree = "<group>"; };
+		18E6541A16175875009B3E90 /* ObB_DropBox.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObB_DropBox.mm; path = objects/ObB_DropBox.mm; sourceTree = "<group>"; };
 		18EB607B14E809D70089C409 /* ObjectMultiTouch.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectMultiTouch.h; path = objects/ObjectMultiTouch.h; sourceTree = "<group>"; };
 		18EB607C14E809D70089C409 /* ObjectMultiTouch.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectMultiTouch.mm; path = objects/ObjectMultiTouch.mm; sourceTree = "<group>"; };
 		18EB607D14E809D70089C409 /* ObjectScoreFun1.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectScoreFun1.h; path = objects/ObjectScoreFun1.h; sourceTree = "<group>"; };
@@ -444,6 +450,10 @@
 				1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */,
 				1824287B15F501C700C420AB /* Ob_IconDrag.h */,
 				1824287C15F501C900C420AB /* Ob_IconDrag.mm */,
+				18E654161613679B009B3E90 /* DropBoxMng.h */,
+				18E654171613679D009B3E90 /* DropBoxMng.m */,
+				18E6541916175873009B3E90 /* ObB_DropBox.h */,
+				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
 			);
 			name = Kernel;
 			sourceTree = "<group>";
@@ -742,6 +752,8 @@
 				186495DB15FB91D300C8F9B7 /* Ob_EmtyPlace.mm in Sources */,
 				1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */,
 				1827F8C015FF34FF00282A00 /* Ob_GroupEmptyPlace.mm in Sources */,
+				18E654181613679F009B3E90 /* DropBoxMng.m in Sources */,
+				18E6541B16175879009B3E90 /* ObB_DropBox.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

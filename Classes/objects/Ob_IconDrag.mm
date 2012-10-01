@@ -51,7 +51,7 @@
 //    GET_TEXTURE(mTextureId, m_pNameTexture);
 }
 //------------------------------------------------------------------------------------------------------
-- (void)PrepareString:(FractalString *)pNewString{
+- (void)SetPos:(FractalString *)pNewString{
     
     pNewString->X=m_pCurPosition.x;
     pNewString->Y=m_pCurPosition.y;
@@ -61,60 +61,79 @@
     
     if(pNewString->Y<-280)pNewString->Y=-280;
     if(pNewString->Y>170)pNewString->Y=170;
-    
-    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)EndObject{
     
-    GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+    int *pMode=GET_INT_V(@"m_iMode");
+    GObject *pObTash=[m_pObjMng GetObjectByName:@"ButtonTach"];
     
     FractalString *pParent = GET_ID_V(@"ParentString");
-
+    FractalString *pDropBoxStr = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+    
     CGPoint Point;
     Point.x=m_pCurPosition.x;
     Point.y=m_pCurPosition.y;
-
+    
     GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
     
-    if(pObGroup!=nil)
-    {
-        for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+    if([pObTash Intersect:Point]){
+        //delete
+    }
+    else{
+        if(pMode!=0 && *pMode==3){
+            if(m_pCurPosition.y<202 && pInsideString!=nil){
+                if(pParent!=pInsideString){
+
+                    FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                            WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
+
+                    [self SetPos:pNewString];
+                    OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
+                }
+            }
+        }
+        else
         {
-            if([pObob Intersect:Point])
+            if(pObGroup!=nil)
             {
-                pParent=pObob->pString;
-                
-                goto Exit;
+                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+                {
+                    if([pObob Intersect:Point])
+                    {
+                        pParent=pObob->pString;
+                        
+                        goto Exit;
+                    }
+                }
+            }
+Exit:
+            if(m_pCurPosition.y<202 && pInsideString!=nil &&
+               ![pInsideString->strName isEqualToString:@"Objects"]){
+
+                if(pParent!=pInsideString){
+                    FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                                           WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
+
+                    [self SetPos:pNewString];
+                    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+                }
+            }
+            else if(m_pCurPosition.y<202){
+
+                FractalString *pNewString =[[FractalString alloc] initWithName:@"EmptyOb" WithParent:pParent
+                 WithContainer:m_pObjMng->pStringContainer
+                    S:m_pObjMng->pStringContainer->iIndexZero F:m_pObjMng->pStringContainer->iIndexZero];
+
+                [self SetPos:pNewString];
+                OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
             }
         }
     }
-Exit:
     
-    if([pOb Intersect:Point]){
-    }
-    else if(m_pCurPosition.y<202 && pInsideString!=nil){
+    DEL_CELL(@"DragObject");
+    DEL_CELL(@"EmptyOb");
 
-        if(pParent!=pInsideString){
-            FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                   WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
-            
-            [self PrepareString:pNewString];
-        }
-    }
-    else if(m_pCurPosition.y<202){
-
-        FractalString *pNewString =[[FractalString alloc]initWithName:@"EmptyOb" WithParent:pParent
-         WithContainer:m_pObjMng->pStringContainer
-            S:m_pObjMng->pStringContainer->iIndexZero F:m_pObjMng->pStringContainer->iIndexZero];
-
-        [self PrepareString:pNewString];
-        
-        DEL_CELL(@"DragObject");
-        DEL_CELL(@"EmptyOb");
-    }
-    
     DESTROY_OBJECT(self);
 }
 //------------------------------------------------------------------------------------------------------
@@ -128,7 +147,10 @@ Exit:
 //    STOP_SOUND(@"");
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    pInsideString=nil;
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     m_pCurPosition.x=Point.x;

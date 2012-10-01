@@ -20,7 +20,6 @@
 
 -(void)Destroy;
 -(void)Start;
-- (void)PrepareString:(FractalString *)pNewString;
 - (void)EndObject;
     
 @end

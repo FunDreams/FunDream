@@ -27,7 +27,7 @@
         aProp = [[NSMutableArray alloc] init];
         aObjects = [[NSMutableArray alloc] init];
         aObSliders = [[NSMutableArray alloc] init];
-        aObPoints = [[NSMutableArray alloc] init];
+        aObPoints = [[NSMutableArray alloc] init];        
     }
     
 	return self;
@@ -55,6 +55,8 @@
     [self Load];
 	[super Start];
         
+    pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox", nil);
+
     UNFROZE_OBJECT(@"StaticObject",@"Sl1",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
                    SET_FLOAT_V(480,@"mWidth"),
@@ -213,6 +215,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetDropBox{
 
+    [pInfoFile UpdateButt];
+    
     OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
     OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
     OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
@@ -515,8 +519,14 @@ EXIT:
     if(pDropBox->m_bPush==YES){
         
         [ButtonGroup Hide];
+        [pInfoFile Show];
     }
-    else  [ButtonGroup Show];
+    else
+    {
+        [ButtonGroup Show];
+        [pInfoFile Hide];
+
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdatePoints{
@@ -565,7 +575,6 @@ EXIT:
             }
         }
     }
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateSlider{
@@ -645,6 +654,7 @@ EXIT:
 //------------------------------------------------------------------------------------------------------
 -(void) dealloc
 {
+    [pInfoFile release];
     [aObPoints release];
     [aObSliders release];
     [aObjects release];

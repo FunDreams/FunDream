@@ -139,7 +139,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
 
-    if(m_bStartMove==NO && m_bStartPush==YES){
+    int *pMode=GET_INT_V(@"m_iMode");
+
+    if(m_bStartMove==NO && m_bStartPush==YES && *pMode!=3){
 
         Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                                         SET_FLOAT_V(54,@"mWidth"),
@@ -154,7 +156,6 @@
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pObOb,@"DragObject"))];
             [m_pObjMng->pMegaTree SetCell:(SET_BOOL_V(YES,@"FromPlace"))];
             
-            int *pMode=GET_INT_V(@"m_iMode");
 
             if(pMode!=0 && *pMode==0){
                 [self SetEmpty];
@@ -189,13 +190,18 @@
 
     if(pObObE==nil && pObObTmp==nil){
         [self SetPush];
-        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
-        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        
+        if(*pMode!=3)
+        {
+            [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
+            OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        }
         m_bStartPush=NO;
         m_bStartMove=NO;
         return;
     }
     else if(pObObTmp!=nil && bFromPlace && *bFromPlace==YES){
+        pObOb=pObObTmp;
         pStr = pObObTmp->pString;
         mTextureId=pObObTmp->mTextureId;
         DEL_CELL(@"DragObject");

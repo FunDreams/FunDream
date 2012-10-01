@@ -66,6 +66,9 @@
         initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:iIndexZero F:iIndexZero];
 ///////////////////////////////////////////
     pFStringObjects=[[FractalString alloc]
+        initWithName:@"DropBox" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
+
+    pFStringObjects=[[FractalString alloc]
         initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 
     [[FractalString alloc]

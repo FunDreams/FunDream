@@ -6,11 +6,11 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "ObjectB_Ob.h"
+#import "ObB_DropBox.h"
 #import "UniCell.h"
 #import "Ob_IconDrag.h"
 
-@implementation ObjectB_Ob
+@implementation ObB_DropBox
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
@@ -46,8 +46,8 @@
     [m_strNameStageDClick setString:@""];
     [m_strNameObjectDClick setString:@""];
     
-    mColorBack = Color3DMake(0, 1, 0, 1);
-    m_bBack=NO;
+    mColorBack = Color3DMake(0, 1, 1, 1);
+    m_bBack=YES;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -105,6 +105,7 @@
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
+    m_bLookTouch=NO;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
@@ -149,42 +150,19 @@
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
-    int *pMode=GET_INT_V(@"m_iMode");
-
-    LastPointTouch.x=Point.x;
-    LastPointTouch.y=Point.y;
-
+    
     if(m_bNotPush==NO){
             
-          if(m_bDrag==YES){
-               [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
-              
-              if(m_iLayer==layerInterfaceSpace5){
+        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+          
+        m_bStartPush=YES;
 
-                  m_bStartPush=YES;
-                  [self SetLayer:m_iLayer+1];
-                  [self SetTouch:YES WithLayer:m_iLayerTouch-1];
-                  m_bLookTouch=NO;
-                  
-                  [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
-                }
-            }
-                
-            [m_pParent PlaySound:m_strNameSound];
+        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
             
-            OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-            [self SetPush];
-    }
+        [m_pParent PlaySound:m_strNameSound];
 
-    if(m_bDoubleTouch==YES)
-    {
-        m_bDoubleTouch=YES;
-        OBJECT_PERFORM_SEL(m_strNameObjectDClick, m_strNameStageDClick);
-    }
-    else
-    {
-        NEXT_STAGE_EX(NAME(self), @"DTouch")
-        m_bDoubleTouch=YES;
+        //OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        [self SetPush];
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -193,26 +171,6 @@
     int *pMode=GET_INT_V(@"m_iMode");
     if(*pMode==0){
         
-        if(m_bDrag==YES && m_bStartPush==YES){
-            
-            m_pCurPosition.x-=LastPointTouch.x-Point.x;
-            m_pCurPosition.y-=LastPointTouch.y-Point.y;
-            
-            LastPointTouch.x=Point.x;
-            LastPointTouch.y=Point.y;
-            
-            if(m_pCurPosition.x<-440)m_pCurPosition.x=-440;
-            if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
-            
-            if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
-            if(m_pCurPosition.y>170)m_pCurPosition.y=170;
-            
-            pString->X=m_pCurPosition.x;
-            pString->Y=m_pCurPosition.y;
-        }
-    }
-    else
-    {
         if(m_bStartMove==NO && bMoveIn==YES){
             
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
@@ -251,53 +209,51 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
-    m_bStartPush=NO;
-    m_bStartMove=NO;
-    
-    int *pMode=GET_INT_V(@"m_iMode");
-    
-    if(m_iLayer==layerInterfaceSpace6){
-        m_bLookTouch=YES;
+//    m_bStartPush=NO;
+//    m_bStartMove=NO;
+//    
+//    if(m_iLayer==layerInterfaceSpace6){
+//        m_bLookTouch=YES;
+//        
+//        GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+//        CGPoint Point;
+//        Point.x=m_pCurPosition.x;
+//        Point.y=m_pCurPosition.y;
+//        
+//        if([pOb Intersect:Point])
+//        {
+//            [m_pObjMng->pStringContainer DelString:pString];
+//        }
+//        else
+//        {
+//            GObject *pObGroup = [m_pObjMng GetObjectByName:@"DropBox"];
+//
+//            if(pObGroup!=nil)
+//            {
+//                for (ObB_DropBox *pObob in pObGroup->m_pChildrenbjectsArr)
+//                {
+//                    if(pObob==self)continue;
+//                    else
+//                    {
+//                        if([pObob Intersect:Point])
+//                        {
+//                            [[FractalString alloc] initAsCopy:pString
+//                                WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
+//                            
+//                            [m_pObjMng->pStringContainer DelString:pString];
+//                            goto Exit;
+//                        }
+//                    }
+//                }
+//            }
+//        }
         
-        GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
-        CGPoint Point;
-        Point.x=m_pCurPosition.x;
-        Point.y=m_pCurPosition.y;
-        
-        if([pOb Intersect:Point])
-        {
-            [m_pObjMng->pStringContainer DelString:pString];
-        }
-        else if(pMode!=0 && *pMode==0)
-        {
-            GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
-
-            if(pObGroup!=nil)
-            {
-                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
-                {
-                    if(pObob==self)continue;
-                    else
-                    {
-                        if([pObob Intersect:Point])
-                        {
-                            [[FractalString alloc] initAsCopy:pString
-                                WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
-                            
-                            [m_pObjMng->pStringContainer DelString:pString];
-                            goto Exit;
-                        }
-                    }
-                }
-            }
-        }
-        
-Exit:
-        [self SetLayer:m_iLayer-1];
-        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-        DEL_CELL(@"DragObject");
-        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
-    }
+//Exit:
+//        [self SetLayer:m_iLayer-1];
+//        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
+//        DEL_CELL(@"DragObject");
+//        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -331,7 +287,7 @@ Exit:
 
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     
-	glScalef(0.9f,0.9f,m_pCurScale.z);
+	glScalef(0.93f,0.93f,m_pCurScale.z);
     [self SetColor:mColor];
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);

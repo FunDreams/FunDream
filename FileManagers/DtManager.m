@@ -21,7 +21,7 @@
         restClient.delegate = self;
         [restClient loadMetadata:@"/"];
 
-        m_sFullFileNameDropBox=[[NSString alloc] initWithString:sFileName];
+        m_sFullFileNameDropBox=[[NSMutableString alloc] initWithString:sFileName];
         
         m_iCurReadingPos = 0;
         
@@ -30,7 +30,7 @@
         
         NSString *cacheDirectory = [cacheDirectories objectAtIndex:0];
         NSString* FileName = [cacheDirectory stringByAppendingPathComponent:sFileName];
-        m_sFullFileName=[[NSString alloc] initWithString:FileName];
+        m_sFullFileName=[[NSMutableString alloc] initWithString:FileName];
         
         if (m_sFullFileName != nil)
         {
@@ -57,7 +57,7 @@
         restClient.delegate = self;
         [restClient loadMetadata:@"/"];
 
-        m_sFullFileNameDropBox=[[NSString alloc] initWithString:sFileName];
+        m_sFullFileNameDropBox=[[NSMutableString alloc] initWithString:sFileName];
 
         m_iCurReadingPos = 0;
         
@@ -66,7 +66,7 @@
         
         NSString *cacheDirectory = [cacheDirectories objectAtIndex:0];
         NSString* FileName = [cacheDirectory stringByAppendingPathComponent:sFileName];
-        m_sFullFileName=[[NSString alloc] initWithString:FileName];
+        m_sFullFileName=[[NSMutableString alloc] initWithString:FileName];
         
         if (m_sFullFileName != nil)
         {
@@ -136,18 +136,34 @@
     
     NSLog(@"File uploaded successfully to path: %@", metadata.path);
     [restClient loadMetadata:@"/"];
+    
+    SEL TmpSel=NSSelectorFromString(@"uploadedFile");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error {
     NSLog(@"File upload failed with error - %@", error);
+    
+    SEL TmpSel=NSSelectorFromString(@"uploadFileFailedWithError");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient*)client loadedFile:(NSString*)localPath {
     NSLog(@"File loaded successfully to path: %@", localPath);
+    
+    SEL TmpSel=NSSelectorFromString(@"loadedFile");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient*)client loadFileFailedWithError:(NSError*)error {
     NSLog(@"There was an error loading the file - %@", error);
+    
+    SEL TmpSel=NSSelectorFromString(@"loadFileFailedWithError");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
@@ -158,15 +174,23 @@
             NSLog(@"\t%@", file.filename);
         }
     }
+    
+    SEL TmpSel=NSSelectorFromString(@"loadedMetadata");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient *)client
             loadMetadataFailedWithError:(NSError *)error {
     
     NSLog(@"Error loading metadata: %@", error);
+    
+    SEL TmpSel=NSSelectorFromString(@"loadMetadataFailedWithError");
+    if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
+        [m_pParent performSelector:TmpSel];
 }
 ////--------------------------------------------------------
-- (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId {
+- (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId{
 	relinkUserId = [userId retain];
     
     [[[[UIAlertView alloc]

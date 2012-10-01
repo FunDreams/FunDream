@@ -110,23 +110,35 @@
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos 
             WithContainer:(StringContainer *)pContainer{
     
-    //Name
-    NSRange Range = { *iCurReadingPos, sizeof(int)};
+//Name-----------------------------------------------------------------------------
+    unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
     int iLen;
+//---------------------------------------------------------------------------------
+    NSRange Range = { *iCurReadingPos, sizeof(int)};
     [pData getBytes:&iLen range:Range];
     *iCurReadingPos += sizeof(int);
-    
     Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
-    unichar* ucBuff = (unichar*)calloc(iLen, sizeof(unichar));
     
     [pData getBytes:ucBuff range:Range];
     
     *iCurReadingPos += iLen*sizeof(unichar);
     
     NSString *sValue = [NSString stringWithCharacters:ucBuff length:iLen];
-    free(ucBuff);
-    
     strUID = [[NSString alloc] initWithString:sValue];
+//---------------------------------------------------------------------------------
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+
+    [pData getBytes:ucBuff range:Range];
+
+    *iCurReadingPos += iLen*sizeof(unichar);
+
+    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    strName = [[NSString alloc] initWithString:sValue];
+//---------------------------------------------------------------------------------
+    free(ucBuff);
     
     //float value
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
@@ -180,7 +192,12 @@
             int Len=[strUID length];
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
-            
+
+            [strName getCharacters:ucBuff];
+            Len=[strName length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+
             free(ucBuff);
 
             //float value

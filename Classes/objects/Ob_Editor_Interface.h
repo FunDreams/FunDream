@@ -13,6 +13,7 @@
 #import "Ob_GroupEmptyPlace.h"
 #import "Ob_GroupButtons.h"
 #import "ObjectButton.h"
+#import "DropBoxMng.h"
 
 @interface Ob_Editor_Interface : GObject {
     
@@ -26,6 +27,8 @@
     NSMutableArray *aObPoints;    
     int IndexCheckPoint;
     int m_iMode;
+    
+    DropBoxMng *pInfoFile;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

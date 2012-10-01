@@ -14,8 +14,8 @@
 @public
     DBRestClient* restClient;//клиент для загрузки
 	/** Хранит полный путь к файлу**/
-	NSString* m_sFullFileName;
-	NSString* m_sFullFileNameDropBox;
+	NSMutableString* m_sFullFileName;
+	NSMutableString* m_sFullFileNameDropBox;
 	/** Объект-буфер отвечающий за загрузку и сохранение данных **/
 	NSMutableData* m_pDataDmp;
 	/** Отвечает за текущую позицию считывания**/
@@ -23,6 +23,7 @@
     
     NSString *relinkUserId;//user id
     DBMetadata *m_pMetaData;
+    NSObject *m_pParent;
 }
 
 /** Инициализирует объект и загружает данные из файла который находится в ресурсах приложения
