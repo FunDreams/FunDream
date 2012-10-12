@@ -61,7 +61,12 @@
                     [GrButt SetString:StringTmp];
                 }
                 
-                OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+                int *pMode=GET_INT_V(@"m_iMode");
+
+                if(*pMode!=3)
+                {
+                    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+                }
 
                 continue;
             }

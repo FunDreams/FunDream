@@ -24,8 +24,14 @@
     NSMutableArray *ArrayDumpFiles;
     CDataManager *pDataCurManagerTmp;
     
-    
     int iIndexZero;
+    
+    FunArrayData *ArrayPointsTmp;
+    //Массив параметно для сохранения/загрузки
+    
+    int *pDataTmp;
+    //Двойной временной массив индексов для копирования
+    //частей струкруты в DropBox и загрузки.
 }
 
 -(id)init:(id)Parent;
@@ -36,6 +42,9 @@
 -(void)AddString:(FractalString *)pString;
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
+
+-(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion;
+-(void)SaveInfoStringToDropBox;
 
 -(bool)LoadContainer;
 -(void)SaveContainer;

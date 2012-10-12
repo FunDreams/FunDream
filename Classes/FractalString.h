@@ -39,9 +39,16 @@
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
    WithContainer:(StringContainer *)pContainer;
 
+- (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
+   WithContainer:(StringContainer *)pContainer WithLevel:(int)iCurLevel WithMaxDeep:(int)iDeep;
+
 - (void)SetLimmitStringS:(int)iS F:(int)iF;
 
 -(void)UpDate:(float)fDelta;
+
+-(void)selfSaveWithOutPoints:(NSMutableData *)m_pData WithVer:(int)iVersion
+                        Deep:(int)iDeep MaxDeep:(int)iMaxDeep;
+
 -(void)selfSave:(NSMutableData *)m_pData WithVer:(int)iVersion;
 -(void)selfLoad:(NSMutableData *)m_pData ReadPos:(int *)iCurReadingPos
         WithContainer:(StringContainer *)pContainer;

@@ -90,10 +90,39 @@
   //  [[DBSession sharedSession] link];
 }
 //--------------------------------------------------------
+-(void)UpLoadWithName:(NSString *)NameUpload
+{
+    if(m_pMetaData==nil)return;
+    
+    NSString *destDir = @"/";
+    
+    bool bSave=NO;
+    for(DBMetadata *child in m_pMetaData.contents)
+    {
+        NSString *folderName = [[child.path pathComponents] lastObject];
+        if ([folderName isEqualToString:NameUpload])
+        {
+            bSave=YES;
+            [restClient uploadFile:NameUpload toPath:destDir
+                     withParentRev:child.rev fromPath:m_sFullFileName];
+        }
+    }
+    
+    if(bSave==NO){
+        [restClient uploadFile:NameUpload toPath:destDir
+                 withParentRev:nil fromPath:m_sFullFileName];
+    }
+    
+    [m_pMetaData release];
+    m_pMetaData=nil;
+    
+    [restClient loadMetadata:@"/"];
+}
+//--------------------------------------------------------
 -(void)UpLoad
 {    
     if(m_pMetaData==nil)return;
-
+    
     NSString *destDir = @"/";
 
     bool bSave=NO;
@@ -117,13 +146,10 @@
     m_pMetaData=nil;
 
     [restClient loadMetadata:@"/"];
-
-//    [restClient moveFrom:m_sFullFileName toPath:destDir];//Rename
-//    [restClient deletePath:@"/FractalCode"];
 }
 //--------------------------------------------------------
--(void)DownLoad
-{
+-(void)DownLoad{
+    
     NSFileManager *fm = [NSFileManager defaultManager];
     [fm createFileAtPath:m_sFullFileName contents:m_pDataDmp attributes:nil];
 
@@ -134,7 +160,7 @@
 - (void)restClient:(DBRestClient*)client uploadedFile:(NSString*)destPath
               from:(NSString*)srcPath metadata:(DBMetadata*)metadata {
     
-    NSLog(@"File uploaded successfully to path: %@", metadata.path);
+    NSLog(@"File uploaded successfully to path: %@", metadata.filename);
     [restClient loadMetadata:@"/"];
     
     SEL TmpSel=NSSelectorFromString(@"uploadedFile");
@@ -142,7 +168,8 @@
         [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
-- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error {
+- (void)restClient:(DBRestClient*)client uploadFileFailedWithError:(NSError*)error{
+    
     NSLog(@"File upload failed with error - %@", error);
     
     SEL TmpSel=NSSelectorFromString(@"uploadFileFailedWithError");
@@ -151,6 +178,7 @@
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient*)client loadedFile:(NSString*)localPath {
+    
     NSLog(@"File loaded successfully to path: %@", localPath);
     
     SEL TmpSel=NSSelectorFromString(@"loadedFile");
@@ -159,6 +187,7 @@
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient*)client loadFileFailedWithError:(NSError*)error {
+    
     NSLog(@"There was an error loading the file - %@", error);
     
     SEL TmpSel=NSSelectorFromString(@"loadFileFailedWithError");
@@ -167,6 +196,7 @@
 }
 //--------------------------------------------------------
 - (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
+    
     m_pMetaData=[metadata retain];
     if (metadata.isDirectory) {
         NSLog(@"Folder '%@' contains:", metadata.path);
@@ -191,6 +221,7 @@
 }
 ////--------------------------------------------------------
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId{
+    
 	relinkUserId = [userId retain];
     
     [[[[UIAlertView alloc]

@@ -7,13 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-
-@interface CellObject: NSObject{
-    NSString *Name;
-    int m_indexIcon;
-    float X,Y;
-}
-@end
     
 @interface DropBoxMng : GObject{
     
@@ -23,10 +16,9 @@
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
--(void)Update;
 - (void)UpdateButt;
 - (void)Hide;
 - (void)Show;
-
+-(void)DownLoadInfoFile;
 
 @end

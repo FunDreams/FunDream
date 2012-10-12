@@ -11,6 +11,7 @@
 #import "Object.h"
 
 @class ObjectB_Ob;
+@class ObB_DropBox;
 /** Шаблонный класс для объектов**/
 @interface Ob_EmtyPlace : GObject {
 @public
@@ -41,6 +42,7 @@
     bool m_bBack;
     
     ObjectB_Ob *pObOb;
+    ObB_DropBox *pObObDropBox;
     FractalString *pStr;
     bool m_bStartMove;
     bool m_bStartPush;

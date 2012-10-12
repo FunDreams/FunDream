@@ -97,12 +97,11 @@
     m_pSquareColors[14]=m_cColor.blue*255;
     m_pSquareColors[15]=m_cColor.alpha*255;
 
-
     m_pSquareColors[16]=m_pSquareColors[8];
     m_pSquareColors[17]=m_pSquareColors[9];
     m_pSquareColors[18]=m_pSquareColors[10];
     m_pSquareColors[19]=m_pSquareColors[11];
-    
+
     m_pSquareColors[20]=m_pSquareColors[4];
     m_pSquareColors[21]=m_pSquareColors[5];
     m_pSquareColors[22]=m_pSquareColors[6];

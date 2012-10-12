@@ -149,7 +149,7 @@
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     if(m_bLookTouch==YES)LOCK_TOUCH;
-    int *pMode=GET_INT_V(@"m_iMode");
+//    int *pMode=GET_INT_V(@"m_iMode");
 
     LastPointTouch.x=Point.x;
     LastPointTouch.y=Point.y;
@@ -166,7 +166,6 @@
                   [self SetTouch:YES WithLayer:m_iLayerTouch-1];
                   m_bLookTouch=NO;
                   
-                  [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
                 }
             }
                 
@@ -215,9 +214,12 @@
     {
         if(m_bStartMove==NO && bMoveIn==YES){
             
+            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
+
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                            SET_FLOAT_V(54,@"mWidth"),
                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                           SET_BOOL_V(NO,@"bFromEmpty"),
                            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                            SET_INT_V(mTextureId,@"mTextureId"));
             

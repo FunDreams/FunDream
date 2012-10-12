@@ -11,11 +11,11 @@
 @interface FunArrayData : NSObject{
 @public
     float *pData;//единый массив данных
-    void *pDataInt;//данные о копиях ячейки
-    int m_iSize;//число байтов в значении
+    int *pDataInt;//данные о копиях ячейки
     
     int iCount;//ёмкость массива
     int iCountInc;//шаг расширения массива
+    int iCountInArray;
     
     NSMutableArray *pFreeArray;//массив со свободными индексами
 }
@@ -27,6 +27,11 @@
 - (void)IncDataAtIndex:(int)iIndex;
 - (void)DecDataAtIndex:(int)iIndex;
 - (float *)GetDataAtIndex:(int)iIndex;
+
+-(void)selfSave:(NSMutableData *)m_pData;
+-(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
+
+- (void)Reserv:(int)iCountTmp;
 
 - (void)dealloc;
 

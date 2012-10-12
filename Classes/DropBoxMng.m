@@ -20,7 +20,7 @@
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
 
         m_bHiden=YES;
-        [self Update];
+        [self DownLoadInfoFile];
     }
 
     return self;
@@ -28,6 +28,25 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 	[super Start];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Check{
+    
+    id pObTmp = GET_ID_V(@"ObCheckInDropBox");
+    
+    int i=0;
+    if(pObTmp!=nil){
+        for (GObject *pOb in m_pChildrenbjectsArr) {
+            if(pOb==pObTmp){
+                m_iCurrentSelect=i;
+                continue;
+            }
+            else{
+                OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnPush");
+            }
+            i++;
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 //- (void)SetDefault{}
@@ -93,7 +112,7 @@
     }    
 }
 //------------------------------------------------------------------------------------------------------
--(void)Update{
+-(void)DownLoadInfoFile{
     [pDataManager DownLoad];
 }
 //------------------------------------------------------------------------------------------------------

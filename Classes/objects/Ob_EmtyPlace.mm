@@ -10,6 +10,7 @@
 #import "UniCell.h"
 #import "Ob_IconDrag.h"
 #import "ObjectB_Ob.h"
+#import "ObB_DropBox.h"
 
 @implementation Ob_EmtyPlace
 //------------------------------------------------------------------------------------------------------
@@ -141,11 +142,12 @@
 
     int *pMode=GET_INT_V(@"m_iMode");
 
-    if(m_bStartMove==NO && m_bStartPush==YES && *pMode!=3){
+    if(m_bStartMove==NO && m_bStartPush==YES){
 
         Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                                         SET_FLOAT_V(54,@"mWidth"),
                                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                        SET_BOOL_V(YES,@"bFromEmpty"),
                                         SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                                         SET_INT_V(mTextureId,@"mTextureId"));
 
@@ -179,45 +181,57 @@
     pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
     mTextureId=-1;
     pObOb=nil;
+    pObObDropBox=nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
 
+    ObB_DropBox *DragObjectDropBox = GET_ID_V(@"DragObjectDropBox");
     bool *bFromPlace=GET_BOOL_V(@"FromPlace");
     ObjectB_Ob *pObObTmp = GET_ID_V(@"DragObject");
     GObject *pObObE = GET_ID_V(@"EmptyOb");
     int *pMode=GET_INT_V(@"m_iMode");
 
-    if(pObObE==nil && pObObTmp==nil){
-        [self SetPush];
+    if(DragObjectDropBox!=nil)
+    {
+//        int m=0;
         
-        if(*pMode!=3)
+        pObObDropBox=DragObjectDropBox;
+        pStr = DragObjectDropBox->pString;
+        mTextureId=DragObjectDropBox->mTextureId;
+    }
+    else
+    {
+        if(pObObE==nil && pObObTmp==nil)
         {
+            [self SetPush];
+            
             [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
             OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+            
+            m_bStartPush=NO;
+            m_bStartMove=NO;
+            return;
         }
-        m_bStartPush=NO;
-        m_bStartMove=NO;
-        return;
-    }
-    else if(pObObTmp!=nil && bFromPlace && *bFromPlace==YES){
-        pObOb=pObObTmp;
-        pStr = pObObTmp->pString;
-        mTextureId=pObObTmp->mTextureId;
-        DEL_CELL(@"DragObject");
-        DEL_CELL(@"FromPlace");
-    }
-    else if(pObObTmp!=nil && pMode!=0 && (*pMode)!=0){
+        else if(pObObTmp!=nil && bFromPlace && *bFromPlace==YES){
+            pObOb=pObObTmp;
+            pStr = pObObTmp->pString;
+            mTextureId=pObObTmp->mTextureId;
+            DEL_CELL(@"DragObject");
+            DEL_CELL(@"FromPlace");
+        }
+        else if(pObObTmp!=nil && pMode!=0 && (*pMode)!=0){
 
-        pObOb=pObObTmp;
-        pStr = pObObTmp->pString;
-        mTextureId=pObObTmp->mTextureId;
-        DEL_CELL(@"DragObject");
-    }
-    else if(pObObE!=nil){
+            pObOb=pObObTmp;
+            pStr = pObObTmp->pString;
+            mTextureId=pObObTmp->mTextureId;
+            DEL_CELL(@"DragObject");
+        }
+        else if(pObObE!=nil){
 
-        [self SetEmpty];
-        DEL_CELL(@"EmptyOb");
+            [self SetEmpty];
+            DEL_CELL(@"EmptyOb");
+        }
     }
     
     m_bStartPush=NO;

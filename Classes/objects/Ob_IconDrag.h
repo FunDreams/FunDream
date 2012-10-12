@@ -14,6 +14,7 @@
 @interface Ob_IconDrag : GObject {
 @public
     FractalString *pInsideString;
+    bool bFromEmpty;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

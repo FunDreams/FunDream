@@ -231,7 +231,6 @@
 		18D9810A152F438C00C9F37A /* mainController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = mainController.xib; sourceTree = "<group>"; };
 		18D9810B152F438C00C9F37A /* MainWindow.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = MainWindow.xib; sourceTree = "<group>"; };
 		18D9810C152F438C00C9F37A /* PreviewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = PreviewController.xib; sourceTree = "<group>"; };
-		18DEE3C8157F1EB800C4DAB5 /* FractalCode */ = {isa = PBXFileReference; lastKnownFileType = file; name = FractalCode; path = /Users/apple/Dropbox/Apps/fractalProgram/FractalCode; sourceTree = "<absolute>"; };
 		18DEE3CA1581150500C4DAB5 /* Ob_EditorPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_EditorPoint.h; path = objects/Ob_EditorPoint.h; sourceTree = "<group>"; };
 		18DEE3CB1581150500C4DAB5 /* Ob_EditorPoint.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_EditorPoint.mm; path = objects/Ob_EditorPoint.mm; sourceTree = "<group>"; };
 		18DEE3CD158A4AF300C4DAB5 /* Ob_Slayder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Slayder.h; path = objects/Ob_Slayder.h; sourceTree = "<group>"; };
@@ -546,7 +545,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				18DEE3C8157F1EB800C4DAB5 /* FractalCode */,
 				185FBA5C152F1EE200DB25C7 /* miniHelp */,
 				186E0CAE14DBA80C008B4290 /* Help */,
 				1890156C1291684E0027418F /* MKStoreKit */,

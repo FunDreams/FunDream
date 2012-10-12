@@ -38,6 +38,8 @@
     bool m_bLookTouch;
 
     Color3D mColorBack;
+    Color3D mColorBackCorn;
+    
     bool m_bBack;
     
     FractalString *pString;

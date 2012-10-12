@@ -40,8 +40,7 @@
 
 -(void)Destroy;
 -(void)Start;
--(void)Update;
-- (void)UpdatePoints;
+-(void)UpdatePoints;
 
 - (void)CreateNewPoint;
 - (void)DelPoint;

@@ -22,6 +22,44 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
+    WithContainer:(StringContainer *)pContainer WithLevel:(int)iCurLevel WithMaxDeep:(int)iDeep{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        pParent=Parent;
+        if(pParent!=nil){
+            [pParent->aStrings addObject:self];
+        }
+        
+        [self SetDefault];
+        [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
+        
+        strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
+        strName = [[NSString alloc] initWithString:pStrSource->strName];
+        
+        [pContainer->DicStrings setObject:self forKey:strUID];
+        
+        
+        if(iCurLevel<=iDeep){
+            
+            int iCurLevelTmp=iCurLevel+1;
+            
+            for (int i=0; i<[pStrSource->aStrings count]; i++) {
+                
+                FractalString *TmpStr=[pStrSource->aStrings objectAtIndex:i];
+                
+                [[FractalString alloc] initAsCopy:TmpStr
+                        WithParent:self WithContainer:pContainer
+                        WithLevel:iCurLevelTmp WithMaxDeep:iDeep];
+            }
+        }
+    }
+    
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
    WithContainer:(StringContainer *)pContainer{
     
     self = [super init];
@@ -178,13 +216,68 @@
         
         [aStrings addObject:FChild];
     }
+    
+//======================================================================================
+    [ArrayPoints selfLoad:pData rpos:iCurReadingPos];
+}
+//------------------------------------------------------------------------------------------------------
+-(void)selfSaveWithOutPoints:(NSMutableData *)m_pData WithVer:(int)iVersion
+    Deep:(int)iDeep MaxDeep:(int)iMaxDeep{
+    
+    switch (iVersion) {
+        case 1:
+        {
+            //Name
+            unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
+            
+            [strUID getCharacters:ucBuff];
+            int Len=[strUID length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+            
+            [strName getCharacters:ucBuff];
+            Len=[strName length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+            
+            free(ucBuff);
+            
+            //float value
+            [m_pData appendBytes:&S length:sizeof(int)];
+            [m_pData appendBytes:&F length:sizeof(int)];
+            
+            [m_pData appendBytes:&iIndexIcon length:sizeof(int)];
+            [m_pData appendBytes:&m_iDeep length:sizeof(int)];
+            
+            [m_pData appendBytes:&X length:sizeof(float)];
+            [m_pData appendBytes:&Y length:sizeof(float)];
+            
+            //child string
+            int iCount=[aStrings count];
+            [m_pData appendBytes:&iCount length:sizeof(int)];
+            
+            int iCurDeep=iDeep+1;
+            
+            if(iCurDeep>iMaxDeep){
+                for (int i=0; i<iCount; i++) {
+                    FractalString *FChild=[aStrings objectAtIndex:i];
+                    [FChild selfSaveWithOutPoints:m_pData WithVer:iVersion
+                     Deep:iCurDeep MaxDeep:iMaxDeep];
+                }
+            }
+        }
+        break;
+            
+        default:
+            break;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData WithVer:(int)iVersion
 {
     switch (iVersion) {
         case 1:
-        {            
+        {
             //Name
             unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
             
@@ -213,11 +306,13 @@
             //child string
             int iCount=[aStrings count];
             [m_pData appendBytes:&iCount length:sizeof(int)];
-            
+                        
             for (int i=0; i<iCount; i++) {
                 FractalString *FChild=[aStrings objectAtIndex:i];
                 [FChild selfSave:m_pData WithVer:iVersion];
             }
+            
+            [ArrayPoints selfSave:m_pData];
         }
         break;
             

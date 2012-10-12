@@ -21,6 +21,10 @@
 -(void)AddData:(int)iDataValue;
 -(void)RemoveDataAtIndex:(int)iIndex;
 -(int)GetDataAtIndex:(int)iIndex;
+- (void)Reserv:(int)iCount;
+
+-(void)selfSave:(NSMutableData *)m_pData;
+-(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
 
 @end
 

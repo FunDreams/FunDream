@@ -46,7 +46,8 @@
     [m_strNameStageDClick setString:@""];
     [m_strNameObjectDClick setString:@""];
     
-    mColorBack = Color3DMake(0, 1, 1, 1);
+    mColorBack = Color3DMake(0,0,1,1);
+    mColorBackCorn = Color3DMake(1,1,0,1);
     m_bBack=YES;
 }
 //------------------------------------------------------------------------------------------------------
@@ -153,15 +154,13 @@
     
     if(m_bNotPush==NO){
             
-        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheckInDropBox")];
           
         m_bStartPush=YES;
 
-        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
-            
         [m_pParent PlaySound:m_strNameSound];
 
-        //OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
         [self SetPush];
     }
 }
@@ -169,12 +168,15 @@
 -(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn{
     
     int *pMode=GET_INT_V(@"m_iMode");
-    if(*pMode==0){
+    if(*pMode==3){
         
         if(m_bStartMove==NO && bMoveIn==YES){
             
+            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObjectDropBox"))];
+
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                            SET_FLOAT_V(54,@"mWidth"),
+                           SET_BOOL_V(NO,@"bFromEmpty"),
                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                            SET_INT_V(mTextureId,@"mTextureId"));
@@ -209,9 +211,10 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
-//    m_bStartPush=NO;
-//    m_bStartMove=NO;
-//    
+    m_bStartPush=NO;
+    m_bStartMove=NO;
+    DEL_CELL(@"DragObjectDropBox");
+//
 //    if(m_iLayer==layerInterfaceSpace6){
 //        m_bLookTouch=YES;
 //        
@@ -251,7 +254,6 @@
 //Exit:
 //        [self SetLayer:m_iLayer-1];
 //        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-//        DEL_CELL(@"DragObject");
 //        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
 //    }
 }
@@ -275,19 +277,23 @@
 				 m_pCurPosition.z);
 
     glRotatef(m_pCurAngle.z, 0, 0, 1);
-    glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+    glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
 
-    [self SetColor:mColorBack];
-
+    [self SetColor:mColorBackCorn];
     glBindTexture(GL_TEXTURE_2D, -1);
 
     if(m_bBack==YES){
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+ //       glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     }
 
+    [self SetColor:mColorBack];
+    glBindTexture(GL_TEXTURE_2D, -1);
+    glScalef(0.9f,0.9f,1);
+
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     
-	glScalef(0.93f,0.93f,m_pCurScale.z);
+	glScalef(0.8f,0.8f,m_pCurScale.z);
     [self SetColor:mColor];
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
@@ -299,5 +305,4 @@
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
-
 @end

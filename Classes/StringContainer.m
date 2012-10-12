@@ -17,7 +17,7 @@
     if(self){
         
         ArrayPoints = [[FunArrayData alloc] initWithCopasity:100];
-        ArrayPoints->iCountInc=1;
+        ArrayPoints->iCountInc=1000;
 
         DicStrings = [[NSMutableDictionary alloc] init];
         ArrayStrings = [[NSMutableArray alloc] init];
@@ -65,7 +65,13 @@
     FractalString *pFStringEditor=[[FractalString alloc]
         initWithName:@"Editor" WithParent:pFStringZero WithContainer:self   S:iIndexZero F:iIndexZero];
 ///////////////////////////////////////////
-    pFStringObjects=[[FractalString alloc]
+    FractalString *pFSCurrentCheck=[[FractalString alloc]
+        initWithName:@"CurrentCheck" WithParent:pFStringEditor
+        WithContainer:self S:iIndexZero F:iIndexZero];
+    
+    [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:1]];
+
+    [[FractalString alloc]
         initWithName:@"DropBox" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 
     pFStringObjects=[[FractalString alloc]
@@ -84,16 +90,13 @@
     FractalString *pFStringXY=[[FractalString alloc]
         initWithName:@"XY" WithParent:pFStringProp WithContainer:self  S:iIndexZero F:iIndexZero];
 
-    int iX1=[self->ArrayPoints SetData:0];
-    int iX2=[self->ArrayPoints SetData:480];
+    int iX1=[self->ArrayPoints SetData:   0];
+    int iX2=[self->ArrayPoints SetData: 480];
     int iY1=[self->ArrayPoints SetData:-320];
-    int iY2=[self->ArrayPoints SetData:320];
+    int iY2=[self->ArrayPoints SetData: 320];
 
-    [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self
-                S:iX1 F:iX2];
-
-    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self
-                S:iY1 F:iY2];
+    [[FractalString alloc] initWithName:@"X" WithParent:pFStringXY WithContainer:self S:iX1 F:iX2];
+    [[FractalString alloc] initWithName:@"Y" WithParent:pFStringXY WithContainer:self S:iY1 F:iY2];
 
     FractalString *pFStringColor=[[FractalString alloc]
                     initWithName:@"Color" WithParent:pFStringProp WithContainer:self
@@ -154,7 +157,7 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 -(bool)LoadContainer{
     
-    CDataManager* pDataCurManager =[ArrayDumpFiles objectAtIndex:m_iCurFile];
+    CDataManager* pDataCurManager =[ArrayDumpFiles objectAtIndex:0];
 
     bool Rez=[pDataCurManager Load];
     
@@ -172,6 +175,9 @@ repeate:
                 [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
                                 WithCurRead:&pDataCurManager->m_iCurReadingPos
                                 WithParent:nil WithContainer:self];
+                
+                [ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
+                                 rpos:&pDataCurManager->m_iCurReadingPos];
             }
             break;
                 
@@ -187,19 +193,50 @@ repeate:
     //версия дампа для сохранения струн
     int iVersion=1;
     
-    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:m_iCurFile];
+    //mainDump
+    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:0];
+    [pDataCurManager Clear];
+    [pDataCurManager->m_pDataDmp appendBytes:&iVersion length:sizeof(int)];
+
+    FractalString *pFStringZero = [DicStrings objectForKey:@"Zero"];
+    [pFStringZero selfSave:pDataCurManager->m_pDataDmp WithVer:iVersion];
     
-    if(pDataCurManager->m_pDataDmp!=nil)
-    {
+    [ArrayPoints selfSave:pDataCurManager->m_pDataDmp];
+
+    [pDataCurManager Save];
+}
+//------------------------------------------------------------------------------------------------------
+-(void)SaveInfoStringToDropBox{
+    
+    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:1];
+    FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+    
+    if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
+        
         [pDataCurManager Clear];
-        [pDataCurManager->m_pDataDmp appendBytes:&iVersion length:sizeof(int)];
-
-        FractalString *pFStringZero = [DicStrings objectForKey:@"Zero"];
-
-        if(pFStringZero!=nil)
-            [pFStringZero selfSave:pDataCurManager->m_pDataDmp WithVer:iVersion];
-    
+        
+        [Str selfSaveWithOutPoints:pDataCurManager->m_pDataDmp WithVer:1
+                                 Deep:0 MaxDeep:1];
+        
         [pDataCurManager Save];
+        
+        [pDataCurManager UpLoadWithName:@"InfoFile"];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion{
+    
+    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:1];
+
+    if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
+
+        [pDataCurManager Clear];
+        [Str selfSave:pDataCurManager->m_pDataDmp WithVer:iVersion];
+        
+        [ArrayPoints selfSave:pDataCurManager->m_pDataDmp];
+        [pDataCurManager Save];
+    
+        [pDataCurManager UpLoadWithName:Str->strUID];
     }
 }
 //------------------------------------------------------------------------------------------------------

@@ -27,7 +27,7 @@
 }
 
 /** Инициализирует объект и загружает данные из файла который находится в ресурсах приложения
- @param sFileName  Определяет название файла 
+ @param sFileName  Определяет название файла
  @return Возвращает созданный объект если считывание удачно и nil в противоположном случае
  **/
 -(CDataManager*) InitWithFileFromCash: (NSString*) sFileName;
@@ -119,6 +119,7 @@
 
 //-(void)initDropBox;//инициализация dropBox
 -(void)UpLoad;//Загрузка файла на сервер
+-(void)UpLoadWithName:(NSString *)NameUpload;//загрузка со специальным именем
 -(void)DownLoad;//Загрузка файла с сервера
 //-(void)Link;//подключение акка
 
