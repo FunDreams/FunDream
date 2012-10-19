@@ -84,6 +84,11 @@
     return self;
 }
 //--------------------------------------------------------
+-(void)LoadMetadata:(NSString *)Paht
+{
+    [restClient loadMetadata:Paht];
+}
+//--------------------------------------------------------
 -(void)Link{
     
 //    if (![[DBSession sharedSession] isLinked])
@@ -112,15 +117,12 @@
         [restClient uploadFile:NameUpload toPath:destDir
                  withParentRev:nil fromPath:m_sFullFileName];
     }
-    
-    [m_pMetaData release];
-    m_pMetaData=nil;
-    
+        
     [restClient loadMetadata:@"/"];
 }
 //--------------------------------------------------------
 -(void)UpLoad
-{    
+{
     if(m_pMetaData==nil)return;
     
     NSString *destDir = @"/";
@@ -146,6 +148,14 @@
     m_pMetaData=nil;
 
     [restClient loadMetadata:@"/"];
+}
+//--------------------------------------------------------
+-(void)DelFileFromDropBox:(NSString*)destPath{
+
+    //    [restClient moveFrom:m_sFullFileName toPath:destDir];//Rename
+    
+    NSString *pStr = [NSString stringWithFormat:@"/%@",destPath];
+    [restClient deletePath:pStr];
 }
 //--------------------------------------------------------
 -(void)DownLoad{
@@ -177,7 +187,7 @@
         [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
-- (void)restClient:(DBRestClient*)client loadedFile:(NSString*)localPath {
+- (void)restClient:(DBRestClient*)client loadedFile:(NSString*)localPath{
     
     NSLog(@"File loaded successfully to path: %@", localPath);
     
@@ -186,7 +196,7 @@
         [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
-- (void)restClient:(DBRestClient*)client loadFileFailedWithError:(NSError*)error {
+- (void)restClient:(DBRestClient*)client loadFileFailedWithError:(NSError*)error{
     
     NSLog(@"There was an error loading the file - %@", error);
     
@@ -195,8 +205,13 @@
         [m_pParent performSelector:TmpSel];
 }
 //--------------------------------------------------------
-- (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata {
+- (void)restClient:(DBRestClient *)client loadedMetadata:(DBMetadata *)metadata{
     
+    if(m_pMetaData!=nil){
+        [m_pMetaData release];
+        m_pMetaData=nil;
+    }
+
     m_pMetaData=[metadata retain];
     if (metadata.isDirectory) {
         NSLog(@"Folder '%@' contains:", metadata.path);

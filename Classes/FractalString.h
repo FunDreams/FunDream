@@ -27,7 +27,8 @@
     int iIndexIcon;//иконка
     float X;
     float Y;
-//    int m_iFlags;
+    int m_iFlags;
+    //1 loading
 }
 
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
@@ -52,5 +53,7 @@
 -(void)selfSave:(NSMutableData *)m_pData WithVer:(int)iVersion;
 -(void)selfLoad:(NSMutableData *)m_pData ReadPos:(int *)iCurReadingPos
         WithContainer:(StringContainer *)pContainer;
+
+-(void)selfLoadOnlyStructure:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos;
 
 @end

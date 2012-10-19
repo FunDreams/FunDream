@@ -76,8 +76,7 @@
     
     ButtonGroup = UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
                    SET_VECTOR_V(Vector3DMake(-450,-60,0),@"m_pCurPosition"),
-                   SET_FLOAT_V(520,@"mHeight"),
-                   SET_INT_V(10,@"m_iNumButton"));
+                   SET_FLOAT_V(520,@"mHeight"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
@@ -96,8 +95,13 @@
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
 //===============================режими==============================================
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
-    float *FCheck=[m_pObjMng->pStringContainer->ArrayPoints
+    
+    if(pStrCheck!=nil){
+        float *FCheck=[m_pObjMng->pStringContainer->ArrayPoints
                    GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
+        m_iMode=(int)(*FCheck);
+    }
+    
         
     pDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
                    SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
@@ -105,11 +109,11 @@
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V((*FCheck==3)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==3)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"SetDropBox",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
@@ -119,11 +123,11 @@
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    //SET_BOOL_V(YES,@"m_bNotPush"),
-                   SET_BOOL_V((*FCheck==0)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==0)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckMove",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
@@ -133,11 +137,11 @@
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    //SET_BOOL_V(YES,@"m_bNotPush"),
-                   SET_BOOL_V((*FCheck==1)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==1)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckCopy",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
@@ -147,11 +151,11 @@
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    //SET_BOOL_V(YES,@"m_bNotPush"),
-                   SET_BOOL_V((*FCheck==2)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==2)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckLink",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
     
 //===================================================================================
@@ -177,6 +181,7 @@
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
 
+
 //        UNFROZE_OBJECT(@"ObjectButton",@"ButtonCreateOb",
 //                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
 //                       SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
@@ -189,6 +194,7 @@
 //                       SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
 
     [self Update];
+    [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
@@ -530,6 +536,7 @@ EXIT:
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Load{
+
     bool bLoad = [m_pObjMng->pStringContainer LoadContainer];
 
     if(bLoad==NO)[m_pObjMng->pStringContainer SetTemplateString];

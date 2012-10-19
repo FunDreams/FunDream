@@ -107,6 +107,9 @@
  **/
 -(char) GetCharValue;
 
+/** Загружает метаданные из директории **/
+-(void)LoadMetadata:(NSString *)Paht;
+
 /** Добавляет данные типа BOOL в буфер
  @param bValue значение добавляемых данных   
  **/
@@ -121,6 +124,7 @@
 -(void)UpLoad;//Загрузка файла на сервер
 -(void)UpLoadWithName:(NSString *)NameUpload;//загрузка со специальным именем
 -(void)DownLoad;//Загрузка файла с сервера
+-(void)DelFileFromDropBox:(NSString*)destPath;//удаления файла с хранилища
 //-(void)Link;//подключение акка
 
 @end

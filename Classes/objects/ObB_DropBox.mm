@@ -46,7 +46,7 @@
     [m_strNameStageDClick setString:@""];
     [m_strNameObjectDClick setString:@""];
     
-    mColorBack = Color3DMake(0,0,1,1);
+    mColorBack = Color3DMake(0,1,1,1);
     mColorBackCorn = Color3DMake(1,1,0,1);
     m_bBack=YES;
 }
@@ -279,18 +279,19 @@
     glRotatef(m_pCurAngle.z, 0, 0, 1);
     glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
 
-    [self SetColor:mColorBackCorn];
+//    [self SetColor:mColorBackCorn];
+    [self SetColor:mColorBack];
+
     glBindTexture(GL_TEXTURE_2D, -1);
 
     if(m_bBack==YES){
- //       glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     }
 
-    [self SetColor:mColorBack];
-    glBindTexture(GL_TEXTURE_2D, -1);
-    glScalef(0.9f,0.9f,1);
+  //  glBindTexture(GL_TEXTURE_2D, -1);
+ //   glScalef(0.9f,0.9f,1);
 
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+ //   glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     
 	glScalef(0.8f,0.8f,m_pCurScale.z);

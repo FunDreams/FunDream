@@ -7,6 +7,7 @@
 //
 
 #import "StringContainer.h"
+#import "DropBoxMng.h"
 
 @implementation StringContainer
 //------------------------------------------------------------------------------------------------------
@@ -39,7 +40,10 @@
 
         pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"Download"];
         [ArrayDumpFiles addObject:pDataManager];
-        
+
+//        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"InfoFile"];
+//        [ArrayDumpFiles addObject:pDataManager];
+
 //        for (int i=0; i<10; i++) {
 //            NSString *strNameContainer = [[NSString alloc]
 //                    initWithFormat:@"FractalDump%d",i];
@@ -146,8 +150,10 @@ repeate:
     if(TmpId!=nil){
         goto repeate;
     }
+    
+    NSString *StrRet=outstring;
 
-    return outstring;
+    return StrRet;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Synhronize{
@@ -207,20 +213,25 @@ repeate:
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SaveInfoStringToDropBox{
-    
-    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:1];
-    FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
-    
-    if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
+
+    DropBoxMng *pMng = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
+
+    if(pMng->bBusy==NO){
+        CDataManager* pDataCurManager = pMng->pDataManager;
+        pMng->bBusy=YES;
+
+        FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
         
-        [pDataCurManager Clear];
-        
-        [Str selfSaveWithOutPoints:pDataCurManager->m_pDataDmp WithVer:1
-                                 Deep:0 MaxDeep:1];
-        
-        [pDataCurManager Save];
-        
-        [pDataCurManager UpLoadWithName:@"InfoFile"];
+        if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
+            
+            [pDataCurManager Clear];
+            
+            [Str selfSaveWithOutPoints:pDataCurManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
+            
+            [pDataCurManager Save];
+            
+            [pDataCurManager UpLoadWithName:@"Info"];
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -242,26 +253,44 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 -(void)AddString:(FractalString *)pString{}
 //------------------------------------------------------------------------------------------------------
--(void)DelString:(FractalString *)strDel{
+-(void)DelChilds:(FractalString *)strDelChilds{
     
-    int iCount=[strDel->pParent->aStrings count];
+    int iCount=[strDelChilds->aStrings count];
     for (int i=0; i<iCount; i++) {
         
-        FractalString *TmpStr=[strDel->pParent->aStrings objectAtIndex:i];
-        if(strDel==TmpStr){//нашли себя в струне парента
+        FractalString *TmpStr=[strDelChilds->aStrings objectAtIndex:0];
+        [self DelString:TmpStr];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)DelString:(FractalString *)strDel{
+    
+    if(strDel->pParent!=nil){
+
+        int iCount=[strDel->pParent->aStrings count];
+        for (int i=0; i<iCount; i++) {
             
-            int iCountTmp=[TmpStr->aStrings count];
-            for (int j=0; j<iCountTmp; j++) {
-                FractalString *TmpShild=[TmpStr->aStrings objectAtIndex:0];
-                [self DelString:TmpShild];
+            FractalString *TmpStr=[strDel->pParent->aStrings objectAtIndex:i];
+            
+            if(strDel==TmpStr){//нашли себя в струне парента
+                
+                while ([TmpStr->aStrings count]>0) {
+                    FractalString *TmpShild=[TmpStr->aStrings objectAtIndex:0];
+                    [self DelString:TmpShild];
+                }
+                
+                [strDel->pParent->aStrings removeObjectAtIndex:i];
+                [DicStrings removeObjectForKey:TmpStr->strUID];
+                [strDel release];
+                
+                break;
             }
-            
-            [strDel->pParent->aStrings removeObjectAtIndex:i];
-            [DicStrings removeObjectForKey:TmpStr->strUID];
-            [TmpStr release];
-            
-            break;
         }
+    }
+    else
+    {
+        [DicStrings removeObjectForKey:strDel->strUID];
+        [strDel release];
     }
 }
 //------------------------------------------------------------------------------------------------------

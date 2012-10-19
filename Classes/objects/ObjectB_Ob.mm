@@ -153,6 +153,8 @@
 
     LastPointTouch.x=Point.x;
     LastPointTouch.y=Point.y;
+    
+    PLAY_SOUND(@"take.wav");
 
     if(m_bNotPush==NO){
             
@@ -168,9 +170,7 @@
                   
                 }
             }
-                
-            [m_pParent PlaySound:m_strNameSound];
-            
+                            
             OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
             [self SetPush];
     }
@@ -253,6 +253,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
+    PLAY_SOUND(@"drop.wav");
+
     m_bStartPush=NO;
     m_bStartMove=NO;
     

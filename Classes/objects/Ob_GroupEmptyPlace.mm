@@ -49,15 +49,18 @@
     
     int i=0;
     if(pObTmp!=nil){
-        for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
-            if(pOb==pObTmp){
+        for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr)
+        {
+            if(pOb==pObTmp)
+            {
                 m_iCurrentSelect=i;
                 
                 FractalString *StringTmp=pOb->pStr;
                 
                 Ob_GroupButtons *GrButt = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
 
-                if(GrButt!=nil){
+                if(GrButt!=nil)
+                {
                     [GrButt SetString:StringTmp];
                 }
                 
@@ -70,7 +73,8 @@
 
                 continue;
             }
-            else{
+            else
+            {
                 OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnPush");
             }
             i++;
@@ -85,7 +89,6 @@
     }
     [m_pChildrenbjectsArr removeAllObjects];
 
-    if(m_iNumButton>10)m_iNumButton=10;
     mWidth=m_iNumButton*56;
     float Step=mWidth/m_iNumButton;
     

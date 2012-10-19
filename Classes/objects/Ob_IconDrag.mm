@@ -84,9 +84,29 @@
     GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
 
     if([pObTash Intersect:Point]){
-        //delete
+        
+        if(pMode!=0 && *pMode==3 && pInsideString!=nil){
+                
+            if([pInsideString->aStrings count]>0)//струна загружена
+            {                
+                //del childs
+                [m_pObjMng->pStringContainer DelChilds:pInsideString];
+                [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
+            }
+            else
+            {
+                //del from drop Box
+                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:1];
+                [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
+                
+                [m_pObjMng->pStringContainer DelString:pInsideString];
+            }
+            
+            OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
+        }
     }
-    else{
+    else
+    {
         if(pMode!=0 && *pMode==3){
             if(m_pCurPosition.y<202 && pInsideString!=nil){
                 if(pParent!=pInsideString){
@@ -95,17 +115,12 @@
                     {
                         FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
                                 WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
+                        
                         [self SetPos:pNewString];
+                        
                         [m_pObjMng->pStringContainer SaveStringToDropBox:pNewString Version:1];
 
                         [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
-
-                        
-//                        FractalString *pStorageString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
-//                        [m_pObjMng->pStringContainer SaveStringToDropBox:pStorageString Version:1];
-//                        [[FractalString alloc] initAsCopy:pInsideString
-//                                    WithParent:pStorageString WithContainer:m_pObjMng->pStringContainer
-//                                         WithLevel:0 WithMaxDeep:1];
 
                         OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
                     }
@@ -118,6 +133,8 @@
                             [self SetPos:DragObjectDropBox->pString];
                             OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
                         }
+                        
+                        [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
                     }
                 }
             }

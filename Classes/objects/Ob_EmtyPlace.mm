@@ -194,8 +194,6 @@
 
     if(DragObjectDropBox!=nil)
     {
-//        int m=0;
-        
         pObObDropBox=DragObjectDropBox;
         pStr = DragObjectDropBox->pString;
         mTextureId=DragObjectDropBox->mTextureId;

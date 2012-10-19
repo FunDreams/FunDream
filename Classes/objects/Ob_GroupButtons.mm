@@ -46,7 +46,8 @@
     
     int i=0;
     if(pObTmp!=nil){
-        for (GObject *pOb in m_pChildrenbjectsArr) {
+        for (GObject *pOb in m_pChildrenbjectsArr)
+        {
             if(pOb==pObTmp){
                 m_iCurrentSelect=i;
                 continue;
@@ -77,7 +78,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{
     
-    for (GObject *pOb in m_pChildrenbjectsArr) {
+    if(pInsideString==nil)return;
+    
+    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArr removeAllObjects];
@@ -112,7 +115,7 @@
         ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
         
         OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
-    }    
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetString:(FractalString *)Str{
@@ -134,7 +137,7 @@
     pInsideString = [m_pObjMng->pStringContainer GetString:@"Objects"];
     [m_pObjMng->pMegaTree SetCell:LINK_ID_V(pInsideString,@"ParentString")];
 
-    [self UpdateButt];
+ //   [self UpdateButt];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

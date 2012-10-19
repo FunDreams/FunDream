@@ -40,6 +40,7 @@
 -(void)SetTemplateString;
 -(id)GetString:(NSString *)strName;
 -(void)AddString:(FractalString *)pString;
+-(void)DelChilds:(FractalString *)strDelChilds;
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
 

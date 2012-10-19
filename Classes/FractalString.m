@@ -12,13 +12,25 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
     
+    iIndexIcon=0;
+    
     aStrings = [[NSMutableArray alloc] init];
     aStages = [[NSMutableArray alloc] init];
     
-    ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:1000];
+    ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:10];
 
     X=-440;
     Y=170;
+}
+//------------------------------------------------------------------------------------------------------
+- (id)init{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        [self SetDefault];
+    }
+    return self;
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
@@ -145,6 +157,82 @@
     F=iF;
 }
 //------------------------------------------------------------------------------------------------------
+-(void)selfLoadOnlyStructure:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
+    
+    //Name-----------------------------------------------------------------------------
+    unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
+    int iLen;
+    //---------------------------------------------------------------------------------
+    NSRange Range = { *iCurReadingPos, sizeof(int)};
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+    
+    [pData getBytes:ucBuff range:Range];
+    
+    *iCurReadingPos += iLen*sizeof(unichar);
+    
+    NSString *sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    strUID = [[NSString alloc] initWithString:sValue];
+    //---------------------------------------------------------------------------------
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+    
+    [pData getBytes:ucBuff range:Range];
+    
+    *iCurReadingPos += iLen*sizeof(unichar);
+    
+    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    strName = [[NSString alloc] initWithString:sValue];
+    //---------------------------------------------------------------------------------
+    free(ucBuff);
+    
+    //float value
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&S range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&F range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iIndexIcon range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&m_iDeep range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:&X range:Range];
+    *iCurReadingPos += sizeof(float);
+    
+    Range = NSMakeRange( *iCurReadingPos, sizeof(float));
+    [pData getBytes:&Y range:Range];
+    *iCurReadingPos += sizeof(float);
+    
+    //child string
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    int iCount=0;
+    [pData getBytes:&iCount range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    for (int i=0; i<iCount; i++) {
+        
+        FractalString *FChild=[[FractalString alloc] init];
+                               
+        [FChild selfLoadOnlyStructure:pData ReadPos:iCurReadingPos];
+        FChild->pParent = self;
+        
+        [aStrings addObject:FChild];
+    }
+    
+//======================================================================================
+}
+//------------------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos 
             WithContainer:(StringContainer *)pContainer{
     
@@ -252,13 +340,15 @@
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
             
+            int iCurDeep=iDeep+1;
+
             //child string
             int iCount=[aStrings count];
+            if(iCurDeep>iMaxDeep)iCount=0;
+
             [m_pData appendBytes:&iCount length:sizeof(int)];
-            
-            int iCurDeep=iDeep+1;
-            
-            if(iCurDeep>iMaxDeep){
+                        
+            if(iCurDeep<=iMaxDeep){
                 for (int i=0; i<iCount; i++) {
                     FractalString *FChild=[aStrings objectAtIndex:i];
                     [FChild selfSaveWithOutPoints:m_pData WithVer:iVersion
@@ -341,7 +431,6 @@
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
-
     [aStages release];
     [aStrings release];
     [ArrayPoints release];
