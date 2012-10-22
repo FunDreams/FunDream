@@ -172,7 +172,7 @@
         
         if(m_bStartMove==NO && bMoveIn==YES){
             
-            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObjectDropBox"))];
+            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DropBoxString"))];
 
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                            SET_FLOAT_V(54,@"mWidth"),
@@ -211,9 +211,10 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
+    DEL_CELL(@"DropBoxString");
+    
     m_bStartPush=NO;
     m_bStartMove=NO;
-    DEL_CELL(@"DragObjectDropBox");
 //
 //    if(m_iLayer==layerInterfaceSpace6){
 //        m_bLookTouch=YES;

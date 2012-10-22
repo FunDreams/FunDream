@@ -195,8 +195,6 @@
                       [self SetLayer:m_iLayer+1];
                       [self SetTouch:YES WithLayer:m_iLayerTouch-1];
                       m_bLookTouch=NO;
-                      
-              //        [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
                     }
                 }
 

@@ -73,8 +73,21 @@
         initWithName:@"CurrentCheck" WithParent:pFStringEditor
         WithContainer:self S:iIndexZero F:iIndexZero];
     
+    //для режимов
+    [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:0]];
+    //для текущей полки
     [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:1]];
+//струны на полке
+    FractalString *pFSChelf=[[FractalString alloc]
+            initWithName:@"ChelfStirngs" WithParent:pFStringEditor
+            WithContainer:self S:iIndexZero F:iIndexZero];
 
+    for(int i=0;i<8;i++){
+        NSMutableString *ZeroString = [NSMutableString stringWithString:@"Objects"];
+
+        [pFSChelf->ArrayLinks addObject:ZeroString];
+    }
+/////
     [[FractalString alloc]
         initWithName:@"DropBox" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
 

@@ -404,7 +404,7 @@
 			path = MKStoreKit;
 			sourceTree = "<group>";
 		};
-		18B839241564D74800A0DB6E /* Kernel */ = {
+		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
 				1890164312917AE10027418F /* GameLogicObject.h */,
@@ -454,7 +454,7 @@
 				18E6541916175873009B3E90 /* ObB_DropBox.h */,
 				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
 			);
-			name = Kernel;
+			name = "First Kernel";
 			sourceTree = "<group>";
 		};
 		18D98105152F438C00C9F37A /* forms-iPad */ = {
@@ -482,7 +482,7 @@
 		18E9F5971255DD1600423916 /* objects */ = {
 			isa = PBXGroup;
 			children = (
-				18B839241564D74800A0DB6E /* Kernel */,
+				18B839241564D74800A0DB6E /* First Kernel */,
 				18B60E9F152CCFC800E98973 /* Ob_Shape.h */,
 				18B60EA0152CCFC800E98973 /* Ob_Shape.mm */,
 				183F0625156559C80096AC6C /* ObjectBullets.h */,

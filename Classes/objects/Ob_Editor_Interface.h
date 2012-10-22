@@ -27,6 +27,7 @@
     NSMutableArray *aObPoints;    
     int IndexCheckPoint;
     int m_iMode;
+    int m_iChelf;
     
     DropBoxMng *pInfoFile;
 }

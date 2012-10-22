@@ -16,6 +16,8 @@
 @interface Ob_EmtyPlace : GObject {
 @public
 
+    FractalString *pStrInside;
+
     Vector3D LastPointTouch;
     bool m_bNotPush;
     bool m_bDoubleTouch;
@@ -41,11 +43,10 @@
     Color3D mColorBack;
     bool m_bBack;
     
-    ObjectB_Ob *pObOb;
-    ObB_DropBox *pObObDropBox;
-    FractalString *pStr;
     bool m_bStartMove;
     bool m_bStartPush;
+    
+    int m_iCurIndex;
 }
 
 /** Инициализирует объект **/
@@ -55,8 +56,11 @@
 
 - (void)Proc:(Processor_ex *)pProc;
 
+- (void)SetNameStr:(FractalString *)StrTmp;
+
 - (void)SetEmpty;
 - (void)SetUnPush;
+- (void)Click;
 - (void)SetPush;
 
 @end

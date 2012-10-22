@@ -101,8 +101,6 @@
                 
                 [m_pObjMng->pStringContainer DelString:pInsideString];
             }
-            
-            OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
         }
     }
     else
@@ -122,16 +120,14 @@
 
                         [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
 
-                        OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
                     }
                     else
                     {
-                        ObB_DropBox *DragObjectDropBox = GET_ID_V(@"DragObjectDropBox");
+                        FractalString *DragObjectDropBox = GET_ID_V(@"DropBoxString");
 
                         if(DragObjectDropBox!=nil){
 
-                            [self SetPos:DragObjectDropBox->pString];
-                            OBJECT_PERFORM_SEL(@"DropBox",@"UpdateButt");
+                            [self SetPos:DragObjectDropBox];
                         }
                         
                         [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
@@ -162,7 +158,6 @@ Exit:
                                 WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
 
                     [self SetPos:pNewString];
-                    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
                 }
             }
             else if(m_pCurPosition.y<202){
@@ -174,7 +169,6 @@ Exit:
                         F:m_pObjMng->pStringContainer->iIndexZero];
 
                 [self SetPos:pNewString];
-                OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
             }
         }
     }
@@ -183,6 +177,8 @@ Exit:
     DEL_CELL(@"EmptyOb");
 
     DESTROY_OBJECT(self);
+    
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}

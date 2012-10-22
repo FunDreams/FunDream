@@ -214,7 +214,7 @@
     {
         if(m_bStartMove==NO && bMoveIn==YES){
             
-            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(self,@"DragObject"))];
+            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
 
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                            SET_FLOAT_V(54,@"mWidth"),
@@ -253,7 +253,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
-    PLAY_SOUND(@"drop.wav");
+    if(m_bStartPush==YES)
+        PLAY_SOUND(@"drop.wav");
 
     m_bStartPush=NO;
     m_bStartMove=NO;
@@ -270,7 +271,7 @@
         
         if([pOb Intersect:Point])
         {
-            [m_pObjMng->pStringContainer DelString:pString];
+            [m_pObjMng->pStringContainer DelString:pString];            
         }
         else if(pMode!=0 && *pMode==0)
         {
@@ -300,7 +301,7 @@ Exit:
         [self SetLayer:m_iLayer-1];
         [self SetTouch:YES WithLayer:m_iLayerTouch+1];
         DEL_CELL(@"DragObject");
-        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
 }
 //------------------------------------------------------------------------------------------------------

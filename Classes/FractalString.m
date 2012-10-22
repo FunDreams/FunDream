@@ -16,6 +16,7 @@
     
     aStrings = [[NSMutableArray alloc] init];
     aStages = [[NSMutableArray alloc] init];
+    ArrayLinks = [[NSMutableArray alloc] init];
     
     ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:10];
 
@@ -263,9 +264,7 @@
 
     sValue = [NSString stringWithCharacters:ucBuff length:iLen];
     strName = [[NSString alloc] initWithString:sValue];
-//---------------------------------------------------------------------------------
-    free(ucBuff);
-    
+//---------------------------------------------------------------------------------    
     //float value
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&S range:Range];
@@ -291,6 +290,31 @@
     [pData getBytes:&Y range:Range];
     *iCurReadingPos += sizeof(float);
 
+    
+    //Load link string
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    int iCountLink=0;
+    [pData getBytes:&iCountLink range:Range];
+    *iCurReadingPos += sizeof(int);
+    
+    for (int i=0; i<iCountLink; i++) {
+        
+        NSRange Range = { *iCurReadingPos, sizeof(int)};
+        [pData getBytes:&iLen range:Range];
+        *iCurReadingPos += sizeof(int);
+
+        Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+        [pData getBytes:ucBuff range:Range];
+        *iCurReadingPos += iLen*sizeof(unichar);
+        
+        sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+        NSMutableString *StringInArray = [NSMutableString stringWithString:sValue];
+        
+        [ArrayLinks addObject:StringInArray];
+    }
+    
+    free(ucBuff);
+    
     //child string
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     int iCount=0;
@@ -392,7 +416,21 @@
 
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
-            
+
+            //link string
+            int iCountLink=[ArrayLinks count];
+            [m_pData appendBytes:&iCountLink length:sizeof(int)];
+
+            for (int i=0; i<iCountLink; i++) {
+                
+                NSMutableString *pString=(NSMutableString *)[ArrayLinks objectAtIndex:i];
+                
+                [pString getCharacters:ucBuff];
+                Len=[pString length];
+                [m_pData appendBytes:&Len length:sizeof(int)];
+                [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+            }
+
             //child string
             int iCount=[aStrings count];
             [m_pData appendBytes:&iCount length:sizeof(int)];
@@ -433,6 +471,7 @@
 {
     [aStages release];
     [aStrings release];
+    [ArrayLinks release];
     [ArrayPoints release];
     
     [strUID release];

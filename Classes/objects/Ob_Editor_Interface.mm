@@ -13,6 +13,7 @@
 #import "Ob_B_Slayder.h"
 #import "Ob_Slayder.h"
 #import "ObjectButton.h"
+#import "Ob_EmtyPlace.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -54,7 +55,21 @@
 
     [self Load];
 	[super Start];
-            
+    
+//////////////////подготовка параметров
+    FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
+    
+    if(pStrCheck!=nil){
+        float *FCheck=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
+        m_iMode=(int)(*FCheck);
+        
+        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
+        m_iChelf=(int)(*FChelf);
+    }
+//////////////////
+    
     pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox", nil);
 
     UNFROZE_OBJECT(@"StaticObject",@"Sl1",
@@ -92,16 +107,9 @@
                    SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
 
     Eplace = UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
-                   SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
+                   SET_INT_V(m_iChelf,@"m_iCurrentSelect"),
+                   SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));    
 //===============================режими==============================================
-    FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
-    
-    if(pStrCheck!=nil){
-        float *FCheck=[m_pObjMng->pStringContainer->ArrayPoints
-                   GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
-        m_iMode=(int)(*FCheck);
-    }
-    
         
     pDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
                    SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
@@ -171,8 +179,8 @@
                    SET_VECTOR_V(Vector3DMake(-160,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonUpLoad",
-                   SET_STRING_V(@"Button_From_box_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
+                   SET_STRING_V(@"Button_To_box_Up.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -193,8 +201,17 @@
 //                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
 //                       SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
 
-    [self Update];
     [self UpdateB];
+    
+    
+    Ob_EmtyPlace *pEmtyPlace=[Eplace->m_pChildrenbjectsArr objectAtIndex:m_iChelf];
+    
+    pEmtyPlace->m_bPush=YES;
+    
+    pEmtyPlace->mColor.green=0;
+    pEmtyPlace->mColor.blue=0;
+    
+    [ButtonGroup SetString:pEmtyPlace->pStrInside];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
@@ -560,6 +577,8 @@ EXIT:
     }
     else
     {
+        OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
+
         [pInfoFile Hide];
         [ButtonGroup UpdateButt];
     }

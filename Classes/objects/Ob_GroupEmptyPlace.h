@@ -13,7 +13,8 @@
 
 @interface Ob_GroupEmptyPlace : GObject {
     int m_iNumButton;
-    int m_iCurrentSelect;
+    FractalString *pChelf;
+    float *m_fChelf;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

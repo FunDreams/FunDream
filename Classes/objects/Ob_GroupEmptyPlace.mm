@@ -9,6 +9,7 @@
 #import "Ob_GroupEmptyPlace.h"
 #import "Ob_EmtyPlace.h"
 #import "Ob_GroupButtons.h"
+#import "ObjectB_Ob.h"
 
 @implementation Ob_GroupEmptyPlace
 //------------------------------------------------------------------------------------------------------
@@ -19,7 +20,8 @@
         m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
         m_bHiden=YES;
-        m_iNumButton=8;
+        pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+        m_iNumButton=[pChelf->ArrayLinks count];
     }
     
 	return self;
@@ -29,7 +31,6 @@
     
     for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
         
-        pOb->pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
         [pOb SetEmpty];
     }
 }
@@ -41,6 +42,14 @@
 
 //====//различные параметры=============================================================================
     [m_pObjMng->pMegaTree SetCell:(LINK_INT_V(m_iNumButton,m_strName,@"m_iNumButton"))];
+    
+    FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
+    if(pStrCheck!=nil){
+        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
+        
+        m_fChelf=FChelf;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Check{
@@ -51,28 +60,7 @@
     if(pObTmp!=nil){
         for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr)
         {
-            if(pOb==pObTmp)
-            {
-                m_iCurrentSelect=i;
-                
-                FractalString *StringTmp=pOb->pStr;
-                
-                Ob_GroupButtons *GrButt = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
-
-                if(GrButt!=nil)
-                {
-                    [GrButt SetString:StringTmp];
-                }
-                
-                int *pMode=GET_INT_V(@"m_iMode");
-
-                if(*pMode!=3)
-                {
-                    OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
-                }
-
-                continue;
-            }
+            if(pOb==pObTmp)continue;
             else
             {
                 OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnPush");
@@ -94,32 +82,44 @@
     
     float fOffset=mWidth/2+Step*0.5f;
     bool bPush=NO;
-    
-    for(int i=0;i<m_iNumButton;i++){
-        
-        if(i==0){
-            bPush=YES;
-        }
-        else bPush=NO;
-        
-        ObjectB_Ob *pOb=UNFROZE_OBJECT(@"Ob_EmtyPlace",@"E_Place",
-            SET_BOOL_V(bPush,@"m_bIsPush"),
-            SET_FLOAT_V(54,@"mWidth"),
-            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-            SET_STRING_V(NAME(self),@"m_strNameObject"),
-            SET_STRING_V(@"Check",@"m_strNameStage"),
-            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-            SET_VECTOR_V(Vector3DMake(m_pCurPosition.x-fOffset+i*Step,m_pCurPosition.y,0)
-                         ,@"m_pCurPosition"));
 
-        [m_pChildrenbjectsArr addObject:pOb];
-    }    
+    if(pChelf!=nil){
+        for(int i=0;i<m_iNumButton;i++){
+
+            Ob_EmtyPlace *pObTmp=UNFROZE_OBJECT(@"Ob_EmtyPlace",@"E_Place",
+                SET_BOOL_V(bPush,@"m_bIsPush"),
+                SET_FLOAT_V(54,@"mWidth"),
+                SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                SET_STRING_V(NAME(self),@"m_strNameObject"),
+                SET_STRING_V(@"Check",@"m_strNameStage"),
+                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                SET_INT_V(i,@"m_iCurIndex"),
+                SET_VECTOR_V(Vector3DMake(m_pCurPosition.x-fOffset+i*Step,m_pCurPosition.y,0)
+                             ,@"m_pCurPosition"));
+
+            [m_pChildrenbjectsArr addObject:pObTmp];
+            
+            NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:i];
+            FractalString *pStrTmp = [m_pObjMng->pStringContainer GetString:Name];
+            
+            if(pStrTmp!=nil){
+                pObTmp->pStrInside=pStrTmp;
+                pObTmp->mTextureId=pStrTmp->iIndexIcon;
+            }
+            else {
+                [Name setString:@""];
+                pObTmp->pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
+                pObTmp->mTextureId = -1;
+            }
+            
+            if(i==*m_fChelf)[pObTmp SetPush];
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
 	[super Start];
-    [self UpdateButt];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}

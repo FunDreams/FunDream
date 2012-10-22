@@ -103,6 +103,7 @@
             SET_BOOL_V(YES,@"m_bDrag"),
             SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
         
+        GET_TEXTURE(pFrStr->iIndexIcon, @"ButtonOb.png");
         pOb->pString=pFrStr;
 
         [m_pChildrenbjectsArr addObject:pOb];

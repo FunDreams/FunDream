@@ -21,7 +21,7 @@
 
         m_bHiden=YES;
         bBusy=NO;
-        [self DownLoadInfoFile];
+   //     [self DownLoadInfoFile];
     }
 
     return self;
@@ -273,16 +273,6 @@ Repeate2:;
             if([pFstrTmp->aStrings count]==0){
                 
                 [m_pObjMng->pStringContainer DelString:pFstrTmp];
-//                for(int j=0;j<[pStrDropBox->aStrings count];j++){
-//                    
-//                    FractalString *pFstrTmp2=[pStrDropBox->aStrings objectAtIndex:j];
-//
-//                    if([pFstrTmp->strUID isEqualToString:pFstrTmp2->strUID]){
-//                        
-//                        [pStrDropBox->aStrings removeObjectAtIndex:j];
-//                        break;
-//                    }
-//                }
             }
             else{//элемент не пуст
                 
@@ -306,7 +296,12 @@ Repeate2:;
     
     [pArrayLink release];
     if(bNeedUpload==YES)[m_pObjMng->pStringContainer SaveInfoStringToDropBox];
-    [self UpdateButt];
+    
+    int *pMode=GET_INT_V(@"m_iMode");
+
+    if(pMode!=0 && *pMode==3){
+        [self UpdateButt];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Save{}

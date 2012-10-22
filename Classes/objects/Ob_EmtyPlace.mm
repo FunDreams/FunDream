@@ -11,6 +11,7 @@
 #import "Ob_IconDrag.h"
 #import "ObjectB_Ob.h"
 #import "ObB_DropBox.h"
+#import "Ob_GroupButtons.h"
 
 @implementation Ob_EmtyPlace
 //------------------------------------------------------------------------------------------------------
@@ -48,7 +49,7 @@
     
     mColorBack = Color3DMake(0, 1, 0, 1);
     
-    pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
+    pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
 
     m_bBack=NO;
 }
@@ -82,6 +83,9 @@
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bLookTouch,m_strName,@"m_bLookTouch")];
 
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_Disable,m_strName,@"m_Disable")];
+    
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iCurIndex,m_strName,@"m_iCurIndex")];
+
 
 //    pProc = [self START_QUEUE:@"Proc"];
 //    
@@ -91,9 +95,9 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-	
+
     if(m_bDimFromTexture){GET_DIM_FROM_TEXTURE(m_pNameTexture);}
-    
+
 	[super Start];
     [self SetTouch:YES];
 
@@ -101,17 +105,26 @@
     if(m_bDimMirrorY==YES){m_pCurScale.y=-m_pCurScale.y;}
 
 	m_vStartPos=m_pCurPosition;
-    
+
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
-    
+
     if(m_bIsPush)
         [self SetPush];
+
+    FractalString *pStrChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+    if(pStrChelf!=nil){
+
+        NSMutableString *pName = [pStrChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+        FractalString *pCurStr = [m_pObjMng->pStringContainer GetString:pName];
+        pStrInside=pCurStr;
+    }
+    else pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
-    
+
     m_bPush=NO;
     
     mColor.green=1;
@@ -124,6 +137,17 @@
     
     mColor.green=0;
     mColor.blue=0;
+    
+    
+    Ob_GroupButtons *GrButt = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
+    
+    if(GrButt!=nil)
+    {
+        [GrButt SetString:pStrInside];
+    }
+    
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
+    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DoubleTouch:(Processor_ex *)pProc{
@@ -135,7 +159,7 @@
 - (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    m_bStartPush=YES;
+    m_bStartPush=YES;    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -151,11 +175,11 @@
                                         SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                                         SET_INT_V(mTextureId,@"mTextureId"));
 
-        pOb->pInsideString=pStr;
+        pOb->pInsideString=pStrInside;
         m_bStartMove=YES;
 
-        if(mTextureId!=-1 && pObOb!=nil){
-            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pObOb,@"DragObject"))];
+        if(mTextureId!=-1 && pStrInside!=nil){
+            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pStrInside,@"DragObject"))];
             [m_pObjMng->pMegaTree SetCell:(SET_BOOL_V(YES,@"FromPlace"))];
             
 
@@ -165,10 +189,6 @@
         }
         else [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pOb,@"EmptyOb"))];
     }
-
-//    [self SetPush];
-//    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
-//    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
 }
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -177,52 +197,84 @@
 //    m_bStartMove=NO;
 //}
 //------------------------------------------------------------------------------------------------------
+- (void)SetNameStr:(FractalString *)StrTmp{
+    
+    FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+
+    if(pChelf!=nil){
+
+        StrTmp->iIndexIcon=mTextureId;
+        
+        NSMutableString *pName = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+        [pName setString:StrTmp->strUID];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SetEmpty{
-    pStr = [m_pObjMng->pStringContainer GetString:@"Objects"];
+    FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+    
+    if(pChelf!=nil){
+        
+        NSMutableString *pName = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+        [pName setString:@"Objects"];
+    }
+
+    pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
+    pStrInside->iIndexIcon=0;
     mTextureId=-1;
-    pObOb=nil;
-    pObObDropBox=nil;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)Click{
+    if(m_bPush==NO)PLAY_SOUND(@"chekbox1.wav");
+    
+    FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
+    if(pStrCheck!=nil){
+        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
+        
+        (*FChelf)=(float)m_iCurIndex;
+    }
+    
+    [self SetPush];
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    FractalString *DragObjectDropBoxStr = GET_ID_V(@"DropBoxString");
+    FractalString *pObObTmpStr = GET_ID_V(@"DragObject");
 
-    ObB_DropBox *DragObjectDropBox = GET_ID_V(@"DragObjectDropBox");
     bool *bFromPlace=GET_BOOL_V(@"FromPlace");
-    ObjectB_Ob *pObObTmp = GET_ID_V(@"DragObject");
     GObject *pObObE = GET_ID_V(@"EmptyOb");
     int *pMode=GET_INT_V(@"m_iMode");
 
-    if(DragObjectDropBox!=nil)
+    if(DragObjectDropBoxStr!=nil)
     {
-        pObObDropBox=DragObjectDropBox;
-        pStr = DragObjectDropBox->pString;
-        mTextureId=DragObjectDropBox->mTextureId;
+        pStrInside = DragObjectDropBoxStr;
+        mTextureId=DragObjectDropBoxStr->iIndexIcon;
     }
     else
     {
-        if(pObObE==nil && pObObTmp==nil)
+        if(pObObE==nil && pObObTmpStr==nil)
         {
-            [self SetPush];
-            
-            [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObPushEmPlace")];
-            OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-            
-            m_bStartPush=NO;
-            m_bStartMove=NO;
-            return;
+            goto FINISH;
         }
-        else if(pObObTmp!=nil && bFromPlace && *bFromPlace==YES){
-            pObOb=pObObTmp;
-            pStr = pObObTmp->pString;
-            mTextureId=pObObTmp->mTextureId;
+        else if(pObObTmpStr!=nil && bFromPlace && *bFromPlace==YES){
+            pStrInside = pObObTmpStr;
+            mTextureId=pObObTmpStr->iIndexIcon;
+            
+            [self SetNameStr:pStrInside];
+            
             DEL_CELL(@"DragObject");
             DEL_CELL(@"FromPlace");
         }
-        else if(pObObTmp!=nil && pMode!=0 && (*pMode)!=0){
+        else if(pObObTmpStr!=nil && pMode!=0 && (*pMode)!=0){
 
-            pObOb=pObObTmp;
-            pStr = pObObTmp->pString;
-            mTextureId=pObObTmp->mTextureId;
+            pStrInside = pObObTmpStr;
+            mTextureId=pObObTmpStr->iIndexIcon;
+            
+            [self SetNameStr:pStrInside];
+            
             DEL_CELL(@"DragObject");
         }
         else if(pObObE!=nil){
@@ -231,6 +283,9 @@
             DEL_CELL(@"EmptyOb");
         }
     }
+
+FINISH:
+    if(m_bStartPush==YES)[self Click];
     
     m_bStartPush=NO;
     m_bStartMove=NO;
@@ -238,8 +293,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    m_bStartPush=NO;
-    m_bStartMove=NO;
+//    m_bStartPush=NO;
+//    m_bStartMove=NO;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{

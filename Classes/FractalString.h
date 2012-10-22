@@ -18,7 +18,8 @@
     int m_iDeep;//вложенность
 
     NSMutableArray *aStages;//Состояния
-    NSMutableArray *aStrings;//дочерние струны
+    NSMutableArray *aStrings;//дочерние струны (для структуры хранения)
+    NSMutableArray *ArrayLinks;//массив ссылок (имена струн).
     
     int S;//начальная граница параметра
     FunArrayDataIndexes *ArrayPoints;//ссылки на значения параметров
