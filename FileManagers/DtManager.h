@@ -127,4 +127,7 @@
 -(void)DelFileFromDropBox:(NSString*)destPath;//удаления файла с хранилища
 //-(void)Link;//подключение акка
 
+/** пересоздание клиента для манипуляции данных в DropBox'e **/
+-(void)relinkResClient;
+
 @end

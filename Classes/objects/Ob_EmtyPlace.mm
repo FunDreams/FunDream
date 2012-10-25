@@ -178,7 +178,10 @@
         pOb->pInsideString=pStrInside;
         m_bStartMove=YES;
 
-        if(mTextureId!=-1 && pStrInside!=nil){
+        int TmpIndexTexture=-1;
+        GET_TEXTURE(TmpIndexTexture, @"EmptyPlace.png");
+
+        if(mTextureId!=TmpIndexTexture && pStrInside!=nil){
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pStrInside,@"DragObject"))];
             [m_pObjMng->pMegaTree SetCell:(SET_BOOL_V(YES,@"FromPlace"))];
             
@@ -220,8 +223,8 @@
     }
 
     pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
-    pStrInside->iIndexIcon=0;
-    mTextureId=-1;
+    GET_TEXTURE(mTextureId, @"EmptyPlace.png");
+    pStrInside->iIndexIcon=mTextureId;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Click{

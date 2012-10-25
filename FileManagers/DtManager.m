@@ -19,7 +19,7 @@
     {        
         restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
         restClient.delegate = self;
-        [restClient loadMetadata:@"/"];
+//        [restClient loadMetadata:@"/"];
 
         m_sFullFileNameDropBox=[[NSMutableString alloc] initWithString:sFileName];
         
@@ -55,7 +55,7 @@
     {
         restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
         restClient.delegate = self;
-        [restClient loadMetadata:@"/"];
+//        [restClient loadMetadata:@"/"];
 
         m_sFullFileNameDropBox=[[NSMutableString alloc] initWithString:sFileName];
 
@@ -82,6 +82,14 @@
     }
     
     return self;
+}
+//--------------------------------------------------------
+-(void)relinkResClient{
+    
+    if(restClient!=nil)[restClient release];
+    
+    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+    restClient.delegate = self;
 }
 //--------------------------------------------------------
 -(void)LoadMetadata:(NSString *)Paht
@@ -213,12 +221,13 @@
     }
 
     m_pMetaData=[metadata retain];
-    if (metadata.isDirectory) {
-        NSLog(@"Folder '%@' contains:", metadata.path);
-        for (DBMetadata *file in metadata.contents) {
-            NSLog(@"\t%@", file.filename);
-        }
-    }
+    NSLog(@"Load MetaData Success");
+//    if (metadata.isDirectory) {
+//        NSLog(@"Folder '%@' contains:", metadata.path);
+//        for (DBMetadata *file in metadata.contents) {
+//            NSLog(@"\t%@", file.filename);
+//        }
+//    }
     
     SEL TmpSel=NSSelectorFromString(@"loadedMetadata");
     if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])

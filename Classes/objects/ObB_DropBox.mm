@@ -158,7 +158,7 @@
           
         m_bStartPush=YES;
 
-        [m_pParent PlaySound:m_strNameSound];
+        PLAY_SOUND(m_strNameSound);
 
         OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
         [self SetPush];

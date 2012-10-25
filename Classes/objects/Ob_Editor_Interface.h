@@ -28,6 +28,7 @@
     int IndexCheckPoint;
     int m_iMode;
     int m_iChelf;
+    GObject *PrBar;
     
     DropBoxMng *pInfoFile;
 }
@@ -55,6 +56,10 @@
 - (void)CheckMove;
 - (void)CheckCopy;
 - (void)CheckLink;
+
+- (void)SynhDropBox;
+- (void)SetStatusBar;
+- (void)DelStatusBar;
 
 -(void)dealloc;
     

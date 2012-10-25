@@ -20,6 +20,7 @@
 		182786E0157681F0002145F7 /* DropboxSDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 182786DF157681F0002145F7 /* DropboxSDK.framework */; };
 		1827F8BD15FE314200282A00 /* ObjectB_Ob.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */; };
 		1827F8C015FF34FF00282A00 /* Ob_GroupEmptyPlace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */; };
+		182BF1301636A6030051A30E /* Ob_ProgressBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */; };
 		182C14A2140CD60000D6E732 /* ObjectWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182C14A0140CD60000D6E732 /* ObjectWorld.mm */; };
 		182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */; };
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
@@ -135,6 +136,8 @@
 		1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectB_Ob.mm; path = objects/ObjectB_Ob.mm; sourceTree = "<group>"; };
 		1827F8BE15FF34FF00282A00 /* Ob_GroupEmptyPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_GroupEmptyPlace.h; path = objects/Ob_GroupEmptyPlace.h; sourceTree = "<group>"; };
 		1827F8BF15FF34FF00282A00 /* Ob_GroupEmptyPlace.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_GroupEmptyPlace.mm; path = objects/Ob_GroupEmptyPlace.mm; sourceTree = "<group>"; };
+		182BF12E1636A6000051A30E /* Ob_ProgressBar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ProgressBar.h; path = objects/Ob_ProgressBar.h; sourceTree = "<group>"; };
+		182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_ProgressBar.mm; path = objects/Ob_ProgressBar.mm; sourceTree = "<group>"; };
 		182C14A0140CD60000D6E732 /* ObjectWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectWorld.mm; path = objects/ObjectWorld.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182C14A1140CD60000D6E732 /* ObjectWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectWorld.h; path = objects/ObjectWorld.h; sourceTree = "<group>"; };
 		182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_NumIndicator.h; path = objects/Ob_NumIndicator.h; sourceTree = "<group>"; };
@@ -407,6 +410,8 @@
 		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				182BF12E1636A6000051A30E /* Ob_ProgressBar.h */,
+				182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */,
 				1890164312917AE10027418F /* GameLogicObject.h */,
 				1859FF781295BEEB00898BFE /* GameLogicObject.mm */,
 				1824893C15CED8AC006DABB3 /* Ob_Editor_Num.h */,
@@ -752,6 +757,7 @@
 				1827F8C015FF34FF00282A00 /* Ob_GroupEmptyPlace.mm in Sources */,
 				18E654181613679F009B3E90 /* DropBoxMng.m in Sources */,
 				18E6541B16175879009B3E90 /* ObB_DropBox.mm in Sources */,
+				182BF1301636A6030051A30E /* Ob_ProgressBar.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

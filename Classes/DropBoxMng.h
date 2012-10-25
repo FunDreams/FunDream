@@ -11,13 +11,15 @@
 @interface DropBoxMng : GObject{
 @public
     CDataManager *pDataManager;
-    bool bBusy;
     
     FractalString *pDropBoxString;
     int m_iCurrentSelect;
     
     bool bMetaDataLoaded;
     bool bInfoLoaded;
+    bool bNeedUpload;
+    bool bDropBoxWork;
+    bool bError;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -25,5 +27,7 @@
 - (void)Hide;
 - (void)Show;
 -(void)DownLoadInfoFile;
+-(void)SaveInfoStringToDropBox;
+
 
 @end

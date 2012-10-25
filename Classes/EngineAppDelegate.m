@@ -94,11 +94,16 @@
     m_flastTime = CFAbsoluteTimeGetCurrent();
 
 #ifdef EDITOR
-    if (![[DBSession sharedSession] isLinked])
-		[[DBSession sharedSession] linkFromController:m_pRootViewController];
- //   else [[DBSession sharedSession] unlinkAll];
+    [self LinkSesstion];
 #endif
 //	[MKStoreManager sharedManager];
+}
+//----------------------------------------------------------------------------------------------------
+- (void)LinkSesstion{
+    
+    if (![[DBSession sharedSession] isLinked])
+		[[DBSession sharedSession] linkFromController:m_pRootViewController];
+    //   else [[DBSession sharedSession] unlinkAll];
 }
 //main timer------------------------------------------------------------------------------------------
 - (void)OnTimer{
@@ -207,9 +212,17 @@
 	if ([[DBSession sharedSession] handleOpenURL:url]) {
 		if ([[DBSession sharedSession] isLinked]) {
             NSLog(@"Link Success");
-			//[navigationController pushViewController:rootViewController.photoViewController animated:YES];
-		}
-		return YES;
+            
+            GObject *pOb = [m_pRootViewController->m_pMainController->m_pObjMng GetObjectByName:@"DropBox"];
+            SEL TmpSel=NSSelectorFromString(@"ReLinkDataManager");
+
+            if([pOb respondsToSelector:TmpSel])
+                [pOb performSelector:TmpSel];
+            
+            [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer ReLinkDataManager];
+            
+            return YES;
+        }
 	}
 	
 	return NO;

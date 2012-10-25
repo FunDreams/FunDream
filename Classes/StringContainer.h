@@ -45,8 +45,8 @@
 -(NSString *)GetRndName;
 
 -(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion;
--(void)SaveInfoStringToDropBox;
 
+-(void)ReLinkDataManager;
 -(bool)LoadContainer;
 -(void)SaveContainer;
 -(void)Synhronize;

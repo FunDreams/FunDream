@@ -61,6 +61,15 @@
     return self;
 }
 //------------------------------------------------------------------------------------------------------
+-(void)ReLinkDataManager{
+    
+    for (int i=0; i<[ArrayDumpFiles count]; i++) {
+
+        CDataManager *pDataManager=[ArrayDumpFiles objectAtIndex:i];
+        [pDataManager relinkResClient];
+    }
+}
+//------------------------------------------------------------------------------------------------------
 -(void)SetTemplateString{
 
     FractalString *pFStringZero=[[FractalString alloc]
@@ -80,8 +89,8 @@
 //струны на полке
     FractalString *pFSChelf=[[FractalString alloc]
             initWithName:@"ChelfStirngs" WithParent:pFStringEditor
-            WithContainer:self S:iIndexZero F:iIndexZero];
-
+            WithContainer:self S:iIndexZero F:iIndexZero];    
+    
     for(int i=0;i<8;i++){
         NSMutableString *ZeroString = [NSMutableString stringWithString:@"Objects"];
 
@@ -93,6 +102,10 @@
 
     pFStringObjects=[[FractalString alloc]
         initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
+    
+    TextureContainer *pNum=[m_pObjMng->m_pParent->m_pTextureList objectForKey:@"EmptyPlace.png"];
+    pFStringObjects->iIndexIcon=pNum->m_iTextureId;
+    
 
     [[FractalString alloc]
             initWithName:@"Ob1" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
@@ -201,6 +214,7 @@ repeate:
             break;
                 
             default:
+                Rez=NO;
                 break;
         }
     }
@@ -223,29 +237,6 @@ repeate:
     [ArrayPoints selfSave:pDataCurManager->m_pDataDmp];
 
     [pDataCurManager Save];
-}
-//------------------------------------------------------------------------------------------------------
--(void)SaveInfoStringToDropBox{
-
-    DropBoxMng *pMng = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
-
-    if(pMng->bBusy==NO){
-        CDataManager* pDataCurManager = pMng->pDataManager;
-        pMng->bBusy=YES;
-
-        FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
-        
-        if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
-            
-            [pDataCurManager Clear];
-            
-            [Str selfSaveWithOutPoints:pDataCurManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
-            
-            [pDataCurManager Save];
-            
-            [pDataCurManager UpLoadWithName:@"Info"];
-        }
-    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion{

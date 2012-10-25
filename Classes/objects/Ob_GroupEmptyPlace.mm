@@ -21,7 +21,9 @@
         m_iLayerTouch=layerTouch_0;//слой касания
         m_bHiden=YES;
         pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
-        m_iNumButton=[pChelf->ArrayLinks count];
+        
+        if(pChelf!=nil)
+            m_iNumButton=[pChelf->ArrayLinks count];
     }
     
 	return self;
@@ -107,9 +109,9 @@
                 pObTmp->mTextureId=pStrTmp->iIndexIcon;
             }
             else {
-                [Name setString:@""];
+                [Name setString:@"Objects"];
                 pObTmp->pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
-                pObTmp->mTextureId = -1;
+                GET_TEXTURE(pObTmp->mTextureId, @"EmptyPlace.png");
             }
             
             if(i==*m_fChelf)[pObTmp SetPush];

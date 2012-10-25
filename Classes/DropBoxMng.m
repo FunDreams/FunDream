@@ -20,11 +20,18 @@
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
 
         m_bHiden=YES;
-        bBusy=NO;
-   //     [self DownLoadInfoFile];
+        bNeedUpload=NO;
+        bDropBoxWork=NO;
+
+        [self DownLoadInfoFile];
     }
 
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)ReLinkDataManager{
+    
+    [pDataManager relinkResClient];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -55,12 +62,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-    
-    Processor_ex *pProc = [self START_QUEUE:@"Pause"];
-        ASSIGN_STAGE(@"Idle", @"Idle:",nil)
-        ASSIGN_STAGE(@"Pause",@"Pause:",SET_INT_V(1000,@"TimeBaseDelay"));
-    [self END_QUEUE:pProc name:@"Pause"];
 
+    [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(bNeedUpload,@"bNeedUpload"))];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Hide{
@@ -102,18 +105,18 @@
     
         FractalString *pFrStr = [pDropBoxString->aStrings objectAtIndex:i];
         ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
-                           SET_COLOR_V(pColorBack,@"mColorBack"),
-                           SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
-                           SET_STRING_V(@"ButtonOb.png",@"m_UP"),
-                           SET_FLOAT_V(54,@"mWidth"),
-                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                           SET_BOOL_V(YES,@"m_bLookTouch"),
-                           SET_INT_V(2,@"m_iType"),
-                           SET_STRING_V(NAME(self),@"m_strNameObject"),
-                           SET_STRING_V(@"Check",@"m_strNameStage"),
-                           SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                           SET_BOOL_V(YES,@"m_bDrag"),
-                           SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
+                       SET_COLOR_V(pColorBack,@"mColorBack"),
+                       SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+                       SET_STRING_V(@"ButtonOb.png",@"m_UP"),
+                       SET_FLOAT_V(54,@"mWidth"),
+                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                       SET_BOOL_V(YES,@"m_bLookTouch"),
+                       SET_INT_V(2,@"m_iType"),
+                       SET_STRING_V(NAME(self),@"m_strNameObject"),
+                       SET_STRING_V(@"Check",@"m_strNameStage"),
+                       SET_STRING_V(@"take.wav", @"m_strNameSound"),
+                       SET_BOOL_V(YES,@"m_bDrag"),
+                       SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
         
         pOb->pString=pFrStr;
 
@@ -131,31 +134,51 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)DownLoadInfoFile{
-    
-    [pDataManager DownLoad];
-    
-    bMetaDataLoaded=NO;
-    bInfoLoaded=NO;
+
+    if(bDropBoxWork==NO){
+        
+        [pDataManager LoadMetadata:@"/"];
+        [pDataManager DownLoad];
+        
+        bMetaDataLoaded=NO;
+        bInfoLoaded=NO;
+        bError=NO;
+        bDropBoxWork=YES;
+    }
 }
-//------------------------------------------------------------------------------------------------------
--(void)loadFileFailedWithError{}
 //------------------------------------------------------------------------------------------------------
 -(void)uploadedFile{
     
-    SET_STAGE_EX(NAME(self), @"Pause", @"Pause");
+    bDropBoxWork=NO;
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)uploadFileFailedWithError{
     SET_STAGE_EX(NAME(self), @"Pause", @"Pause");
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
--(void)loadMetadataFailedWithError{}
+-(void)loadFileFailedWithError{
+    bError=YES;
+    bDropBoxWork=NO;
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+}
+//------------------------------------------------------------------------------------------------------
+-(void)loadMetadataFailedWithError{
+    bError=YES;
+    bDropBoxWork=NO;
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+}
 //------------------------------------------------------------------------------------------------------
 -(void)loadedMetadata{
     bMetaDataLoaded=YES;
     
     if(bInfoLoaded==YES && bMetaDataLoaded==YES)
         [self LoadAndSyns];
+    
+    if(bError==YES)bDropBoxWork=NO;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedFile{
@@ -163,6 +186,8 @@
     
     if(bInfoLoaded==YES && bMetaDataLoaded==YES)
         [self LoadAndSyns];
+    
+    if(bError==YES)bDropBoxWork=NO;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAndSyns{
@@ -171,11 +196,11 @@
     bMetaDataLoaded=NO;
     
     int ReadPos=0;
-    bool bNeedUpload;
 
     FractalString *pFstrRez = [[FractalString alloc] init];
     FractalString *pFstr = [[FractalString alloc] init];
-    
+        
+    [pDataManager Load];
     [pFstr selfLoadOnlyStructure:pDataManager->m_pDataDmp ReadPos:&ReadPos];
     //meta data to array-------------------------------------------------------------
     NSMutableArray *pArray=[[NSMutableArray alloc] init];
@@ -191,7 +216,7 @@ Repeate:;
     int iCount=[pFstr->aStrings count];
     int iCountInMetadata=[pArray count];
 
-    for(int i=0;i<iCountInMetadata;i++){
+    for(int i=0;i<iCountInMetadata;i++){//ищем одинаковые
 
         NSString *folderName = [pArray objectAtIndex:i];
 
@@ -236,7 +261,7 @@ Repeate:;
     NSMutableArray * pArrayLink=[[NSMutableArray alloc] init];
     
     if(pStrDropBox!=nil){
-        for (int i=0; i<[pStrDropBox->aStrings count]; i++) {
+        for (int i=0; i<[pStrDropBox->aStrings count]; i++){
             
             FractalString *pChild=[pStrDropBox->aStrings objectAtIndex:i];
             [pArrayLink addObject:pChild];
@@ -244,7 +269,7 @@ Repeate:;
     }
 
 Repeate2:;
-    for(int i=0;i<[pArrayLink count];i++){
+    for(int i=0;i<[pArrayLink count];i++){//синхронизируем со струной DropBox
         
         FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
@@ -254,6 +279,9 @@ Repeate2:;
 
             if([pFstrTmp->strUID isEqualToString:pFstrTmp2->strUID]){
 
+                pFstrTmp->X=pFstrTmp2->X;
+                pFstrTmp->Y=pFstrTmp2->Y;
+                
                 [pArrayLink removeObjectAtIndex:i];
                 [pFstrRez->aStrings removeObjectAtIndex:j];
                 goto Repeate2;
@@ -295,22 +323,42 @@ Repeate2:;
     }
     
     [pArrayLink release];
-    if(bNeedUpload==YES)[m_pObjMng->pStringContainer SaveInfoStringToDropBox];
     
-    int *pMode=GET_INT_V(@"m_iMode");
+    bDropBoxWork=NO;
+    
 
-    if(pMode!=0 && *pMode==3){
-        [self UpdateButt];
+//    if(bNeedUpload==YES)[m_pObjMng->pStringContainer SaveInfoStringToDropBox];
+//    
+//    int *pMode=GET_INT_V(@"m_iMode");
+//
+//    if(pMode!=0 && *pMode==3){
+//        [self UpdateButt];
+//    }
+
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+}
+//------------------------------------------------------------------------------------------------------
+-(void)SaveInfoStringToDropBox{
+    
+    bDropBoxWork=YES;
+    
+    FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+    
+    if(Str!=nil && pDataManager->m_pDataDmp!=nil){
+        
+        [pDataManager Clear];
+        
+        [Str selfSaveWithOutPoints:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
+        
+        [pDataManager Save];
+        
+        [pDataManager UpLoadWithName:@"Info"];
     }
+    
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Save{}
-//------------------------------------------------------------------------------------------------------
-- (void)Pause:(Processor_ex *)pProc{
-    
-    bBusy=NO;
-    NEXT_STAGE;
-}
 //------------------------------------------------------------------------------------------------------
 -(void)dealloc{
     [pDataManager release];

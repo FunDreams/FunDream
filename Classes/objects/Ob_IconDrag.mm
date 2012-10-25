@@ -71,6 +71,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndObject{
 
+    PLAY_SOUND(@"drop.wav");
+    
     int *pMode=GET_INT_V(@"m_iMode");
     GObject *pObTash=[m_pObjMng GetObjectByName:@"ButtonTach"];
 
@@ -91,7 +93,14 @@
             {                
                 //del childs
                 [m_pObjMng->pStringContainer DelChilds:pInsideString];
-                [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
+                
+                bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
+                
+                if(pNeedUpload!=0){
+                    *pNeedUpload=YES;
+                }
+
+  //              [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
             }
             else
             {
@@ -118,8 +127,11 @@
                         
                         [m_pObjMng->pStringContainer SaveStringToDropBox:pNewString Version:1];
 
-                        [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
-
+                        bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
+                        
+                        if(pNeedUpload!=0){
+                            *pNeedUpload=YES;
+                        }
                     }
                     else
                     {
@@ -130,7 +142,11 @@
                             [self SetPos:DragObjectDropBox];
                         }
                         
-                        [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
+                        bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
+                        
+                        if(pNeedUpload!=0){
+                            *pNeedUpload=YES;
+                        }
                     }
                 }
             }

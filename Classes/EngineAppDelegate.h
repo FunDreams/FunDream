@@ -41,6 +41,8 @@
 - (void)applicationWillResignActive:(UIApplication *)application;
 - (void)applicationWillTerminate:(UIApplication *)application;
 
+- (void)LinkSesstion;
+
 @property (nonatomic, retain) IBOutlet UIWindow *window;
 @property (nonatomic, retain) IBOutlet RootViewController *m_pRootViewController;
 

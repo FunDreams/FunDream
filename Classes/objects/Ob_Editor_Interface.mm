@@ -110,23 +110,23 @@
                    SET_INT_V(m_iChelf,@"m_iCurrentSelect"),
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));    
 //===============================режими==============================================
-        
     pDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_STRING_V(@"Button_DropBox.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_DropBox.png",@"m_UP"),
+                   SET_FLOAT_V(46,@"mWidth"),
+                   SET_FLOAT_V(46*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V((m_iMode==3)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
+                   SET_BOOL_V(YES,@"m_bBack"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"SetDropBox",@"m_strNameStage"),
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
-                   SET_STRING_V(@"ButtonPoint_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonPoint_Up.png",@"m_UP"),
+                   SET_STRING_V(@"Button_Move.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_Move.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -139,8 +139,8 @@
                    SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
+                   SET_STRING_V(@"Button_Copy.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_Copy.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -153,8 +153,8 @@
                    SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
-                   SET_STRING_V(@"ButtonTime.png",@"m_DOWN"),
-                   SET_STRING_V(@"ButtonTime.png",@"m_UP"),
+                   SET_STRING_V(@"Button_Link.png",@"m_DOWN"),
+                   SET_STRING_V(@"Button_Link.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -167,29 +167,17 @@
                    SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
     
 //===================================================================================
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonDownLoad",
-                   SET_STRING_V(@"Button_From_box_Down.png",@"m_DOWN"),
-                   SET_STRING_V(@"Button_From_box_Down.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                   SET_STRING_V(@"DownLoad",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-160,295,0),@"m_pCurPosition"));
-
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonUpLoad",
-                   SET_STRING_V(@"Button_To_box_Up.png",@"m_DOWN"),
-                   SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                   SET_STRING_V(@"UpLoad",@"m_strNameStage"),
-                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
-
-
+//    UNFROZE_OBJECT(@"ObjectButton",@"ButtonUpLoad",
+//                   SET_STRING_V(@"Button_To_box_Up.png",@"m_DOWN"),
+//                   SET_STRING_V(@"Button_To_box_Up.png",@"m_UP"),
+//                   SET_FLOAT_V(54,@"mWidth"),
+//                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+//                   SET_BOOL_V(YES,@"m_bLookTouch"),
+//                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+//                   SET_STRING_V(@"UpLoad",@"m_strNameStage"),
+//                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+//                   SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+    
 //        UNFROZE_OBJECT(@"ObjectButton",@"ButtonCreateOb",
 //                       SET_STRING_V(@"ButtonCreate.png",@"m_DOWN"),
 //                       SET_STRING_V(@"ButtonCreate.png",@"m_UP"),
@@ -204,14 +192,17 @@
     [self UpdateB];
     
     
-    Ob_EmtyPlace *pEmtyPlace=[Eplace->m_pChildrenbjectsArr objectAtIndex:m_iChelf];
+    if([Eplace->m_pChildrenbjectsArr count]>0){
+        
+        Ob_EmtyPlace *pEmtyPlace=[Eplace->m_pChildrenbjectsArr objectAtIndex:m_iChelf];
     
-    pEmtyPlace->m_bPush=YES;
-    
-    pEmtyPlace->mColor.green=0;
-    pEmtyPlace->mColor.blue=0;
-    
-    [ButtonGroup SetString:pEmtyPlace->pStrInside];
+        pEmtyPlace->m_bPush=YES;
+        
+        pEmtyPlace->mColor.green=0;
+        pEmtyPlace->mColor.blue=0;
+        
+        [ButtonGroup SetString:pEmtyPlace->pStrInside];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
@@ -263,7 +254,11 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetDropBox{
-    
+        
+    if (![[DBSession sharedSession] isLinked])
+		[[DBSession sharedSession] linkFromController:m_pObjMng->m_pParent->m_pRootViewController];
+    else OBJECT_PERFORM_SEL(@"DropBox", @"DownLoadInfoFile");
+
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     float *FCheck=[m_pObjMng->pStringContainer->ArrayPoints
                    GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
@@ -274,7 +269,7 @@
     OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
     OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
 
-    m_iMode=3;//DropBox    
+    m_iMode=3;//DropBox
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -565,21 +560,69 @@ EXIT:
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Save{
-    [m_pObjMng->pStringContainer SaveContainer];
+//    [m_pObjMng->pStringContainer SaveContainer];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetStatusBar{
+    if(PrBar==nil)
+        PrBar =  CREATE_NEW_OBJECT(@"Ob_ProgressBar",@"Progress",nil);
+}
+//------------------------------------------------------------------------------------------------------
+- (void)DelStatusBar{
+    
+    if(PrBar!=nil)
+    {
+        DESTROY_OBJECT(PrBar);
+        PrBar=nil;
+    }
+}                 
+//------------------------------------------------------------------------------------------------------
+- (void)SynhDropBox{
+    
+    [pInfoFile SaveInfoStringToDropBox];
+    pInfoFile->bNeedUpload=NO;
+    [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
     
+    int *pMode=GET_INT_V(@"m_iMode");
+    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonSynh"]);
+
+    if(pMode!=0 && *pMode==3){
+
+    if(pInfoFile->bNeedUpload==YES)
+        
+        UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
+                       SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
+                       SET_STRING_V(@"Button_Synh.png",@"m_UP"),
+                       SET_FLOAT_V(54,@"mWidth"),
+                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                       SET_BOOL_V(YES,@"m_bLookTouch"),
+                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                       SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
+                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                       SET_VECTOR_V(Vector3DMake(-160,295,0),@"m_pCurPosition"));
+    }
+    
+    [pInfoFile Hide];
+    [ButtonGroup Hide];
+
+    OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
+
     if(pDropBox->m_bPush==YES){
         
-        [ButtonGroup Hide];
-        [pInfoFile UpdateButt];
+        if(pInfoFile->bDropBoxWork==YES){
+            [self SetStatusBar];
+        }
+        else{
+            [self DelStatusBar];
+            [pInfoFile UpdateButt];
+        }
     }
     else
     {
-        OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
-
-        [pInfoFile Hide];
+        [self DelStatusBar];
         [ButtonGroup UpdateButt];
     }
 }

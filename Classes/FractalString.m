@@ -160,6 +160,7 @@
 //------------------------------------------------------------------------------------------------------
 -(void)selfLoadOnlyStructure:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
     
+    if([pData length]==0)return;
     //Name-----------------------------------------------------------------------------
     unichar* ucBuff = (unichar*)calloc(512, sizeof(unichar));
     int iLen;
@@ -405,8 +406,6 @@
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
 
-            free(ucBuff);
-
             //float value
             [m_pData appendBytes:&S length:sizeof(int)];
             [m_pData appendBytes:&F length:sizeof(int)];
@@ -430,6 +429,8 @@
                 [m_pData appendBytes:&Len length:sizeof(int)];
                 [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
             }
+            
+            free(ucBuff);
 
             //child string
             int iCount=[aStrings count];
