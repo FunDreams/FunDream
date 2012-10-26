@@ -126,7 +126,7 @@
                  withParentRev:nil fromPath:m_sFullFileName];
     }
         
-    [restClient loadMetadata:@"/"];
+//    [restClient loadMetadata:@"/"];
 }
 //--------------------------------------------------------
 -(void)UpLoad
@@ -155,7 +155,7 @@
     [m_pMetaData release];
     m_pMetaData=nil;
 
-    [restClient loadMetadata:@"/"];
+ //   [restClient loadMetadata:@"/"];
 }
 //--------------------------------------------------------
 -(void)DelFileFromDropBox:(NSString*)destPath{

@@ -281,11 +281,18 @@
     glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
 
 //    [self SetColor:mColorBackCorn];
-    [self SetColor:mColorBack];
 
     glBindTexture(GL_TEXTURE_2D, -1);
 
     if(m_bBack==YES){
+        
+        if(pString->m_iFlagsString & DEAD_STRING)
+            mColorBack=Color3DMake(1, 0, 0, 1);
+        else if(pString->m_iFlagsString & ONLY_HEAD)
+            mColorBack=Color3DMake(1, 1, 0, 1);
+        else mColorBack=Color3DMake(0, 1, 0, 1);
+            
+        [self SetColor:mColorBack];
         glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     }
 

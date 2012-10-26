@@ -17,6 +17,8 @@
     {
         pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"info"];
         pDataManager->m_pParent=self;
+        [pDataManager LoadMetadata:@"/"];
+        
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
 
         m_bHiden=YES;
@@ -160,19 +162,34 @@
 //------------------------------------------------------------------------------------------------------
 -(void)loadFileFailedWithError{
     bError=YES;
-    bDropBoxWork=NO;
+//    bDropBoxWork=NO;
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadMetadataFailedWithError{
     bError=YES;
-    bDropBoxWork=NO;
+//    bDropBoxWork=NO;
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedMetadata{
+
+    bool bIsInfo=NO;
+    if (pDataManager->m_pMetaData.isDirectory){
+        for (DBMetadata *file in pDataManager->m_pMetaData.contents){
+            
+            if([file.filename isEqualToString:@"info"])bIsInfo=YES;
+        }
+    }
+    
+    if(bIsInfo==NO){
+        
+        bNeedUpload=YES;
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    }
+
     bMetaDataLoaded=YES;
     
     if(bInfoLoaded==YES && bMetaDataLoaded==YES)
@@ -190,6 +207,14 @@
     if(bError==YES)bDropBoxWork=NO;
 }
 //------------------------------------------------------------------------------------------------------
+-(void)AddToUpload:(FractalString *)pStr{
+}
+//------------------------------------------------------------------------------------------------------
+-(void)Synhronization{
+    
+    [self SaveInfoStringToDropBox];
+}
+//------------------------------------------------------------------------------------------------------
 -(void)LoadAndSyns{
     
     bInfoLoaded=NO;
@@ -205,9 +230,9 @@
     //meta data to array-------------------------------------------------------------
     NSMutableArray *pArray=[[NSMutableArray alloc] init];
     for(DBMetadata *child in pDataManager->m_pMetaData.contents)
-    {
+    {//собираем именя из метадаты
         NSString *folderName = [[child.path pathComponents] lastObject];
-        if([folderName isEqualToString:@"Info"])continue;
+        if([folderName isEqualToString:@"info"])continue;
 
         [pArray addObject:folderName];
     }
@@ -216,7 +241,8 @@ Repeate:;
     int iCount=[pFstr->aStrings count];
     int iCountInMetadata=[pArray count];
 
-    for(int i=0;i<iCountInMetadata;i++){//ищем одинаковые
+    for(int i=0;i<iCountInMetadata;i++){//ищем одинаковые в загруженном Info загаловке
+        //одинаковые вычёркиваем
 
         NSString *folderName = [pArray objectAtIndex:i];
 
@@ -227,6 +253,7 @@ Repeate:;
             if([pFstrTmp->strUID isEqualToString:folderName]){
 
                 [pFstrRez->aStrings addObject:pFstrTmp];
+                
                 [pFstr->aStrings removeObjectAtIndex:j];
                 [pArray removeObjectAtIndex:i];
                 goto Repeate;
@@ -234,7 +261,7 @@ Repeate:;
         }
     }
 
-    if([pArray count]>0){
+    if([pArray count]>0){//если у метадаты остались имена, то создаём пустые струны которые надо загрузить
 
         bNeedUpload=YES;
         for(int i=0;i<[pArray count];i++){
@@ -248,8 +275,8 @@ Repeate:;
             pLoadFstr->strName = [[NSString alloc] initWithString:folderName];
             pLoadFstr->strUID = [[NSString alloc] initWithString:folderName];
 
-            pLoadFstr->iIndexIcon=0;
-            pLoadFstr->m_iFlags &=0x80000000;
+            pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
+            pLoadFstr->m_iFlagsString &=ONLY_HEAD;//только заголовок
             [pFstrRez->aStrings addObject:pLoadFstr];
         }
     }
@@ -261,7 +288,7 @@ Repeate:;
     NSMutableArray * pArrayLink=[[NSMutableArray alloc] init];
     
     if(pStrDropBox!=nil){
-        for (int i=0; i<[pStrDropBox->aStrings count]; i++){
+        for (int i=0; i<[pStrDropBox->aStrings count]; i++){//делаем массив линков из DropBox'a
             
             FractalString *pChild=[pStrDropBox->aStrings objectAtIndex:i];
             [pArrayLink addObject:pChild];
@@ -269,7 +296,7 @@ Repeate:;
     }
 
 Repeate2:;
-    for(int i=0;i<[pArrayLink count];i++){//синхронизируем со струной DropBox
+    for(int i=0;i<[pArrayLink count];i++){//синхронизируем со струной копией DropBox'a
         
         FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
@@ -290,7 +317,7 @@ Repeate2:;
         }
     }
     
-    if([pArrayLink count]>0){
+    if([pArrayLink count]>0){//после вычитания остались ссылки в DropBox'e
         
         bNeedUpload=YES;
 
@@ -298,18 +325,24 @@ Repeate2:;
             
             FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
-            if([pFstrTmp->aStrings count]==0){
+            if(pFstrTmp->m_iFlagsString & ONLY_HEAD){
                 
-                [m_pObjMng->pStringContainer DelString:pFstrTmp];
+                //мертвая ссылка
+  //              [m_pObjMng->pStringContainer DelString:pFstrTmp];
+                
+                //помечаем струну мёртвой
+                pFstrTmp->m_iFlagsString &=  DEAD_STRING;
+                pFstrTmp->m_iFlagsString &= ~ONLY_HEAD;
             }
             else{//элемент не пуст
                 
-                [m_pObjMng->pStringContainer SaveStringToDropBox:pFstrTmp Version:1];
+                [self AddToUpload:pFstrTmp];
             }
         }
     }
     
     if([pFstrRez->aStrings count]>0){
+        //добавляем пустые струны, которые необходимо загрузить
         
         bNeedUpload=YES;
         
@@ -325,7 +358,6 @@ Repeate2:;
     [pArrayLink release];
     
     bDropBoxWork=NO;
-    
 
 //    if(bNeedUpload==YES)[m_pObjMng->pStringContainer SaveInfoStringToDropBox];
 //    
@@ -353,7 +385,7 @@ Repeate2:;
         
         [pDataManager Save];
         
-        [pDataManager UpLoadWithName:@"Info"];
+        [pDataManager UpLoadWithName:@"info"];
     }
     
 }

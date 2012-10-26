@@ -10,6 +10,9 @@
 
 @class StringContainer;
 
+#define DEAD_STRING   0x00000001
+#define ONLY_HEAD     0x00000002
+
 @interface FractalString : NSObject{
 @public
     FractalString *pParent;//струна родитель
@@ -28,8 +31,10 @@
     int iIndexIcon;//иконка
     float X;
     float Y;
-    int m_iFlags;
-    //1 loading
+    int m_iFlagsString;
+
+    //0x00000001 струна мёртвая (без ссылок в DropBox'e)
+    //0x00000002 только структура заголовок
 }
 
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent

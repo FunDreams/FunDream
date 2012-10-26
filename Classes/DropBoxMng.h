@@ -23,11 +23,14 @@
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
-- (void)UpdateButt;
-- (void)Hide;
-- (void)Show;
+-(void)UpdateButt;
+-(void)Hide;
+-(void)Show;
 -(void)DownLoadInfoFile;
 -(void)SaveInfoStringToDropBox;
+-(void)Synhronization;
+
+-(void)AddToUpload:(FractalString *)pStr;
 
 
 @end

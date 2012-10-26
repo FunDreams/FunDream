@@ -263,6 +263,7 @@ repeate:
     for (int i=0; i<iCount; i++) {
         
         FractalString *TmpStr=[strDelChilds->aStrings objectAtIndex:0];
+        TmpStr->m_iFlagsString &= ONLY_HEAD;
         [self DelString:TmpStr];
     }
 }

@@ -579,7 +579,7 @@ EXIT:
 //------------------------------------------------------------------------------------------------------
 - (void)SynhDropBox{
     
-    [pInfoFile SaveInfoStringToDropBox];
+    [pInfoFile Synhronization];
     pInfoFile->bNeedUpload=NO;
     [self UpdateB];
 }
@@ -591,7 +591,7 @@ EXIT:
 
     if(pMode!=0 && *pMode==3){
 
-    if(pInfoFile->bNeedUpload==YES)
+    if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
         
         UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
                        SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),

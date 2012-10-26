@@ -8,6 +8,8 @@
 
 #import "FractalString.h"
 
+#define COUNT_RESERV 100
+
 @implementation FractalString
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
@@ -216,6 +218,10 @@
     [pData getBytes:&Y range:Range];
     *iCurReadingPos += sizeof(float);
     
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&m_iFlagsString range:Range];
+    *iCurReadingPos += sizeof(int);
+    
     //child string
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     int iCount=0;
@@ -291,6 +297,9 @@
     [pData getBytes:&Y range:Range];
     *iCurReadingPos += sizeof(float);
 
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&m_iFlagsString range:Range];
+    *iCurReadingPos += sizeof(int);
     
     //Load link string
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
@@ -316,6 +325,11 @@
     
     free(ucBuff);
     
+    int ArrayResern[COUNT_RESERV];
+    Range = NSMakeRange( *iCurReadingPos, sizeof(ArrayResern));
+    [pData getBytes:ArrayResern range:Range];
+    *iCurReadingPos += sizeof(ArrayResern);
+
     //child string
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     int iCount=0;
@@ -365,6 +379,9 @@
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
             
+            //флаги
+            [m_pData appendBytes:&m_iFlagsString length:sizeof(m_iFlagsString)];
+
             int iCurDeep=iDeep+1;
 
             //child string
@@ -416,26 +433,32 @@
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
 
+            //флаги
+            [m_pData appendBytes:&m_iFlagsString length:sizeof(m_iFlagsString)];
+
             //link string
             int iCountLink=[ArrayLinks count];
             [m_pData appendBytes:&iCountLink length:sizeof(int)];
 
             for (int i=0; i<iCountLink; i++) {
-                
+
                 NSMutableString *pString=(NSMutableString *)[ArrayLinks objectAtIndex:i];
-                
+
                 [pString getCharacters:ucBuff];
                 Len=[pString length];
                 [m_pData appendBytes:&Len length:sizeof(int)];
                 [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
             }
-            
+
             free(ucBuff);
+
+            int ArrayResern[COUNT_RESERV];
+            [m_pData appendBytes:ArrayResern length:sizeof(ArrayResern)];
 
             //child string
             int iCount=[aStrings count];
             [m_pData appendBytes:&iCount length:sizeof(int)];
-                        
+
             for (int i=0; i<iCount; i++) {
                 FractalString *FChild=[aStrings objectAtIndex:i];
                 [FChild selfSave:m_pData WithVer:iVersion];

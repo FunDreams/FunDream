@@ -9,6 +9,7 @@
 #import "Ob_IconDrag.h"
 #import "ObjectB_Ob.h"
 #import "ObB_DropBox.h"
+#import "DropBoxMng.h"
 
 @implementation Ob_IconDrag
 //------------------------------------------------------------------------------------------------------
@@ -99,11 +100,10 @@
                 if(pNeedUpload!=0){
                     *pNeedUpload=YES;
                 }
-
-  //              [m_pObjMng->pStringContainer SaveInfoStringToDropBox];
             }
             else
             {
+                //????
                 //del from drop Box
                 CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:1];
                 [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
@@ -125,13 +125,15 @@
                         
                         [self SetPos:pNewString];
                         
-                        [m_pObjMng->pStringContainer SaveStringToDropBox:pNewString Version:1];
-
                         bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
                         
                         if(pNeedUpload!=0){
                             *pNeedUpload=YES;
                         }
+                        
+                        //add to save                        
+                        DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
+                        [pODropBox AddToUpload:pNewString];
                     }
                     else
                     {
