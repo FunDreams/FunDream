@@ -44,8 +44,6 @@
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
 
--(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion;
-
 -(void)ReLinkDataManager;
 -(bool)LoadContainer;
 -(void)SaveContainer;

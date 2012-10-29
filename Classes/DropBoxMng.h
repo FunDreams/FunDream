@@ -8,18 +8,24 @@
 
 #import <Foundation/Foundation.h>
     
+#define UPDATE_INFO             1
+#define UPLOAD_DATA_STR         2
+#define DOWNLOAD_DATA_STR       3
+
 @interface DropBoxMng : GObject{
 @public
     CDataManager *pDataManager;
+    NSMutableDictionary *m_pListAdd;
     
     FractalString *pDropBoxString;
     int m_iCurrentSelect;
     
-    bool bMetaDataLoaded;
-    bool bInfoLoaded;
     bool bNeedUpload;
     bool bDropBoxWork;
-    bool bError;
+    bool bErrorDownLoad;
+    bool bErrorMetaData;
+    
+    int m_iMode;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -30,7 +36,9 @@
 -(void)SaveInfoStringToDropBox;
 -(void)Synhronization;
 
--(void)AddToUpload:(FractalString *)pStr;
-
+-(void)AddToUploadString:(FractalString *)pStr;
+-(void)DefFromUploadString:(FractalString *)pStr;
+-(void)AddToDelArray:(FractalString *)pStr;
+-(void)DownLoadString:(FractalString *)pFsr;
 
 @end

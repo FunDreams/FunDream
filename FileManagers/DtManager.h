@@ -23,6 +23,7 @@
     
     NSString *relinkUserId;//user id
     DBMetadata *m_pMetaData;
+    DBMetadata *m_pTmpLocalMetaData;
     NSObject *m_pParent;
 }
 
@@ -124,6 +125,7 @@
 -(void)UpLoad;//Загрузка файла на сервер
 -(void)UpLoadWithName:(NSString *)NameUpload;//загрузка со специальным именем
 -(void)DownLoad;//Загрузка файла с сервера
+-(void)DownLoadWithName:(NSString *)pPath;//загрузка с сервера со специальным именем
 -(void)DelFileFromDropBox:(NSString*)destPath;//удаления файла с хранилища
 //-(void)Link;//подключение акка
 

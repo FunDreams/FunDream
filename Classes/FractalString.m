@@ -13,8 +13,8 @@
 @implementation FractalString
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
-    
-    iIndexIcon=0;
+        
+    [self SetFlag:ONLY_IN_MEM];
     
     aStrings = [[NSMutableArray alloc] init];
     aStages = [[NSMutableArray alloc] init];
@@ -50,11 +50,11 @@
         [self SetDefault];
         [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
         
-        strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
+        strUID = [pContainer GetRndName];
         strName = [[NSString alloc] initWithString:pStrSource->strName];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
-        
+        iIndexIcon=pStrSource->iIndexIcon;
         
         if(iCurLevel<=iDeep){
             
@@ -88,8 +88,9 @@
         [self SetDefault];
         [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
                 
-        strUID = [[NSString alloc] initWithString:[pContainer GetRndName]];
+        strUID = [pContainer GetRndName];
         strName = [[NSString alloc] initWithString:pStrSource->strName];
+        iIndexIcon=pStrSource->iIndexIcon;
 
         [pContainer->DicStrings setObject:self forKey:strUID];
         
@@ -124,7 +125,7 @@
         }
         else
         {
-            strName = [[NSString alloc] initWithString:StrRndName];
+            strName = StrRndName;
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
 
@@ -152,6 +153,11 @@
     }
     
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)SetFlag:(int)iFlag{
+    m_iFlagsString &= ~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
+    m_iFlagsString|=iFlag;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetLimmitStringS:(int)iS F:(int)iF{
@@ -348,7 +354,7 @@
     [ArrayPoints selfLoad:pData rpos:iCurReadingPos];
 }
 //------------------------------------------------------------------------------------------------------
--(void)selfSaveWithOutPoints:(NSMutableData *)m_pData WithVer:(int)iVersion
+-(void)selfSaveOnlyStructure:(NSMutableData *)m_pData WithVer:(int)iVersion
     Deep:(int)iDeep MaxDeep:(int)iMaxDeep{
     
     switch (iVersion) {
@@ -393,7 +399,7 @@
             if(iCurDeep<=iMaxDeep){
                 for (int i=0; i<iCount; i++) {
                     FractalString *FChild=[aStrings objectAtIndex:i];
-                    [FChild selfSaveWithOutPoints:m_pData WithVer:iVersion
+                    [FChild selfSaveOnlyStructure:m_pData WithVer:iVersion
                      Deep:iCurDeep MaxDeep:iMaxDeep];
                 }
             }

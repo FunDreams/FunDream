@@ -10,8 +10,10 @@
 
 @class StringContainer;
 
-#define DEAD_STRING   0x00000001
-#define ONLY_HEAD     0x00000002
+#define DEAD_STRING         0x00000001
+#define SYNH_AND_HEAD       0x00000002
+#define SYNH_AND_LOAD       0x00000004
+#define ONLY_IN_MEM         0x00000008
 
 @interface FractalString : NSObject{
 @public
@@ -34,7 +36,9 @@
     int m_iFlagsString;
 
     //0x00000001 струна мёртвая (без ссылок в DropBox'e)
-    //0x00000002 только структура заголовок
+    //0x00000002 струна на сервере, а в памяти только структура заголовок
+    //0x00000004 струна загружена и синхронизировано с хранилищем
+    //0x00000008 струна только в локальной памяти устройства
 }
 
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
@@ -53,12 +57,14 @@
 
 -(void)UpDate:(float)fDelta;
 
--(void)selfSaveWithOutPoints:(NSMutableData *)m_pData WithVer:(int)iVersion
+-(void)selfSaveOnlyStructure:(NSMutableData *)m_pData WithVer:(int)iVersion
                         Deep:(int)iDeep MaxDeep:(int)iMaxDeep;
 
 -(void)selfSave:(NSMutableData *)m_pData WithVer:(int)iVersion;
 -(void)selfLoad:(NSMutableData *)m_pData ReadPos:(int *)iCurReadingPos
         WithContainer:(StringContainer *)pContainer;
+
+-(void)SetFlag:(int)iFlag;
 
 -(void)selfLoadOnlyStructure:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos;
 

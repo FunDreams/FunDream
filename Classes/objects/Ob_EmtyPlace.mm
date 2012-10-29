@@ -12,6 +12,7 @@
 #import "ObjectB_Ob.h"
 #import "ObB_DropBox.h"
 #import "Ob_GroupButtons.h"
+#import "DropBoxMng.h"
 
 @implementation Ob_EmtyPlace
 //------------------------------------------------------------------------------------------------------
@@ -253,8 +254,37 @@
 
     if(DragObjectDropBoxStr!=nil)
     {
-        pStrInside = DragObjectDropBoxStr;
-        mTextureId=DragObjectDropBoxStr->iIndexIcon;
+        
+        switch (DragObjectDropBoxStr->m_iFlagsString) {
+            case ONLY_IN_MEM:
+            case SYNH_AND_LOAD:
+            {
+                pStrInside = DragObjectDropBoxStr;
+                mTextureId=DragObjectDropBoxStr->iIndexIcon;
+                
+                [self SetNameStr:pStrInside];
+            }
+            break;
+                
+            case SYNH_AND_HEAD:
+            {
+                DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
+
+                if(pODropBox!=nil){
+                    pStrInside = DragObjectDropBoxStr;
+                    mTextureId=0;
+                    
+                    [pODropBox DownLoadString:DragObjectDropBoxStr];
+                }
+            }
+            break;
+                
+            default:
+                break;
+        }
+        
+        DEL_CELL(@"DropBoxString");
+        DEL_CELL(@"DragObject");
     }
     else
     {
@@ -296,8 +326,8 @@ FINISH:
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-//    m_bStartPush=NO;
-//    m_bStartMove=NO;
+    m_bStartPush=NO;
+    m_bStartMove=NO;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{

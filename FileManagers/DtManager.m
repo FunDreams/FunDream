@@ -152,9 +152,8 @@
                      withParentRev:nil fromPath:m_sFullFileName];
     }
 
-    [m_pMetaData release];
-    m_pMetaData=nil;
-
+//    [m_pMetaData release];
+//    m_pMetaData=nil;
  //   [restClient loadMetadata:@"/"];
 }
 //--------------------------------------------------------
@@ -164,6 +163,15 @@
     
     NSString *pStr = [NSString stringWithFormat:@"/%@",destPath];
     [restClient deletePath:pStr];
+}
+//--------------------------------------------------------
+-(void)DownLoadWithName:(NSString *)pPath{
+    
+    NSFileManager *fm = [NSFileManager defaultManager];
+    [fm createFileAtPath:m_sFullFileName contents:m_pDataDmp attributes:nil];
+    
+    NSString *srcDir =[NSString stringWithFormat:@"/%@",pPath];
+    [restClient loadFile:srcDir intoPath:m_sFullFileName];
 }
 //--------------------------------------------------------
 -(void)DownLoad{
@@ -179,7 +187,7 @@
               from:(NSString*)srcPath metadata:(DBMetadata*)metadata {
     
     NSLog(@"File uploaded successfully to path: %@", metadata.filename);
-    [restClient loadMetadata:@"/"];
+    m_pTmpLocalMetaData=metadata;
     
     SEL TmpSel=NSSelectorFromString(@"uploadedFile");
     if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
@@ -243,7 +251,7 @@
     if(m_pParent!=nil && [m_pParent respondsToSelector:TmpSel])
         [m_pParent performSelector:TmpSel];
 }
-////--------------------------------------------------------
+//--------------------------------------------------------
 - (void)sessionDidReceiveAuthorizationFailure:(DBSession*)session userId:(NSString *)userId{
     
 	relinkUserId = [userId retain];

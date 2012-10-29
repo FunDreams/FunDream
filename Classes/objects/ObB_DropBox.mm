@@ -170,7 +170,7 @@
     int *pMode=GET_INT_V(@"m_iMode");
     if(*pMode==3){
         
-        if(m_bStartMove==NO && bMoveIn==YES){
+        if(m_bStartMove==NO && bMoveIn==YES && m_bStartPush==YES){
             
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DropBoxString"))];
 
@@ -192,9 +192,11 @@
     
  //   if(m_bLookTouch==YES)LOCK_TOUCH;
     
-    [self SetPush];
-    
-    [self MoveObject:Point WithMode:YES];
+    if(m_bStartPush==YES){
+        
+        [self SetPush];        
+        [self MoveObject:Point WithMode:YES];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -215,48 +217,6 @@
     
     m_bStartPush=NO;
     m_bStartMove=NO;
-//
-//    if(m_iLayer==layerInterfaceSpace6){
-//        m_bLookTouch=YES;
-//        
-//        GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
-//        CGPoint Point;
-//        Point.x=m_pCurPosition.x;
-//        Point.y=m_pCurPosition.y;
-//        
-//        if([pOb Intersect:Point])
-//        {
-//            [m_pObjMng->pStringContainer DelString:pString];
-//        }
-//        else
-//        {
-//            GObject *pObGroup = [m_pObjMng GetObjectByName:@"DropBox"];
-//
-//            if(pObGroup!=nil)
-//            {
-//                for (ObB_DropBox *pObob in pObGroup->m_pChildrenbjectsArr)
-//                {
-//                    if(pObob==self)continue;
-//                    else
-//                    {
-//                        if([pObob Intersect:Point])
-//                        {
-//                            [[FractalString alloc] initAsCopy:pString
-//                                WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
-//                            
-//                            [m_pObjMng->pStringContainer DelString:pString];
-//                            goto Exit;
-//                        }
-//                    }
-//                }
-//            }
-//        }
-        
-//Exit:
-//        [self SetLayer:m_iLayer-1];
-//        [self SetTouch:YES WithLayer:m_iLayerTouch+1];
-//        OBJECT_PERFORM_SEL(@"GroupButtons",@"UpdateButt");
-//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
@@ -283,13 +243,15 @@
 //    [self SetColor:mColorBackCorn];
 
     glBindTexture(GL_TEXTURE_2D, -1);
-
+    
     if(m_bBack==YES){
         
         if(pString->m_iFlagsString & DEAD_STRING)
             mColorBack=Color3DMake(1, 0, 0, 1);
-        else if(pString->m_iFlagsString & ONLY_HEAD)
+        else if(pString->m_iFlagsString & SYNH_AND_HEAD)
             mColorBack=Color3DMake(1, 1, 0, 1);
+        else if(pString->m_iFlagsString & ONLY_IN_MEM)
+            mColorBack=Color3DMake(0, 0.5f, 1, 1);
         else mColorBack=Color3DMake(0, 1, 0, 1);
             
         [self SetColor:mColorBack];

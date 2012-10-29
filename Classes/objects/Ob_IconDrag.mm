@@ -74,6 +74,8 @@
 
     PLAY_SOUND(@"drop.wav");
     
+    DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
+    
     int *pMode=GET_INT_V(@"m_iMode");
     GObject *pObTash=[m_pObjMng GetObjectByName:@"ButtonTach"];
 
@@ -85,31 +87,49 @@
     Point.y=m_pCurPosition.y;
 
     GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
+    bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
 
-    if([pObTash Intersect:Point]){
-        
-        if(pMode!=0 && *pMode==3 && pInsideString!=nil){
+    if([pObTash Intersect:Point] &&  pNeedUpload!=0){
+
+        switch (pInsideString->m_iFlagsString) {
+            case DEAD_STRING:{
                 
-            if([pInsideString->aStrings count]>0)//струна загружена
-            {                
-                //del childs
-                [m_pObjMng->pStringContainer DelChilds:pInsideString];
-                
-                bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
-                
-                if(pNeedUpload!=0){
-                    *pNeedUpload=YES;
-                }
-            }
-            else
-            {
-                //????
-                //del from drop Box
-                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:1];
+                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:0];
                 [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
                 
                 [m_pObjMng->pStringContainer DelString:pInsideString];
+                pInsideString=0;
+                *pNeedUpload=YES;
             }
+            break;
+
+            case SYNH_AND_HEAD:{
+                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:0];
+                [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
+                [m_pObjMng->pStringContainer DelString:pInsideString];
+                *pNeedUpload=YES;
+            }
+            break;
+
+            case SYNH_AND_LOAD:{
+                //del childs
+                [m_pObjMng->pStringContainer DelChilds:pInsideString];
+                *pNeedUpload=YES;
+            }
+            break;
+
+            case ONLY_IN_MEM:{
+                
+                [pODropBox DefFromUploadString:pInsideString];
+
+                [m_pObjMng->pStringContainer DelString:pInsideString];
+                pInsideString=0;
+                *pNeedUpload=YES;
+            }
+            break;
+
+            default:
+                break;
         }
     }
     else
@@ -132,8 +152,8 @@
                         }
                         
                         //add to save                        
-                        DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
-                        [pODropBox AddToUpload:pNewString];
+                        [pODropBox AddToUploadString:pNewString];
+                        [pNewString SetFlag:ONLY_IN_MEM];
                     }
                     else
                     {

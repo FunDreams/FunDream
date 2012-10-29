@@ -17,13 +17,14 @@
     {
         pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"info"];
         pDataManager->m_pParent=self;
-        [pDataManager LoadMetadata:@"/"];
         
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
 
         m_bHiden=YES;
         bNeedUpload=NO;
         bDropBoxWork=NO;
+        
+        m_pListAdd = [[NSMutableDictionary alloc] init];
 
         [self DownLoadInfoFile];
     }
@@ -139,87 +140,161 @@
 
     if(bDropBoxWork==NO){
         
-        [pDataManager LoadMetadata:@"/"];
+        m_iMode=UPDATE_INFO;
+
         [pDataManager DownLoad];
-        
-        bMetaDataLoaded=NO;
-        bInfoLoaded=NO;
-        bError=NO;
+
+        bErrorDownLoad=NO;
+        bErrorMetaData=NO;
         bDropBoxWork=YES;
     }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)uploadedFile{
     
+    if(m_iMode==UPLOAD_DATA_STR){
+
+        if([pDataManager->m_pTmpLocalMetaData.filename isEqualToString:@"info"]){
+            
+            bDropBoxWork=NO;
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+        }
+        else
+        {
+            if([m_pListAdd count]>0)
+            {
+                FractalString *pStr=[m_pListAdd objectForKey:pDataManager->m_pTmpLocalMetaData.filename];
+                
+                if(pStr!=nil)
+                    [pStr SetFlag:SYNH_AND_LOAD];
+                
+                [m_pListAdd removeObjectForKey:pDataManager->m_pTmpLocalMetaData.filename];
+            }
+            
+            [self Synhronization];
+        }
+    }
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+}
+//------------------------------------------------------------------------------------------------------
+-(void)uploadFileFailedWithError{
+    
+    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+    
     bDropBoxWork=NO;
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
--(void)uploadFileFailedWithError{
-    SET_STAGE_EX(NAME(self), @"Pause", @"Pause");
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
-}
-//------------------------------------------------------------------------------------------------------
 -(void)loadFileFailedWithError{
-    bError=YES;
-//    bDropBoxWork=NO;
-    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    bErrorDownLoad=YES;
     OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+    
+    bDropBoxWork=NO;
+    
+    if(m_iMode==UPDATE_INFO){        
+        bNeedUpload=YES;
+    }
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadMetadataFailedWithError{
-    bError=YES;
-//    bDropBoxWork=NO;
-    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    bErrorMetaData=YES;
     OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+    
+    bDropBoxWork=NO;
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedMetadata{
 
-    bool bIsInfo=NO;
-    if (pDataManager->m_pMetaData.isDirectory){
-        for (DBMetadata *file in pDataManager->m_pMetaData.contents){
-            
-            if([file.filename isEqualToString:@"info"])bIsInfo=YES;
-        }
+    if(m_iMode==UPLOAD_DATA_STR)
+    {
+        [self Synhronization];
     }
-    
-    if(bIsInfo==NO){
-        
-        bNeedUpload=YES;
-        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
-    }
-
-    bMetaDataLoaded=YES;
-    
-    if(bInfoLoaded==YES && bMetaDataLoaded==YES)
+    else
+    {
         [self LoadAndSyns];
-    
-    if(bError==YES)bDropBoxWork=NO;
+        OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedFile{
-    bInfoLoaded=YES;
     
-    if(bInfoLoaded==YES && bMetaDataLoaded==YES)
-        [self LoadAndSyns];
-    
-    if(bError==YES)bDropBoxWork=NO;
+    if(m_iMode==UPDATE_INFO){
+        
+        [pDataManager LoadMetadata:@"/"];
+    }
+    else if(m_iMode==DOWNLOAD_DATA_STR){
+        
+        int m=0;
+    }
 }
 //------------------------------------------------------------------------------------------------------
--(void)AddToUpload:(FractalString *)pStr{
+-(void)DefFromUploadString:(FractalString *)pStr{
+    
+    if(pStr!=nil){
+        [m_pListAdd removeObjectForKey:pStr->strUID];
+    }
+}
+//--------------------------------------------------------
+-(void)AddToDelArray:(FractalString *)pStr{
+    if(pStr!=nil){
+//        [m_pListDel setObject:pStr forKey:pStr->strUID];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)AddToUploadString:(FractalString *)pStr{
+    
+    if(pStr!=nil){
+        [m_pListAdd setObject:pStr forKey:pStr->strUID];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)DownLoadString:(FractalString *)pFsr{
+    
+    if(bDropBoxWork==NO){
+        bDropBoxWork=YES;
+        m_iMode=DOWNLOAD_DATA_STR;
+
+        [pDataManager DownLoadWithName:pFsr->strUID];
+    }
+    
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Synhronization{
-    
-    [self SaveInfoStringToDropBox];
+        
+    if(bDropBoxWork==NO){
+                    
+        m_iMode=UPLOAD_DATA_STR;
+        [pDataManager LoadMetadata:@"/"];
+        bDropBoxWork=YES;        
+    }
+    else
+    {
+        NSEnumerator *enumeratorObjects = [m_pListAdd objectEnumerator];
+        int iVersion=1;
+        
+        if([m_pListAdd count]>0){
+            FractalString *pStr=[enumeratorObjects nextObject];
+                        
+            if(pStr!=nil && pDataManager->m_pDataDmp!=nil){
+                
+                [pDataManager Clear];
+                [pStr selfSave:pDataManager->m_pDataDmp WithVer:iVersion];
+                
+                [m_pObjMng->pStringContainer->ArrayPoints selfSave:pDataManager->m_pDataDmp];
+                [pDataManager Save];
+                
+                [pDataManager UpLoadWithName:pStr->strUID];
+            }
+        }
+        else [self SaveInfoStringToDropBox];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAndSyns{
-    
-    bInfoLoaded=NO;
-    bMetaDataLoaded=NO;
-    
+
     int ReadPos=0;
 
     FractalString *pFstrRez = [[FractalString alloc] init];
@@ -261,6 +336,14 @@ Repeate:;
         }
     }
 
+//    if([pFstr->aStrings count]>0){
+//        
+//        for(int i=0;i<[pFstr->aStrings count];i++){
+//            FractalString *pFstrTmp=[pFstr->aStrings objectAtIndex:i];
+//            [pFstrRez->aStrings addObject:pFstrTmp];
+//        }
+//    }
+    
     if([pArray count]>0){//если у метадаты остались имена, то создаём пустые струны которые надо загрузить
 
         bNeedUpload=YES;
@@ -276,7 +359,7 @@ Repeate:;
             pLoadFstr->strUID = [[NSString alloc] initWithString:folderName];
 
             pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
-            pLoadFstr->m_iFlagsString &=ONLY_HEAD;//только заголовок
+            [pLoadFstr SetFlag:SYNH_AND_HEAD];//только заголовок
             [pFstrRez->aStrings addObject:pLoadFstr];
         }
     }
@@ -295,7 +378,7 @@ Repeate:;
         }
     }
 
-Repeate2:;
+Repeate2:;//главная синхронизация 
     for(int i=0;i<[pArrayLink count];i++){//синхронизируем со струной копией DropBox'a
         
         FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
@@ -305,10 +388,12 @@ Repeate2:;
             FractalString *pFstrTmp2=[pFstrRez->aStrings objectAtIndex:j];
 
             if([pFstrTmp->strUID isEqualToString:pFstrTmp2->strUID]){
-
-                pFstrTmp->X=pFstrTmp2->X;
-                pFstrTmp->Y=pFstrTmp2->Y;
                 
+                if(pFstrTmp->X!=pFstrTmp2->X || pFstrTmp->Y!=pFstrTmp2->Y)bNeedUpload=YES;
+                
+                if(pFstrTmp->m_iFlagsString & ONLY_IN_MEM)
+                    [pFstrTmp SetFlag:SYNH_AND_LOAD];
+
                 [pArrayLink removeObjectAtIndex:i];
                 [pFstrRez->aStrings removeObjectAtIndex:j];
                 goto Repeate2;
@@ -325,22 +410,24 @@ Repeate2:;
             
             FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
-            if(pFstrTmp->m_iFlagsString & ONLY_HEAD){
-                
-                //мертвая ссылка
-  //              [m_pObjMng->pStringContainer DelString:pFstrTmp];
-                
+            if(pFstrTmp->m_iFlagsString & SYNH_AND_HEAD){
+
                 //помечаем струну мёртвой
-                pFstrTmp->m_iFlagsString &=  DEAD_STRING;
-                pFstrTmp->m_iFlagsString &= ~ONLY_HEAD;
+                [pFstrTmp SetFlag:DEAD_STRING];
             }
-            else{//элемент не пуст
+            else if(pFstrTmp->m_iFlagsString & ONLY_IN_MEM){
                 
-                [self AddToUpload:pFstrTmp];
+                [self AddToUploadString:pFstrTmp];
+            }
+            else if(pFstrTmp->m_iFlagsString & DEAD_STRING){
+            }
+            else if (pFstrTmp->m_iFlagsString & SYNH_AND_LOAD){
+                [pFstrTmp SetFlag:ONLY_IN_MEM];
+                [self AddToUploadString:pFstrTmp];
             }
         }
     }
-    
+
     if([pFstrRez->aStrings count]>0){
         //добавляем пустые струны, которые необходимо загрузить
         
@@ -358,42 +445,31 @@ Repeate2:;
     [pArrayLink release];
     
     bDropBoxWork=NO;
-
-//    if(bNeedUpload==YES)[m_pObjMng->pStringContainer SaveInfoStringToDropBox];
-//    
-//    int *pMode=GET_INT_V(@"m_iMode");
-//
-//    if(pMode!=0 && *pMode==3){
-//        [self UpdateButt];
-//    }
-
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SaveInfoStringToDropBox{
-    
-    bDropBoxWork=YES;
-    
+        
     FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
     
     if(Str!=nil && pDataManager->m_pDataDmp!=nil){
         
         [pDataManager Clear];
         
-        [Str selfSaveWithOutPoints:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
+        [Str selfSaveOnlyStructure:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
         
         [pDataManager Save];
         
         [pDataManager UpLoadWithName:@"info"];
     }
-    
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Save{}
 //------------------------------------------------------------------------------------------------------
 -(void)dealloc{
     [pDataManager release];
+    [m_pListAdd release];
+    
     [super dealloc];
 }
 

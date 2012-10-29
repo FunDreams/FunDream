@@ -35,12 +35,6 @@
         CDataManager *pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"MainDump"];
         [ArrayDumpFiles addObject:pDataManager];
 
-        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"Upload"];
-        [ArrayDumpFiles addObject:pDataManager];
-
-        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"Download"];
-        [ArrayDumpFiles addObject:pDataManager];
-
 //        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"InfoFile"];
 //        [ArrayDumpFiles addObject:pDataManager];
 
@@ -85,7 +79,7 @@
     //для режимов
     [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:0]];
     //для текущей полки
-    [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:1]];
+    [pFSCurrentCheck->ArrayPoints AddData:[ArrayPoints SetData:0]];
 //струны на полке
     FractalString *pFSChelf=[[FractalString alloc]
             initWithName:@"ChelfStirngs" WithParent:pFStringEditor
@@ -107,12 +101,17 @@
     pFStringObjects->iIndexIcon=pNum->m_iTextureId;
     
 
-    [[FractalString alloc]
+    FractalString *pStrOb1=[[FractalString alloc]
             initWithName:@"Ob1" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
-    [[FractalString alloc]
+    pStrOb1->iIndexIcon=pNum->m_iTextureId;
+    
+    FractalString *pStrOb2=[[FractalString alloc]
             initWithName:@"Ob2" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
-    [[FractalString alloc]
+    pStrOb2->iIndexIcon=pNum->m_iTextureId;
+    
+    FractalString *pStrOb3=[[FractalString alloc]
             initWithName:@"Ob3" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
+    pStrOb3->iIndexIcon=pNum->m_iTextureId;
 
     FractalString *pFStringProp=[[FractalString alloc]
         initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
@@ -177,9 +176,9 @@ repeate:
         goto repeate;
     }
     
-    NSString *StrRet=outstring;
+    NSString *StrRet=[NSString stringWithString:outstring];
 
-    return StrRet;
+    return [StrRet retain];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Synhronize{
@@ -239,22 +238,6 @@ repeate:
     [pDataCurManager Save];
 }
 //------------------------------------------------------------------------------------------------------
--(void)SaveStringToDropBox:(FractalString *)Str Version:(int)iVersion{
-    
-    CDataManager* pDataCurManager = [ArrayDumpFiles objectAtIndex:1];
-
-    if(Str!=nil && pDataCurManager->m_pDataDmp!=nil){
-
-        [pDataCurManager Clear];
-        [Str selfSave:pDataCurManager->m_pDataDmp WithVer:iVersion];
-        
-        [ArrayPoints selfSave:pDataCurManager->m_pDataDmp];
-        [pDataCurManager Save];
-    
-        [pDataCurManager UpLoadWithName:Str->strUID];
-    }
-}
-//------------------------------------------------------------------------------------------------------
 -(void)AddString:(FractalString *)pString{}
 //------------------------------------------------------------------------------------------------------
 -(void)DelChilds:(FractalString *)strDelChilds{
@@ -263,9 +246,10 @@ repeate:
     for (int i=0; i<iCount; i++) {
         
         FractalString *TmpStr=[strDelChilds->aStrings objectAtIndex:0];
-        TmpStr->m_iFlagsString &= ONLY_HEAD;
         [self DelString:TmpStr];
     }
+    
+    [strDelChilds SetFlag:SYNH_AND_HEAD];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)DelString:(FractalString *)strDel{
