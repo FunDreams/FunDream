@@ -254,11 +254,14 @@
 
     if(DragObjectDropBoxStr!=nil)
     {
-        
+        FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+        NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+
         switch (DragObjectDropBoxStr->m_iFlagsString) {
             case ONLY_IN_MEM:
             case SYNH_AND_LOAD:
             {
+                [Name setString:DragObjectDropBoxStr->strUID];
                 pStrInside = DragObjectDropBoxStr;
                 mTextureId=DragObjectDropBoxStr->iIndexIcon;
                 
@@ -271,10 +274,12 @@
                 DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
 
                 if(pODropBox!=nil){
+                    [Name setString:DragObjectDropBoxStr->strUID];
                     pStrInside = DragObjectDropBoxStr;
                     mTextureId=0;
                     
                     [pODropBox DownLoadString:DragObjectDropBoxStr];
+                    
                 }
             }
             break;
@@ -285,6 +290,7 @@
         
         DEL_CELL(@"DropBoxString");
         DEL_CELL(@"DragObject");
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
     else
     {

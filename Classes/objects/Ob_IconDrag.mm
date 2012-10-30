@@ -139,21 +139,23 @@
                 if(pParent!=pInsideString){
 
                     if(bFromEmpty==YES)
-                    {
-                        FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
-                        
-                        [self SetPos:pNewString];
-                        
-                        bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
-                        
-                        if(pNeedUpload!=0){
-                            *pNeedUpload=YES;
+                    {                        
+                        if(pInsideString->m_iFlagsString & (SYNH_AND_LOAD|ONLY_IN_MEM)){
+                            FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                                    WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
+                            
+                            [self SetPos:pNewString];
+                            
+                            bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
+                            
+                            if(pNeedUpload!=0){
+                                *pNeedUpload=YES;
+                            }
+                            
+                            //add to save                        
+                            [pODropBox AddToUploadString:pNewString];
+                            [pNewString SetFlag:ONLY_IN_MEM];
                         }
-                        
-                        //add to save                        
-                        [pODropBox AddToUploadString:pNewString];
-                        [pNewString SetFlag:ONLY_IN_MEM];
                     }
                     else
                     {

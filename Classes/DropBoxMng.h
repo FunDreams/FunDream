@@ -40,5 +40,6 @@
 -(void)DefFromUploadString:(FractalString *)pStr;
 -(void)AddToDelArray:(FractalString *)pStr;
 -(void)DownLoadString:(FractalString *)pFsr;
+-(void)loadAndMerge;
 
 @end

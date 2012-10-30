@@ -138,6 +138,32 @@
     return self;
 }
 //------------------------------------------------------------------------------------------------------
+- (id)initWithDataAndMerge:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos
+                WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
+
+    self = [super init];
+	if (self != nil)
+    {        
+        [self SetDefault];
+        
+        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
+        
+        FractalString *TmpStr=[pContainer->DicStrings objectForKey:strUID];
+        
+        if(TmpStr!=nil)
+            [pContainer DelString:TmpStr];
+        
+        pParent=Parent;
+        if(pParent!=nil){
+            [pParent->aStrings addObject:self];
+        }
+
+        [pContainer->DicStrings setObject:self forKey:strUID];        
+    }
+    
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
         WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
     
@@ -149,6 +175,7 @@
         [self SetDefault];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
+        
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
     

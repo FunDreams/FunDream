@@ -104,11 +104,13 @@
             NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:i];
             FractalString *pStrTmp = [m_pObjMng->pStringContainer GetString:Name];
             
-            if(pStrTmp!=nil){
+            if(pStrTmp!=nil && (pStrTmp->m_iFlagsString & (ONLY_IN_MEM|SYNH_AND_LOAD)))
+            {
                 pObTmp->pStrInside=pStrTmp;
                 pObTmp->mTextureId=pStrTmp->iIndexIcon;
             }
-            else {
+            else
+            {
                 [Name setString:@"Objects"];
                 pObTmp->pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
                 GET_TEXTURE(pObTmp->mTextureId, @"EmptyPlace.png");

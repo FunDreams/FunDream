@@ -97,18 +97,10 @@
     int m_iNumButton=[pDropBoxString->aStrings count];
 
     for(int i=0;i<m_iNumButton;i++){
-        
-        Color3D pColorBack;
-
-        FractalString *pFstr=[pDropBoxString->aStrings objectAtIndex:i];
-        
-        if([pFstr->aStrings count]>0)
-            pColorBack=Color3DMake(0,1,0,1);
-        else pColorBack=Color3DMake(1,0,0,1);
-    
+                    
         FractalString *pFrStr = [pDropBoxString->aStrings objectAtIndex:i];
         ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
-                       SET_COLOR_V(pColorBack,@"mColorBack"),
+//                       SET_COLOR_V(pColorBack,@"mColorBack"),
                        SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
                        SET_STRING_V(@"ButtonOb.png",@"m_UP"),
                        SET_FLOAT_V(54,@"mWidth"),
@@ -218,6 +210,50 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+-(void)loadAndMerge{
+    
+    CDataManager* pDataCurManager = pDataManager;
+    bool Rez=[pDataCurManager Load];
+    
+    int iLen=[pDataCurManager->m_pDataDmp length];
+    if(iLen==0)Rez=false;
+    
+    if([pDataCurManager->m_pDataDmp length]!=0){
+        
+        int iLenVersion = [pDataCurManager GetIntValue];
+        
+        switch (iLenVersion) {
+            case 1:
+            {
+                FractalString *StrDropBox = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+
+                if(StrDropBox!=nil){
+                    
+                    FractalString *pNewString = [[FractalString alloc]
+                                    initWithDataAndMerge:pDataCurManager->m_pDataDmp
+                                    WithCurRead:&pDataCurManager->m_iCurReadingPos
+                                     WithParent:StrDropBox WithContainer:m_pObjMng->pStringContainer];
+                    
+                    FunArrayData *ArrayPointsLocal = [[FunArrayData alloc] initWithCopasity:100];
+
+                    [ArrayPointsLocal selfLoad:pDataCurManager->m_pDataDmp
+                                     rpos:&pDataCurManager->m_iCurReadingPos];
+                    
+                    [pNewString SetFlag:SYNH_AND_LOAD];
+
+                    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+                    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+                }
+            }
+                break;
+                
+            default:
+                Rez=NO;
+                break;
+        }
+    }    
+}
+//------------------------------------------------------------------------------------------------------
 -(void)loadedFile{
     
     if(m_iMode==UPDATE_INFO){
@@ -225,8 +261,12 @@
         [pDataManager LoadMetadata:@"/"];
     }
     else if(m_iMode==DOWNLOAD_DATA_STR){
+
+        [self loadAndMerge];
         
-        int m=0;
+        //load InFo;
+        bDropBoxWork=NO;
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -236,7 +276,7 @@
         [m_pListAdd removeObjectForKey:pStr->strUID];
     }
 }
-//--------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
 -(void)AddToDelArray:(FractalString *)pStr{
     if(pStr!=nil){
 //        [m_pListDel setObject:pStr forKey:pStr->strUID];
@@ -274,18 +314,20 @@
     {
         NSEnumerator *enumeratorObjects = [m_pListAdd objectEnumerator];
         int iVersion=1;
-        
+
         if([m_pListAdd count]>0){
             FractalString *pStr=[enumeratorObjects nextObject];
-                        
+
             if(pStr!=nil && pDataManager->m_pDataDmp!=nil){
                 
                 [pDataManager Clear];
+                [pDataManager->m_pDataDmp appendBytes:&iVersion length:sizeof(int)];
+
                 [pStr selfSave:pDataManager->m_pDataDmp WithVer:iVersion];
-                
+
                 [m_pObjMng->pStringContainer->ArrayPoints selfSave:pDataManager->m_pDataDmp];
                 [pDataManager Save];
-                
+
                 [pDataManager UpLoadWithName:pStr->strUID];
             }
         }

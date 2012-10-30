@@ -47,6 +47,9 @@
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
         WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer;
 
+- (id)initWithDataAndMerge:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos
+                WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer;
+
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
    WithContainer:(StringContainer *)pContainer;
 
