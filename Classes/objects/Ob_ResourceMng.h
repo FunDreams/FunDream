@@ -11,20 +11,20 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-@interface Ob_GroupEmptyPlace : GObject {
-    int m_iNumButton;
-    FractalString *pChelf;
-    float *m_fChelf;
+#define R_ICON          1
+#define R_TEXTURE       2
+#define R_SOUND         3
+
+@interface Ob_ResourceMng : GObject {
+    int m_iTypeRes;
+    GObject *pObBtnClose;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 -(void)Destroy;
 -(void)Start;
-
-- (void)Hide;
-- (void)Show;
-
-- (void)ReLinkEmptyPlace;
+-(void)Update;
+- (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y;
     
 @end

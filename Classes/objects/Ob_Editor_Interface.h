@@ -20,6 +20,7 @@
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;
     ObjectButton *pDropBox;
+    float *FCheck;
     
     NSMutableArray *aProp;
     NSMutableArray *aObjects;
@@ -28,9 +29,10 @@
     int IndexCheckPoint;
     int m_iMode;
     int m_iChelf;
-    GObject *PrBar;
     
     DropBoxMng *pInfoFile;
+    GObject *PrBar;
+    int OldCheck;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -43,6 +45,8 @@
 -(void)Destroy;
 -(void)Start;
 -(void)UpdatePoints;
+- (void)CreateButtons;
+- (void)CloseChoseIcon;
 
 - (void)CreateNewPoint;
 - (void)DelPoint;
@@ -52,6 +56,7 @@
 - (void)CheckPoint;
 - (void)DelObject;
 - (void)SetDropBox;
+- (void)ClearInterface;
 
 - (void)CheckMove;
 - (void)CheckCopy;
@@ -60,6 +65,8 @@
 - (void)SynhDropBox;
 - (void)SetStatusBar;
 - (void)DelStatusBar;
+
+- (void)DoubleTouchObject;
 
 -(void)dealloc;
     

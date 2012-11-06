@@ -93,6 +93,8 @@
 		18EB607F14E809D70089C409 /* ObjectMultiTouch.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB607C14E809D70089C409 /* ObjectMultiTouch.mm */; };
 		18EB608014E809D70089C409 /* ObjectScoreFun1.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB607E14E809D70089C409 /* ObjectScoreFun1.mm */; };
 		18EB608314E8141D0089C409 /* ObjectGameSpaun.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EB608214E8141D0089C409 /* ObjectGameSpaun.mm */; };
+		18EF3F011642580F00BE6B57 /* Ob_ResourceMng.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EF3F001642580D00BE6B57 /* Ob_ResourceMng.mm */; };
+		18EF3F07164814A600BE6B57 /* texture2d.m in Sources */ = {isa = PBXBuildFile; fileRef = 18EF3F05164814A500BE6B57 /* texture2d.m */; };
 		18EFBFAD1414E4D500426553 /* ObjectAnimateStatic.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18EFBFAC1414E4D200426553 /* ObjectAnimateStatic.mm */; };
 		18F355AA1541D47900E7ABBA /* Ob_ParticleCont_Ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F355A91541D47800E7ABBA /* Ob_ParticleCont_Ex.mm */; };
 		18F86B30129975A20068A469 /* Ob_Templet.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18F86B2F129975A20068A469 /* Ob_Templet.mm */; };
@@ -256,6 +258,10 @@
 		18EB607E14E809D70089C409 /* ObjectScoreFun1.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectScoreFun1.mm; path = objects/ObjectScoreFun1.mm; sourceTree = "<group>"; };
 		18EB608114E8141D0089C409 /* ObjectGameSpaun.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectGameSpaun.h; path = objects/ObjectGameSpaun.h; sourceTree = "<group>"; };
 		18EB608214E8141D0089C409 /* ObjectGameSpaun.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectGameSpaun.mm; path = objects/ObjectGameSpaun.mm; sourceTree = "<group>"; };
+		18EF3EFF1642580B00BE6B57 /* Ob_ResourceMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ResourceMng.h; path = objects/Ob_ResourceMng.h; sourceTree = "<group>"; };
+		18EF3F001642580D00BE6B57 /* Ob_ResourceMng.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_ResourceMng.mm; path = objects/Ob_ResourceMng.mm; sourceTree = "<group>"; };
+		18EF3F04164814A300BE6B57 /* texture2d.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = texture2d.h; sourceTree = "<group>"; };
+		18EF3F05164814A500BE6B57 /* texture2d.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = texture2d.m; sourceTree = "<group>"; };
 		18EFBFAB1414E4D100426553 /* ObjectAnimateStatic.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectAnimateStatic.h; path = objects/ObjectAnimateStatic.h; sourceTree = "<group>"; };
 		18EFBFAC1414E4D200426553 /* ObjectAnimateStatic.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectAnimateStatic.mm; path = objects/ObjectAnimateStatic.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		18F355A81541D47800E7ABBA /* Ob_ParticleCont_Ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ParticleCont_Ex.h; path = objects/Ob_ParticleCont_Ex.h; sourceTree = "<group>"; };
@@ -319,6 +325,8 @@
 				186E0CC214E04BD0008B4290 /* PVRTexture.m */,
 				18D79551127B29C800BD5445 /* GLView.h */,
 				18D79552127B29C800BD5445 /* GLView.m */,
+				18EF3F04164814A300BE6B57 /* texture2d.h */,
+				18EF3F05164814A500BE6B57 /* texture2d.m */,
 				18D79559127B2A0000BD5445 /* OpenGLCommon.h */,
 				189015D6129175060027418F /* PrSettings.h */,
 				189015D5129175060027418F /* PrSettings.m */,
@@ -458,6 +466,8 @@
 				18E654171613679D009B3E90 /* DropBoxMng.m */,
 				18E6541916175873009B3E90 /* ObB_DropBox.h */,
 				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
+				18EF3EFF1642580B00BE6B57 /* Ob_ResourceMng.h */,
+				18EF3F001642580D00BE6B57 /* Ob_ResourceMng.mm */,
 			);
 			name = "First Kernel";
 			sourceTree = "<group>";
@@ -758,6 +768,8 @@
 				18E654181613679F009B3E90 /* DropBoxMng.m in Sources */,
 				18E6541B16175879009B3E90 /* ObB_DropBox.mm in Sources */,
 				182BF1301636A6030051A30E /* Ob_ProgressBar.mm in Sources */,
+				18EF3F011642580F00BE6B57 /* Ob_ResourceMng.mm in Sources */,
+				18EF3F07164814A600BE6B57 /* texture2d.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

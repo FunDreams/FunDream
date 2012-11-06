@@ -9,13 +9,14 @@
 #import "DropBoxMng.h"
 #import "ObB_DropBox.h"
 
+#define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"info"];
+        pDataManager=[[CDataManager alloc] InitWithFileFromRes:NAME_INFO_FILE];
         pDataManager->m_pParent=self;
         
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
@@ -146,7 +147,7 @@
     
     if(m_iMode==UPLOAD_DATA_STR){
 
-        if([pDataManager->m_pTmpLocalMetaData.filename isEqualToString:@"info"]){
+        if([pDataManager->m_pTmpLocalMetaData.filename isEqualToString:NAME_INFO_FILE]){
             
             bDropBoxWork=NO;
             OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
@@ -349,7 +350,9 @@
     for(DBMetadata *child in pDataManager->m_pMetaData.contents)
     {//собираем именя из метадаты
         NSString *folderName = [[child.path pathComponents] lastObject];
-        if([folderName isEqualToString:@"info"])continue;
+        if([folderName isEqualToString:NAME_INFO_FILE])continue;
+        if([folderName isEqualToString:@"_Resource"])continue;
+        if([folderName length]!=8)continue;
 
         [pArray addObject:folderName];
     }
@@ -502,7 +505,7 @@ Repeate2:;//главная синхронизация
         
         [pDataManager Save];
         
-        [pDataManager UpLoadWithName:@"info"];
+        [pDataManager UpLoadWithName:NAME_INFO_FILE];
     }
 }
 //------------------------------------------------------------------------------------------------------

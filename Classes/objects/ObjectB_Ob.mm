@@ -178,11 +178,14 @@
     if(m_bDoubleTouch==YES)
     {
         m_bDoubleTouch=YES;
-        OBJECT_PERFORM_SEL(m_strNameObjectDClick, m_strNameStageDClick);
+//        OBJECT_PERFORM_SEL(m_strNameObjectDClick, m_strNameStageDClick);
+        
+        SET_CELL(LINK_ID_V(self,@"DoubleTouch"));
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"DoubleTouchObject");
     }
     else
     {
-        NEXT_STAGE_EX(NAME(self), @"DTouch")
+        NEXT_STAGE_EX(NAME(self), @"DTouch");
         m_bDoubleTouch=YES;
     }
 }

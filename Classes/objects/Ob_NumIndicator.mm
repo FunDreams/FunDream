@@ -17,8 +17,7 @@
     {
         m_iLayer = layerOb5;
         m_iLayerTouch=layerTouch_0;//слой касания
-        
-        
+
         m_fScale=1.0f;
     }
     
@@ -80,17 +79,17 @@
     for (int i=0; i<20; i++) {
 		
 		GObject *Ob = UNFROZE_OBJECT(@"ObjectAlNumber",([NSString stringWithFormat:@"sym%d", i]),
-                                     SET_INT_V(3,@"m_iCurrentSym"),
-                                     LINK_ID_V(self,@"m_pOwner"),
-                                     SET_INT_V(0,@"m_iCurrentSym"),
-                                     SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
-                                     SET_BOOL_V(YES,@"m_bHiden"),
-                                     SET_BOOL_V(m_bNoOffset,@"m_bNoOffset"),
-                                     SET_FLOAT_V(WSym,@"mWidth"),
-                                     SET_FLOAT_V(HSym,@"mHeight"),
-                                     SET_BOOL_V(m_bNoOffset, @"m_bNoOffset"),
-                                     SET_STRING_V(m_strNameContainer,@"m_strNameContainer"),
-                                     SET_INT_V(m_iLayer+1,@"m_iLayer"));
+                         SET_INT_V(3,@"m_iCurrentSym"),
+                         LINK_ID_V(self,@"m_pOwner"),
+                         SET_INT_V(0,@"m_iCurrentSym"),
+                         SET_VECTOR_V(Vector3DMake(i*m_fWNumber,0,0),@"m_pOffsetCurPosition"),
+                         SET_BOOL_V(YES,@"m_bHiden"),
+                         SET_BOOL_V(m_bNoOffset,@"m_bNoOffset"),
+                         SET_FLOAT_V(WSym,@"mWidth"),
+                         SET_FLOAT_V(HSym,@"mHeight"),
+                         SET_BOOL_V(m_bNoOffset, @"m_bNoOffset"),
+                         SET_STRING_V(m_strNameContainer,@"m_strNameContainer"),
+                         SET_INT_V(m_iLayer+1,@"m_iLayer"));
         
 		[m_pChildrenbjectsArr addObject:Ob];
 	}
