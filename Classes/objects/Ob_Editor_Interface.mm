@@ -14,6 +14,7 @@
 #import "Ob_Slayder.h"
 #import "ObjectButton.h"
 #import "Ob_EmtyPlace.h"
+#import "Ob_ResourceMng.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -53,7 +54,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CreateButtons{
     
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
+    BTash=UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonTash.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
@@ -66,7 +67,7 @@
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
     
-    pDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
+    BDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
                   SET_STRING_V(@"Button_DropBox.png",@"m_DOWN"),
                   SET_STRING_V(@"Button_DropBox.png",@"m_UP"),
                   SET_FLOAT_V(46,@"mWidth"),
@@ -80,13 +81,12 @@
                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                   SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
     
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
+    BMove=UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
                    SET_STRING_V(@"Button_Move.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Move.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   //SET_BOOL_V(YES,@"m_bNotPush"),
                    SET_BOOL_V((m_iMode==0)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
@@ -94,13 +94,12 @@
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
     
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
+    BCopy=UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
                    SET_STRING_V(@"Button_Copy.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Copy.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   //SET_BOOL_V(YES,@"m_bNotPush"),
                    SET_BOOL_V((m_iMode==1)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
@@ -108,13 +107,12 @@
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
     
-    UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
+    BLink=UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
                    SET_STRING_V(@"Button_Link.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Link.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   //SET_BOOL_V(YES,@"m_bNotPush"),
                    SET_BOOL_V((m_iMode==2)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
@@ -185,24 +183,24 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
-
+    
     *FCheck=0;
     
-    OBJECT_PERFORM_SEL(@"ButtonCopy",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonLink",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     
     m_iMode=0;//move
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckCopy{
-    
+
     *FCheck=1;
 
-    OBJECT_PERFORM_SEL(@"ButtonMove",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonLink",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     
     m_iMode=1;//copy
     [self UpdateB];
@@ -212,9 +210,9 @@
     
     *FCheck=2;
 
-    OBJECT_PERFORM_SEL(@"ButtonMove",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonCopy",   @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonDropBox",@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     
     m_iMode=2;//link
     [self UpdateB];
@@ -224,9 +222,9 @@
             
     *FCheck=3;
 
-    OBJECT_PERFORM_SEL(@"ButtonMove", @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonCopy", @"SetUnPush");
-    OBJECT_PERFORM_SEL(@"ButtonLink", @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
 
     m_iMode=3;//DropBox
     [self UpdateB];
@@ -241,7 +239,9 @@
     
     if(pObDblTouch!=nil){}
     
-    UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",nil);
+    UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
+                   SET_INT_V(R_ICON,@"m_iTypeRes"),
+                   SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
 
     DEL_CELL(@"DoubleTouch");
     
@@ -570,14 +570,23 @@ EXIT:
     [ButtonGroup Hide];
     [Eplace Hide];
     
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonSynh"]);
+    DESTROY_OBJECT(PrSyn);
+    PrSyn=nil;
 
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonTach"]);
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonDropBox"]);
+    DESTROY_OBJECT(BTash);
+    BTash=nil;
     
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonMove"]);
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonCopy"]);
-    DESTROY_OBJECT([m_pObjMng GetObjectByName:@"ButtonLink"]);
+    DESTROY_OBJECT(BDropBox);
+    BDropBox=nil;
+    
+    DESTROY_OBJECT(BMove);
+    BMove=nil;
+    
+    DESTROY_OBJECT(BCopy);
+    BCopy=nil;
+    
+    DESTROY_OBJECT(BLink);
+    BLink=nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
@@ -594,7 +603,7 @@ EXIT:
 
         if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
             
-            UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
+            PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
                        SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
                        SET_STRING_V(@"Button_Synh.png",@"m_UP"),
                        SET_FLOAT_V(54,@"mWidth"),
@@ -608,7 +617,7 @@ EXIT:
         
         OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
 
-        if(pDropBox->m_bPush==YES){
+        if(((ObjectButton *)BDropBox)->m_bPush==YES){
             
             if(pInfoFile->bDropBoxWork==YES){
                 [self SetStatusBar];

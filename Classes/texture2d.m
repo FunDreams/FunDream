@@ -292,7 +292,7 @@
 	UIGraphicsPushContext(context);
 	
 	[string drawInRect:CGRectMake(0, 0, dimensions.width, dimensions.height)
-			  withFont:font lineBreakMode:UILineBreakModeWordWrap alignment:alignment];
+			  withFont:font lineBreakMode:UILineBreakModeTailTruncation alignment:alignment];
 	
 	UIGraphicsPopContext();
 	

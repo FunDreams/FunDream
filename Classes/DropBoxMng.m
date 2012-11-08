@@ -73,9 +73,14 @@
 - (void)Hide{
     
     for (ObB_DropBox *pOb in m_pChildrenbjectsArr) {
-        [pOb SetTouch:NO];
-        [pOb DeleteFromDraw];
+        DESTROY_OBJECT(pOb);
     }
+    [m_pChildrenbjectsArr removeAllObjects];
+
+//    for (ObB_DropBox *pOb in m_pChildrenbjectsArr) {
+//        [pOb SetTouch:NO];
+//        [pOb DeleteFromDraw];
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -403,7 +408,7 @@ Repeate:;
             pLoadFstr->strName = [[NSString alloc] initWithString:folderName];
             pLoadFstr->strUID = [[NSString alloc] initWithString:folderName];
 
-            pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
+//            pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
             [pLoadFstr SetFlag:SYNH_AND_HEAD];//только заголовок
             [pFstrRez->aStrings addObject:pLoadFstr];
         }

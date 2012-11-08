@@ -27,10 +27,10 @@
     NSMutableArray *ArrayLinks;//массив ссылок (имена струн).
     
     int S;//начальная граница параметра
-    FunArrayDataIndexes *ArrayPoints;//ссылки на значения параметров
+    FunArrayDataIndexes *ArrayPoints;//имена параметров (strKey=(int)iValue)
     int F;//конечная граница параметра
 
-    int iIndexIcon;//иконка
+    NSString *sNameIcon;//имя иконка
     float X;
     float Y;
     int m_iFlagsString;
@@ -40,6 +40,8 @@
     //0x00000004 струна загружена и синхронизировано с хранилищем
     //0x00000008 струна только в локальной памяти устройства
 }
+
+- (void)SetNameIcon:(NSString *)Name;
 
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
      WithContainer:(StringContainer *)pContainer S:(int)iS F:(int)iF;

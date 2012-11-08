@@ -304,7 +304,9 @@ Exit:
         [self SetLayer:m_iLayer-1];
         [self SetTouch:YES WithLayer:m_iLayerTouch+1];
         DEL_CELL(@"DragObject");
-        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+        
+        if(m_bPush==NO)
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
 }
 //------------------------------------------------------------------------------------------------------

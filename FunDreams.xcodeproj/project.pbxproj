@@ -31,6 +31,7 @@
 		18408806141D1CA200A4C9BF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18408805141D1CA100A4C9BF /* CoreMotion.framework */; };
 		18444D9B13D93A6C0058ADC9 /* Mega_tree.m in Sources */ = {isa = PBXBuildFile; fileRef = 18444D9A13D93A6C0058ADC9 /* Mega_tree.m */; };
 		18444D9E13D93D8D0058ADC9 /* ObjectTest.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18444D9D13D93D8D0058ADC9 /* ObjectTest.mm */; };
+		1849D250164C02740045F9E4 /* Ob_Icon.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1849D24F164C02740045F9E4 /* Ob_Icon.mm */; };
 		1851808F1421C200009C879E /* sounds_loop in Resources */ = {isa = PBXBuildFile; fileRef = 1851808E1421C200009C879E /* sounds_loop */; };
 		1852D3D513D18B2C00180809 /* texture in Resources */ = {isa = PBXBuildFile; fileRef = 1852D3D413D18B2B00180809 /* texture */; };
 		1852D3D813D1F29500180809 /* sounds in Resources */ = {isa = PBXBuildFile; fileRef = 1852D3D613D1F29500180809 /* sounds */; };
@@ -50,6 +51,7 @@
 		186E0CF714E1994E008B4290 /* textureAtlas in Resources */ = {isa = PBXBuildFile; fileRef = 186E0CF614E1994E008B4290 /* textureAtlas */; };
 		1878951F149FA4B900F9EE57 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 1878951E149FA4B900F9EE57 /* Default@2x.png */; };
 		18789520149FA4DB00F9EE57 /* Default-Portrait~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 18FCA0DA149F950800C011F8 /* Default-Portrait~ipad.png */; };
+		187A5BC1164A3D6800D80D43 /* Ob_Label.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187A5BC0164A3D6700D80D43 /* Ob_Label.mm */; };
 		187D25CF13E5ABF600C82DBB /* Processor_ex.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187D25CE13E5ABF600C82DBB /* Processor_ex.mm */; };
 		187E228F1165E9CB00EA912F /* SoundEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187E228D1165E9CB00EA912F /* SoundEngine.cpp */; };
 		187E22A61165EC3200EA912F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22A51165EC3200EA912F /* CoreAudio.framework */; };
@@ -158,6 +160,8 @@
 		18444D9A13D93A6C0058ADC9 /* Mega_tree.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Mega_tree.m; sourceTree = "<group>"; };
 		18444D9C13D93D8D0058ADC9 /* ObjectTest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectTest.h; path = objects/ObjectTest.h; sourceTree = "<group>"; };
 		18444D9D13D93D8D0058ADC9 /* ObjectTest.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectTest.mm; path = objects/ObjectTest.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
+		1849D24E164C02740045F9E4 /* Ob_Icon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Icon.h; path = objects/Ob_Icon.h; sourceTree = "<group>"; };
+		1849D24F164C02740045F9E4 /* Ob_Icon.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Icon.mm; path = objects/Ob_Icon.mm; sourceTree = "<group>"; };
 		1851808E1421C200009C879E /* sounds_loop */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds_loop; sourceTree = SOURCE_ROOT; };
 		1852D3D413D18B2B00180809 /* texture */ = {isa = PBXFileReference; lastKnownFileType = folder; path = texture; sourceTree = SOURCE_ROOT; };
 		1852D3D613D1F29500180809 /* sounds */ = {isa = PBXFileReference; lastKnownFileType = folder; path = sounds; sourceTree = SOURCE_ROOT; };
@@ -183,6 +187,8 @@
 		186E0CC214E04BD0008B4290 /* PVRTexture.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVRTexture.m; sourceTree = "<group>"; };
 		186E0CF614E1994E008B4290 /* textureAtlas */ = {isa = PBXFileReference; lastKnownFileType = folder; path = textureAtlas; sourceTree = SOURCE_ROOT; };
 		1878951E149FA4B900F9EE57 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default@2x.png"; path = "../Default@2x.png"; sourceTree = "<group>"; };
+		187A5BBF164A3D6700D80D43 /* Ob_Label.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Label.h; path = objects/Ob_Label.h; sourceTree = "<group>"; };
+		187A5BC0164A3D6700D80D43 /* Ob_Label.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Label.mm; path = objects/Ob_Label.mm; sourceTree = "<group>"; };
 		187D25CD13E5ABF600C82DBB /* Processor_ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Processor_ex.h; sourceTree = "<group>"; };
 		187D25CE13E5ABF600C82DBB /* Processor_ex.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Processor_ex.mm; sourceTree = "<group>"; };
 		187E228D1165E9CB00EA912F /* SoundEngine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SoundEngine.cpp; sourceTree = "<group>"; };
@@ -468,6 +474,10 @@
 				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
 				18EF3EFF1642580B00BE6B57 /* Ob_ResourceMng.h */,
 				18EF3F001642580D00BE6B57 /* Ob_ResourceMng.mm */,
+				187A5BBF164A3D6700D80D43 /* Ob_Label.h */,
+				187A5BC0164A3D6700D80D43 /* Ob_Label.mm */,
+				1849D24E164C02740045F9E4 /* Ob_Icon.h */,
+				1849D24F164C02740045F9E4 /* Ob_Icon.mm */,
 			);
 			name = "First Kernel";
 			sourceTree = "<group>";
@@ -770,6 +780,8 @@
 				182BF1301636A6030051A30E /* Ob_ProgressBar.mm in Sources */,
 				18EF3F011642580F00BE6B57 /* Ob_ResourceMng.mm in Sources */,
 				18EF3F07164814A600BE6B57 /* texture2d.m in Sources */,
+				187A5BC1164A3D6800D80D43 /* Ob_Label.mm in Sources */,
+				1849D250164C02740045F9E4 /* Ob_Icon.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

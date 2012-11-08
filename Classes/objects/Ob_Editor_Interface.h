@@ -19,7 +19,6 @@
     
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;
-    ObjectButton *pDropBox;
     float *FCheck;
     
     NSMutableArray *aProp;
@@ -33,6 +32,13 @@
     DropBoxMng *pInfoFile;
     GObject *PrBar;
     int OldCheck;
+
+    GObject *BDropBox;
+    GObject *BMove;
+    GObject *BCopy;
+    GObject *BLink;
+    GObject *BTash;
+    GObject *PrSyn;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

@@ -6,22 +6,22 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_ProgressBar.h"
+#import "Ob_Icon.h"
 
-@implementation Ob_ProgressBar
+@implementation Ob_Icon
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerInterfaceSpace10;
+        m_iLayer = layerInterfaceSpace9;
         m_iLayerTouch=layerTouch_0;//слой касания
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)SetDefault{}
+- (void)SetDefault{m_bHiden=NO;}
 //- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -33,7 +33,7 @@
     [self END_QUEUE:pProc name:@"Proc"];
     
 //====//различные параметры=============================================================================
-//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"))];
     
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
@@ -41,18 +41,13 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    //   GET_DIM_FROM_TEXTURE(@"");
-	mWidth  = 128;
-	mHeight = 128*FACTOR_DEC;
+	mWidth  = 50;
+	mHeight = 50;
 
 	[super Start];
+    GET_TEXTURE(mTextureId, m_pNameTexture);
 
-    //   [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId, @"ProgressBar.png");
-    m_pCurPosition=Vector3DMake(-250, -50, 0);
-
-    //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
-    //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
+    [self SetPosWithOffsetOwner];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -63,7 +58,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
     
-    m_pCurAngle.z+=200*DELTA;
+    [self SetPosWithOffsetOwner];
+
 //    PLAY_SOUND(@"");
 //    STOP_SOUND(@"");
 }

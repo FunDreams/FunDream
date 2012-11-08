@@ -119,6 +119,10 @@
 		GObject * TmpOb=[pMustDelKeys objectAtIndex:0];
 		[pMustDelKeys removeObjectAtIndex:0];
 
+        NSString *NameClass= NSStringFromClass([TmpOb class]);
+        NSMutableArray *pArray = [m_pObjectReserv objectForKey:NameClass];
+        [pArray addObject:TmpOb];
+
         [TmpOb DeleteFromProc];
         [self RemoveFromGroups:TmpOb];
 	}
@@ -332,11 +336,7 @@ repeate:
         pObject->m_bDeleted=YES;
 
         [pObject DeleteFromDraw];
-        [pObject Destroy];
-        
-        NSString *NameClass= NSStringFromClass([pObject class]);
-        NSMutableArray *pArray = [m_pObjectReserv objectForKey:NameClass];
-        [pArray addObject:pObject];
+        [pObject Destroy];        
     }
     
 	return pObject;

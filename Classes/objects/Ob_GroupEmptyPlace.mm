@@ -39,15 +39,21 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Hide{
     
-    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
-        [pOb SetTouch:NO];
-        [pOb DeleteFromDraw];
+    for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
+        DESTROY_OBJECT(pOb);
     }
+    [m_pChildrenbjectsArr removeAllObjects];
+
+    
+//    for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
+//        [pOb SetTouch:NO];
+//        [pOb DeleteFromDraw];
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
     
-    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
+    for (Ob_EmtyPlace *pOb in m_pChildrenbjectsArr) {
         [pOb SetTouch:YES];
         [pOb AddToDraw];
     }
@@ -123,7 +129,7 @@
             if(pStrTmp!=nil && (pStrTmp->m_iFlagsString & (ONLY_IN_MEM|SYNH_AND_LOAD)))
             {
                 pObTmp->pStrInside=pStrTmp;
-                pObTmp->mTextureId=pStrTmp->iIndexIcon;
+                GET_TEXTURE(pObTmp->mTextureId, pStrTmp->sNameIcon);
             }
             else
             {

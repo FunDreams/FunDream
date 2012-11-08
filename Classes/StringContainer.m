@@ -97,21 +97,19 @@
     pFStringObjects=[[FractalString alloc]
         initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];
     
-    TextureContainer *pNum=[m_pObjMng->m_pParent->m_pTextureList objectForKey:@"EmptyPlace.png"];
-    pFStringObjects->iIndexIcon=pNum->m_iTextureId;
-    
+    [pFStringObjects SetNameIcon:@"EmptyPlace.png"];
 
     FractalString *pStrOb1=[[FractalString alloc]
             initWithName:@"Ob1" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
-    pStrOb1->iIndexIcon=pNum->m_iTextureId;
+    [pStrOb1 SetNameIcon:@"ButtonOb.png"];
     
     FractalString *pStrOb2=[[FractalString alloc]
             initWithName:@"Ob2" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
-    pStrOb2->iIndexIcon=pNum->m_iTextureId;
+    [pStrOb2 SetNameIcon:@"ButtonOb.png"];
     
     FractalString *pStrOb3=[[FractalString alloc]
             initWithName:@"Ob3" WithParent:pFStringObjects WithContainer:self  S:iIndexZero F:iIndexZero];
-    pStrOb3->iIndexIcon=pNum->m_iTextureId;
+    [pStrOb3 SetNameIcon:@"ButtonOb.png"];
 
     FractalString *pFStringProp=[[FractalString alloc]
         initWithName:@"Prop" WithParent:pFStringEditor WithContainer:self S:iIndexZero F:iIndexZero];

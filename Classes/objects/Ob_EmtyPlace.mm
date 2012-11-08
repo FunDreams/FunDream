@@ -206,11 +206,10 @@
     FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
 
     if(pChelf!=nil){
-
-        StrTmp->iIndexIcon=mTextureId;
         
         NSMutableString *pName = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
         [pName setString:StrTmp->strUID];
+//        StrTmp->iIndexIcon=mTextureId;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -225,7 +224,7 @@
 
     pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
     GET_TEXTURE(mTextureId, @"EmptyPlace.png");
-    pStrInside->iIndexIcon=mTextureId;
+//    pStrInside->iIndexIcon=mTextureId;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Click{
@@ -263,7 +262,7 @@
             {
                 [Name setString:DragObjectDropBoxStr->strUID];
                 pStrInside = DragObjectDropBoxStr;
-                mTextureId=DragObjectDropBoxStr->iIndexIcon;
+                GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
                 
                 [self SetNameStr:pStrInside];
             }
@@ -300,7 +299,7 @@
         }
         else if(pObObTmpStr!=nil && bFromPlace && *bFromPlace==YES){
             pStrInside = pObObTmpStr;
-            mTextureId=pObObTmpStr->iIndexIcon;
+            GET_TEXTURE(mTextureId, pObObTmpStr->sNameIcon);
             
             [self SetNameStr:pStrInside];
             
@@ -310,7 +309,7 @@
         else if(pObObTmpStr!=nil && pMode!=0 && (*pMode)!=0){
 
             pStrInside = pObObTmpStr;
-            mTextureId=pObObTmpStr->iIndexIcon;
+            GET_TEXTURE(mTextureId, pObObTmpStr->sNameIcon);
             
             [self SetNameStr:pStrInside];
             

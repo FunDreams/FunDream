@@ -12,6 +12,16 @@
 
 @implementation FractalString
 //------------------------------------------------------------------------------------------------------
+- (void)SetNameIcon:(NSString *)Name{
+    
+    if(sNameIcon!=nil){
+        [sNameIcon release];
+        sNameIcon=nil;
+    }
+
+    sNameIcon=[[NSString alloc] initWithString:Name];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
         
     [self SetFlag:ONLY_IN_MEM];
@@ -21,6 +31,8 @@
     ArrayLinks = [[NSMutableArray alloc] init];
     
     ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:10];
+    
+    [self SetNameIcon:@"none"];
 
     X=-440;
     Y=170;
@@ -54,7 +66,8 @@
         strName = [[NSString alloc] initWithString:pStrSource->strName];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
-        iIndexIcon=pStrSource->iIndexIcon;
+        
+        [self SetNameIcon:pStrSource->sNameIcon];
         
         if(iCurLevel<=iDeep){
             
@@ -90,7 +103,8 @@
                 
         strUID = [pContainer GetRndName];
         strName = [[NSString alloc] initWithString:pStrSource->strName];
-        iIndexIcon=pStrSource->iIndexIcon;
+        
+        [self SetNameIcon:pStrSource->sNameIcon];
 
         [pContainer->DicStrings setObject:self forKey:strUID];
         
@@ -224,6 +238,18 @@
     sValue = [NSString stringWithCharacters:ucBuff length:iLen];
     strName = [[NSString alloc] initWithString:sValue];
     //---------------------------------------------------------------------------------
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+    
+    [pData getBytes:ucBuff range:Range];
+    
+    *iCurReadingPos += iLen*sizeof(unichar);
+    
+    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    sNameIcon = [[NSString alloc] initWithString:sValue];
+    //---------------------------------------------------------------------------------
     free(ucBuff);
     
     //float value
@@ -234,11 +260,7 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&F range:Range];
     *iCurReadingPos += sizeof(int);
-    
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&iIndexIcon range:Range];
-    *iCurReadingPos += sizeof(int);
-    
+        
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&m_iDeep range:Range];
     *iCurReadingPos += sizeof(int);
@@ -304,7 +326,19 @@
 
     sValue = [NSString stringWithCharacters:ucBuff length:iLen];
     strName = [[NSString alloc] initWithString:sValue];
-//---------------------------------------------------------------------------------    
+//---------------------------------------------------------------------------------
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&iLen range:Range];
+    *iCurReadingPos += sizeof(int);
+    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
+    
+    [pData getBytes:ucBuff range:Range];
+    
+    *iCurReadingPos += iLen*sizeof(unichar);
+    
+    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
+    sNameIcon = [[NSString alloc] initWithString:sValue];
+//---------------------------------------------------------------------------------
     //float value
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&S range:Range];
@@ -312,10 +346,6 @@
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&F range:Range];
-    *iCurReadingPos += sizeof(int);
-
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&iIndexIcon range:Range];
     *iCurReadingPos += sizeof(int);
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
@@ -399,14 +429,18 @@
             Len=[strName length];
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
-            
+
+            [sNameIcon getCharacters:ucBuff];
+            Len=[sNameIcon length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+
             free(ucBuff);
             
             //float value
             [m_pData appendBytes:&S length:sizeof(int)];
             [m_pData appendBytes:&F length:sizeof(int)];
             
-            [m_pData appendBytes:&iIndexIcon length:sizeof(int)];
             [m_pData appendBytes:&m_iDeep length:sizeof(int)];
             
             [m_pData appendBytes:&X length:sizeof(float)];
@@ -456,11 +490,15 @@
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
 
+            [sNameIcon getCharacters:ucBuff];
+            Len=[sNameIcon length];
+            [m_pData appendBytes:&Len length:sizeof(int)];
+            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
+
             //float value
             [m_pData appendBytes:&S length:sizeof(int)];
             [m_pData appendBytes:&F length:sizeof(int)];
 
-            [m_pData appendBytes:&iIndexIcon length:sizeof(int)];
             [m_pData appendBytes:&m_iDeep length:sizeof(int)];
 
             [m_pData appendBytes:&X length:sizeof(float)];
@@ -526,6 +564,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
+    [sNameIcon release];
     [aStages release];
     [aStrings release];
     [ArrayLinks release];

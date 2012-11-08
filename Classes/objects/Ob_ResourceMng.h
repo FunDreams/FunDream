@@ -14,10 +14,21 @@
 #define R_ICON          1
 #define R_TEXTURE       2
 #define R_SOUND         3
+#define R_ATLAS         4
 
 @interface Ob_ResourceMng : GObject {
+@public
+    NSString *RootFolder;
     int m_iTypeRes;
     GObject *pObBtnClose;
+    
+    int NumButtons;
+    float m_fCurrentOffset;
+    float m_fUpLimmit,m_fDownLimmit;
+    float m_fStartOffset;
+    
+    bool m_bStartPush;
+    CGPoint m_pStartPoint;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -25,6 +36,7 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
-- (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y;
+
+- (void)Move:(CGPoint)Point;
     
 @end

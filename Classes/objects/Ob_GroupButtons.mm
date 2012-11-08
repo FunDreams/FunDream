@@ -63,9 +63,14 @@
 - (void)Hide{
 
     for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
-        [pOb SetTouch:NO];
-        [pOb DeleteFromDraw];
+        DESTROY_OBJECT(pOb);
     }
+    [m_pChildrenbjectsArr removeAllObjects];
+
+//    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
+//        [pOb SetTouch:NO];
+//        [pOb DeleteFromDraw];
+//    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -103,7 +108,7 @@
             SET_BOOL_V(YES,@"m_bDrag"),
             SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
         
-        GET_TEXTURE(pFrStr->iIndexIcon, @"ButtonOb.png");
+        GET_TEXTURE(pOb->mTextureId, pFrStr->sNameIcon);
         pOb->pString=pFrStr;
 
         [m_pChildrenbjectsArr addObject:pOb];
@@ -141,7 +146,14 @@
  //   [self UpdateButt];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
+- (void)Destroy{
+    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsArr removeAllObjects];
+
+    [super Destroy];
+}
 //------------------------------------------------------------------------------------------------------
 //- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 @end
