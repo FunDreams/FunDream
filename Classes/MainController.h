@@ -12,8 +12,6 @@
 #import <iAd/iAd.h>
 
 #import <CoreMotion/CoreMotion.h>
-
-#define MAX_NUM_TEXTURE 600
 //------------------------------------------------------------------------------------------------------
 @interface SoundContainer : NSObject {
 @public
@@ -121,9 +119,6 @@
     Vector3D m_vAccel;
     Vector3D m_vRYawPitchRoll;
     bool m_bMotionMashine;
-
-	GLuint	texture[MAX_NUM_TEXTURE];
-    UInt32 m_iCount;//индекс текстуры для загрузки
 }
 @property (nonatomic, retain) GLView *glView;
 @property (nonatomic, retain) RootViewController* m_pRootViewController;
@@ -160,6 +155,8 @@
 -(void)LoadAllTextures;
 -(void)LoadAllSounds;
 -(void)LoadTextureAtlas:(AtlasContainer *)pAtlasContainer;
+- (void)DeleteTexture:(NSString *)NameTexture;
+- (void)DeleteSound:(NSString *)NameSound;
 
 -(NSString *)GetNameWithLocale:(NSString *)NameTexture Ext:(NSString *)Ext;
 

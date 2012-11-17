@@ -14,8 +14,11 @@
 #import "Ob_GroupButtons.h"
 #import "ObjectButton.h"
 #import "DropBoxMng.h"
+#import "Ob_ResourceMng.h"
 
 @interface Ob_Editor_Interface : GObject {
+    
+    Ob_ResourceMng *pResIcon;
     
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;

@@ -36,6 +36,7 @@
     m_bPush=NO;
     m_bDrag=NO;
     m_bStartPush=NO;
+    m_bStartMove=NO;
     
     [m_DOWN setString:@""];
     [m_UP setString:@""];
@@ -178,9 +179,8 @@
     if(m_bDoubleTouch==YES)
     {
         m_bDoubleTouch=YES;
-//        OBJECT_PERFORM_SEL(m_strNameObjectDClick, m_strNameStageDClick);
         
-        SET_CELL(LINK_ID_V(self,@"DoubleTouch"));
+        SET_CELL(LINK_ID_V(pString,@"DoubleTouchFractalString"));
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"DoubleTouchObject");
     }
     else
@@ -191,7 +191,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn{
-    
+        
     int *pMode=GET_INT_V(@"m_iMode");
     if(*pMode==0){
         
@@ -211,6 +211,7 @@
             
             pString->X=m_pCurPosition.x;
             pString->Y=m_pCurPosition.y;
+            m_bStartMove=YES;
         }
     }
     else
@@ -228,7 +229,7 @@
             
             pOb->pInsideString=pString;
 
-            m_bStartMove=YES;
+//            m_bStartMove=YES;
         }
     }
 }
@@ -256,11 +257,10 @@
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
         
+    bool bUpdate=NO;
+    
     if(m_bStartPush==YES)
         PLAY_SOUND(@"drop.wav");
-
-    m_bStartPush=NO;
-    m_bStartMove=NO;
     
     int *pMode=GET_INT_V(@"m_iMode");
     
@@ -274,9 +274,12 @@
         
         if([pOb Intersect:Point])
         {
-            [m_pObjMng->pStringContainer DelString:pString];            
+            [m_pObjMng->pStringContainer DelString:pString];
+            bUpdate=YES;
+            goto Exit;
         }
-        else if(pMode!=0 && *pMode==0)
+
+        else if(pMode!=0 && *pMode==0 && m_bStartMove==YES)
         {
             GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
 
@@ -293,6 +296,8 @@
                                 WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
                             
                             [m_pObjMng->pStringContainer DelString:pString];
+                            bUpdate=YES;
+
                             goto Exit;
                         }
                     }
@@ -301,12 +306,15 @@
         }
         
 Exit:
+        m_bStartPush=NO;
+        m_bStartMove=NO;
+
         [self SetLayer:m_iLayer-1];
         [self SetTouch:YES WithLayer:m_iLayerTouch+1];
         DEL_CELL(@"DragObject");
         
-        if(m_bPush==NO)
-            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+        if(m_bPush==NO || bUpdate==YES)
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");        
     }
 }
 //------------------------------------------------------------------------------------------------------

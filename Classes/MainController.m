@@ -16,9 +16,7 @@
 @implementation SoundContainer
 - (id)InitWithName:(NSString *)pName WithUint:(UInt32)SoundId{
     self = [super init];
-    if (self)
-    {
-    }
+    if (self){}
     return self;
 }
 @end
@@ -359,12 +357,24 @@ FullName:(NSString *)FullNameSound
 	NSNumber *TmpOb;
 	
 	while ((TmpOb = [enumerator nextObject])){SoundEngine_UnloadEffect([TmpOb intValue]);}
-	
 	[m_pSoundList release];
+    
 
-	glDeleteTextures(MAX_NUM_TEXTURE,texture);
+    enumerator = [m_pTextureList objectEnumerator];
+	TextureContainer *TmpContainer;
+	
+	while ((TmpContainer = [enumerator nextObject])){
+        glDeleteTextures(1,(GLuint *)&TmpContainer->m_iTextureId);
+    }
 	
 	[m_pTextureList release];
+
+    
+    enumerator = [m_pTextureAtlasList objectEnumerator];
+    while ((TmpContainer = [enumerator nextObject])){
+        glDeleteTextures(1,(GLuint *)&TmpContainer->m_iTextureId);
+    }
+
     [m_pTextureAtlasList release];
 
 #ifdef BANNER_IAD
@@ -734,20 +744,22 @@ FullName:(NSString *)FullNameSound
 	NSString *path = [[NSBundle mainBundle] pathForResource:NameTexture ofType:Extention];
 	if (path!=nil)
 	{
-            
-        glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
+        GLuint	_name;
+        glGenTextures(1, &_name);
+        glBindTexture(GL_TEXTURE_2D, _name);
+        
+  //      glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
         
         PVRTexture *pvrTexture = [PVRTexture pvrTextureWithContentsOfFile:
                 [[NSBundle mainBundle] pathForResource:NameTexture ofType:@"pvr"]];
         
-        m_iTextureId=texture[m_iCount];
+        m_iTextureId=_name;
 		
         int sourceW=pvrTexture.width;
         int sourceH=pvrTexture.height;
 
         TextureContainer *TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
 		[m_pTextureList setObject:TmpContainer forKey:NameFile];
-        m_iCount++;
         
         [pvrTexture release];
     }
@@ -755,7 +767,29 @@ FullName:(NSString *)FullNameSound
     return m_iTextureId;
 }
 //------------------------------------------------------------------------------------------------------
--(UInt32)loadTexture:(NSString *)NameTexture WithExt:(NSString *)Extention 
+- (void)DeleteTexture:(NSString *)NameTexture{
+    
+    TextureContainer *TmpContainer=[m_pTextureList objectForKey:NameTexture];
+    
+    if(TmpContainer!=nil){
+        glDeleteTextures(1, (GLuint *)&TmpContainer->m_iTextureId);
+        [m_pTextureList removeObjectForKey:NameTexture];
+        [TmpContainer release];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)DeleteSound:(NSString *)NameSound{
+    
+    NSNumber *soundId =[m_pSoundList objectForKey:NameSound];
+    
+    if(soundId!=nil){
+        SoundEngine_UnloadEffect([soundId intValue]);
+        [m_pSoundList removeObjectForKey:NameSound];
+        [soundId release];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+-(UInt32)loadTexture:(NSString *)FullPath WithExt:(NSString *)Extention
             NameFile:(NSString *)NameFile
 {    
 	UInt32 m_iTextureId = -1;
@@ -769,11 +803,15 @@ FullName:(NSString *)FullNameSound
         return existingContainer->m_iTextureId;
     }
 	   
-	NSString *path = [[NSBundle mainBundle] pathForResource:NameTexture ofType:Extention];
+	NSString *path = FullPath;
 	if (path!=nil)
 	{
+        GLuint	_name;
+        glGenTextures(1, &_name);
+        glBindTexture(GL_TEXTURE_2D, _name);
+
 		//NSLog(@"texture:%@",NameTexture);
-		glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
+	//	glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
 
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -813,13 +851,11 @@ FullName:(NSString *)FullNameSound
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);
 
-		m_iTextureId=texture[m_iCount];
+		m_iTextureId=_name;
 		
-        TextureContainer *TmpContainer=[[TextureContainer alloc] InitWithName:NameTexture WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
+        TextureContainer *TmpContainer=[[TextureContainer alloc] InitWithName:NameFile WithUint:m_iTextureId WithWidth:sourceW WithWidth:sourceH];
 		[m_pTextureList setObject:TmpContainer forKey:NameFile];
-        
-		m_iCount++;
-
+  
 		CGContextRelease(context);
 
 		free(imageData);
@@ -851,7 +887,7 @@ FullName:(NSString *)FullNameSound
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     bundleRoot=[bundleRoot stringByAppendingString:@"/sounds"];
     
-    NSError *Error=[[NSError alloc] init];
+    NSError *Error=nil;
     NSArray *dirContents = [[NSFileManager defaultManager] 
                             contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
@@ -881,18 +917,15 @@ FullName:(NSString *)FullNameSound
 
         [self LoadSound:REZ WithExt:SubStr1 WithLoop:YES FullName:tString];
     }
-    
-    [Error release];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAllTextures{
 
-//    return;
     //load all textures
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     bundleRoot=[bundleRoot stringByAppendingString:@"/texture"];
     
-    NSError *Error=[[NSError alloc] init];
+    NSError *Error=nil;
     NSArray *dirContents = [[NSFileManager defaultManager] 
         contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
@@ -902,12 +935,14 @@ FullName:(NSString *)FullNameSound
         if(toprange.length==0)continue;
         
         NSString *SubStr = [tString substringToIndex:toprange.location];
-        NSString *SubStr1 = [tString substringFromIndex:toprange.location+1];
+        NSString *Extention = [tString substringFromIndex:toprange.location+1];
         
         NSString *REZ=@"texture/";
         REZ=[REZ stringByAppendingString:SubStr];
         
-        [self loadTexture:REZ WithExt:SubStr1 NameFile:tString];
+        NSString *FullName =  [[NSBundle mainBundle] pathForResource:REZ ofType:Extention];
+        
+        [self loadTexture:FullName WithExt:Extention NameFile:tString];
     }
 
     
@@ -930,8 +965,6 @@ FullName:(NSString *)FullNameSound
 
         [self loadTexturePVR:REZ WithExt:SubStr1 NameFile:tString];
     }
-
-    [Error release];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadTextureAtlas:(AtlasContainer *)pAtlasContainer{
@@ -949,14 +982,18 @@ FullName:(NSString *)FullNameSound
     NSString *bundleRoot = [[NSBundle mainBundle] bundlePath];
     bundleRoot=[bundleRoot stringByAppendingString:@"/textureAtlas"];
     
-    NSError *Error=[[NSError alloc] init];
+    NSError *Error=nil;
     NSArray *dirContents = [[NSFileManager defaultManager] 
                             contentsOfDirectoryAtPath:bundleRoot error:&Error];
     
     UInt32	m_iTextureId=-1;
     
     //		NSLog(NameTexture);
-    glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
+//    glBindTexture(GL_TEXTURE_2D, texture[m_iCount]);
+    
+    GLuint	_name;
+    glGenTextures(1, &_name);
+    glBindTexture(GL_TEXTURE_2D, _name);
     
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
@@ -1026,16 +1063,13 @@ FullName:(NSString *)FullNameSound
     
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageData);    
     
-    m_iTextureId=texture[m_iCount];
-    m_iCount++;
+    m_iTextureId=_name;
         
     [m_pTextureAtlasList setObject:pAtlasContainer forKey:pAtlasContainer->pAtlasName];
     pAtlasContainer->m_iTextureId=m_iTextureId;
     
     CGContextRelease(context);
     free(imageData);
-    
-    [Error release];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)setupView:(GLView*)view
@@ -1064,7 +1098,7 @@ FullName:(NSString *)FullNameSound
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     // Bind the number of textures we need, in this case one.
-	glGenTextures(MAX_NUM_TEXTURE, &texture[0]);
+//	glGenTextures(MAX_NUM_TEXTURE, &texture[0]);
 }
 
 -(UInt32) GetTextureId:(NSString*)textureName

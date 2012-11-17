@@ -17,9 +17,9 @@
     Vector3D LastPointTouch;
     bool m_bNotPush;
     bool m_bStartPush;
+    bool m_bStartMove;
     bool m_bDrag;
     bool m_bDoubleTouch;
-    bool m_bStartMove;
 
     bool m_bPush;
     NSMutableString *m_strNameSound;

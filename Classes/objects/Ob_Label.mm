@@ -80,24 +80,24 @@
     [self Update];
 }
 //------------------------------------------------------------------------------------------------------
-- (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y {
+- (void)drawText:(NSString*)theString AtX:(float)X Y:(float)Y {
 
     glLoadIdentity();
     glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
-    
+
     int iFontSize=24;
     // Set up texture
     Texture2D* statusTexture = [[Texture2D alloc] initWithString:theString
                 dimensions:CGSizeMake(mWidth-40, iFontSize+10) alignment:UITextAlignmentLeft
                 fontName:@"Helvetica" fontSize:iFontSize];
-    
+
     statusTexture->_color=Color3DMake(0, 0, 0, 1);
-    
+
     // Bind texture
     glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
     // Draw
     [statusTexture drawAtPoint:CGPointMake(X+m_fOffsetText,Y)];
-    
+
     [statusTexture release];
 }
 //------------------------------------------------------------------------------------------------------

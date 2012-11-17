@@ -42,7 +42,7 @@
 - (void)Start{
     
 	mWidth  = 50;
-	mHeight = 50;
+	mHeight = 50*FACTOR_DEC;
 
 	[super Start];
     GET_TEXTURE(mTextureId, m_pNameTexture);

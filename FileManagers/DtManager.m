@@ -103,6 +103,11 @@
   //  [[DBSession sharedSession] link];
 }
 //--------------------------------------------------------
+-(void)CreateFolder:(NSString *)NameFolder
+{
+    [restClient createFolder:NameFolder];
+}
+//--------------------------------------------------------
 -(void)UpLoadWithName:(NSString *)NameUpload
 {
     if(m_pMetaData==nil)return;

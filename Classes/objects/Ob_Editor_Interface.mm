@@ -14,7 +14,6 @@
 #import "Ob_Slayder.h"
 #import "ObjectButton.h"
 #import "Ob_EmtyPlace.h"
-#import "Ob_ResourceMng.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -61,6 +60,8 @@
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V(YES,@"m_bNotPush"),
+                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                   SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    //SET_INT_V(bCheckBox,@"m_iType"),
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
@@ -68,6 +69,8 @@
                    SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
     
     BDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
+                  SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                  SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                   SET_STRING_V(@"Button_DropBox.png",@"m_DOWN"),
                   SET_STRING_V(@"Button_DropBox.png",@"m_UP"),
                   SET_FLOAT_V(46,@"mWidth"),
@@ -82,6 +85,8 @@
                   SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
     
     BMove=UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
+                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                   SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Move.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Move.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
@@ -95,6 +100,8 @@
                    SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
     
     BCopy=UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
+                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                   SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Copy.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Copy.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
@@ -108,6 +115,8 @@
                    SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
     
     BLink=UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
+                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                   SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Link.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Link.png",@"m_UP"),
                    SET_FLOAT_V(54,@"mWidth"),
@@ -165,6 +174,13 @@
     Eplace = UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
                    SET_INT_V(m_iChelf,@"m_iCurrentSelect"),
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
+    
+//===================================================================================
+    //создаём ресурсы по порядку 
+    pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
+                            SET_INT_V(R_ICON,@"m_iTypeRes"),
+                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+
 //===============================режими==============================================
     [self UpdateB];
 
@@ -234,16 +250,6 @@
     
     OldCheck=*FCheck;
     *FCheck=4;
-
-    FractalString *pObDblTouch = GET_ID_V(@"DoubleTouch");
-    
-    if(pObDblTouch!=nil){}
-    
-    UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
-                   SET_INT_V(R_ICON,@"m_iTypeRes"),
-                   SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
-
-    DEL_CELL(@"DoubleTouch");
     
     [self UpdateB];
 }
@@ -566,6 +572,8 @@ EXIT:
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ClearInterface{
+    
+    [pResIcon Hide];
     [pInfoFile Hide];
     [ButtonGroup Hide];
     [Eplace Hide];
@@ -593,7 +601,7 @@ EXIT:
     
     [self ClearInterface];
 
-    if(*FCheck==4){}
+    if(*FCheck==4){[pResIcon Show];}
     else
     {
         [self CreateButtons];

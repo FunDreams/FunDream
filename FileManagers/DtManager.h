@@ -127,6 +127,7 @@
 -(void)DownLoad;//Загрузка файла с сервера
 -(void)DownLoadWithName:(NSString *)pPath;//загрузка с сервера со специальным именем
 -(void)DelFileFromDropBox:(NSString*)destPath;//удаления файла с хранилища
+-(void)CreateFolder:(NSString *)NameFolder;//создаём новый каталов в хранилище
 //-(void)Link;//подключение акка
 
 /** пересоздание клиента для манипуляции данных в DropBox'e **/

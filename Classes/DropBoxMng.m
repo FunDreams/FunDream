@@ -8,6 +8,7 @@
 
 #import "DropBoxMng.h"
 #import "ObB_DropBox.h"
+#import "Ob_ResourceMng.h"
 
 #define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
@@ -39,7 +40,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-	[super Start];
+	[super Start];    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Check{
@@ -511,6 +512,16 @@ Repeate2:;//главная синхронизация
         [pDataManager Save];
         
         [pDataManager UpLoadWithName:NAME_INFO_FILE];
+        
+        
+        [pDataManager CreateFolder:@"_Resource"];
+        NSMutableArray *pGroupRes = [m_pObjMng GetGroup:@"Res"];
+
+        for(Ob_ResourceMng *pOb in pGroupRes){
+            
+            NSString *pTmpPath = [NSString stringWithFormat:@"_Resource%@",pOb->RootFolder];
+            [pDataManager CreateFolder:pTmpPath];
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------
