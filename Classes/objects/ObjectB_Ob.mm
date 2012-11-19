@@ -180,7 +180,9 @@
     {
         m_bDoubleTouch=YES;
         
+        DEL_CELL(@"DoubleTouchFractalString");
         SET_CELL(LINK_ID_V(pString,@"DoubleTouchFractalString"));
+        
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"DoubleTouchObject");
     }
     else

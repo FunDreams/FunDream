@@ -77,6 +77,7 @@
     }
     else m_fOffsetText=-10;
     
+    [self SetUnPush];
     [self Update];
 }
 //------------------------------------------------------------------------------------------------------
@@ -146,11 +147,25 @@
     [self SetPosWithOffsetOwner];
     
     if(m_pOwner!=nil){
-        Ob_ResourceMng *pMngRes=(Ob_ResourceMng *)m_pOwner;
-        m_pCurPosition.y += pMngRes->m_fCurrentOffset;
-        
+//        Ob_ResourceMng *pMngRes=(Ob_ResourceMng *)m_pOwner;
+//        m_pCurPosition.y += pMngRes->m_fCurrentOffset;
+//        
         [self Update];
     }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetPush{
+    mColor=Color3DMake(1, 0, 0, 1);
+    
+    if(m_pOwner!=nil){
+        
+        SET_CELL(LINK_ID_V(self,@"ObPushLabel"));
+        OBJECT_PERFORM_SEL(NAME(m_pOwner), @"SetSelection");
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetUnPush{
+    mColor=Color3DMake(1, 1, 1, 1);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
@@ -165,5 +180,7 @@
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    [self SetPush];
+}
 @end

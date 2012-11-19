@@ -238,9 +238,9 @@
             
     *FCheck=3;
 
-    OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
-    OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
-    OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BMove),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
 
     m_iMode=3;//DropBox
     [self UpdateB];

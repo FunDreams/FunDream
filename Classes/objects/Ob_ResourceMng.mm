@@ -7,6 +7,7 @@
 //
 
 #import "Ob_ResourceMng.h"
+#import "Ob_Label.h"
 
 @interface Ob_ResourceMng () <DBRestClientDelegate>
 @end
@@ -18,7 +19,8 @@
 	if (self != nil)
     {
         m_fCurrentOffset=0;
-        m_bHiden=YES;
+        m_bHiden=NO;
+        mColor=Color3DMake(1, 1, 1, 0);
         m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
         
@@ -57,13 +59,15 @@
     if(bShow==NO)return;
     bShow=NO;
 
+    if(PrBar!=nil)[PrBar DeleteFromDraw];
+
     DESTROY_OBJECT(pObBtnClose);
+    
     DESTROY_OBJECT(pObBtnSyn);
     pObBtnClose=nil;
     pObBtnSyn=nil;
     
-    for (int i=0; i<[m_pChildrenbjectsArr count]; i++) {
-        
+    for (int i=0; i<[m_pChildrenbjectsArr count]; i++){
         DESTROY_OBJECT([m_pChildrenbjectsArr objectAtIndex:i]);
     }
     
@@ -87,81 +91,107 @@
                                SET_STRING_V(@"Close",@"m_strNameStage"),
                                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                                SET_VECTOR_V(Vector3DMake(-35,290,0),@"m_pCurPosition"));
+    
+    if(PrBar!=nil)[PrBar AddToDraw];
+    else{
 //------------------------------------------------------------------------------------------------------
-    NSString *NameFoler = @"Objects_1";
-    
-    Fstring = GET_ID_V(@"DoubleTouchFractalString");
-    DEL_CELL(@"DoubleTouchFractalString");
-
-    float StepY=50;
-    m_fStartOffset=mWidth*0.55f;
-    float OffsetY=m_fStartOffset;
-    m_fUpLimmit=OffsetY;
-
-    NSError *Error=nil;
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:bundleRoot error:&Error];
-    
-    NumButtons=0;
-    
-    for (NSString *tNameFolder in dirContents) {
+        NSString *NameFoler = @"Objects_1";
         
-        if([tNameFolder isEqualToString:NameFoler]){
+        Fstring = GET_ID_V(@"DoubleTouchFractalString");
 
-            NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:tNameFolder];
-            NSArray *dirContentInFolder = [fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
-            int i=0;
+        float StepY=50;
+        m_fStartOffset=mWidth*0.55f;
+        float OffsetY=m_fStartOffset;
+        m_fUpLimmit=OffsetY;
+
+        NSError *Error=nil;
+        NSArray *dirContents = [fm contentsOfDirectoryAtPath:bundleRoot error:&Error];
+        
+        NumButtons=0;
+        
+        for (NSString *tNameFolder in dirContents) {
             
-            for (NSString *tNameFile in dirContentInFolder) {
-                                    
-                float fOffset=0;
-                float TmpOff=115;
-                
-                if(i%2==0){
-                    fOffset=-TmpOff;
-                    OffsetY-=StepY;
-                    m_fDownLimmit=OffsetY-64*FACTOR_DEC;
-                }
-                else fOffset=TmpOff;
-                
-                GObject *pOb = UNFROZE_OBJECT(@"Ob_Label",@"Label",
-                              LINK_ID_V(self,@"m_pOwner"),
-                              SET_STRING_V(tNameFile,@"pNameLabel"),
-                              SET_BOOL_V(bTexture,@"bTexture"),
-                              SET_VECTOR_V(Vector3DMake(fOffset, OffsetY, 0),@"m_pOffsetCurPosition"));
+            if([tNameFolder isEqualToString:NameFoler]){
 
-                [m_pChildrenbjectsArr addObject:pOb];
+                NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:tNameFolder];
+                NSArray *dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
+                int i=0;
                 
-                if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
+                for (NSString *tNameFile in dirContentInFolder){
+
+                    float fOffset=0;
+                    float TmpOff=115;
+
+                    if(i%2==0){
+                        fOffset=-TmpOff;
+                        OffsetY-=StepY+m_fCurrentOffset;
+                        m_fDownLimmit=OffsetY-64*FACTOR_DEC;
+                    }
+                    else fOffset=TmpOff;
+
+                    GObject *pOb = UNFROZE_OBJECT(@"Ob_Label",@"Label",
+                                  LINK_ID_V(self,@"m_pOwner"),
+                                  SET_STRING_V(tNameFile,@"pNameLabel"),
+                                  SET_BOOL_V(bTexture,@"bTexture"),
+                                  SET_VECTOR_V(Vector3DMake(fOffset, OffsetY, 0),@"m_pOffsetCurPosition"));
+
+                    [m_pChildrenbjectsArr addObject:pOb];
+
+                    if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
+                        
+                        //pOb set selection
+                        //m_fCurrentOffset высчитать
+                        [self LimmitOffset];
+                    }
+                    i++;
                     
-                    //pOb set selection
-                    //m_fCurrentOffset высчитать
-                    [self LimmitOffset];
+                    if(m_iCurrentSelect==i)OBJECT_PERFORM_SEL(NAME(pOb), @"SetPush");
                 }
-                i++;
             }
         }
-    }
 //-----------------------------------------------------------------------------------------------------
-    if(LoadData==NO){
-        
-        bNeedSyn=NO;
-        LoadData=YES;
-        
-        if(restClient!=nil)[restClient release];
-        
-        restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-        restClient.delegate = self;
+        if(LoadData==NO){
+            
+            bNeedSyn=NO;
+            LoadData=YES;
+            
+            if(restClient!=nil)[restClient release];
+            
+            restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+            restClient.delegate = self;
 
-        NSString *TmpDirInDropBox = @"/_Resource/";
-        TmpDirInDropBox = [TmpDirInDropBox stringByAppendingPathComponent:RootFolder];
+            NSString *TmpDirInDropBox = @"/_Resource/";
+            TmpDirInDropBox = [TmpDirInDropBox stringByAppendingPathComponent:RootFolder];
 
-        [restClient loadMetadata:TmpDirInDropBox];
+            [restClient loadMetadata:TmpDirInDropBox];
 
-        m_iMode=M_LOAD_METADATA;
+            m_iMode=M_LOAD_METADATA;
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetSelection{
+    
+    id pObTmp = GET_ID_V(@"ObPushLabel");
+    
+    int i=0;
+    if(pObTmp!=nil){
+        for (Ob_Label *pOb in m_pChildrenbjectsArr)
+        {
+            if(pOb==pObTmp){
+                
+                m_iCurrentSelect=i;
+                [Fstring SetNameIcon:pOb->pNameLabel];
+                
+                continue;
+            }
+            else
+            {
+                OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnPush");
+            }
+            i++;
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -358,6 +388,16 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SynRes{
     
+    DESTROY_OBJECT(pObBtnSyn);
+    pObBtnSyn=nil;
+    
+    for (int i=0; i<[m_pChildrenbjectsArr count]; i++){
+        DESTROY_OBJECT([m_pChildrenbjectsArr objectAtIndex:i]);
+    }
+    
+    [m_pChildrenbjectsArr removeAllObjects];
+
+    
     LoadData=YES;
     
     if(PrBar==nil)
@@ -384,7 +424,6 @@
         
         //имя папки и список внутренних файлов в DropBox'e
         NSMutableArray *TmpLocalFolder = [pListNamesLocalFolder objectForKey:tString];
-        NSString *StrFile= [bundleRoot stringByAppendingPathComponent:tString];
         
         for(int i=0;i<[TmpLocalFolder count];i++){
             
@@ -393,6 +432,9 @@
             [self UploadResWithName:NameFile];
             
             NSError *Error=nil;
+            
+            NSString *StrFile= [bundleRoot stringByAppendingPathComponent:tString];
+            StrFile = [StrFile stringByAppendingPathComponent:NameFile];
             [fm removeItemAtPath:StrFile error:&Error];
         }
     }
@@ -405,15 +447,27 @@
     
     m_iMode=M_SYNH_FOLDERS;
 
+    if(restClient!=nil)[restClient release];
+    
+    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
+    restClient.delegate = self;
+
+    
+    //подсчитаем количество загружаеммых файлов
+    enumerator = [pListNamesUpdateFolder keyEnumerator];
+    NSString *tNameFolder;
+    while(tNameFolder=[enumerator nextObject]){//по всем папкам
+        
+        //имя папки и список внутренних файлов в DropBox'e
+        NSMutableArray *TmpLocalFolder = [pListNamesUpdateFolder objectForKey:tNameFolder];
+        m_iNumDownLoadFiles+=[TmpLocalFolder count];
+    }
+    
     [self DownLoadFiles];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DownLoadFiles{
     
-    if(restClient!=nil)[restClient release];
-    
-    restClient = [[DBRestClient alloc] initWithSession:[DBSession sharedSession]];
-    restClient.delegate = self;
     bool bLoad=NO;
     
     NSEnumerator *enumerator = [pListNamesUpdateFolder keyEnumerator];
@@ -433,17 +487,23 @@
             NSString *NameFile=[StrFolder stringByAppendingPathComponent:NameFileTmp];
             
             NSString *NameFileInDropBox = @"/_Resource/";
-            NameFileInDropBox = [NameFileInDropBox  stringByAppendingPathComponent:RootFolder];
+            NameFileInDropBox = [NameFileInDropBox stringByAppendingPathComponent:RootFolder];
             NameFileInDropBox = [NameFileInDropBox stringByAppendingPathComponent:tNameFolder];
             NameFileInDropBox = [NameFileInDropBox stringByAppendingPathComponent:NameFileTmp];
 
+            if(NameDownLoadFile!=nil)[NameDownLoadFile release];
+            NameDownLoadFile=[[NSString stringWithString:NameFileTmp] retain];
+            m_iNumDownLoadFiles--;
+            
             [restClient loadFile:NameFileInDropBox intoPath:NameFile];
             bLoad=YES;
 
             [TmpLocalFolder removeObjectAtIndex:i];
+            goto Exit;
         }
     }
-
+    
+Exit:
     if(bLoad==NO){
         [self FinishDownLoad];
     }
@@ -455,6 +515,11 @@
         DESTROY_OBJECT(PrBar);
         PrBar=nil;
         m_iMode=0;
+
+        if(bShow==YES){
+            [self Hide];
+            [self Show];
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -614,16 +679,35 @@ rep:
                         }
                     }
                     
-                    if([pArrayContentTmp count]>0)
-                        bNeedSyn=YES;
                 }
 
-                
-                if([TmpFolder count]>0)
+                if([pArrayContentTmp count]>0)
                     bNeedSyn=YES;
+
+                if([TmpFolder count]>0){
+                    
+Rep:
+                    for(int i=0;i<[TmpFolder count];i++){
+                        
+                        NSString *pNameFileDropBox = [TmpFolder objectAtIndex:i];
+
+                        int TmpIndex=-1;
+                        GET_TEXTURE(TmpIndex, pNameFileDropBox);
+                        
+                        if(TmpIndex!=-1){
+                            [TmpFolder removeObjectAtIndex:i];
+                            goto Rep;
+                        }
+                    }
+                    
+                    if([TmpFolder count]>0)
+                        bNeedSyn=YES;
+                }
             }
             
-            if(bNeedSyn==YES){
+            NSLog(@"Res DownLoad MetaData");
+            
+            if(bNeedSyn==YES && bShow==YES){
                 
                 pObBtnSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSyn",
                                            SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
@@ -636,7 +720,6 @@ rep:
                                            SET_STRING_V(@"SynRes",@"m_strNameStage"),
                                            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                                            SET_VECTOR_V(Vector3DMake(-35,232,0),@"m_pCurPosition"));
-                
             }
         }
     }
@@ -653,7 +736,7 @@ rep:
 - (void)Close{
 
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"CloseChoseIcon");
-    DESTROY_OBJECT(self);
+    [self Hide];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
@@ -700,6 +783,45 @@ rep:
     
     m_bStartPush=YES;
     m_pStartPoint=Point;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SelfDrawOffset{
+         
+    if(PrBar!=nil && PrBar->m_bHiden==NO){
+        
+        glLoadIdentity();
+        glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
+        
+        int iFontSize=34;
+        // Set up texture
+        
+        Texture2D* statusTexture = [[Texture2D alloc] initWithString:
+                            [NSString stringWithFormat:@"%d",m_iNumDownLoadFiles+1]
+                          dimensions:CGSizeMake(mWidth, 40) alignment:UITextAlignmentCenter
+                            fontName:@"Helvetica" fontSize:iFontSize];
+
+        statusTexture->_color=Color3DMake(1,1,1,1);
+
+        // Bind texture
+        glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
+        // Draw
+        [statusTexture drawAtPoint:CGPointMake(m_pCurPosition.x,m_pCurPosition.y-160)];
+        
+        [statusTexture release];
+////////////////////////////////////////////////////////////////////////////////////
+        statusTexture = [[Texture2D alloc] initWithString:NameDownLoadFile
+                          dimensions:CGSizeMake(mWidth, 40) alignment:UITextAlignmentCenter
+                            fontName:@"Helvetica" fontSize:iFontSize];
+        
+        statusTexture->_color=Color3DMake(1,1,1,1);
+        
+        // Bind texture
+        glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
+        // Draw
+        [statusTexture drawAtPoint:CGPointMake(m_pCurPosition.x,m_pCurPosition.y-200)];
+        
+        [statusTexture release];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc{

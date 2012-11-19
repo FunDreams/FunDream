@@ -12,6 +12,7 @@
 #import "ObjectParticle.h"
 
 @interface Ob_Label : GObject {
+@public
     NSMutableString *pNameLabel;
     float m_fOffsetText;
     bool bTexture;
@@ -22,6 +23,9 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
+
+- (void)SetPush;
+- (void)SetUnPush;
 
 - (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y;
     

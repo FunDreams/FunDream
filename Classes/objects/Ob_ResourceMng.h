@@ -24,6 +24,9 @@
 @interface Ob_ResourceMng : GObject {
 @public
     
+    int m_iCurrentSelect;
+    NSString *NameDownLoadFile;
+    int m_iNumDownLoadFiles;
     GObject *PrBar;
 
     bool LoadData;

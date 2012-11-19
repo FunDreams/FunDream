@@ -12,6 +12,7 @@
 #import "ObjectParticle.h"
 
 @interface Ob_Templet : GObject {
+@public
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
