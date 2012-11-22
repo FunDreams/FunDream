@@ -6,24 +6,24 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_Icon.h"
+#import "Ob_Tab.h"
 
-@implementation Ob_Icon
+@implementation Ob_Tab
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerInterfaceSpace9;
+        m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetDefault
-{
+- (void)SetDefault{
     m_bHiden=NO;
+    [self SetUnPush];
 }
 //- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
@@ -38,19 +38,23 @@
 //====//различные параметры=============================================================================
 //   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"))];
     
-//    m_strNameObject=[NSMutableString stringWithString:@""];    
-//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
+    m_strNameFolder=[NSMutableString stringWithString:@""];
+    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameFolder,m_strName,@"m_strNameFolder"))];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-	mWidth  = 46;
-	mHeight = 46*FACTOR_DEC;
+    //   GET_DIM_FROM_TEXTURE(@"");
+	mWidth  = 38;
+	mHeight = 38*FACTOR_DEC;
 
 	[super Start];
+
+    [self SetTouch:YES];//интерактивность
     GET_TEXTURE(mTextureId, m_pNameTexture);
 
-    [self SetPosWithOffsetOwner];
+    //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
+    //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -61,13 +65,29 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
     
-    [self SetPosWithOffsetOwner];
-
 //    PLAY_SOUND(@"");
 //    STOP_SOUND(@"");
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetPush{
+    mColor=Color3DMake(1,0,0,1);
+    
+    if(m_pOwner!=nil){
+        
+        COPY_CELL(SET_STRING_V(m_strNameFolder,@"NameFolerSelect"));        
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"UpdateB");
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetUnPush{
+    mColor=Color3DMake(1,1,1,1);
+}
+//------------------------------------------------------------------------------------------------------
+- (void)dealloc{[super dealloc];}
+//------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
-//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+- (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    [self SetPush];
+}
 @end

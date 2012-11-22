@@ -8,6 +8,7 @@
 
 #import "Ob_ResourceMng.h"
 #import "Ob_Label.h"
+#import "Ob_Tab.h"
 
 @interface Ob_ResourceMng () <DBRestClientDelegate>
 @end
@@ -27,6 +28,7 @@
         pListNamesRes = [[NSMutableDictionary alloc] init];
         pListNamesUpdateFolder = [[NSMutableDictionary alloc] init];
         pListNamesLocalFolder = [[NSMutableDictionary alloc] init];
+        m_pFolderButton = [[NSMutableArray alloc] init];
         fm = [NSFileManager defaultManager];
         bShow=NO;
     }
@@ -51,6 +53,9 @@
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
     
+    NameFolerSelect=[NSMutableString stringWithString:@"nil"];
+    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(NameFolerSelect,@"NameFolerSelect"))];
+
     [m_pObjMng AddToGroup:@"Res" Object:self];
 }
 //------------------------------------------------------------------------------------------------------
@@ -70,9 +75,12 @@
     for (int i=0; i<[m_pChildrenbjectsArr count]; i++){
         DESTROY_OBJECT([m_pChildrenbjectsArr objectAtIndex:i]);
     }
-    
     [m_pChildrenbjectsArr removeAllObjects];
-    LoadData=NO;
+
+    for (int i=0; i<[m_pFolderButton count]; i++){
+        DESTROY_OBJECT([m_pFolderButton objectAtIndex:i]);
+    }
+    [m_pFolderButton removeAllObjects];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -83,8 +91,8 @@
     pObBtnClose=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClose",
                                SET_STRING_V(@"Close.png",@"m_DOWN"),
                                SET_STRING_V(@"Close.png",@"m_UP"),
-                               SET_FLOAT_V(64,@"mWidth"),
-                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(54,@"mWidth"),
+                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                                SET_BOOL_V(YES,@"m_bLookTouch"),
                                SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                SET_STRING_V(NAME(self),@"m_strNameObject"),
@@ -93,62 +101,156 @@
                                SET_VECTOR_V(Vector3DMake(-35,290,0),@"m_pCurPosition"));
     
     if(PrBar!=nil)[PrBar AddToDraw];
-    else{
-//------------------------------------------------------------------------------------------------------
-        NSString *NameFoler = @"Objects_1";
-        
-        Fstring = GET_ID_V(@"DoubleTouchFractalString");
-
-        float StepY=50;
-        m_fStartOffset=mWidth*0.55f;
-        float OffsetY=m_fStartOffset;
-        m_fUpLimmit=OffsetY;
-
+    else
+    {
+        NSMutableArray *pArrTmpNameFolder=[NSMutableArray array];
         NSError *Error=nil;
         NSArray *dirContents = [fm contentsOfDirectoryAtPath:bundleRoot error:&Error];
-        
-        NumButtons=0;
-        
+        NSArray *dirContentInFolder;
+//-----------------------------------------------------------------------------------------------------
+        int i=0;//cоздаём табы
         for (NSString *tNameFolder in dirContents) {
             
-            if([tNameFolder isEqualToString:NameFoler]){
-
+            if([tNameFolder isEqualToString:@"_Tabs"]){
+                
                 NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:tNameFolder];
-                NSArray *dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
-                int i=0;
+                dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
+                break;
+            }
+        }
+        
+        float sY=300;
+        float fStep=40;
+        
+        for (NSString *tFolder in dirContents) {
+            if(![tFolder isEqualToString:@"_Tabs"]){
+                
+                [pArrTmpNameFolder addObject:tFolder];
+                NSString *NameTexture=@"nil";
                 
                 for (NSString *tNameFile in dirContentInFolder){
+                    NSString *OnlyName=[tNameFile stringByDeletingPathExtension];
 
-                    float fOffset=0;
-                    float TmpOff=115;
-
-                    if(i%2==0){
-                        fOffset=-TmpOff;
-                        OffsetY-=StepY+m_fCurrentOffset;
-                        m_fDownLimmit=OffsetY-64*FACTOR_DEC;
-                    }
-                    else fOffset=TmpOff;
-
-                    GObject *pOb = UNFROZE_OBJECT(@"Ob_Label",@"Label",
-                                  LINK_ID_V(self,@"m_pOwner"),
-                                  SET_STRING_V(tNameFile,@"pNameLabel"),
-                                  SET_BOOL_V(bTexture,@"bTexture"),
-                                  SET_VECTOR_V(Vector3DMake(fOffset, OffsetY, 0),@"m_pOffsetCurPosition"));
-
-                    [m_pChildrenbjectsArr addObject:pOb];
-
-                    if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
+                    if([tFolder isEqualToString:OnlyName]){
                         
-                        //pOb set selection
-                        //m_fCurrentOffset высчитать
-                        [self LimmitOffset];
+                        NameTexture=tNameFile;
+                        break;
                     }
-                    i++;
-                    
-                    if(m_iCurrentSelect==i)OBJECT_PERFORM_SEL(NAME(pOb), @"SetPush");
+                }
+                
+                Ob_Tab *pObBtnTab=UNFROZE_OBJECT(@"Ob_Tab",tFolder,
+                                     SET_STRING_V(NameTexture,@"m_pNameTexture"),
+                                     SET_STRING_V(tFolder,@"m_strNameFolder"),
+                                     LINK_ID_V(self,@"m_pOwner"),
+                                     SET_VECTOR_V(Vector3DMake(-460+fStep*i,sY,0),@"m_pCurPosition"));
+            
+                [m_pFolderButton addObject:pObBtnTab];
+                i++;
+                
+                if(i==9){
+                    sY-=fStep;
+                    i=0;
                 }
             }
         }
+//------------------------------------------------------------------------------------------------------
+        Fstring = GET_ID_V(@"DoubleTouchFractalString");
+
+        if([NameFolerSelect isEqualToString:@"nil"]){
+            int iCur=0;
+
+            for (NSString *tNameFolder in pArrTmpNameFolder) {
+                    
+                NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:tNameFolder];
+                NSArray *dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
+                
+                for (NSString *tNameFile in dirContentInFolder){
+                    
+                    if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
+                        
+                        [NameFolerSelect setString:tNameFolder];
+                        goto exit;
+                    }
+                }
+                iCur++;
+            }
+exit:
+            
+            if([NameFolerSelect isEqualToString:@"nil"]){
+                [NameFolerSelect setString:[pArrTmpNameFolder objectAtIndex:0]];
+                iCur=0;
+            }
+            
+            Ob_Tab *pObBtnTab=[m_pFolderButton objectAtIndex:iCur];
+
+            pObBtnTab->mColor=Color3DMake(1,0,0,1);
+            [NameFolerSelect setString:pObBtnTab->m_strNameFolder];
+        }
+        else
+        {
+            for(int i=0;i<[m_pFolderButton count];i++){
+                
+                Ob_Tab *pObBtnTab=[m_pFolderButton objectAtIndex:i];
+                if([pObBtnTab->m_strNameFolder isEqualToString:NameFolerSelect]){
+                    
+                    pObBtnTab->mColor=Color3DMake(1,0,0,1);
+                    
+                    [NameFolerSelect setString:pObBtnTab->m_strNameFolder];
+
+                    break;
+                }
+            }
+        }
+
+        float StepY=50;
+        m_fCurrentOffset=0;
+//        m_fStartOffset=mWidth*0.55f;
+        float OffsetY=mWidth*0.55f;
+        m_fUpLimmit=0;
+        
+        NumButtons=0;
+        m_fDownLimmit=0;
+//-------------------------------------------------------------------------------------------------------
+        NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:NameFolerSelect];
+        dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
+        i=0;
+        
+        for (NSString *tNameFile in dirContentInFolder){
+
+            float fOffset=0;
+            float TmpOff=115;
+
+            if(i%2==0){
+                fOffset=-TmpOff;
+                OffsetY-=StepY;
+                m_fDownLimmit+=StepY;
+            }
+            else fOffset=TmpOff;
+
+            Ob_Label *pOb = UNFROZE_OBJECT(@"Ob_Label",@"Label",
+                          LINK_ID_V(self,@"m_pOwner"),
+                          SET_STRING_V(tNameFile,@"pNameLabel"),
+                          SET_BOOL_V(bTexture,@"bTexture"),
+                          SET_VECTOR_V(Vector3DMake(fOffset, OffsetY, 0),@"m_pOffsetCurPosition"));
+
+            [m_pChildrenbjectsArr addObject:pOb];
+            
+            i++;
+            
+            if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
+                
+                pOb->mColor=Color3DMake(1, 0, 0, 1);
+            }
+            
+            if(m_iCurrentSelect==i)OBJECT_PERFORM_SEL(NAME(pOb), @"SetPush");
+        }
+        
+        [self LimmitOffset];
+
+        m_fDownLimmit+=FACTOR_DEC;
+        
+        if([m_pChildrenbjectsArr count]>18)
+            m_fDownLimmit-=9*StepY;
 //-----------------------------------------------------------------------------------------------------
         if(LoadData==NO){
             
@@ -520,6 +622,8 @@ Exit:
             [self Hide];
             [self Show];
         }
+        
+        LoadData=NO;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -590,6 +694,10 @@ repeate:
             
             NSMutableArray *TmpArr =[NSMutableArray array];
             [pListNamesUpdateFolder setObject:TmpArr forKey:file.filename];
+            bNeedSyn=YES;
+        }
+        
+        if([pArrayContent count]>0){
             bNeedSyn=YES;
         }
         
@@ -705,24 +813,24 @@ Rep:
                 }
             }
             
-            NSLog(@"Res DownLoad MetaData");
-            
             if(bNeedSyn==YES && bShow==YES){
                 
                 pObBtnSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSyn",
-                                           SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
-                                           SET_STRING_V(@"Button_Synh.png",@"m_UP"),
-                                           SET_FLOAT_V(64,@"mWidth"),
-                                           SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-                                           SET_BOOL_V(YES,@"m_bLookTouch"),
-                                           SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                                           SET_STRING_V(NAME(self),@"m_strNameObject"),
-                                           SET_STRING_V(@"SynRes",@"m_strNameStage"),
-                                           SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                                           SET_VECTOR_V(Vector3DMake(-35,232,0),@"m_pCurPosition"));
+                                         SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
+                                         SET_STRING_V(@"Button_Synh.png",@"m_UP"),
+                                         SET_FLOAT_V(54,@"mWidth"),
+                                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                         SET_BOOL_V(YES,@"m_bLookTouch"),
+                                         SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                                         SET_STRING_V(NAME(self),@"m_strNameObject"),
+                                         SET_STRING_V(@"SynRes",@"m_strNameStage"),
+                                         SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                                         SET_VECTOR_V(Vector3DMake(-35,232,0),@"m_pCurPosition"));
             }
+
+            NSLog(@"Res DownLoad MetaData");            
         }
-    }
+    }    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Update{}
@@ -735,6 +843,7 @@ Rep:
 //------------------------------------------------------------------------------------------------------
 - (void)Close{
 
+    [NameFolerSelect setString:@"nil"];
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"CloseChoseIcon");
     [self Hide];
 }
@@ -754,14 +863,15 @@ Rep:
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LimmitOffset{
-    if((m_fCurrentOffset+m_fStartOffset)<m_fUpLimmit)
-        m_fCurrentOffset=m_fUpLimmit-m_fStartOffset;
-    if((m_fCurrentOffset+m_fStartOffset)>-m_fDownLimmit)
-        m_fCurrentOffset=-m_fDownLimmit-m_fStartOffset;
+    if((m_fCurrentOffset)<0)
+        m_fCurrentOffset=m_fUpLimmit;
+    
+    if((m_fCurrentOffset)>m_fDownLimmit)
+        m_fCurrentOffset=m_fDownLimmit;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(CGPoint)Point{
-    if(m_bStartPush==YES && NumButtons > 18){
+    if(m_bStartPush==YES && [m_pChildrenbjectsArr count] > 18){
         float DeltaF=Point.y-m_pStartPoint.y;
         m_fCurrentOffset+=DeltaF;
         
@@ -829,6 +939,7 @@ Rep:
     [pListNamesLocalFolder release];
     [pListNamesUpdateFolder release];
     [pListNamesRes release];
+    [m_pFolderButton release];
     
     [restClient release];
     [super dealloc];

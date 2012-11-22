@@ -45,7 +45,6 @@
     int NumButtons;
     float m_fCurrentOffset;
     float m_fUpLimmit,m_fDownLimmit;
-    float m_fStartOffset;
     
     bool m_bStartPush;
     CGPoint m_pStartPoint;
@@ -55,9 +54,11 @@
     NSMutableDictionary *pListNamesLocalFolder;
         
     NSMutableArray *pArrayContent;
+    NSMutableArray *m_pFolderButton;
     
     NSFileManager *fm;
     int iCountInc;
+    NSMutableString *NameFolerSelect;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

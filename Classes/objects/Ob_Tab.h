@@ -11,23 +11,18 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-@interface Ob_Label : GObject {
+@interface Ob_Tab : GObject {
 @public
-    NSMutableString *pNameLabel;
-    float m_fOffsetText;
-    bool bTexture;
-    bool bStartPush;
+    NSMutableString *m_strNameFolder;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 -(void)Destroy;
 -(void)Start;
--(void)UpdateLabel;
+-(void)Update;
 
 - (void)SetPush;
 - (void)SetUnPush;
-
-- (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y;
     
 @end
