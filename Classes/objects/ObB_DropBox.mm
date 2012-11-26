@@ -150,14 +150,12 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    if(m_bLookTouch==YES)LOCK_TOUCH;
+    m_bStartPush=YES;
     
     if(m_bNotPush==NO){
             
         [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheckInDropBox")];
           
-        m_bStartPush=YES;
-
         PLAY_SOUND(m_strNameSound);
 
         OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
@@ -170,7 +168,7 @@
     int *pMode=GET_INT_V(@"m_iMode");
     if(*pMode==3){
         
-        if(m_bStartMove==NO && bMoveIn==YES && m_bStartPush==YES){
+        if(m_bStartMove==NO && m_bStartPush==YES){
             
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DropBoxString"))];
 
@@ -179,7 +177,7 @@
                            SET_BOOL_V(NO,@"bFromEmpty"),
                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-                           SET_INT_V(mTextureId,@"mTextureId"));
+                           SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
             
             pOb->pInsideString=pString;
 
@@ -190,8 +188,6 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
- //   if(m_bLookTouch==YES)LOCK_TOUCH;
-    
     if(m_bStartPush==YES){
         
         [self SetPush];        
@@ -201,13 +197,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-//    if(m_bLookTouch==YES)LOCK_TOUCH;
-
-//    if(m_bStartPush==NO)[self SetUnPush];
-    
-//    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
     OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-    
     [self MoveObject:Point WithMode:NO];
 }
 //------------------------------------------------------------------------------------------------------

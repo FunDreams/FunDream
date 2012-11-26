@@ -206,6 +206,7 @@ exit:
         m_fCurrentOffset=0;
 //        m_fStartOffset=mWidth*0.55f;
         float OffsetY=mWidth*0.55f;
+        float StartOffsetY=OffsetY;
         m_fUpLimmit=0;
         
         NumButtons=0;
@@ -214,6 +215,8 @@ exit:
         NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:NameFolerSelect];
         dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
         i=0;
+        Ob_Label *pObSel=nil;
+        float offsetSel=0;
         
         for (NSString *tNameFile in dirContentInFolder){
 
@@ -234,23 +237,30 @@ exit:
                           SET_VECTOR_V(Vector3DMake(fOffset, OffsetY, 0),@"m_pOffsetCurPosition"));
 
             [m_pChildrenbjectsArr addObject:pOb];
-            
             i++;
             
             if(Fstring && [Fstring->sNameIcon isEqualToString:tNameFile]){
                 
-                pOb->mColor=Color3DMake(1, 0, 0, 1);
+                pObSel=pOb;
+                offsetSel=OffsetY;
             }
-            
-            if(m_iCurrentSelect==i)OBJECT_PERFORM_SEL(NAME(pOb), @"SetPush");
         }
         
-        [self LimmitOffset];
-
         m_fDownLimmit+=FACTOR_DEC;
         
         if([m_pChildrenbjectsArr count]>18)
             m_fDownLimmit-=9*StepY;
+        
+        if(pObSel!=nil){
+            OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
+            m_fCurrentOffset=StartOffsetY-offsetSel-StepY;
+            [self LimmitOffset];
+            
+            for (Ob_Label *pOb in m_pChildrenbjectsArr)
+            {
+                [pOb UpdatePos];
+            }
+        }
 //-----------------------------------------------------------------------------------------------------
         if(LoadData==NO){
             
@@ -472,18 +482,16 @@ exit:
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UploadRosourceFolder:(NSString *)NameFolder{
-    
-    NSString *StrFolder= [bundleRoot stringByAppendingPathComponent:NameFolder];
-    
+        
     NSError *Error=nil;
-    NSArray *dirContents = [fm contentsOfDirectoryAtPath:StrFolder error:&Error];
+    NSArray *dirContents = [fm contentsOfDirectoryAtPath:NameFolder error:&Error];
     
     for (int i=0;i<[dirContents count];i++) {
         
         NSString *tString = [dirContents objectAtIndex:i];
         [self UploadResWithName:tString];
         
-        NSString *NameFile = [StrFolder stringByAppendingPathComponent:tString];
+        NSString *NameFile = [NameFolder stringByAppendingPathComponent:tString];
         [fm removeItemAtPath:NameFile error:&Error];
     }
 }
@@ -498,7 +506,11 @@ exit:
     }
     
     [m_pChildrenbjectsArr removeAllObjects];
-
+    
+    for (int i=0; i<[m_pFolderButton count]; i++){
+        DESTROY_OBJECT([m_pFolderButton objectAtIndex:i]);
+    }
+    [m_pFolderButton removeAllObjects];
     
     LoadData=YES;
     
@@ -666,7 +678,7 @@ repeate:
 
             for (int j=0;j<[pArrayMetaData count];j++) {
 
-                 DBMetadata *file = [pArrayMetaData objectAtIndex:i];
+                 DBMetadata *file = [pArrayMetaData objectAtIndex:j];
 
                 if([file.filename isEqualToString:tString]){
 

@@ -26,12 +26,15 @@
     bool bErrorMetaData;
     
     int m_iMode;
+    
+    NSMutableString *NameDownLoadFile;
+    int m_iNumDownLoadFiles;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 -(void)UpdateButt;
 -(void)Hide;
--(void)Show;
+//-(void)Show;
 -(void)DownLoadInfoFile;
 -(void)SaveInfoStringToDropBox;
 -(void)Synhronization;

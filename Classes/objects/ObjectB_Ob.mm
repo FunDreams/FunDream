@@ -9,6 +9,7 @@
 #import "ObjectB_Ob.h"
 #import "UniCell.h"
 #import "Ob_IconDrag.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation ObjectB_Ob
 //------------------------------------------------------------------------------------------------------
@@ -149,7 +150,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-    if(m_bLookTouch==YES)LOCK_TOUCH;
+  ///  if(m_bLookTouch==YES)LOCK_TOUCH;
+    
+    m_bStartTouch=YES;
 //    int *pMode=GET_INT_V(@"m_iMode");
 
     LastPointTouch.x=Point.x;
@@ -167,7 +170,7 @@
                   m_bStartPush=YES;
                   [self SetLayer:m_iLayer+1];
                   [self SetTouch:YES WithLayer:m_iLayerTouch-1];
-                  m_bLookTouch=NO;
+         //         m_bLookTouch=NO;
                   
                 }
             }
@@ -218,7 +221,7 @@
     }
     else
     {
-        if(m_bStartMove==NO && bMoveIn==YES){
+        if(m_bStartMove==NO && m_bStartTouch==YES){
             
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
 
@@ -227,11 +230,11 @@
                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                            SET_BOOL_V(NO,@"bFromEmpty"),
                            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-                           SET_INT_V(mTextureId,@"mTextureId"));
+                           SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
             
             pOb->pInsideString=pString;
 
-//            m_bStartMove=YES;
+            m_bStartMove=YES;
         }
     }
 }
@@ -241,7 +244,6 @@
  //   if(m_bLookTouch==YES)LOCK_TOUCH;
     
     [self SetPush];
-    
     [self MoveObject:Point WithMode:YES];
 }
 //------------------------------------------------------------------------------------------------------
@@ -260,6 +262,7 @@
 - (void)EndTouch{
         
     bool bUpdate=NO;
+    m_bStartTouch=NO;
     
     if(m_bStartPush==YES)
         PLAY_SOUND(@"drop.wav");
@@ -267,9 +270,15 @@
     int *pMode=GET_INT_V(@"m_iMode");
     
     if(m_iLayer==layerInterfaceSpace6){
-        m_bLookTouch=YES;
+     //   m_bLookTouch=YES;
+                
+        Ob_Editor_Interface *Interface=(Ob_Editor_Interface *)
+                    [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
         
-        GObject *pOb=[m_pObjMng GetObjectByName:@"ButtonTach"];
+        GObject *pOb=nil;
+        if(Interface!=nil)
+            pOb=Interface->BTash;
+
         CGPoint Point;
         Point.x=m_pCurPosition.x;
         Point.y=m_pCurPosition.y;

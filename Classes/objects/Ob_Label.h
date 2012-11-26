@@ -24,6 +24,7 @@
 -(void)Destroy;
 -(void)Start;
 -(void)UpdateLabel;
+- (void)UpdatePos;
 
 - (void)SetPush;
 - (void)SetUnPush;

@@ -17,7 +17,7 @@
 #import "Ob_ResourceMng.h"
 
 @interface Ob_Editor_Interface : GObject {
-    
+@public
     Ob_ResourceMng *pResIcon;
     
     Ob_GroupButtons *ButtonGroup;

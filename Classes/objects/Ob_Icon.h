@@ -19,5 +19,6 @@
 -(void)Destroy;
 -(void)Start;
 -(void)Update;
+- (void)Proc:(Processor_ex *)pProc;
     
 @end

@@ -8,6 +8,7 @@
 
 #import "Ob_Label.h"
 #import "Ob_ResourceMng.h"
+#import "Ob_Icon.h"
 
 @implementation Ob_Label
 //------------------------------------------------------------------------------------------------------
@@ -63,11 +64,13 @@
     
     NSString *StrTmp=pNameLabel;
         
+    [self Proc:nil];
+
     if(bTexture==YES)
     {
         m_fOffsetText=26;
         
-        GObject *pOb = UNFROZE_OBJECT(@"Ob_Icon",@"Icon",
+        Ob_Icon *pOb = UNFROZE_OBJECT(@"Ob_Icon",@"Icon",
                           SET_INT_V(m_iLayer+1,@"m_iLayer"),
                           LINK_ID_V(self,@"m_pOwner"),
                           //SET_FLOAT_V(100,@"m_fOffsetText"),
@@ -75,6 +78,7 @@
                           SET_VECTOR_V(Vector3DMake(-90, 0, 0),@"m_pOffsetCurPosition"));
         
         [m_pChildrenbjectsArr addObject:pOb];
+        [pOb Proc:nil];
     }
     else m_fOffsetText=-20;
     
@@ -82,6 +86,16 @@
     
     [self SetUnPush];
     [self UpdateLabel];
+    
+}
+//------------------------------------------------------------------------------------------------------
+- (void)UpdatePos{
+    [self Proc:nil];
+    if(bTexture==YES){
+        
+        Ob_Icon *pObIcon = [m_pChildrenbjectsArr objectAtIndex:0];
+        [pObIcon Proc:nil];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)drawText:(NSString*)theString AtX:(float)X Y:(float)Y {

@@ -174,7 +174,7 @@
                                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                                         SET_BOOL_V(YES,@"bFromEmpty"),
                                         SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-                                        SET_INT_V(mTextureId,@"mTextureId"));
+                                        SET_STRING_V(pStrInside->sNameIcon,@"m_pNameTexture"));
 
         pOb->pInsideString=pStrInside;
         m_bStartMove=YES;

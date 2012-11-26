@@ -9,6 +9,7 @@
 #import "DropBoxMng.h"
 #import "ObB_DropBox.h"
 #import "Ob_ResourceMng.h"
+#import "Ob_Editor_Interface.h"
 
 #define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
@@ -22,13 +23,13 @@
         
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
 
-        m_bHiden=YES;
+        m_bHiden=NO;
+        mColor= Color3DMake(1, 1, 1, 0);
         bNeedUpload=NO;
         bDropBoxWork=NO;
         
         m_pListAdd = [[NSMutableDictionary alloc] init];
-
-        [self DownLoadInfoFile];
+        NameDownLoadFile = [[NSMutableString alloc] init];
     }
 
     return self;
@@ -40,7 +41,12 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-	[super Start];    
+    mWidth=460;
+    mHeight=510;
+
+	[super Start];
+    
+//    [self DownLoadInfoFile];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Check{
@@ -82,18 +88,22 @@
 //        [pOb SetTouch:NO];
 //        [pOb DeleteFromDraw];
 //    }
+    
 }
 //------------------------------------------------------------------------------------------------------
-- (void)Show{
-    
-    for (ObB_DropBox *pOb in m_pChildrenbjectsArr) {
-        [pOb SetTouch:YES];
-        [pOb AddToDraw];
-    }
-}
+//- (void)Show{
+//    
+//    if(bShow==NO){
+//        bShow=YES;
+//        for (ObB_DropBox *pOb in m_pChildrenbjectsArr) {
+//            [pOb SetTouch:YES];
+//            [pOb AddToDraw];
+//        }
+//    }
+//}
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{
-    
+
     if(pDropBoxString==nil)return;
     
     for (GObject *pOb in m_pChildrenbjectsArr) {
@@ -108,8 +118,8 @@
         FractalString *pFrStr = [pDropBoxString->aStrings objectAtIndex:i];
         ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
 //                       SET_COLOR_V(pColorBack,@"mColorBack"),
-                       SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
-                       SET_STRING_V(@"ButtonOb.png",@"m_UP"),
+                       SET_STRING_V(pFrStr->sNameIcon,@"m_DOWN"),
+                       SET_STRING_V(pFrStr->sNameIcon,@"m_UP"),
                        SET_FLOAT_V(54,@"mWidth"),
                        SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -132,14 +142,19 @@
         ObB_DropBox *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
         
         OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
-    }    
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)DownLoadInfoFile{
 
     if(bDropBoxWork==NO){
         
+        [pDataManager relinkResClient];
+        
         m_iMode=UPDATE_INFO;
+
+        [NameDownLoadFile setString:@"INFO"];
+        m_iNumDownLoadFiles = 0;
 
         [pDataManager DownLoad];
 
@@ -164,8 +179,9 @@
             {
                 FractalString *pStr=[m_pListAdd objectForKey:pDataManager->m_pTmpLocalMetaData.filename];
                 
-                if(pStr!=nil)
+                if(pStr!=nil){
                     [pStr SetFlag:SYNH_AND_LOAD];
+                }
                 
                 [m_pListAdd removeObjectForKey:pDataManager->m_pTmpLocalMetaData.filename];
             }
@@ -218,7 +234,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadAndMerge{
-    
+
     CDataManager* pDataCurManager = pDataManager;
     bool Rez=[pDataCurManager Load];
     
@@ -300,22 +316,30 @@
 -(void)DownLoadString:(FractalString *)pFsr{
     
     if(bDropBoxWork==NO){
+        [pDataManager relinkResClient];
+        
+        [NameDownLoadFile setString:pFsr->strName];
+        m_iNumDownLoadFiles = 0;
+
         bDropBoxWork=YES;
         m_iMode=DOWNLOAD_DATA_STR;
 
         [pDataManager DownLoadWithName:pFsr->strUID];
+        
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
-    
-    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Synhronization{
-        
+
     if(bDropBoxWork==NO){
-                    
+
         m_iMode=UPLOAD_DATA_STR;
+        [pDataManager relinkResClient];
+        [NameDownLoadFile setString:@"INFO"];
+        m_iNumDownLoadFiles = 0;
         [pDataManager LoadMetadata:@"/"];
-        bDropBoxWork=YES;        
+        bDropBoxWork=YES;
     }
     else
     {
@@ -336,6 +360,9 @@
                 [pDataManager Save];
 
                 [pDataManager UpLoadWithName:pStr->strUID];
+                
+                [NameDownLoadFile setString:pStr->sNameIcon];
+                m_iNumDownLoadFiles = [m_pListAdd count];
             }
         }
         else [self SaveInfoStringToDropBox];
@@ -388,7 +415,8 @@ Repeate:;
     }
 
 //    if([pFstr->aStrings count]>0){
-//        
+//        int m=0;
+//
 //        for(int i=0;i<[pFstr->aStrings count];i++){
 //            FractalString *pFstrTmp=[pFstr->aStrings objectAtIndex:i];
 //            [pFstrRez->aStrings addObject:pFstrTmp];
@@ -513,6 +541,8 @@ Repeate2:;//главная синхронизация
         
         [pDataManager UpLoadWithName:NAME_INFO_FILE];
         
+        [NameDownLoadFile setString:@"INFO"];
+        m_iNumDownLoadFiles = 0;
         
         [pDataManager CreateFolder:@"_Resource"];
         NSMutableArray *pGroupRes = [m_pObjMng GetGroup:@"Res"];
@@ -527,9 +557,78 @@ Repeate2:;//главная синхронизация
 //------------------------------------------------------------------------------------------------------
 -(void)Save{}
 //------------------------------------------------------------------------------------------------------
+- (void)SelfDrawOffset{
+    
+    Ob_Editor_Interface *pObInterface = (Ob_Editor_Interface *)
+        [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    
+    if(bDropBoxWork==YES && pObInterface && pObInterface->PrBar!=nil)
+    {
+        glLoadIdentity();
+        glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
+        
+        int iFontSize=34;
+        // Set up texture
+        
+        Texture2D* statusTexture=nil;
+        ////////////////////////////////////////////////////////////////////////////////////
+        if([NameDownLoadFile isEqualToString:@"INFO"]){
+
+            statusTexture = [[Texture2D alloc] initWithString:NameDownLoadFile
+                       dimensions:CGSizeMake(mWidth, 40) alignment:UITextAlignmentCenter
+                         fontName:@"Helvetica" fontSize:iFontSize];
+            
+            statusTexture->_color=Color3DMake(1,1,1,1);
+            
+            // Bind texture
+            glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
+            // Draw
+            [statusTexture drawAtPoint:CGPointMake(m_pCurPosition.x,m_pCurPosition.y-160)];
+            
+            [statusTexture release];
+        }
+        else
+        {
+            statusTexture = [[Texture2D alloc] initWithString:
+                             [NSString stringWithFormat:@"%d",m_iNumDownLoadFiles]
+                                                   dimensions:CGSizeMake(mWidth, 40) alignment:UITextAlignmentCenter
+                                                     fontName:@"Helvetica" fontSize:iFontSize];
+            
+            statusTexture->_color=Color3DMake(1,1,1,1);
+            
+            // Bind texture
+            glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
+            // Draw
+            [statusTexture drawAtPoint:CGPointMake(m_pCurPosition.x,m_pCurPosition.y-150)];
+            
+            [statusTexture release];
+
+            //рисуем иконку
+            [self SetColor:Color3DMake(1, 1, 1, 1)];
+            
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+            
+            GET_TEXTURE(mTextureId, NameDownLoadFile);
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
+            
+            glTranslatef(m_pCurPosition.x,-270,0);
+
+            //	glRotatef(m_pCurAngle.x, 1, 0, 0);
+            //	glRotatef(m_pCurAngle.y, 0, 1, 0);
+            glRotatef(m_pCurAngle.z, 0, 0, 1);
+            glScalef(30,30,m_pCurScale.z);
+            
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
 -(void)dealloc{
     [pDataManager release];
     [m_pListAdd release];
+    [NameDownLoadFile release];
     
     [super dealloc];
 }

@@ -43,7 +43,7 @@
     
     //   GET_DIM_FROM_TEXTURE(@"");
 	mWidth  = 128;
-	mHeight = 128*FACTOR_DEC;
+	mHeight = 128;
 
 	[super Start];
 

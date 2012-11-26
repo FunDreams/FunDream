@@ -141,6 +141,8 @@
     if(pStrCheck!=nil){
          FCheck=[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
+        
+        if(FCheck && *FCheck==4)*FCheck=0;
         m_iMode=(int)(*FCheck);
         
         float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
@@ -149,8 +151,6 @@
     }
 //////////////////
     
-    pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox", nil);
-
     UNFROZE_OBJECT(@"StaticObject",@"Sl1",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
                    SET_FLOAT_V(480,@"mWidth"),
@@ -176,7 +176,10 @@
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
     
 //===================================================================================
-    //создаём ресурсы по порядку 
+    pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox",
+                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+
+    //создаём ресурсы по порядку
     pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
                             SET_INT_V(R_ICON,@"m_iTypeRes"),
                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
@@ -242,6 +245,8 @@
     OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
 
+    OBJECT_PERFORM_SEL(@"DropBox",@"DownLoadInfoFile");
+    
     m_iMode=3;//DropBox
     [self UpdateB];
 }

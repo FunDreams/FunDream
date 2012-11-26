@@ -344,7 +344,10 @@
 	Vector3D VstartPoint = Vector3DMake(tmpPointDif.x-m_pCurPosition.x,tmpPointDif.y-m_pCurPosition.y,0);
 	Vector3D TmpRotate=Vector3DRotateZ2D(VstartPoint,-m_pCurAngle.z);
 	
-	if((TmpRotate.x>=((m_pOffsetVert.x-1)*mWidth*0.5f)) && (TmpRotate.x<=((1+m_pOffsetVert.x)*mWidth*0.5f)) && (TmpRotate.y>=((m_pOffsetVert.y-1)*mHeight*0.5f)) && (TmpRotate.y<=((1+m_pOffsetVert.y)*mHeight*0.5f)))
+	if(TmpRotate.x>=((m_pOffsetVert.x-1)*mWidth*0.5f))
+        if(TmpRotate.x<=((1+m_pOffsetVert.x)*mWidth*0.5f))
+            if(TmpRotate.y>=((m_pOffsetVert.y-1)*mHeight*0.5f))
+                if(TmpRotate.y<=((1+m_pOffsetVert.y)*mHeight*0.5f))
 	{
 		m_pCurrentTouch.x=TmpRotate.x;
 		m_pCurrentTouch.y=TmpRotate.y;

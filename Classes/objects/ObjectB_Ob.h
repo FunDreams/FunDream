@@ -20,6 +20,7 @@
     bool m_bStartMove;
     bool m_bDrag;
     bool m_bDoubleTouch;
+    bool m_bStartTouch;
 
     bool m_bPush;
     NSMutableString *m_strNameSound;

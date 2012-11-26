@@ -10,6 +10,7 @@
 #import "ObjectB_Ob.h"
 #import "ObB_DropBox.h"
 #import "DropBoxMng.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation Ob_IconDrag
 //------------------------------------------------------------------------------------------------------
@@ -50,12 +51,12 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
-    int TmpTexture=mTextureId;
+ //   int TmpTexture=mTextureId;
 	[super Start];
-    mTextureId=TmpTexture;
+//    mTextureId=TmpTexture;
 
+    GET_TEXTURE(mTextureId, m_pNameTexture);
     [self SetTouch:YES];//интерактивность
-//    GET_TEXTURE(mTextureId, m_pNameTexture);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetPos:(FractalString *)pNewString{
@@ -77,7 +78,11 @@
     DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
     
     int *pMode=GET_INT_V(@"m_iMode");
-    GObject *pObTash=[m_pObjMng GetObjectByName:@"ButtonTach"];
+    Ob_Editor_Interface *Interface=(Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    
+    GObject *pObTash=nil;
+    if(Interface!=nil)
+        pObTash=Interface->BTash;
 
     FractalString *pParent = GET_ID_V(@"ParentString");
     FractalString *pDropBoxStr = [m_pObjMng->pStringContainer GetString:@"DropBox"];
