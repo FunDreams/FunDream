@@ -38,6 +38,7 @@
     m_bDrag=NO;
     m_bStartPush=NO;
     m_bStartMove=NO;
+    m_bFlicker=NO;
     
     [m_DOWN setString:@""];
     [m_UP setString:@""];
@@ -49,7 +50,7 @@
     [m_strNameObjectDClick setString:@""];
     
     mColorBack = Color3DMake(0, 1, 0, 1);
-    m_bBack=NO;
+    m_bBack=YES;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -57,6 +58,7 @@
     
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
+    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bFlicker,m_strName,@"m_bFlicker")];
 
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bNotPush,m_strName,@"m_bNotPush")];
     
@@ -81,13 +83,16 @@
     
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_DOWN,m_strName,@"m_DOWN")];
     [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_UP,m_strName,@"m_UP")];
-
-    
 //////--------------------------------------------------------------------------------------------------
     Processor_ex *pProc = [self START_QUEUE:@"DTouch"];
         ASSIGN_STAGE(@"Idle", @"Idle:",nil)
         ASSIGN_STAGE(@"DoubleTouch",@"DoubleTouch:",SET_INT_V(300,@"TimeBaseDelay"));
     [self END_QUEUE:pProc name:@"DTouch"];
+
+    pProc = [self START_QUEUE:@"Flick"];
+        ASSIGN_STAGE(@"Stop", @"Idle:",nil)
+        ASSIGN_STAGE(@"ActionFlick",@"ActionFlick:",nil);
+    [self END_QUEUE:pProc name:@"Flick"];    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -107,6 +112,9 @@
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
+    
+    if(m_bFlicker==YES)[self setFlick];
+    else [self setUnFlick];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
@@ -129,6 +137,27 @@
     
     m_bDoubleTouch=NO;
     NEXT_STAGE;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)setFlick{
+    m_fPhase=0;
+    mColorBack.alpha=1;
+    SET_STAGE_EX(NAME(self), @"Flick", @"ActionFlick");
+}
+//------------------------------------------------------------------------------------------------------
+- (void)setUnFlick{
+    mColorBack.alpha=1;
+    SET_STAGE_EX(NAME(self), @"Flick", @"Stop");
+}
+//------------------------------------------------------------------------------------------------------
+- (void)PrepareActionFlick:(ProcStage_ex *)pStage{
+    m_fPhase=0;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)ActionFlick:(Processor_ex *)pProc{
+    
+    m_fPhase+=DELTA*3;
+    mColorBack.alpha=0.5f*cos(m_fPhase)+0.5f;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{

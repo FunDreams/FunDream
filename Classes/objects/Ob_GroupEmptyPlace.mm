@@ -69,7 +69,7 @@
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
-        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
         
         m_fChelf=FChelf;
@@ -126,7 +126,7 @@
             NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:i];
             FractalString *pStrTmp = [m_pObjMng->pStringContainer GetString:Name];
             
-            if(pStrTmp!=nil && (pStrTmp->m_iFlagsString & (ONLY_IN_MEM|SYNH_AND_LOAD)))
+            if(pStrTmp!=nil && (pStrTmp->m_iFlagsDropBox & (ONLY_IN_MEM|SYNH_AND_LOAD)))
             {
                 pObTmp->pStrInside=pStrTmp;
                 GET_TEXTURE(pObTmp->mTextureId, pStrTmp->sNameIcon);

@@ -21,6 +21,7 @@
     bool m_bDrag;
     bool m_bDoubleTouch;
     bool m_bStartTouch;
+    bool m_bFlicker;
 
     bool m_bPush;
     NSMutableString *m_strNameSound;
@@ -57,4 +58,8 @@
 - (void)SetUnPush;
 - (void)SetPush;
 - (void)EndTouch;
+
+- (void)setFlick;
+- (void)setUnFlick;
+
 @end

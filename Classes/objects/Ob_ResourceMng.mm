@@ -176,15 +176,17 @@
             }
 exit:
             
-            if([NameFolerSelect isEqualToString:@"nil"]){
+            if([NameFolerSelect isEqualToString:@"nil"] && [pArrTmpNameFolder count]>0){
                 [NameFolerSelect setString:[pArrTmpNameFolder objectAtIndex:0]];
                 iCur=0;
             }
             
-            Ob_Tab *pObBtnTab=[m_pFolderButton objectAtIndex:iCur];
+            if([m_pFolderButton count]>0){
+                Ob_Tab *pObBtnTab=[m_pFolderButton objectAtIndex:iCur];
 
-            pObBtnTab->mColor=Color3DMake(1,0,0,1);
-            [NameFolerSelect setString:pObBtnTab->m_strNameFolder];
+                pObBtnTab->mColor=Color3DMake(1,0,0,1);
+                [NameFolerSelect setString:pObBtnTab->m_strNameFolder];
+            }
         }
         else
         {
@@ -314,7 +316,7 @@ exit:
     mHeight=510;
         
 	[super Start];
-            
+
     bTexture=NO;
     switch (m_iTypeRes) {
         case R_TEXTURE:

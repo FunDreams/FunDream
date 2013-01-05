@@ -79,11 +79,11 @@
     
     if(pOb_BSlayder->pInsideString!=nil){
                 
-        pObInd1->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
-                              GetDataAtIndex:pOb_BSlayder->pInsideString->S];
-        
-        pObInd2->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
-                              GetDataAtIndex:pOb_BSlayder->pInsideString->F];
+//        pObInd1->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
+//                              GetDataAtIndex:pOb_BSlayder->pInsideString->S];
+//        
+//        pObInd2->m_fCurValue=[m_pObjMng->pStringContainer->ArrayPoints
+//                              GetDataAtIndex:pOb_BSlayder->pInsideString->F];
         
         OBJECT_PERFORM_SEL(NAME(pObInd1), @"UpdateNum");
         OBJECT_PERFORM_SEL(NAME(pObInd2), @"UpdateNum");

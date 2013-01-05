@@ -61,7 +61,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateObjects{
 	    
-    [pStringContainer Update:(float)m_fDeltaTime];
+    [pStringContainer Update];
     
 	if([m_pObjectAddToTouch count])
 	{

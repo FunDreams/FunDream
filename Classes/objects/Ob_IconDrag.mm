@@ -96,7 +96,7 @@
 
     if([pObTash Intersect:Point] &&  pNeedUpload!=0){
 
-        switch (pInsideString->m_iFlagsString) {
+        switch (pInsideString->m_iFlagsDropBox) {
             case DEAD_STRING:{
                 
                 CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:0];
@@ -145,7 +145,7 @@
 
                     if(bFromEmpty==YES)
                     {                        
-                        if(pInsideString->m_iFlagsString & (SYNH_AND_LOAD|ONLY_IN_MEM)){
+                        if(pInsideString->m_iFlagsDropBox & (SYNH_AND_LOAD|ONLY_IN_MEM)){
                             FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
                                     WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
                             
@@ -196,7 +196,7 @@
             }
 Exit:
             if(m_pCurPosition.y<202 && pInsideString!=nil &&
-               ![pInsideString->strName isEqualToString:@"Objects"]){
+               ![pInsideString->strUID isEqualToString:@"Objects"]){
 
                 if(pParent!=pInsideString){
                     FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
@@ -209,9 +209,7 @@ Exit:
 
                 FractalString *pNewString =[[FractalString alloc]
                         initWithName:@"EmptyOb" WithParent:pParent
-                        WithContainer:m_pObjMng->pStringContainer
-                        S:m_pObjMng->pStringContainer->iIndexZero
-                        F:m_pObjMng->pStringContainer->iIndexZero];
+                        WithContainer:m_pObjMng->pStringContainer];
 
                 [self SetPos:pNewString];
             }

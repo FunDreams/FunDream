@@ -236,11 +236,11 @@
     
     if(m_bBack==YES){
         
-        if(pString->m_iFlagsString & DEAD_STRING)
+        if(pString->m_iFlagsDropBox & DEAD_STRING)
             mColorBack=Color3DMake(1, 0, 0, 1);
-        else if(pString->m_iFlagsString & SYNH_AND_HEAD)
+        else if(pString->m_iFlagsDropBox & SYNH_AND_HEAD)
             mColorBack=Color3DMake(1, 1, 0, 1);
-        else if(pString->m_iFlagsString & ONLY_IN_MEM)
+        else if(pString->m_iFlagsDropBox & ONLY_IN_MEM)
             mColorBack=Color3DMake(0, 0.5f, 1, 1);
         else mColorBack=Color3DMake(0, 1, 0, 1);
             

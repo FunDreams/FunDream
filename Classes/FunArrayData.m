@@ -7,6 +7,7 @@
 //
 
 #import "FunArrayData.h"
+
 //------------------------------------------------------------------------------------------
 @implementation FunArrayData
 //------------------------------------------------------------------------------------------
@@ -21,6 +22,9 @@
         iCount=0;
         iCountInArray=0;
         
+        pNamesOb = [[NSMutableDictionary alloc] init];
+        pNamesValue = [[NSMutableDictionary alloc] init];
+        
         [self Increase:iCopasity];
     }
     
@@ -33,6 +37,7 @@
     iCount+=CountInc;
     pData=realloc(pData,iCount*sizeof(float));
     pDataInt=realloc(pDataInt,iCount*sizeof(int));
+    pType=realloc(pType,iCount*sizeof(unsigned char));
     
     for (int i=0; i<CountInc; i++) {
         
@@ -40,14 +45,23 @@
 
         NSNumber *pNum=[NSNumber numberWithInt:Index];
         [pFreeArray addObject:pNum];
+        
+        *(pDataInt+FirstIndex+i)=0;
+        *(pData+FirstIndex+i)=0;
+        *(pType+FirstIndex+i)=0;
     }
 }
 //------------------------------------------------------------------------------------------
 - (void)Reserv:(int)iCountTmp{
     iCount=iCountTmp;
     
-    pData=realloc(pData,iCountTmp*sizeof(float));
-    pDataInt=realloc(pDataInt,iCountTmp*sizeof(int));
+    pData=malloc(iCountTmp*sizeof(float));
+    pDataInt=malloc(iCountTmp*sizeof(int));
+    pType=malloc(iCountTmp*sizeof(unsigned char));
+    
+    memset(pData, 0, sizeof(float));
+    memset(pDataInt, 0, sizeof(int));
+    memset(pType, 0, sizeof(unsigned char));
 }
 //------------------------------------------------------------------------------------------
 - (int)GetFree{
@@ -62,18 +76,98 @@
     return IndexFree;
 }
 //------------------------------------------------------------------------------------------
-- (int)SetData:(float)DataValue{
+//------------------------------------------------------------------------------------------
+- (int)SetFloat:(float)DataValue{
 
     int iIndex=[self GetFree];
     
     float *TmpLink=pData+iIndex;
     
-    memcpy(TmpLink,&DataValue, sizeof(float));
+    *TmpLink=DataValue;
+    (*((int *)pDataInt+iIndex))++;
+    iCountInArray++;
+
+    (*(pType+iIndex))=DATA_FLOAT;
+
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (int)SetInt:(int)DataValue{
+    
+    int iIndex=[self GetFree];
+    
+    int *TmpLink=(int *)pData+iIndex;
+    
+    *TmpLink=DataValue;
     (*((int *)pDataInt+iIndex))++;
     iCountInArray++;
     
+    (*(pType+iIndex))=DATA_INT;
+    
     return iIndex;
 }
+//------------------------------------------------------------------------------------------
+- (int)SetName:(NSMutableString *)DataValue{
+    
+    int iIndex=[self GetFree];
+        
+    NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
+    [pNamesValue setValue:DataValue forKey:pKey];
+    
+    id *TmpLink=(id *)(pData+iIndex);
+    *(TmpLink)=DataValue;
+    
+    (*((int *)pDataInt+iIndex))++;
+    iCountInArray++;
+    
+    (*(pType+iIndex))=DATA_STRING;
+    
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (int)SetOb:(FractalString *)DataValue{
+    
+    int iIndex=[self GetFree];
+    
+    NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
+    [pNamesOb setValue:DataValue->strUID forKey:pKey];
+    
+    id *TmpLink=(id *)(pData+iIndex);
+    *(TmpLink)=DataValue;
+    
+    (*((int *)pDataInt+iIndex))++;
+    iCountInArray++;
+    
+    (*(pType+iIndex))=DATA_ID;
+
+    return iIndex;
+}
+//==----------------------------------------------------------------------------------------
+- (void *)GetDataAtIndex:(int)iIndex{
+    if(iIndex>iCount)return 0;
+    
+    void *fRet=(pData+iIndex);
+    
+    return fRet;
+}
+//------------------------------------------------------------------------------------------
+- (id)GetIdAtIndex:(int)iIndex{
+    if(iIndex>iCount)return 0;
+    
+    id *fRet=(id *)(pData+iIndex);
+    return *fRet;
+}
+//------------------------------------------------------------------------------------------
+- (int)GetIncAtIndex:(int)iIndex{
+    int iRet=(*(pDataInt+iIndex));
+    return iRet;
+}
+//------------------------------------------------------------------------------------------
+- (unsigned char)GetTypeAtIndex:(int)iIndex{
+    unsigned char iRet=(*(pType+iIndex));
+    return iRet;
+}
+//------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 - (void)IncDataAtIndex:(int)iIndex{
     
@@ -89,18 +183,20 @@
     (*TmpIndex)--;
     if(*TmpIndex==0)
     {
+        unsigned char uType = (*(pType+iIndex));
+
+        NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
+
+        if(uType==DATA_ID){
+            [pNamesOb removeObjectForKey:pKey];
+        }
+        else if(uType==DATA_STRING)
+            [pNamesValue removeObjectForKey:pKey];
+
         iCountInArray--;
         NSNumber *pNum=[NSNumber numberWithInt:*TmpIndex];
         [pFreeArray addObject:pNum];
     }
-}
-//------------------------------------------------------------------------------------------
-- (float *)GetDataAtIndex:(int)iIndex{
-    if(iIndex>iCount)return 0;
-    
-    float *fRet=((float *)(pData+iIndex));
-    
-    return fRet;
 }
 //------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData{
@@ -111,12 +207,58 @@
     
     [m_pData appendBytes:pData length:iCount*sizeof(float)];
     [m_pData appendBytes:pDataInt length:iCount*sizeof(int)];
-    
+    [m_pData appendBytes:pType length:iCount*sizeof(unsigned char)];
+
+//сохраняем свободные ячейки------------------------------------------------------
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pFreeArray];
     int iLen=[data length];
     
     [m_pData appendBytes:&iLen length:sizeof(int)];
     [m_pData appendData:data];
+//--------------------------------------------------------------------------------
+    data=[NSKeyedArchiver archivedDataWithRootObject:pNamesOb];
+    iLen=[data length];
+    
+    [m_pData appendBytes:&iLen length:sizeof(int)];
+    [m_pData appendData:data];
+//--------------------------------------------------------------------------------
+    data=[NSKeyedArchiver archivedDataWithRootObject:pNamesValue];
+    iLen=[data length];
+    
+    [m_pData appendBytes:&iLen length:sizeof(int)];
+    [m_pData appendData:data];
+//--------------------------------------------------------------------------------
+}
+//------------------------------------------------------------------------------------------
+-(void)PrepareLoadData{
+    
+    NSEnumerator *Key_enumerator = [pNamesOb keyEnumerator];
+    NSString *pNameKey;
+    
+    while ((pNameKey = [Key_enumerator nextObject])) {
+        
+        NSString * pName = [pNamesOb objectForKey:pNameKey];
+        
+        FractalString *pTmpStr = [pParent->DicStrings objectForKey:pName];
+
+        int iKey=[pNameKey intValue];
+        id *fRet=((id *)(pData+iKey));
+
+        if(pTmpStr==0)*fRet=0;
+        else *fRet=pTmpStr;
+    }
+
+    Key_enumerator = [pNamesValue keyEnumerator];
+    
+    while ((pNameKey = [Key_enumerator nextObject])) {
+        
+        NSString * pName = [pNamesValue objectForKey:pNameKey];
+        
+        int iKey=[pNameKey intValue];
+        id *fRet=((id *)(pData+iKey));
+        
+        *fRet=pName;
+    }
 }
 //------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos{
@@ -137,6 +279,9 @@
     [m_pData getBytes:pDataInt range:NSMakeRange( *iCurReadingPos, iCount*sizeof(int))];
     *iCurReadingPos += iCount*sizeof(int);
 
+    [m_pData getBytes:pType range:NSMakeRange( *iCurReadingPos, iCount*sizeof(unsigned char))];
+    *iCurReadingPos += iCount*sizeof(unsigned char);
+//--------------------------------------------------------------------------------
     int iLen;
     [m_pData getBytes:&iLen range:NSMakeRange( *iCurReadingPos, sizeof(int))];
     *iCurReadingPos += sizeof(int);
@@ -145,13 +290,39 @@
     
     if(pFreeArray!=nil)[pFreeArray release];
     pFreeArray = [[NSKeyedUnarchiver unarchiveObjectWithData:iv] retain];
+    
+    *iCurReadingPos += iLen;
+//--------------------------------------------------------------------------------
+    [m_pData getBytes:&iLen range:NSMakeRange( *iCurReadingPos, sizeof(int))];
+    *iCurReadingPos += sizeof(int);
+    
+    iv = [m_pData subdataWithRange:NSMakeRange(*iCurReadingPos, iLen)];
+    
+    if(pNamesOb!=nil)[pNamesOb release];
+    pNamesOb = [[NSKeyedUnarchiver unarchiveObjectWithData:iv] retain];
+    
+    *iCurReadingPos += iLen;
+//--------------------------------------------------------------------------------
+    [m_pData getBytes:&iLen range:NSMakeRange( *iCurReadingPos, sizeof(int))];
+    *iCurReadingPos += sizeof(int);
+    
+    iv = [m_pData subdataWithRange:NSMakeRange(*iCurReadingPos, iLen)];
+    
+    if(pNamesValue!=nil)[pNamesValue release];
+    pNamesValue = [[NSKeyedUnarchiver unarchiveObjectWithData:iv] retain];
+//--------------------------------------------------------------------------------
+    [self PrepareLoadData];
 }
 //------------------------------------------------------------------------------------------
 - (void)dealloc
 {
     free(pData);
     free(pDataInt);
+    free(pType);
     [pFreeArray release];
+    
+    [pNamesOb release];
+    [pNamesValue release];
 
     [super dealloc];
 }

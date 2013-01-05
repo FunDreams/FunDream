@@ -232,7 +232,7 @@
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
-        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
         
         (*FChelf)=(float)m_iCurIndex;
@@ -256,7 +256,7 @@
         FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
         NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
 
-        switch (DragObjectDropBoxStr->m_iFlagsString) {
+        switch (DragObjectDropBoxStr->m_iFlagsDropBox) {
             case ONLY_IN_MEM:
             case SYNH_AND_LOAD:
             {

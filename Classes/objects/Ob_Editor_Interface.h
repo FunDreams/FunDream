@@ -40,6 +40,8 @@
     GObject *BMove;
     GObject *BCopy;
     GObject *BLink;
+    GObject *BConnect;
+
     GObject *BTash;
     GObject *PrSyn;
 }

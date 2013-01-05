@@ -14,14 +14,17 @@
     int m_iCopasity;
     int iCountInArray;
     int iCoundAdd;
+    bool bOrder;
 }
 
 -(id) initWithCopasity:(int)iCopasity;
 
+- (void)Extend;
 -(void)AddData:(int)iDataValue;
 -(void)RemoveDataAtIndex:(int)iIndex;
 -(int)GetDataAtIndex:(int)iIndex;
 - (void)Reserv:(int)iCount;
+- (void)Insert:(int)iDataValue index:(int)iIndex;
 
 -(void)selfSave:(NSMutableData *)m_pData;
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;

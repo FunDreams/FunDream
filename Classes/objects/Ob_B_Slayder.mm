@@ -92,11 +92,11 @@
 - (void)setStartPos{
 
     if(pInsideString!=0){
-        float WHalf=m_pOwner->mWidth*0.5f;
+  //      float WHalf=m_pOwner->mWidth*0.5f;
         
-        float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
-        float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
-        SET_MIRROR(*m_fLink, *pF, *pS,m_pOffsetCurPosition.x, WHalf, -WHalf);
+//        float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
+//        float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
+//        SET_MIRROR(*m_fLink, *pF, *pS,m_pOffsetCurPosition.x, WHalf, -WHalf);
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -128,17 +128,17 @@
 - (void)ProcMove:(CGPoint)Point{
     
     if(m_bTouchButton==YES){
-        float WHalf=m_pOwner->mWidth*0.5f; 
+  //      float WHalf=m_pOwner->mWidth*0.5f;
 
         m_vCurrentTouchPoint=Vector3DMake(Point.x, 0, 0);
         
         if(m_fLink!=0 && pInsideString!=0){
             
-            float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
-            float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
-
-            SET_MIRROR(m_pOffsetCurPosition.x, WHalf, -WHalf,
-                       *m_fLink, *pF, *pS);
+//            float *pS=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->S];
+//            float *pF=[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pInsideString->F];
+//
+//            SET_MIRROR(m_pOffsetCurPosition.x, WHalf, -WHalf,
+//                       *m_fLink, *pF, *pS);
             
             [pObIndicator UpdateNum];
         }

@@ -150,6 +150,9 @@ WithParams:[NSArray arrayWithObjects:__VA_ARGS__,nil] ];
     va_end(argList);\
 }
 
+//беззнаковый однобайтовый тип
+#define BYTE unsigned char
+
 //установка/удаление ячейки в MegaTree
 #define COPY_CELL(CELL) [m_pObjMng->pMegaTree CopyCell:CELL];
 #define SET_CELL(CELL) [m_pObjMng->pMegaTree SetCell:CELL];

@@ -18,16 +18,23 @@
         [sNameIcon release];
         sNameIcon=nil;
     }
-
     sNameIcon=[[NSString alloc] initWithString:Name];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)InitMemory{
+    
+    pPointCopy=(int **)malloc(sizeof(int));
+    pPointLink=(int **)malloc(sizeof(int));
+    
+    *pPointCopy=(int *)malloc(sizeof(StringValue));
+    *pPointLink=(int *)malloc(sizeof(StringValue));
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
-        
+
     [self SetFlag:ONLY_IN_MEM];
     
     aStrings = [[NSMutableArray alloc] init];
-    aStages = [[NSMutableArray alloc] init];
     ArrayLinks = [[NSMutableArray alloc] init];
     
     ArrayPoints = [[FunArrayDataIndexes alloc] initWithCopasity:10];
@@ -59,11 +66,10 @@
             [pParent->aStrings addObject:self];
         }
         
+        [self InitMemory];
         [self SetDefault];
-        [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
         
         strUID = [pContainer GetRndName];
-        strName = [[NSString alloc] initWithString:pStrSource->strName];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
         
@@ -98,11 +104,10 @@
             [pParent->aStrings addObject:self];
         }
 
+        [self InitMemory];
         [self SetDefault];
-        [self SetLimmitStringS:pStrSource->S F:pStrSource->F];
-                
+        
         strUID = [pContainer GetRndName];
-        strName = [[NSString alloc] initWithString:pStrSource->strName];
         
         [self SetNameIcon:pStrSource->sNameIcon];
 
@@ -120,7 +125,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
-     WithContainer:(StringContainer *)pContainer S:(int)iS F:(int)iF{
+     WithContainer:(StringContainer *)pContainer{
 
 	self = [super init];
 	if (self != nil)
@@ -134,17 +139,15 @@
         id TmpId=[pContainer->DicStrings objectForKey:NameString];
         
         if(TmpId==nil){
-            strName = [[NSString alloc] initWithString:NameString];
             strUID = [[NSString alloc] initWithString:NameString];
         }
         else
         {
-            strName = StrRndName;
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
 
+        [self InitMemory];
         [self SetDefault];
-        [self SetLimmitStringS:iS F:iF];
                 
         [pContainer->DicStrings setObject:self forKey:strUID];
     }
@@ -157,7 +160,8 @@
 
     self = [super init];
 	if (self != nil)
-    {        
+    {
+        [self InitMemory];
         [self SetDefault];
         
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
@@ -183,11 +187,11 @@
     
     self = [super init];
 	if (self != nil)
-    {
-        pParent=Parent;
-        
+    {        
+        [self InitMemory];
         [self SetDefault];
         
+        pParent=Parent;
         [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
         
         [pContainer->DicStrings setObject:self forKey:strUID];
@@ -197,14 +201,8 @@
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetFlag:(int)iFlag{
-    m_iFlagsString &= ~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
-    m_iFlagsString|=iFlag;
-}
-//------------------------------------------------------------------------------------------------------
-- (void)SetLimmitStringS:(int)iS F:(int)iF{
-    
-    S=iS;
-    F=iF;
+    m_iFlagsDropBox &= ~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
+    m_iFlagsDropBox|=iFlag;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)selfLoadOnlyStructure:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
@@ -236,34 +234,11 @@
     *iCurReadingPos += iLen*sizeof(unichar);
     
     sValue = [NSString stringWithCharacters:ucBuff length:iLen];
-    strName = [[NSString alloc] initWithString:sValue];
-    //---------------------------------------------------------------------------------
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&iLen range:Range];
-    *iCurReadingPos += sizeof(int);
-    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
-    
-    [pData getBytes:ucBuff range:Range];
-    
-    *iCurReadingPos += iLen*sizeof(unichar);
-    
-    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
     sNameIcon = [[NSString alloc] initWithString:sValue];
     //---------------------------------------------------------------------------------
     free(ucBuff);
     
     //float value
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&S range:Range];
-    *iCurReadingPos += sizeof(int);
-    
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&F range:Range];
-    *iCurReadingPos += sizeof(int);
-        
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&m_iDeep range:Range];
-    *iCurReadingPos += sizeof(int);
     
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
     [pData getBytes:&X range:Range];
@@ -274,7 +249,7 @@
     *iCurReadingPos += sizeof(float);
     
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&m_iFlagsString range:Range];
+    [pData getBytes:&m_iFlagsDropBox range:Range];
     *iCurReadingPos += sizeof(int);
     
     //child string
@@ -319,18 +294,6 @@
     [pData getBytes:&iLen range:Range];
     *iCurReadingPos += sizeof(int);
     Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
-
-    [pData getBytes:ucBuff range:Range];
-
-    *iCurReadingPos += iLen*sizeof(unichar);
-
-    sValue = [NSString stringWithCharacters:ucBuff length:iLen];
-    strName = [[NSString alloc] initWithString:sValue];
-//---------------------------------------------------------------------------------
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&iLen range:Range];
-    *iCurReadingPos += sizeof(int);
-    Range = NSMakeRange( *iCurReadingPos, iLen*sizeof(unichar));
     
     [pData getBytes:ucBuff range:Range];
     
@@ -340,18 +303,6 @@
     sNameIcon = [[NSString alloc] initWithString:sValue];
 //---------------------------------------------------------------------------------
     //float value
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&S range:Range];
-    *iCurReadingPos += sizeof(int);
-
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&F range:Range];
-    *iCurReadingPos += sizeof(int);
-
-    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&m_iDeep range:Range];
-    *iCurReadingPos += sizeof(int);
-
     Range = NSMakeRange( *iCurReadingPos, sizeof(float));
     [pData getBytes:&X range:Range];
     *iCurReadingPos += sizeof(float);
@@ -361,7 +312,7 @@
     *iCurReadingPos += sizeof(float);
 
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
-    [pData getBytes:&m_iFlagsString range:Range];
+    [pData getBytes:&m_iFlagsDropBox range:Range];
     *iCurReadingPos += sizeof(int);
     
     //Load link string
@@ -425,11 +376,6 @@
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
             
-            [strName getCharacters:ucBuff];
-            Len=[strName length];
-            [m_pData appendBytes:&Len length:sizeof(int)];
-            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
-
             [sNameIcon getCharacters:ucBuff];
             Len=[sNameIcon length];
             [m_pData appendBytes:&Len length:sizeof(int)];
@@ -438,16 +384,11 @@
             free(ucBuff);
             
             //float value
-            [m_pData appendBytes:&S length:sizeof(int)];
-            [m_pData appendBytes:&F length:sizeof(int)];
-            
-            [m_pData appendBytes:&m_iDeep length:sizeof(int)];
-            
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
             
             //флаги
-            [m_pData appendBytes:&m_iFlagsString length:sizeof(m_iFlagsString)];
+            [m_pData appendBytes:&m_iFlagsDropBox length:sizeof(m_iFlagsDropBox)];
 
             int iCurDeep=iDeep+1;
 
@@ -485,27 +426,17 @@
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
 
-            [strName getCharacters:ucBuff];
-            Len=[strName length];
-            [m_pData appendBytes:&Len length:sizeof(int)];
-            [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
-
             [sNameIcon getCharacters:ucBuff];
             Len=[sNameIcon length];
             [m_pData appendBytes:&Len length:sizeof(int)];
             [m_pData appendBytes:ucBuff length:Len*sizeof(unichar)];
 
             //float value
-            [m_pData appendBytes:&S length:sizeof(int)];
-            [m_pData appendBytes:&F length:sizeof(int)];
-
-            [m_pData appendBytes:&m_iDeep length:sizeof(int)];
-
             [m_pData appendBytes:&X length:sizeof(float)];
             [m_pData appendBytes:&Y length:sizeof(float)];
 
             //флаги
-            [m_pData appendBytes:&m_iFlagsString length:sizeof(m_iFlagsString)];
+            [m_pData appendBytes:&m_iFlagsDropBox length:sizeof(m_iFlagsDropBox)];
 
             //link string
             int iCountLink=[ArrayLinks count];
@@ -535,6 +466,7 @@
                 [FChild selfSave:m_pData WithVer:iVersion];
             }
             
+            //сохраняем данные струны
             [ArrayPoints selfSave:m_pData];
         }
         break;
@@ -544,34 +476,14 @@
     }    
 }
 //------------------------------------------------------------------------------------------------------
--(void)UpDate:(float)fDelta{
-    
-//    switch (m_iType) {
-//        case tLine:
-//            
-            for (FractalString *pFStringChild in aStrings){
-                [pFStringChild UpDate:fDelta];
-            
-            ////mirror
-            }
-//
-//            break;
-//            
-//        default:
-//            break;
-//    }
-}
-//------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
     [sNameIcon release];
-    [aStages release];
     [aStrings release];
     [ArrayLinks release];
     [ArrayPoints release];
     
     [strUID release];
-    [strName release];
     
     [super dealloc];
 }

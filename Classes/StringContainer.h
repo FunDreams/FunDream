@@ -35,7 +35,7 @@
 }
 
 -(id)init:(id)Parent;
--(void)Update:(float)fDelta;
+-(void)Update;
 
 -(void)SetTemplateString;
 -(id)GetString:(NSString *)strName;
@@ -43,6 +43,7 @@
 -(void)DelChilds:(FractalString *)strDelChilds;
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
+-(void)AddSmallCube:(FractalString *)pFParent;
 
 -(void)ReLinkDataManager;
 -(bool)LoadContainer;

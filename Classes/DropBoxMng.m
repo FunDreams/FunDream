@@ -318,7 +318,7 @@
     if(bDropBoxWork==NO){
         [pDataManager relinkResClient];
         
-        [NameDownLoadFile setString:pFsr->strName];
+        [NameDownLoadFile setString:pFsr->strUID];
         m_iNumDownLoadFiles = 0;
 
         bDropBoxWork=YES;
@@ -431,10 +431,7 @@ Repeate:;
 
             FractalString *pLoadFstr = [[FractalString alloc] init];
 
-            [pLoadFstr->strName release];
             [pLoadFstr->strUID release];
-
-            pLoadFstr->strName = [[NSString alloc] initWithString:folderName];
             pLoadFstr->strUID = [[NSString alloc] initWithString:folderName];
 
 //            pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
@@ -470,7 +467,7 @@ Repeate2:;//главная синхронизация
                 
                 if(pFstrTmp->X!=pFstrTmp2->X || pFstrTmp->Y!=pFstrTmp2->Y)bNeedUpload=YES;
                 
-                if(pFstrTmp->m_iFlagsString & ONLY_IN_MEM)
+                if(pFstrTmp->m_iFlagsDropBox & ONLY_IN_MEM)
                     [pFstrTmp SetFlag:SYNH_AND_LOAD];
 
                 [pArrayLink removeObjectAtIndex:i];
@@ -489,18 +486,18 @@ Repeate2:;//главная синхронизация
             
             FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
-            if(pFstrTmp->m_iFlagsString & SYNH_AND_HEAD){
+            if(pFstrTmp->m_iFlagsDropBox & SYNH_AND_HEAD){
 
                 //помечаем струну мёртвой
                 [pFstrTmp SetFlag:DEAD_STRING];
             }
-            else if(pFstrTmp->m_iFlagsString & ONLY_IN_MEM){
+            else if(pFstrTmp->m_iFlagsDropBox & ONLY_IN_MEM){
                 
                 [self AddToUploadString:pFstrTmp];
             }
-            else if(pFstrTmp->m_iFlagsString & DEAD_STRING){
+            else if(pFstrTmp->m_iFlagsDropBox & DEAD_STRING){
             }
-            else if (pFstrTmp->m_iFlagsString & SYNH_AND_LOAD){
+            else if (pFstrTmp->m_iFlagsDropBox & SYNH_AND_LOAD){
                 [pFstrTmp SetFlag:ONLY_IN_MEM];
                 [self AddToUploadString:pFstrTmp];
             }

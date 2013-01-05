@@ -128,9 +128,33 @@
                    SET_STRING_V(@"CheckLink",@"m_strNameStage"),
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
+
+    BConnect=UNFROZE_OBJECT(@"ObjectButton",@"ButtonConnect",
+                         SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                         SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                         SET_STRING_V(@"ButtonConnection.png",@"m_DOWN"),
+                         SET_STRING_V(@"ButtonConnection.png",@"m_UP"),
+                         SET_FLOAT_V(54,@"mWidth"),
+                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                         SET_BOOL_V(YES,@"m_bLookTouch"),
+                         SET_BOOL_V((m_iMode==4)?YES:NO,@"m_bIsPush"),
+                         SET_INT_V(bRadioBox,@"m_iType"),
+                         SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                         SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
+                         SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                         SET_VECTOR_V(Vector3DMake(-200,295,0),@"m_pCurPosition"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
+    
+    pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox",
+                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+    
+    //создаём ресурсы по порядку
+    pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
+                            SET_INT_V(R_ICON,@"m_iTypeRes"),
+                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+//===============================режими==============================================
 
     [self Load];
 	[super Start];
@@ -139,13 +163,13 @@
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     
     if(pStrCheck!=nil){
-         FCheck=[m_pObjMng->pStringContainer->ArrayPoints
+         FCheck=(float *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
         
         if(FCheck && *FCheck==4)*FCheck=0;
         m_iMode=(int)(*FCheck);
         
-        float *FChelf=[m_pObjMng->pStringContainer->ArrayPoints
+        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
         m_iChelf=(int)(*FChelf);
     }
@@ -176,15 +200,6 @@
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
     
 //===================================================================================
-    pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox",
-                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
-
-    //создаём ресурсы по порядку
-    pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
-                            SET_INT_V(R_ICON,@"m_iTypeRes"),
-                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
-
-//===============================режими==============================================
     [self UpdateB];
 
     if([Eplace->m_pChildrenbjectsArr count]>0){
@@ -203,11 +218,10 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
     
-    *FCheck=0;
-    
     OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=0;//move
     [self UpdateB];
@@ -215,39 +229,47 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CheckCopy{
 
-    *FCheck=1;
-
     OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=1;//copy
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CheckLink{
-    
-    *FCheck=2;
 
     OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=2;//link
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetDropBox{
-            
-    *FCheck=3;
 
     OBJECT_PERFORM_SEL(NAME(BMove),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
 
     OBJECT_PERFORM_SEL(@"DropBox",@"DownLoadInfoFile");
     
     m_iMode=3;//DropBox
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CheckConnection{
+    
+    OBJECT_PERFORM_SEL(NAME(BMove),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+        
+    m_iMode=4;//Connection
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -321,7 +343,7 @@
                     
                     FractalString *CurSringTmp=[CurObject->aStrings objectAtIndex:i];
 
-                    if([CurSringTmp->strName isEqual:@"XY"]){
+                    if([CurSringTmp->strUID isEqual:@"XY"]){
                             
                         //Получаем объкт для создания манеьких частиц
                         Ob_ParticleCont_ForStr *pObParCont=(Ob_ParticleCont_ForStr *)
@@ -414,7 +436,7 @@
                         
                             FractalString *CurSringTmpProp=[CurObject->aStrings objectAtIndex:i];
                             
-                            if([CurSringTmpProp->strName isEqual:@"XY"]){
+                            if([CurSringTmpProp->strUID isEqual:@"XY"]){
                                 
                                 //Получаем объкт для создания манеьких частиц
                                 Ob_ParticleCont_ForStr *pObParCont=(Ob_ParticleCont_ForStr *)
@@ -484,9 +506,7 @@ EXIT:
         FractalString *pFStringCurObj=[[FractalString alloc]
                        initWithName:[m_pObjMng->pStringContainer GetRndName]
                        WithParent:pFStringObjects
-                        WithContainer:m_pObjMng->pStringContainer
-                                       S:m_pObjMng->pStringContainer->iIndexZero
-                                       F:m_pObjMng->pStringContainer->iIndexZero];
+                        WithContainer:m_pObjMng->pStringContainer];
 
         int Step=0;
         for (ObjectButton *pOb in aProp)
@@ -600,6 +620,9 @@ EXIT:
     
     DESTROY_OBJECT(BLink);
     BLink=nil;
+
+    DESTROY_OBJECT(BConnect);
+    BConnect=nil;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
@@ -625,7 +648,7 @@ EXIT:
                        SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                        SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
                        SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                       SET_VECTOR_V(Vector3DMake(-160,295,0),@"m_pCurPosition"));
+                       SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
         }
         
         OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
