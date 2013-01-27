@@ -11,20 +11,14 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-@interface Ob_GroupEmptyPlace : GObject {
-    int m_iNumButton;
-    FractalString *pChelf;
-    int *m_iChelf;
+@interface Ob_Arrow : GObject {
+@public
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 -(void)Destroy;
 -(void)Start;
-
-- (void)Hide;
-- (void)Show;
-
-- (void)ReLinkEmptyPlace;
+-(void)Update;
     
 @end

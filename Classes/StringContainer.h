@@ -8,13 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import "FractalString.h"
+@class FunArrayDataIndexes;
+@class CObjectManager;
 
-@interface StringContainer : NSObject{
+@interface StringContainer : NSObject{//пространство струн 
 @public
     NSMutableArray *ArrayStrings;
     FunArrayData *ArrayPoints;
-    NSMutableArray *ArrayActiveStrings;
     NSMutableDictionary *DicStrings;
+    FunArrayDataIndexes *m_OperationIndex;
     
     FractalString *pFStringObjects;
     CObjectManager* m_pObjMng;
@@ -23,28 +25,34 @@
     int m_iCurFile;
     NSMutableArray *ArrayDumpFiles;
     CDataManager *pDataCurManagerTmp;
-    
-    int iIndexZero;
-    
+        
     FunArrayData *ArrayPointsTmp;
     //Массив параметно для сохранения/загрузки
     
     int *pDataTmp;
     //Двойной временной массив индексов для копирования
     //частей струкруты в DropBox и загрузки.
+    
+//kernell data====================================================================
+    float *pDeltaTime;
+    int iIndexMaxSys;
 }
 
 -(id)init:(id)Parent;
--(void)Update;
+-(void)Update:(FractalString *)StartString;
 
--(void)SetTemplateString;
+-(void)SetKernel;
+-(void)SetEditor;
+-(void)InitIndex;
+
 -(id)GetString:(NSString *)strName;
--(void)AddString:(FractalString *)pString;
 -(void)DelChilds:(FractalString *)strDelChilds;
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
 -(void)AddSmallCube:(FractalString *)pFParent;
 
+-(void)CopyStrFrom:(StringContainer*)SourceContainer WithId:(FractalString *)SourceStr;
+-(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr;
 -(void)ReLinkDataManager;
 -(bool)LoadContainer;
 -(void)SaveContainer;

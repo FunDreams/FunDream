@@ -27,4 +27,6 @@
 - (void)Show;
 - (void)UpdateButt;
 
+- (void)CreateOb:(FractalString *)pFrStr;
+
 @end

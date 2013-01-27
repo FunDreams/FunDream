@@ -11,9 +11,10 @@
 #define UPDATE_INFO             1
 #define UPLOAD_DATA_STR         2
 #define DOWNLOAD_DATA_STR       3
-
+@class InfoFile;
 @interface DropBoxMng : GObject{
 @public
+    InfoFile *pInfofile;
     CDataManager *pDataManager;
     NSMutableDictionary *m_pListAdd;
     
@@ -38,6 +39,7 @@
 -(void)DownLoadInfoFile;
 -(void)SaveInfoStringToDropBox;
 -(void)Synhronization;
+- (void)CreateOb:(FractalString *)pFrStr;
 
 -(void)AddToUploadString:(FractalString *)pStr;
 -(void)DefFromUploadString:(FractalString *)pStr;

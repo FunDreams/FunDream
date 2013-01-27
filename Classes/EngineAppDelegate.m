@@ -84,9 +84,8 @@
 
 	[m_pRootViewController SetPrSettings:m_pPrSettings]; 
 	[m_pRootViewController initViews];
-
-	[window addSubview:m_pRootViewController.view];
-	
+    
+    window.rootViewController = m_pRootViewController;
     [window makeKeyAndVisible];
 //--------------------------------------------------------------------------
 //	m_pTimer=[NSTimer scheduledTimerWithTimeInterval:(1.0f/60.0f) target:self selector:@selector(OnTimer) userInfo:nil repeats:YES];

@@ -68,11 +68,11 @@
 	<key>NSMainNibFile~ipad</key>
 	<string>MainWindow-iPad</string>
 	<key>UIInterfaceOrientation</key>
-	<string>UIInterfaceOrientationLandscapeRight</string>
+	<string>UIInterfaceOrientationLandscapeLeft</string>
 	<key>UIPrerenderedIcon</key>
 	<true/>
 	<key>UIStatusBarHidden</key>
-	<true/>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

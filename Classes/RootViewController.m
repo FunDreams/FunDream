@@ -26,7 +26,7 @@
 #endif
     return NO;
 }
-
+//------------------------------------------------------------------------------------------------------
 -(void) completeLoading
 {
     [self.view insertSubview:m_pMainController.view atIndex:0];
@@ -37,7 +37,7 @@
     [m_pMainController Pause:NO];
     loadingSubviews = NO;
 }
-
+//------------------------------------------------------------------------------------------------------
 - (void) loadVerySlowLoadingViews
 {
 //    NSAutoreleasePool * pool = [[NSAutoreleasePool alloc] init];
@@ -52,18 +52,18 @@
     
     [self completeLoading];
 }
-
+//------------------------------------------------------------------------------------------------------
 -(BOOL) isReady
 {
     return !loadingSubviews;
 }
-
+//------------------------------------------------------------------------------------------------------
 - (void)initViews
 {
 	if([self isDeviceAniPad])
 	{
 		m_pMainController = [[MainController alloc] initWithNibName:@"mainController-ipad" bundle:nil];
-		m_pPreviewController = [[PreviewController alloc] initWithNibName:@"PreviewController-ipad" bundle:nil];
+		m_pPreviewController=[[PreviewController alloc] initWithNibName:@"PreviewController-ipad" bundle:nil];
 	}
 	else 
 	{
@@ -90,9 +90,10 @@
 	[UIView beginAnimations:nil context:NULL];
 	[UIView setAnimationDuration:1];
 	[UIView setAnimationTransition:UIViewAnimationTransitionCurlUp forView:self.view cache:YES];
+    [UIView setAnimationDidStopSelector:@selector(animationDidStop:finished:context:)];
 	
-	if ( iViewID == vwPreview && m_iCurrentView != vwPreview ) {
-		
+	if ( iViewID == vwPreview && m_iCurrentView != vwPreview )
+    {
 		[m_pPreviewController viewWillAppear:YES];
 		[m_pMainController viewWillDisappear:YES];
 		
@@ -101,8 +102,9 @@
 		[m_pMainController viewDidDisappear:YES];
 		[m_pPreviewController viewDidAppear:YES];
 		m_iCurrentView = vwPreview;
-		
-	} else	if ( iViewID == vwGame && m_iCurrentView != vwGame ) {
+	}
+    else if ( iViewID == vwGame && m_iCurrentView != vwGame )
+    {
 		[m_pMainController viewWillAppear:YES];
 		[m_pPreviewController viewWillDisappear:YES];
 		
@@ -115,6 +117,8 @@
 	
 	[UIView commitAnimations];
 }
+//------------------------------------------------------------------------------------------------------
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context {}
 //------------------------------------------------------------------------------------------------------
 //- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
 //	// Return YES for supported orientations

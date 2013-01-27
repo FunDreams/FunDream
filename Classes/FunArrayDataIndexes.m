@@ -9,114 +9,180 @@
 #import "FunArrayDataIndexes.h"
 @implementation FunArrayDataIndexes
 //------------------------------------------------------------------------------------------
--(id)initWithCopasity:(int)iCopasity{
+-(id)init{
     
     self = [super init];
-    
-    bOrder=NO;
-    
-    if(self){
-        
-        iCoundAdd=5;
-        iCountInArray=0;
-        m_iCopasity=iCopasity;
-        
-        pData = (int *)malloc(sizeof(int)*m_iCopasity);
-    }
-    
     return self;
 }
+//------------------------------------------------------------------------------------------------------
+- (void)InitStructure:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    
+    InfoStr->mFlags=0;
+    InfoStr->mCount=0;
+    InfoStr->mCopasity=0;
+    InfoStr->mCountAdd=1;
+}
+//------------------------------------------------------------------------------------------------------
+- (int **)InitMemory{
+
+    int ** pData = (int **)malloc(sizeof(int));
+    *pData = (int *)malloc(sizeof(InfoArrayValue));
+    [self InitStructure:pData];
+//    [self SetCopasity:50 WithData:pData];
+    return pData;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)ReleaseMemory:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+
+    for(int i=0;i<InfoStr->mCount;i++){
+        
+        int index=(*pData+SIZE_INFO_STRUCT)[i];
+        [m_pParent->ArrayPoints DecDataAtIndex:index];
+    }
+    
+    free(*pData);
+    free(pData);
+}
 //------------------------------------------------------------------------------------------
-- (void)Extend{
-    if(m_iCopasity==iCountInArray){
-        m_iCopasity+=iCoundAdd;
-        pData = realloc(pData, (sizeof(int)*m_iCopasity));
+-(void)SetCopasity:(int)icopasity WithData:(int **)pData{
+    
+    if(icopasity<0)return;
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    
+    InfoStr->mCopasity=icopasity;
+    
+//    InfoStr=(InfoArrayValue *)(*pData);
+//    for(int i=0;i<InfoStr->mCount;i++){
+//        
+//        int index=((*pData)+SIZE_INFO_STRUCT)[i];
+//
+//        int m=0;
+//    }
+
+    int FullSize=InfoStr->mCopasity*sizeof(int)+sizeof(InfoArrayValue);
+    *pData = (int *)realloc(*pData,FullSize);
+    
+//    InfoStr=(InfoArrayValue *)(*pData);
+//    for(int i=0;i<InfoStr->mCount;i++){
+//        
+//        int index=((*pData)+SIZE_INFO_STRUCT)[i];
+//        
+//        int m=0;
+//    }
+}
+//------------------------------------------------------------------------------------------
+- (void)Extend:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+
+    if(InfoStr->mCopasity==InfoStr->mCount){
+        InfoStr->mCopasity+=InfoStr->mCountAdd;
+                
+        [self SetCopasity:InfoStr->mCopasity WithData:pData];        
     }
 }
 //------------------------------------------------------------------------------------------
-- (void)Reserv:(int)iCount{
-    pData = realloc(pData, (sizeof(int)*iCount));
-}
-//------------------------------------------------------------------------------------------
-- (void)Insert:(int)iDataValue index:(int)iIndex{
+- (void)Insert:(int)iDataValue index:(int)iIndex WithData:(int **)pData{
     
     if(iIndex<0)return;
+    [self Extend:pData];
+
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
     
-    if(iIndex+1>iCountInArray){
+    if(iIndex+1>InfoStr->mCount){
         
-        [self AddData:iDataValue];
+        [self AddData:iDataValue WithData:pData];
         return;
     }
-    
-    [self Extend];
-    
-    memcpy(pData+iIndex+1, pData+iIndex, sizeof(int)*(iCountInArray-(iIndex+1)));
-    memcpy(pData+iIndex, &iDataValue, sizeof(int));
-    iCountInArray++;
+
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+
+    memcpy(StartData+iIndex+1, StartData+iIndex, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
+    memcpy(StartData+iIndex, &iDataValue, sizeof(int));
+    InfoStr->mCount++;
+    [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
-- (void)AddData:(int)iDataValue{
+- (void)AddData:(int)IndexValue WithData:(int **)pData{
     
-    [self Extend];
-    memcpy(pData+iCountInArray, &iDataValue, sizeof(int));
-    iCountInArray++;
+    [self Extend:pData];
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+
+    StartData[InfoStr->mCount]=IndexValue;
+    InfoStr->mCount++;
+    [m_pParent->ArrayPoints IncDataAtIndex:IndexValue];
 }
 //------------------------------------------------------------------------------------------
-- (void)RemoveDataAtIndex:(int)iIndex{
+- (void)RemoveDataAtIndex:(int)iIndex WithData:(int **)pData{
     
-    if(iIndex+1>iCountInArray)return;
-        
-    if(bOrder==YES){
-        
-        if(iIndex+1<iCountInArray)
-            memcpy(pData+iIndex, pData+iIndex+1, sizeof(int)*(iCountInArray-(iIndex+1)));
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    if(iIndex+1>InfoStr->mCount)return;
+    
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+
+    if(InfoStr->mFlags && F_ORDER)
+    {
+        if(iIndex+1<InfoStr->mCount)
+            memcpy(StartData+iIndex, StartData+iIndex+1, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
     }
-    else{
-        memcpy(pData+iIndex, pData+iCountInArray, sizeof(int));
+    else
+    {
+        if(iIndex+1<InfoStr->mCount)
+            memcpy(StartData+iIndex, StartData+(InfoStr->mCount-1), sizeof(int));
     }
     
-    iCountInArray--;
+    InfoStr->mCount--;
+    [m_pParent->ArrayPoints DecDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
--(void)selfSave:(NSMutableData *)m_pData{    
+-(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)*pData;
 
-    [m_pData appendBytes:&m_iCopasity length:sizeof(int)];
-    [m_pData appendBytes:&iCountInArray length:sizeof(int)];
-    [m_pData appendBytes:&iCoundAdd length:sizeof(int)];
-    [m_pData appendBytes:&bOrder length:sizeof(bool)];
-
-    [m_pData appendBytes:pData length:m_iCopasity*sizeof(int)];
+    int Size=InfoStr->mCopasity*sizeof(int)+sizeof(InfoArrayValue);
+    [m_pData appendBytes:*pData length:Size];
 }
 //------------------------------------------------------------------------------------------
--(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos{
+-(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos WithData:(int **)pData{
     
-    [m_pData getBytes:&m_iCopasity range:NSMakeRange( *iCurReadingPos, sizeof(int))];
-    *iCurReadingPos += sizeof(int);
-    
-    [m_pData getBytes:&iCountInArray range:NSMakeRange( *iCurReadingPos, sizeof(int))];
-    *iCurReadingPos += sizeof(int);
+    InfoArrayValue InfoStr;
 
-    [m_pData getBytes:&iCoundAdd range:NSMakeRange( *iCurReadingPos, sizeof(int))];
-    *iCurReadingPos += sizeof(int);
+    int iReadSize=sizeof(InfoArrayValue);
+    [m_pData getBytes:&InfoStr range:NSMakeRange( *iCurReadingPos, iReadSize)];
+    *iCurReadingPos += iReadSize;    
     
-    [m_pData getBytes:&bOrder range:NSMakeRange( *iCurReadingPos, sizeof(bool))];
-    *iCurReadingPos += sizeof(bool);
+    [self SetCopasity:InfoStr.mCopasity WithData:pData];
     
-    [m_pData getBytes:pData range:NSMakeRange( *iCurReadingPos, m_iCopasity*sizeof(float))];
-    *iCurReadingPos += m_iCopasity*sizeof(float);
+    iReadSize=InfoStr.mCopasity*sizeof(int);
+
+    int *StartData=(*pData)+SIZE_INFO_STRUCT;
+
+    [m_pData getBytes:StartData range:NSMakeRange( *iCurReadingPos, iReadSize)];
+    *iCurReadingPos += iReadSize;
+    InfoArrayValue *pInfoStr=(InfoArrayValue *)*pData;
+    memcpy(pInfoStr, &InfoStr, sizeof(InfoArrayValue));
 }
 //------------------------------------------------------------------------------------------
-- (int)GetDataAtIndex:(int)iIndex{
+- (int)GetDataAtIndex:(int)iIndex WithData:(int **)pData{
     
-    if(iIndex>iCountInArray)return 0;
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+
+    if(iIndex>InfoStr->mCount)return 0;
     
-    int *iRet=pData+iIndex;
+    int *StartData=(*pData)+SIZE_INFO_STRUCT;
+    int *iRet=StartData+iIndex;
     return *iRet;
 }
 //------------------------------------------------------------------------------------------
 - (void)dealloc
 {
-    free(pData);
     [super dealloc];
 }
 //------------------------------------------------------------------------------------------

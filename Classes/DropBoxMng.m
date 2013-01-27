@@ -10,6 +10,7 @@
 #import "ObB_DropBox.h"
 #import "Ob_ResourceMng.h"
 #import "Ob_Editor_Interface.h"
+#import "InfoFile.h"
 
 #define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
@@ -22,6 +23,7 @@
         pDataManager->m_pParent=self;
         
         pDropBoxString = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+        pInfofile=[[InfoFile alloc] init:pDropBoxString WithParent:m_pObjMng->pStringContainer];
 
         m_bHiden=NO;
         mColor= Color3DMake(1, 1, 1, 0);
@@ -102,6 +104,26 @@
 //    }
 //}
 //------------------------------------------------------------------------------------------------------
+- (void)CreateOb:(FractalString *)pFrStr{
+    ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
+                                    //                       SET_COLOR_V(pColorBack,@"mColorBack"),
+                                    SET_STRING_V(pFrStr->sNameIcon,@"m_DOWN"),
+                                    SET_STRING_V(pFrStr->sNameIcon,@"m_UP"),
+                                    SET_FLOAT_V(54,@"mWidth"),
+                                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                    SET_BOOL_V(YES,@"m_bLookTouch"),
+                                    SET_INT_V(2,@"m_iType"),
+                                    SET_STRING_V(NAME(self),@"m_strNameObject"),
+                                    SET_STRING_V(@"Check",@"m_strNameStage"),
+                                    SET_STRING_V(@"take.wav", @"m_strNameSound"),
+                                    SET_BOOL_V(YES,@"m_bDrag"),
+                                    SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
+    
+    pOb->pString=pFrStr;
+    
+    [m_pChildrenbjectsArr addObject:pOb];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{
 
     if(pDropBoxString==nil)return;
@@ -111,30 +133,31 @@
     }
     [m_pChildrenbjectsArr removeAllObjects];
 
-    int m_iNumButton=[pDropBoxString->aStrings count];
+////////////////////////////////////////////////////////////////////////////////////////////
+    int *Data=(*pDropBoxString->pChildString);
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(Data);
 
-    for(int i=0;i<m_iNumButton;i++){
-                    
-        FractalString *pFrStr = [pDropBoxString->aStrings objectAtIndex:i];
-        ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
-//                       SET_COLOR_V(pColorBack,@"mColorBack"),
-                       SET_STRING_V(pFrStr->sNameIcon,@"m_DOWN"),
-                       SET_STRING_V(pFrStr->sNameIcon,@"m_UP"),
-                       SET_FLOAT_V(54,@"mWidth"),
-                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                       SET_BOOL_V(YES,@"m_bLookTouch"),
-                       SET_INT_V(2,@"m_iType"),
-                       SET_STRING_V(NAME(self),@"m_strNameObject"),
-                       SET_STRING_V(@"Check",@"m_strNameStage"),
-                       SET_STRING_V(@"take.wav", @"m_strNameSound"),
-                       SET_BOOL_V(YES,@"m_bDrag"),
-                       SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
+    for(int i=0;i<InfoStr->mCount;i++){
         
-        pOb->pString=pFrStr;
+        int index=(Data+SIZE_INFO_STRUCT)[i];
+        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
+                               GetIdAtIndex:index];
 
-        [m_pChildrenbjectsArr addObject:pOb];
+        [self CreateOb:pFrStr];
     }
-    
+
+//    Data=(*pDropBoxString->pPointLink);
+//    InfoStr=(InfoArrayValue *)(Data);
+//    
+//    for(int i=0;i<InfoStr->mCount;i++){
+//        
+//        int index=(Data+SIZE_INFO_STRUCT)[i];
+//        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
+//                               GetIdAtIndex:index];
+//        
+//        [self CreateOb:pFrStr];
+//    }
+////////////////////////////////////////////////////////////////////////////////////////////
     if([m_pChildrenbjectsArr count]>0){
         if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
             m_iCurrentSelect=[m_pChildrenbjectsArr count]-1;
@@ -233,50 +256,6 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
--(void)loadAndMerge{
-
-    CDataManager* pDataCurManager = pDataManager;
-    bool Rez=[pDataCurManager Load];
-    
-    int iLen=[pDataCurManager->m_pDataDmp length];
-    if(iLen==0)Rez=false;
-    
-    if([pDataCurManager->m_pDataDmp length]!=0){
-        
-        int iLenVersion = [pDataCurManager GetIntValue];
-        
-        switch (iLenVersion) {
-            case 1:
-            {
-                FractalString *StrDropBox = [m_pObjMng->pStringContainer GetString:@"DropBox"];
-
-                if(StrDropBox!=nil){
-                    
-                    FractalString *pNewString = [[FractalString alloc]
-                                    initWithDataAndMerge:pDataCurManager->m_pDataDmp
-                                    WithCurRead:&pDataCurManager->m_iCurReadingPos
-                                     WithParent:StrDropBox WithContainer:m_pObjMng->pStringContainer];
-                    
-                    FunArrayData *ArrayPointsLocal = [[FunArrayData alloc] initWithCopasity:100];
-
-                    [ArrayPointsLocal selfLoad:pDataCurManager->m_pDataDmp
-                                     rpos:&pDataCurManager->m_iCurReadingPos];
-                    
-                    [pNewString SetFlag:SYNH_AND_LOAD];
-
-                    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
-                    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
-                }
-            }
-                break;
-                
-            default:
-                Rez=NO;
-                break;
-        }
-    }    
-}
-//------------------------------------------------------------------------------------------------------
 -(void)loadedFile{
     
     if(m_iMode==UPDATE_INFO){
@@ -326,6 +305,9 @@
 
         [pDataManager DownLoadWithName:pFsr->strUID];
         
+        [NameDownLoadFile setString:pFsr->sNameIcon];
+        m_iNumDownLoadFiles = 1;
+        
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
 }
@@ -344,7 +326,7 @@
     else
     {
         NSEnumerator *enumeratorObjects = [m_pListAdd objectEnumerator];
-        int iVersion=1;
+        int iVersion=VERSTION;
 
         if([m_pListAdd count]>0){
             FractalString *pStr=[enumeratorObjects nextObject];
@@ -352,11 +334,18 @@
             if(pStr!=nil && pDataManager->m_pDataDmp!=nil){
                 
                 [pDataManager Clear];
+//////////////////////////////////////////////////////////////////////////////////////////////////
+                StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                [pStringContainerTmp CopyStrFrom:m_pObjMng->pStringContainer WithId:pStr];
+                
+                id pEncodeString = [pStringContainerTmp GetString:pStr->strUID];
+                
                 [pDataManager->m_pDataDmp appendBytes:&iVersion length:sizeof(int)];
-
-                [pStr selfSave:pDataManager->m_pDataDmp WithVer:iVersion];
-
-                [m_pObjMng->pStringContainer->ArrayPoints selfSave:pDataManager->m_pDataDmp];
+                [pEncodeString selfSave:pDataManager->m_pDataDmp WithVer:iVersion];
+                [pStringContainerTmp->ArrayPoints selfSave:pDataManager->m_pDataDmp];
+                
+                [pStringContainerTmp release];
+//////////////////////////////////////////////////////////////////////////////////////////////////
                 [pDataManager Save];
 
                 [pDataManager UpLoadWithName:pStr->strUID];
@@ -369,15 +358,68 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+-(void)loadAndMerge{
+    
+    CDataManager* pDataCurManager = pDataManager;
+    bool Rez=[pDataCurManager Load];
+    
+    int iLen=[pDataCurManager->m_pDataDmp length];
+    if(iLen==0)Rez=false;
+    
+    if([pDataCurManager->m_pDataDmp length]!=0){
+        
+        int iLenVersion = [pDataCurManager GetIntValue];
+        
+        switch (iLenVersion) {
+            case 1:
+            {
+                FractalString *StrDropBox = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+                
+                if(StrDropBox!=nil)
+                {
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+                    StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+
+                    FractalString *pNewString = [[FractalString alloc]
+                                    initWithData:pDataCurManager->m_pDataDmp
+                                    WithCurRead:&pDataCurManager->m_iCurReadingPos
+                                    WithParent:nil WithContainer:pStringContainerTmp];
+                                        
+                    [pStringContainerTmp->ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
+                                          rpos:&pDataCurManager->m_iCurReadingPos];
+                    
+                    FractalString *pDelStr=[m_pObjMng->pStringContainer GetString:pNewString->strUID];
+                    [m_pObjMng->pStringContainer DelString:pDelStr];
+                    
+                    [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
+                    FractalString *pNewStr = [m_pObjMng->pStringContainer GetString:pNewString->strUID];
+                    [pNewStr SetParent:StrDropBox];
+
+                    [pStringContainerTmp release];
+/////////////////////////////////////////////////////////////////////////////////////////////////////
+                    [pNewString SetFlag:SYNH_AND_LOAD];
+                    
+                    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+                    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+                }
+            }
+                break;
+                
+            default:
+                Rez=NO;
+                break;
+        }
+    }    
+}
+//------------------------------------------------------------------------------------------------------
 -(void)LoadAndSyns{
 
     int ReadPos=0;
 
-    FractalString *pFstrRez = [[FractalString alloc] init];
-    FractalString *pFstr = [[FractalString alloc] init];
-        
+    NSMutableArray *pFstrRez = [[NSMutableArray alloc] init];
+    
     [pDataManager Load];
-    [pFstr selfLoadOnlyStructure:pDataManager->m_pDataDmp ReadPos:&ReadPos];
+    [pInfofile LoadFile:pDataManager->m_pDataDmp ReadPos:&ReadPos];
     //meta data to array-------------------------------------------------------------
     NSMutableArray *pArray=[[NSMutableArray alloc] init];
     for(DBMetadata *child in pDataManager->m_pMetaData.contents)
@@ -385,13 +427,14 @@
         NSString *folderName = [[child.path pathComponents] lastObject];
         if([folderName isEqualToString:NAME_INFO_FILE])continue;
         if([folderName isEqualToString:@"_Resource"])continue;
-        if([folderName length]!=8)continue;
+        if([folderName length]!=20)continue;
 
         [pArray addObject:folderName];
     }
     //-------------------------------------------------------------------------------
 Repeate:;
-    int iCount=[pFstr->aStrings count];
+
+    int iCount=[pInfofile->pArray count];
     int iCountInMetadata=[pArray count];
 
     for(int i=0;i<iCountInMetadata;i++){//ищем одинаковые в загруженном Info загаловке
@@ -401,27 +444,32 @@ Repeate:;
 
         for(int j=0;j<iCount;j++){
 
-            FractalString *pFstrTmp=[pFstr->aStrings objectAtIndex:j];
+            Head *pTmpHead=[pInfofile->pArray objectAtIndex:j];
 
-            if([pFstrTmp->strUID isEqualToString:folderName]){
-
-                [pFstrRez->aStrings addObject:pFstrTmp];
+            if([pTmpHead->strUID isEqualToString:folderName]){
                 
-                [pFstr->aStrings removeObjectAtIndex:j];
+                FractalString *pLoadFstr = [[FractalString alloc] init:m_pObjMng->pStringContainer];
+                
+                [pLoadFstr->strUID release];
+                pLoadFstr->strUID = [[NSString alloc] initWithString:pTmpHead->strUID];
+                [pLoadFstr->sNameIcon release];
+                pLoadFstr->sNameIcon = [[NSString alloc] initWithString:pTmpHead->sNameIcon];
+
+                pLoadFstr->X=pTmpHead->X;
+                pLoadFstr->Y=pTmpHead->Y;
+                pLoadFstr->TypeInformation=pTmpHead->TypeInformation;
+                pLoadFstr->NameInformation=pTmpHead->NameInformation;
+                pLoadFstr->m_iFlags=pTmpHead->iFlags;
+
+                [pFstrRez addObject:pLoadFstr];
+                
+                [pInfofile->pArray removeObjectAtIndex:j];
+
                 [pArray removeObjectAtIndex:i];
                 goto Repeate;
             }
         }
     }
-
-//    if([pFstr->aStrings count]>0){
-//        int m=0;
-//
-//        for(int i=0;i<[pFstr->aStrings count];i++){
-//            FractalString *pFstrTmp=[pFstr->aStrings objectAtIndex:i];
-//            [pFstrRez->aStrings addObject:pFstrTmp];
-//        }
-//    }
     
     if([pArray count]>0){//если у метадаты остались имена, то создаём пустые струны которые надо загрузить
 
@@ -429,14 +477,13 @@ Repeate:;
         for(int i=0;i<[pArray count];i++){
             NSString *folderName = [pArray objectAtIndex:i];
 
-            FractalString *pLoadFstr = [[FractalString alloc] init];
+            FractalString *pLoadFstr = [[FractalString alloc] init:m_pObjMng->pStringContainer];
 
             [pLoadFstr->strUID release];
             pLoadFstr->strUID = [[NSString alloc] initWithString:folderName];
 
-//            pLoadFstr->iIndexIcon=0;//текстура незагруженной струны
             [pLoadFstr SetFlag:SYNH_AND_HEAD];//только заголовок
-            [pFstrRez->aStrings addObject:pLoadFstr];
+            [pFstrRez addObject:pLoadFstr];
         }
     }
     
@@ -446,10 +493,17 @@ Repeate:;
     
     NSMutableArray * pArrayLink=[[NSMutableArray alloc] init];
     
+    int **DataDropBox=(pStrDropBox->pChildString);
+    InfoArrayValue *InfoStrDropBox=(InfoArrayValue *)(*DataDropBox);
+    
     if(pStrDropBox!=nil){
-        for (int i=0; i<[pStrDropBox->aStrings count]; i++){//делаем массив линков из DropBox'a
+        for (int i=0; i<InfoStrDropBox->mCount; i++){//делаем массив линков из DropBox'a
             
-            FractalString *pChild=[pStrDropBox->aStrings objectAtIndex:i];
+            int index=(*DataDropBox+SIZE_INFO_STRUCT)[i];
+            FractalString *pChild=[m_pObjMng->pStringContainer->ArrayPoints
+                                     GetIdAtIndex:index];
+
+
             [pArrayLink addObject:pChild];
         }
     }
@@ -459,19 +513,28 @@ Repeate2:;//главная синхронизация
         
         FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
-        for(int j=0;j<[pFstrRez->aStrings count];j++){
+        for(int j=0;j<[pFstrRez count];j++){
             
-            FractalString *pFstrTmp2=[pFstrRez->aStrings objectAtIndex:j];
+            FractalString *pFstrTmp2=[pFstrRez objectAtIndex:j];
 
             if([pFstrTmp->strUID isEqualToString:pFstrTmp2->strUID]){
                 
-                if(pFstrTmp->X!=pFstrTmp2->X || pFstrTmp->Y!=pFstrTmp2->Y)bNeedUpload=YES;
+                if(pFstrTmp->X!=pFstrTmp2->X || pFstrTmp->Y!=pFstrTmp2->Y)
+                    bNeedUpload=YES;
                 
-                if(pFstrTmp->m_iFlagsDropBox & ONLY_IN_MEM)
+                if(pFstrTmp->m_iFlags & ONLY_IN_MEM){
                     [pFstrTmp SetFlag:SYNH_AND_LOAD];
+                    bNeedUpload=YES;
+                }
+
+                if(pFstrTmp->m_iFlags & DEAD_STRING){
+                    [pFstrTmp SetFlag:SYNH_AND_HEAD];
+                    bNeedUpload=YES;
+                }
 
                 [pArrayLink removeObjectAtIndex:i];
-                [pFstrRez->aStrings removeObjectAtIndex:j];
+                [pFstrRez removeObjectAtIndex:j];
+
                 goto Repeate2;
             }
 
@@ -486,35 +549,41 @@ Repeate2:;//главная синхронизация
             
             FractalString *pFstrTmp=[pArrayLink objectAtIndex:i];
 
-            if(pFstrTmp->m_iFlagsDropBox & SYNH_AND_HEAD){
+            if(pFstrTmp->m_iFlags & SYNH_AND_HEAD){
 
                 //помечаем струну мёртвой
                 [pFstrTmp SetFlag:DEAD_STRING];
             }
-            else if(pFstrTmp->m_iFlagsDropBox & ONLY_IN_MEM){
+            else if(pFstrTmp->m_iFlags & ONLY_IN_MEM){
                 
                 [self AddToUploadString:pFstrTmp];
             }
-            else if(pFstrTmp->m_iFlagsDropBox & DEAD_STRING){
+            else if(pFstrTmp->m_iFlags & DEAD_STRING){
             }
-            else if (pFstrTmp->m_iFlagsDropBox & SYNH_AND_LOAD){
+            else if (pFstrTmp->m_iFlags & SYNH_AND_LOAD){
                 [pFstrTmp SetFlag:ONLY_IN_MEM];
                 [self AddToUploadString:pFstrTmp];
             }
         }
     }
 
-    if([pFstrRez->aStrings count]>0){
+    if([pFstrRez count]>0){
         //добавляем пустые струны, которые необходимо загрузить
         
         bNeedUpload=YES;
         
-        for(int i=0;i<[pFstrRez->aStrings count];i++){
+        for(int i=0;i<[pFstrRez count];i++){
             
-            FractalString *pFstrTmp=[pFstrRez->aStrings objectAtIndex:i];
+            FractalString *pFstrTmp=[pFstrRez objectAtIndex:i];
             
-            [pStrDropBox->aStrings addObject:pFstrTmp];
+            int index=[m_pObjMng->pStringContainer->ArrayPoints SetOb:pFstrTmp];
+            [m_pObjMng->pStringContainer->m_OperationIndex
+                                       AddData:index WithData:DataDropBox];
+
             pFstrTmp->pParent=pStrDropBox;
+            
+            if(pFstrTmp->m_iFlags & SYNH_AND_LOAD)
+                [pFstrTmp SetFlag:SYNH_AND_HEAD];
         }
     }
     
@@ -528,11 +597,14 @@ Repeate2:;//главная синхронизация
         
     FractalString *Str = [m_pObjMng->pStringContainer GetString:@"DropBox"];
     
+    [pInfofile Update];
+    
     if(Str!=nil && pDataManager->m_pDataDmp!=nil){
         
         [pDataManager Clear];
         
-        [Str selfSaveOnlyStructure:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
+        [pInfofile SaveFile:pDataManager->m_pDataDmp];
+  //      [Str selfSaveOnlyStructure:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
         
         [pDataManager Save];
         
@@ -626,6 +698,7 @@ Repeate2:;//главная синхронизация
     [pDataManager release];
     [m_pListAdd release];
     [NameDownLoadFile release];
+    [pInfofile release];
     
     [super dealloc];
 }

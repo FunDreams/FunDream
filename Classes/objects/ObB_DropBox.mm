@@ -31,11 +31,11 @@
     
     m_pOwner=nil;
     
-    m_bNotPush=NO;
     m_bHiden=NO;
     m_bPush=NO;
     m_bDrag=NO;
     m_bStartPush=NO;
+    m_bStartMove=NO;
     
     [m_DOWN setString:@""];
     [m_UP setString:@""];
@@ -56,8 +56,6 @@
     
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
-
-    [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bNotPush,m_strName,@"m_bNotPush")];
     
     m_strNameSound=[NSMutableString stringWithString:@""];
     m_strNameStage=[NSMutableString stringWithString:@""];
@@ -152,15 +150,12 @@
     
     m_bStartPush=YES;
     
-    if(m_bNotPush==NO){
-            
-        [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheckInDropBox")];
-          
-        PLAY_SOUND(m_strNameSound);
+    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheckInDropBox")];
+      
+    PLAY_SOUND(m_strNameSound);
 
-        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-        [self SetPush];
-    }
+    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+    [self SetPush];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn{
@@ -198,11 +193,11 @@
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-    [self MoveObject:Point WithMode:NO];
+    [self MoveObject:Point WithMode:NO];    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)EndTouch{
-        
+    
     DEL_CELL(@"DropBoxString");
     
     m_bStartPush=NO;
@@ -236,11 +231,11 @@
     
     if(m_bBack==YES){
         
-        if(pString->m_iFlagsDropBox & DEAD_STRING)
+        if(pString->m_iFlags & DEAD_STRING)
             mColorBack=Color3DMake(1, 0, 0, 1);
-        else if(pString->m_iFlagsDropBox & SYNH_AND_HEAD)
+        else if(pString->m_iFlags & SYNH_AND_HEAD)
             mColorBack=Color3DMake(1, 1, 0, 1);
-        else if(pString->m_iFlagsDropBox & ONLY_IN_MEM)
+        else if(pString->m_iFlags & ONLY_IN_MEM)
             mColorBack=Color3DMake(0, 0.5f, 1, 1);
         else mColorBack=Color3DMake(0, 1, 0, 1);
             

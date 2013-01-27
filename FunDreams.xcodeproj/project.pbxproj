@@ -27,6 +27,7 @@
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
 		183C009013CE08F60013CB08 /* Dictionary_Ex.m in Sources */ = {isa = PBXBuildFile; fileRef = 183C008F13CE08F60013CB08 /* Dictionary_Ex.m */; };
 		183C009213CE09D80013CB08 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 183C009113CE09D80013CB08 /* iAd.framework */; };
+		183D8644169825D300FC9C01 /* Ob_Arrow.mm in Sources */ = {isa = PBXBuildFile; fileRef = 183D8643169825D300FC9C01 /* Ob_Arrow.mm */; };
 		183F0627156559C80096AC6C /* ObjectBullets.mm in Sources */ = {isa = PBXBuildFile; fileRef = 183F0626156559C80096AC6C /* ObjectBullets.mm */; };
 		184087F51418A12300A4C9BF /* ObjectFade.mm in Sources */ = {isa = PBXBuildFile; fileRef = 184087F41418A12300A4C9BF /* ObjectFade.mm */; };
 		18408806141D1CA200A4C9BF /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18408805141D1CA100A4C9BF /* CoreMotion.framework */; };
@@ -40,6 +41,7 @@
 		185FBA5D152F1EE200DB25C7 /* miniHelp in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5C152F1EE200DB25C7 /* miniHelp */; };
 		185FBA5F152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */; };
 		185FBA63152F200400DB25C7 /* Default-Landscape@2x~ipad.png in Resources */ = {isa = PBXBuildFile; fileRef = 185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */; };
+		186178A916AFFED300227777 /* InfoFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 186178A816AFFED100227777 /* InfoFile.m */; };
 		186495DB15FB91D300C8F9B7 /* Ob_EmtyPlace.mm in Sources */ = {isa = PBXBuildFile; fileRef = 186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */; };
 		1866EC5615AD504200195271 /* Ob_B_Slayder.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1866EC5515AD504100195271 /* Ob_B_Slayder.mm */; };
 		1869E08A158B17090022055A /* StringContainer.m in Sources */ = {isa = PBXBuildFile; fileRef = 1869E089158B17090022055A /* StringContainer.m */; };
@@ -155,6 +157,8 @@
 		183C008E13CE08F60013CB08 /* Dictionary_Ex.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dictionary_Ex.h; sourceTree = "<group>"; };
 		183C008F13CE08F60013CB08 /* Dictionary_Ex.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dictionary_Ex.m; sourceTree = "<group>"; };
 		183C009113CE09D80013CB08 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		183D8642169825D300FC9C01 /* Ob_Arrow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Arrow.h; path = objects/Ob_Arrow.h; sourceTree = "<group>"; };
+		183D8643169825D300FC9C01 /* Ob_Arrow.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Arrow.mm; path = objects/Ob_Arrow.mm; sourceTree = "<group>"; };
 		183F0625156559C80096AC6C /* ObjectBullets.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectBullets.h; path = objects/ObjectBullets.h; sourceTree = "<group>"; };
 		183F0626156559C80096AC6C /* ObjectBullets.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectBullets.mm; path = objects/ObjectBullets.mm; sourceTree = "<group>"; };
 		184087F31418A12300A4C9BF /* ObjectFade.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectFade.h; path = objects/ObjectFade.h; sourceTree = "<group>"; };
@@ -173,6 +177,8 @@
 		185FBA5C152F1EE200DB25C7 /* miniHelp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = miniHelp; sourceTree = "<group>"; };
 		185FBA5E152F1FB000DB25C7 /* Default-Portrait@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Portrait@2x~ipad.png"; path = "../Default-Portrait@2x~ipad.png"; sourceTree = "<group>"; };
 		185FBA62152F200400DB25C7 /* Default-Landscape@2x~ipad.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-Landscape@2x~ipad.png"; path = "../Default-Landscape@2x~ipad.png"; sourceTree = "<group>"; };
+		186178A716AFFED000227777 /* InfoFile.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = InfoFile.h; sourceTree = "<group>"; };
+		186178A816AFFED100227777 /* InfoFile.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = InfoFile.m; sourceTree = "<group>"; };
 		186495D915FB91D300C8F9B7 /* Ob_EmtyPlace.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_EmtyPlace.h; path = objects/Ob_EmtyPlace.h; sourceTree = "<group>"; };
 		186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_EmtyPlace.mm; path = objects/Ob_EmtyPlace.mm; sourceTree = "<group>"; };
 		1866EC5415AD504100195271 /* Ob_B_Slayder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_B_Slayder.h; path = objects/Ob_B_Slayder.h; sourceTree = "<group>"; };
@@ -429,6 +435,8 @@
 		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				183D8642169825D300FC9C01 /* Ob_Arrow.h */,
+				183D8643169825D300FC9C01 /* Ob_Arrow.mm */,
 				182BF12E1636A6000051A30E /* Ob_ProgressBar.h */,
 				182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */,
 				1890164312917AE10027418F /* GameLogicObject.h */,
@@ -445,8 +453,6 @@
 				1817D5C5156C069C00ED0758 /* Ob_Editor_Interface.mm */,
 				186495D915FB91D300C8F9B7 /* Ob_EmtyPlace.h */,
 				186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */,
-				1827F8BB15FE314200282A00 /* ObjectB_Ob.h */,
-				1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */,
 				181F2BA612D5019E008A6482 /* ObjectButton.h */,
 				181F2BA512D5019E008A6482 /* ObjectButton.mm */,
 				1866EC5415AD504100195271 /* Ob_B_Slayder.h */,
@@ -467,6 +473,10 @@
 				186D5E1D154700B000DDC893 /* FunArrayData.m */,
 				1824287515EDE33700C420AB /* FunArrayDataIndexes.h */,
 				1824287615EDE33800C420AB /* FunArrayDataIndexes.m */,
+				1827F8BB15FE314200282A00 /* ObjectB_Ob.h */,
+				1827F8BC15FE314200282A00 /* ObjectB_Ob.mm */,
+				18E6541916175873009B3E90 /* ObB_DropBox.h */,
+				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
 				1824287815EFC47700C420AB /* Ob_GroupButtons.h */,
 				1824287915EFC47800C420AB /* Ob_GroupButtons.mm */,
 				1827F8BE15FF34FF00282A00 /* Ob_GroupEmptyPlace.h */,
@@ -475,8 +485,8 @@
 				1824287C15F501C900C420AB /* Ob_IconDrag.mm */,
 				18E654161613679B009B3E90 /* DropBoxMng.h */,
 				18E654171613679D009B3E90 /* DropBoxMng.m */,
-				18E6541916175873009B3E90 /* ObB_DropBox.h */,
-				18E6541A16175875009B3E90 /* ObB_DropBox.mm */,
+				186178A716AFFED000227777 /* InfoFile.h */,
+				186178A816AFFED100227777 /* InfoFile.m */,
 				18EF3EFF1642580B00BE6B57 /* Ob_ResourceMng.h */,
 				18EF3F001642580D00BE6B57 /* Ob_ResourceMng.mm */,
 				187A5BBF164A3D6700D80D43 /* Ob_Label.h */,
@@ -792,6 +802,8 @@
 				187A5BC1164A3D6800D80D43 /* Ob_Label.mm in Sources */,
 				1849D250164C02740045F9E4 /* Ob_Icon.mm in Sources */,
 				182BC6E2165E351700ED304E /* Ob_Tab.mm in Sources */,
+				183D8644169825D300FC9C01 /* Ob_Arrow.mm in Sources */,
+				186178A916AFFED300227777 /* InfoFile.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

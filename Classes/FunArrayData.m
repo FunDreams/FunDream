@@ -71,8 +71,8 @@
     }
     
     NSNumber *pNum=[pFreeArray objectAtIndex:0];
-    [pFreeArray removeObjectAtIndex:0];
     int IndexFree=[pNum intValue];
+    [pFreeArray removeObjectAtIndex:0];
     return IndexFree;
 }
 //------------------------------------------------------------------------------------------
@@ -84,8 +84,8 @@
     float *TmpLink=pData+iIndex;
     
     *TmpLink=DataValue;
-    (*((int *)pDataInt+iIndex))++;
-    iCountInArray++;
+//    (*((int *)pDataInt+iIndex))++;
+//    iCountInArray++;
 
     (*(pType+iIndex))=DATA_FLOAT;
 
@@ -99,8 +99,8 @@
     int *TmpLink=(int *)pData+iIndex;
     
     *TmpLink=DataValue;
-    (*((int *)pDataInt+iIndex))++;
-    iCountInArray++;
+//    (*((int *)pDataInt+iIndex))++;
+//    iCountInArray++;
     
     (*(pType+iIndex))=DATA_INT;
     
@@ -117,8 +117,8 @@
     id *TmpLink=(id *)(pData+iIndex);
     *(TmpLink)=DataValue;
     
-    (*((int *)pDataInt+iIndex))++;
-    iCountInArray++;
+//    (*((int *)pDataInt+iIndex))++;
+//    iCountInArray++;
     
     (*(pType+iIndex))=DATA_STRING;
     
@@ -131,18 +131,19 @@
     
     NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
     [pNamesOb setValue:DataValue->strUID forKey:pKey];
-    
+
     id *TmpLink=(id *)(pData+iIndex);
     *(TmpLink)=DataValue;
-    
-    (*((int *)pDataInt+iIndex))++;
-    iCountInArray++;
-    
+
+//    (*((int *)pDataInt+iIndex))++;
+//    iCountInArray++;
+
     (*(pType+iIndex))=DATA_ID;
+    DataValue->m_iIndex=iIndex;
 
     return iIndex;
 }
-//==----------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------
 - (void *)GetDataAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
     
@@ -188,13 +189,19 @@
         NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
 
         if(uType==DATA_ID){
+            NSString * pName = [pNamesOb objectForKey:pKey];
+            FractalString *pFStr = [pParent->DicStrings objectForKey:pName];
+            [pFStr release];
+
             [pNamesOb removeObjectForKey:pKey];
         }
-        else if(uType==DATA_STRING)
+        else if(uType==DATA_STRING){
             [pNamesValue removeObjectForKey:pKey];
+//            [pNamesValue release];
+        }
 
         iCountInArray--;
-        NSNumber *pNum=[NSNumber numberWithInt:*TmpIndex];
+        NSNumber *pNum=[NSNumber numberWithInt:iIndex];
         [pFreeArray addObject:pNum];
     }
 }
@@ -239,13 +246,13 @@
         
         NSString * pName = [pNamesOb objectForKey:pNameKey];
         
-        FractalString *pTmpStr = [pParent->DicStrings objectForKey:pName];
+        FractalString *pFStr = [pParent->DicStrings objectForKey:pName];
 
         int iKey=[pNameKey intValue];
         id *fRet=((id *)(pData+iKey));
 
-        if(pTmpStr==0)*fRet=0;
-        else *fRet=pTmpStr;
+        if(pFStr==0)*fRet=0;
+        else *fRet=pFStr;
     }
 
     Key_enumerator = [pNamesValue keyEnumerator];

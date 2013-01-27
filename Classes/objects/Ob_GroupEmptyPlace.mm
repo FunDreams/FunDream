@@ -22,8 +22,10 @@
         m_bHiden=YES;
         pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
         
-        if(pChelf!=nil)
-            m_iNumButton=[pChelf->ArrayLinks count];
+        if(pChelf!=nil){
+            InfoArrayValue *pInfo = (InfoArrayValue *)*pChelf->pValueLink;
+            m_iNumButton=pInfo->mCount;
+        }
     }
     
 	return self;
@@ -69,10 +71,12 @@
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
-        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
         
-        m_fChelf=FChelf;
+        int index=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
+        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                               GetDataAtIndex:index];
+        
+        m_iChelf=FChelf;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -123,10 +127,13 @@
 
             [m_pChildrenbjectsArr addObject:pObTmp];
             
-            NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:i];
+            int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[i];
+            NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
+                                   GetIdAtIndex:index];
+
             FractalString *pStrTmp = [m_pObjMng->pStringContainer GetString:Name];
             
-            if(pStrTmp!=nil && (pStrTmp->m_iFlagsDropBox & (ONLY_IN_MEM|SYNH_AND_LOAD)))
+            if(pStrTmp!=nil)// && (pStrTmp->m_iFlags & (ONLY_IN_MEM|SYNH_AND_LOAD)))
             {
                 pObTmp->pStrInside=pStrTmp;
                 GET_TEXTURE(pObTmp->mTextureId, pStrTmp->sNameIcon);
@@ -138,7 +145,7 @@
                 GET_TEXTURE(pObTmp->mTextureId, @"EmptyPlace.png");
             }
             
-            if(i==*m_fChelf)[pObTmp SetPush];
+            if(i==*m_iChelf)[pObTmp SetPush];
         }
     }
 }

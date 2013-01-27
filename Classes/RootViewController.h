@@ -37,6 +37,8 @@ typedef enum tagRootViewControllerState {
 
 -(BOOL)isDeviceAniPad;
 
+- (void)animationDidStop:(NSString *)animationID finished:(NSNumber *)finished context:(void *)context;
+
 -(BOOL) isReady;
 
 @property (nonatomic, retain) MainController *m_pMainController;

@@ -19,7 +19,7 @@
     StringContainer *pParent;//контейнер родитель
     float *pData;//единый массив данных
     int *pDataInt;//данные о копиях ячейки
-    unsigned char *pType;//тип данных
+    BYTE *pType;//тип данных
     
     int iCount;//ёмкость массива
     int iCountInc;//шаг расширения массива

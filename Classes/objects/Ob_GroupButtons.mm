@@ -81,6 +81,50 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)CreateOb:(FractalString *)pFrStr{
+    
+    Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
+    bool bFlick=NO;
+    
+    switch (pFrStr->TypeInformation) {
+        case STR_DATA:
+            ColorTmp = Color3DMake(0.4f, 0.4f, 1, 1);
+            break;
+        case STR_OPERATION:
+            ColorTmp = Color3DMake(1, 0, 1, 1);
+            break;
+        case STR_CONTAINER:
+            ColorTmp = Color3DMake(0, 0, 0, 1);
+            
+            if(pFrStr->NameInformation==NAME_K_START)
+                bFlick=YES;
+            break;
+            
+        default:
+            break;
+    }
+    
+    ObjectB_Ob *pOb=UNFROZE_OBJECT(@"ObjectB_Ob",@"Object",
+                                   SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+                                   SET_STRING_V(@"ButtonOb.png",@"m_UP"),
+                                   SET_FLOAT_V(44,@"mWidth"),
+                                   SET_FLOAT_V(44*FACTOR_DEC,@"mHeight"),
+                                   //SET_BOOL_V(YES,@"m_bLookTouch"),
+                                   SET_INT_V(2,@"m_iType"),
+                                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+                                   SET_STRING_V(@"Check",@"m_strNameStage"),
+                                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                                   SET_BOOL_V(YES,@"m_bDrag"),
+                                   SET_COLOR_V(ColorTmp,@"mColorBack"),
+                                   SET_BOOL_V(bFlick,@"m_bFlicker"),
+                                   SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
+    
+    GET_TEXTURE(pOb->mTextureId, pFrStr->sNameIcon);
+    pOb->pString=pFrStr;
+    
+    [m_pChildrenbjectsArr addObject:pOb];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)UpdateButt{
     
     if(pInsideString==nil)return;
@@ -89,58 +133,35 @@
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArr removeAllObjects];
-                      
-    m_iNumButton=[pInsideString->aStrings count];
     
-    for(int i=0;i<m_iNumButton;i++){
-        
-        FractalString *pFrStr = [pInsideString->aStrings objectAtIndex:i];
-        
-        Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
-        bool bFlick=NO;
-        
-        switch (pFrStr->TypeInformation) {
-            case STR_DATA:
-                ColorTmp = Color3DMake(0.4f, 0.4f, 1, 1);
-                break;
-            case STR_OPERATION:
-                ColorTmp = Color3DMake(1, 0, 1, 1);
-                break;
-            case STR_CONTAINER:
-                ColorTmp = Color3DMake(0, 0, 0, 1);
-                
-                if(pFrStr->NameInformation==NAME_K_START)
-                    bFlick=YES;
-                break;
-                
-            default:
-                break;
-        }        
-        
-        ObjectB_Ob *pOb=UNFROZE_OBJECT(@"ObjectB_Ob",@"Object",
-            SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
-            SET_STRING_V(@"ButtonOb.png",@"m_UP"),
-            SET_FLOAT_V(54,@"mWidth"),
-            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-            SET_BOOL_V(YES,@"m_bLookTouch"),
-            SET_INT_V(2,@"m_iType"),
-            SET_STRING_V(NAME(self),@"m_strNameObject"),
-            SET_STRING_V(@"Check",@"m_strNameStage"),
-            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-            SET_BOOL_V(YES,@"m_bDrag"),
-            SET_COLOR_V(ColorTmp,@"mColorBack"),
-            SET_BOOL_V(bFlick,@"m_bFlicker"),
-            SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
-        
-        GET_TEXTURE(pOb->mTextureId, pFrStr->sNameIcon);
-        pOb->pString=pFrStr;
+    int *Data=(*pInsideString->pChildString);
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(Data);
 
-        [m_pChildrenbjectsArr addObject:pOb];
+    for(int i=0;i<InfoStr->mCount;i++){
+        
+        int index=(Data+SIZE_INFO_STRUCT)[i];
+        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetIdAtIndex:index];
+
+        [self CreateOb:pFrStr];
     }
+
+//    Data=(*pInsideString->pPointLink);
+//    InfoStr=(InfoArrayValue *)(Data);
+//    
+//    for(int i=0;i<InfoStr->mCount;i++){
+//        
+//        int index=(Data+SIZE_INFO_STRUCT)[i];
+//        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
+//                                   GetIdAtIndex:index];
+//
+//        [self CreateOb:pFrStr];
+//    }
+
     
-    if([m_pChildrenbjectsArr count]>0){
+    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1){
         if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
-            m_iCurrentSelect=[m_pChildrenbjectsArr count]-1;
+            m_iCurrentSelect=0;
         
         ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
         

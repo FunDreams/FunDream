@@ -9,6 +9,7 @@
 //преобразование градусов радианы
 #define DEGREES_TO_RADIANS(__ANGLE__) ((__ANGLE__) / 180.0 * M_PI)
 
+#define VERSTION 1
 //доступ к имени объекта
 #define NAME(OB) OB->m_strName
 

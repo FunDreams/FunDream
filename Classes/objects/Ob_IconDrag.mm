@@ -78,7 +78,8 @@
     DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
     
     int *pMode=GET_INT_V(@"m_iMode");
-    Ob_Editor_Interface *Interface=(Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    Ob_Editor_Interface *Interface=(Ob_Editor_Interface *)
+                [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
     
     GObject *pObTash=nil;
     if(Interface!=nil)
@@ -96,10 +97,12 @@
 
     if([pObTash Intersect:Point] &&  pNeedUpload!=0){
 
-        switch (pInsideString->m_iFlagsDropBox) {
+        switch (pInsideString->m_iFlags){
             case DEAD_STRING:{
                 
-                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:0];
+                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
+                                                ArrayDumpFiles objectAtIndex:0];
+                
                 [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
                 
                 [m_pObjMng->pStringContainer DelString:pInsideString];
@@ -109,7 +112,9 @@
             break;
 
             case SYNH_AND_HEAD:{
-                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->ArrayDumpFiles objectAtIndex:0];
+                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
+                                                ArrayDumpFiles objectAtIndex:0];
+
                 [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
                 [m_pObjMng->pStringContainer DelString:pInsideString];
                 *pNeedUpload=YES;
@@ -119,6 +124,8 @@
             case SYNH_AND_LOAD:{
                 //del childs
                 [m_pObjMng->pStringContainer DelChilds:pInsideString];
+                [pInsideString SetFlag:SYNH_AND_HEAD];
+
                 *pNeedUpload=YES;
             }
             break;
@@ -145,9 +152,10 @@
 
                     if(bFromEmpty==YES)
                     {                        
-                        if(pInsideString->m_iFlagsDropBox & (SYNH_AND_LOAD|ONLY_IN_MEM)){
+                        if(pInsideString->m_iFlags & (SYNH_AND_LOAD|ONLY_IN_MEM)){
                             FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                    WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer];
+                                    WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer
+                                                        WithLink:NO];
                             
                             [self SetPos:pNewString];
                             
@@ -200,7 +208,8 @@ Exit:
 
                 if(pParent!=pInsideString){
                     FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                WithParent:pParent WithContainer:m_pObjMng->pStringContainer];
+                                WithParent:pParent WithContainer:m_pObjMng->pStringContainer
+                                                WithLink:NO];
 
                     [self SetPos:pNewString];
                 }
@@ -209,19 +218,15 @@ Exit:
 
                 FractalString *pNewString =[[FractalString alloc]
                         initWithName:@"EmptyOb" WithParent:pParent
-                        WithContainer:m_pObjMng->pStringContainer];
+                                    WithContainer:m_pObjMng->pStringContainer WithLink:NO];
 
                 [self SetPos:pNewString];
             }
         }
     }
     
-    DEL_CELL(@"DragObject");
-    DEL_CELL(@"EmptyOb");
-
-    DESTROY_OBJECT(self);
-    
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    DESTROY_OBJECT(self);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}

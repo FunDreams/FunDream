@@ -14,7 +14,6 @@
 @interface ObB_DropBox : GObject {
 @public
 
-    bool m_bNotPush;
     bool m_bStartPush;
     bool m_bDrag;
     bool m_bDoubleTouch;

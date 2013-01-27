@@ -60,9 +60,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateObjects{
-	    
-    [pStringContainer Update];
-    
+	        
 	if([m_pObjectAddToTouch count])
 	{
 		NSEnumerator *enumerator = [m_pObjectAddToTouch objectEnumerator];
@@ -187,6 +185,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMoveNormal:(id)pDeltaTime{
 
+    FractalString *StartStr = [pStringContainer GetString:@"StartActive"];
+    [pStringContainer Update:StartStr];
+    
     NSNumber *NumDelta=pDeltaTime;
     m_fDeltaTime=[NumDelta doubleValue];
 

@@ -10,6 +10,7 @@
 #import "UniCell.h"
 #import "Ob_IconDrag.h"
 #import "Ob_Editor_Interface.h"
+#import "Ob_Arrow.h"
 
 @implementation ObjectB_Ob
 //------------------------------------------------------------------------------------------------------
@@ -112,6 +113,7 @@
     m_vStartPos=m_pCurPosition;
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
+    m_bStartPush=NO;
     
     if(m_bFlicker==YES)[self setFlick];
     else [self setUnFlick];
@@ -179,7 +181,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
-  ///  if(m_bLookTouch==YES)LOCK_TOUCH;
+    int *pMode=GET_INT_V(@"m_iMode");
+
+    LOCK_TOUCH;
     
     m_bStartTouch=YES;
 //    int *pMode=GET_INT_V(@"m_iMode");
@@ -192,7 +196,11 @@
     if(m_bNotPush==NO){
             
           if(m_bDrag==YES){
-               [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
+              if(*pMode==4){
+                  [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"StartConnection"))];
+              }
+              
+              [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
               
               if(m_iLayer==layerInterfaceSpace5){
 
@@ -200,7 +208,6 @@
                   [self SetLayer:m_iLayer+1];
                   [self SetTouch:YES WithLayer:m_iLayerTouch-1];
          //         m_bLookTouch=NO;
-                  
                 }
             }
                             
@@ -230,19 +237,19 @@
     if(*pMode==0){
         
         if(m_bDrag==YES && m_bStartPush==YES){
-            
+
             m_pCurPosition.x-=LastPointTouch.x-Point.x;
             m_pCurPosition.y-=LastPointTouch.y-Point.y;
-            
+
             LastPointTouch.x=Point.x;
             LastPointTouch.y=Point.y;
-            
+
             if(m_pCurPosition.x<-440)m_pCurPosition.x=-440;
             if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
-            
+
             if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
             if(m_pCurPosition.y>170)m_pCurPosition.y=170;
-            
+
             pString->X=m_pCurPosition.x;
             pString->Y=m_pCurPosition.y;
             m_bStartMove=YES;
@@ -250,20 +257,32 @@
     }
     else
     {
-        if(m_bStartMove==NO && m_bStartTouch==YES){
+        if(*pMode==5){
             
-            [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
+            if(m_bStartMove==NO  && m_bStartTouch==YES){
 
-            Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
-                           SET_FLOAT_V(54,@"mWidth"),
-                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                           SET_BOOL_V(NO,@"bFromEmpty"),
-                           SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
-                           SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
-            
-            pOb->pInsideString=pString;
+                UNFROZE_OBJECT(@"Ob_Arrow",@"Arrow",
+                                SET_VECTOR_V(m_pCurPosition,@"Start_Vector"));
+                m_bStartMove=YES;
+            }
+        }
+        else
+        {
+            if(m_bStartMove==NO && m_bStartTouch==YES){
 
-            m_bStartMove=YES;
+                [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
+
+                Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
+                               SET_FLOAT_V(54,@"mWidth"),
+                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                               SET_BOOL_V(NO,@"bFromEmpty"),
+                               SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
+                               SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
+
+                pOb->pInsideString=pString;
+
+                m_bStartMove=YES;
+            }
         }
     }
 }
@@ -274,16 +293,18 @@
     
     [self SetPush];
     [self MoveObject:Point WithMode:YES];
+    
+ //   NSLog(@"%@",self->m_strName);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
 
-//    if(m_bStartPush==NO)[self SetUnPush];
+    if(m_bStartPush==NO)[self SetUnPush];
     
 //    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
-    OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+ //   OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
     
     [self MoveObject:Point WithMode:NO];
 }
@@ -291,7 +312,6 @@
 - (void)EndTouch{
         
     bool bUpdate=NO;
-    m_bStartTouch=NO;
     
     if(m_bStartPush==YES)
         PLAY_SOUND(@"drop.wav");
@@ -318,7 +338,6 @@
             bUpdate=YES;
             goto Exit;
         }
-
         else if(pMode!=0 && *pMode==0 && m_bStartMove==YES)
         {
             GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
@@ -333,7 +352,9 @@
                         if([pObob Intersect:Point])
                         {
                             [[FractalString alloc] initAsCopy:pString
-                                WithParent:pObob->pString WithContainer:m_pObjMng->pStringContainer];
+                                    WithParent:pObob->pString
+                                        WithContainer:m_pObjMng->pStringContainer
+                                            WithLink:NO];
                             
                             [m_pObjMng->pStringContainer DelString:pString];
                             bUpdate=YES;
@@ -346,19 +367,29 @@
         }
         
 Exit:
+        
+        m_bStartTouch=NO;
         m_bStartPush=NO;
         m_bStartMove=NO;
 
         [self SetLayer:m_iLayer-1];
         [self SetTouch:YES WithLayer:m_iLayerTouch+1];
         DEL_CELL(@"DragObject");
-        
+
         if(m_bPush==NO || bUpdate==YES)
-            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");        
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    int *pMode=GET_INT_V(@"m_iMode");
+    if(pMode!=0 && *pMode==4 && m_bStartTouch==NO){
+        FractalString *StartStr=GET_ID_V(@"StartConnection");
+        
+        [m_pObjMng->pStringContainer ConnectStart:StartStr End:pString];
+    }
+
     [self EndTouch];
 }
 //------------------------------------------------------------------------------------------------------

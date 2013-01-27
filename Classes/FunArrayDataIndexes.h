@@ -1,5 +1,5 @@
 //
-//  FunArrayData.h
+//  FunArrayDataIndexes.h
 //  FunDreams
 //
 //  Created by Konstantin Maximov on 24.04.12.
@@ -7,27 +7,29 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "StringContainer.h"
 
-@interface FunArrayDataIndexes : NSObject{
+#define F_ORDER 0x01//упорядоченность массива
+
+@interface FunArrayDataIndexes : NSObject {
 @public
-    int *pData;
-    int m_iCopasity;
-    int iCountInArray;
-    int iCoundAdd;
-    bool bOrder;
+    StringContainer *m_pParent;
 }
 
--(id) initWithCopasity:(int)iCopasity;
+-(id)init;
+- (int **)InitMemory;
+- (void)ReleaseMemory:(int **)pData;
+- (void)InitStructure:(int **)pData;
 
-- (void)Extend;
--(void)AddData:(int)iDataValue;
--(void)RemoveDataAtIndex:(int)iIndex;
--(int)GetDataAtIndex:(int)iIndex;
-- (void)Reserv:(int)iCount;
-- (void)Insert:(int)iDataValue index:(int)iIndex;
+-(void)SetCopasity:(int)icopasity WithData:(int **)pData;
+-(void)Extend:(int **)pData;
+-(void)AddData:(int)IndexValue WithData:(int **)pData;
+-(void)RemoveDataAtIndex:(int)iIndex WithData:(int **)pData;
+-(void)Insert:(int)iDataValue index:(int)iIndex WithData:(int **)pData;
 
--(void)selfSave:(NSMutableData *)m_pData;
--(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
+-(int)GetDataAtIndex:(int)iIndex WithData:(int **)pData;
+-(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData;
+-(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos WithData:(int **)pData;
 
 @end
 

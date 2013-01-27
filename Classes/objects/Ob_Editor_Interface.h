@@ -22,7 +22,7 @@
     
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;
-    float *FCheck;
+    int *ICheck;
     
     NSMutableArray *aProp;
     NSMutableArray *aObjects;
@@ -55,17 +55,9 @@
 
 -(void)Destroy;
 -(void)Start;
--(void)UpdatePoints;
 - (void)CreateButtons;
 - (void)CloseChoseIcon;
 
-- (void)CreateNewPoint;
-- (void)DelPoint;
-
-- (void)CreateNewObject;
-- (void)CheckObject;
-- (void)CheckPoint;
-- (void)DelObject;
 - (void)SetDropBox;
 - (void)ClearInterface;
 

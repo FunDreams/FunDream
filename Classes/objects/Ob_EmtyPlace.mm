@@ -117,8 +117,11 @@
     FractalString *pStrChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
     if(pStrChelf!=nil){
 
-        NSMutableString *pName = [pStrChelf->ArrayLinks objectAtIndex:m_iCurIndex];
-        FractalString *pCurStr = [m_pObjMng->pStringContainer GetString:pName];
+        int index=(*pStrChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
+                               GetIdAtIndex:index];
+
+        FractalString *pCurStr = [m_pObjMng->pStringContainer GetString:Name];
         pStrInside=pCurStr;
     }
     else pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
@@ -207,9 +210,11 @@
 
     if(pChelf!=nil){
         
-        NSMutableString *pName = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
+                               GetIdAtIndex:index];
+
         [pName setString:StrTmp->strUID];
-//        StrTmp->iIndexIcon=mTextureId;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -218,7 +223,9 @@
     
     if(pChelf!=nil){
         
-        NSMutableString *pName = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
+                                GetIdAtIndex:index];
         [pName setString:@"Objects"];
     }
 
@@ -232,9 +239,9 @@
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
-        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
-        
+        int index=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
+        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                            GetDataAtIndex:index];
         (*FChelf)=(float)m_iCurIndex;
     }
     
@@ -253,16 +260,21 @@
 
     if(DragObjectDropBoxStr!=nil)
     {
-        FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
-        NSMutableString *Name = [pChelf->ArrayLinks objectAtIndex:m_iCurIndex];
+//        FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
+        
+//        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+//        NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
+//                                GetIdAtIndex:index];
 
-        switch (DragObjectDropBoxStr->m_iFlagsDropBox) {
+        switch (DragObjectDropBoxStr->m_iFlags) {
             case ONLY_IN_MEM:
             case SYNH_AND_LOAD:
             {
-                [Name setString:DragObjectDropBoxStr->strUID];
-                pStrInside = DragObjectDropBoxStr;
-                GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
+        //        [Name setString:DragObjectDropBoxStr->strUID];
+                [self SetNameStr:DragObjectDropBoxStr];
+
+//                pStrInside = DragObjectDropBoxStr;
+//                GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
                 
                 [self SetNameStr:pStrInside];
             }
@@ -273,9 +285,11 @@
                 DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
 
                 if(pODropBox!=nil){
-                    [Name setString:DragObjectDropBoxStr->strUID];
-                    pStrInside = DragObjectDropBoxStr;
-                    mTextureId=0;
+          //          [Name setString:DragObjectDropBoxStr->strUID];
+                    [self SetNameStr:DragObjectDropBoxStr];
+
+//                    pStrInside = DragObjectDropBoxStr;
+//                    GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
                     
                     [pODropBox DownLoadString:DragObjectDropBoxStr];
                     

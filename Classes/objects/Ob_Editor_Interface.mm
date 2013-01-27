@@ -18,7 +18,8 @@
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
-	self = [super Init:Parent WithName:strName];
+	self = [super Init:Parent WithName:strName];        
+        
 	if (self != nil)
     {
         m_iLayer = layerTemplet;
@@ -62,7 +63,7 @@
                    SET_BOOL_V(YES,@"m_bNotPush"),
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
-                   //SET_INT_V(bCheckBox,@"m_iType"),
+                   SET_INT_V(bSimple,@"m_iType"),
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
@@ -137,7 +138,7 @@
                          SET_FLOAT_V(54,@"mWidth"),
                          SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                          SET_BOOL_V(YES,@"m_bLookTouch"),
-                         SET_BOOL_V((m_iMode==4)?YES:NO,@"m_bIsPush"),
+                         SET_BOOL_V((m_iMode==5)?YES:NO,@"m_bIsPush"),
                          SET_INT_V(bRadioBox,@"m_iType"),
                          SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                          SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
@@ -147,6 +148,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
+    [self Load];
+
     pInfoFile=UNFROZE_OBJECT(@"DropBoxMng",@"DropBox",
                              SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
     
@@ -156,21 +159,24 @@
                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
 //===============================режими==============================================
 
-    [self Load];
 	[super Start];
     
 //////////////////подготовка параметров
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     
     if(pStrCheck!=nil){
-         FCheck=(float *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[0]];
         
-        if(FCheck && *FCheck==4)*FCheck=0;
-        m_iMode=(int)(*FCheck);
+         ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0]];
         
-        float *FChelf=(float *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:pStrCheck->ArrayPoints->pData[1]];
+        if(ICheck)
+        {
+            if(*ICheck==4)*ICheck=0;
+            m_iMode=(int)(*ICheck);
+        }
+        
+        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1]];
         m_iChelf=(int)(*FChelf);
     }
 //////////////////
@@ -224,6 +230,7 @@
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=0;//move
+    *ICheck=m_iMode;
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -235,6 +242,7 @@
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=1;//copy
+    *ICheck=m_iMode;
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -246,6 +254,7 @@
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
     m_iMode=2;//link
+    *ICheck=m_iMode;
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -259,6 +268,7 @@
     OBJECT_PERFORM_SEL(@"DropBox",@"DownLoadInfoFile");
     
     m_iMode=3;//DropBox
+    *ICheck=m_iMode;
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
@@ -269,283 +279,23 @@
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
         
-    m_iMode=4;//Connection
+    m_iMode=5;//Connection
+    *ICheck=m_iMode;
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DoubleTouchObject{
     
-    OldCheck=*FCheck;
-    *FCheck=4;
+    OldCheck=*ICheck;
+    *ICheck=4;
     
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CloseChoseIcon{
     
-    *FCheck=OldCheck;
+    *ICheck=OldCheck;
     [self UpdateB];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)CheckObject{
-    id pObTmp = GET_ID_V(@"ObCheck");
-
-    if(pObTmp!=nil){
-        for (GObject *pOb in aObjects) {
-            if(pOb==pObTmp){
-                continue;
-            }
-            else{
-                OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnCheck");
-           }
-        }
-    }
-
-    [self UpdatePoints];
-    [self UpdateSlider];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)CheckPoint{
-    
-    id pObTmp = GET_ID_V(@"ObCheck");
-    int Index=0;
-    
-    if(pObTmp!=nil){
-        for (ObjectButton *pOb in aObPoints) {
-            if(pOb==pObTmp){
-                if(pOb->m_bCheck==YES)
-                    IndexCheckPoint=Index;
-                else IndexCheckPoint=-1; 
-                continue;
-            }
-            else{
-                OBJECT_PERFORM_SEL(pOb->m_strName, @"SetUnCheck");
-            }
-            Index++;
-        }
-    }
-    [self UpdateSlider];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)CreateNewPoint{
-    FractalString *pFStringObjects = [m_pObjMng->pStringContainer GetString:@"Object"];
-    
-    if(pFStringObjects!=nil){
-        int Step=0;
-
-        for (ObjectButton *pOb in aObjects)
-        {
-            if(pOb->m_bCheck)
-            {
-                FractalString *CurObject=[pFStringObjects->aStrings objectAtIndex:Step];
-                
-                for (int i=0; i<[CurObject->aStrings count]; i++) {
-                    
-                    FractalString *CurSringTmp=[CurObject->aStrings objectAtIndex:i];
-
-                    if([CurSringTmp->strUID isEqual:@"XY"]){
-                            
-                        //Получаем объкт для создания манеьких частиц
-                        Ob_ParticleCont_ForStr *pObParCont=(Ob_ParticleCont_ForStr *)
-                                    [m_pObjMng GetObjectByName:@"SpriteContainer"];
-//////////////////////////////////////
-                        Particle_ForStr *Par=[pObParCont CreateParticle];
-
-                        [Par SetFrame:0];
-                        Par->m_iStage=0;
-
-                        Par->m_fSize=20;
-//////////////////////////////////////
-                        int iCount = [CurSringTmp->aStrings count];
-                        for (int j=0; j<iCount; j++){
-                            
-                //            FractalString *CurSringInProp=[CurSringTmp->aStrings objectAtIndex:j];
-                            
-                            //float fTmpValue=0;
-                            switch (j)
-                            {
-                                case 0:{
-//                                    float X=RND_I_F(240,240);
-//                                    
-//                                    float *pX=(float *)[m_pObjMng->pStringContainer->
-//                                                        ArrayPoints AddData:&X];
-//                                    
-//                                    [CurSringInProp->ArrayPoints AddData:pX];
-//                                    Par->X=pX;
-                                }
-                                break;
-                                    
-                                case 1:{
-                                    
-//                                    float Y=RND_I_F(0,320);
-//                                    
-//                                    float *pY=(float *)[m_pObjMng->pStringContainer->
-//                                                        ArrayPoints AddData:&Y];
-//                                    
-//                                    [CurSringInProp->ArrayPoints AddData:pY];
-//                                    Par->Y=pY;
-
-//                                    float *Y=(float *)malloc(sizeof(float));
-//                                    *Y=RND_I_F(0,320);
-//                                    
-//                                    [m_pObjMng->pStringContainer->ArrayPoints AddData:Y];
-//                                    
-//                                    [CurSringInProp->ArrayPoints AddData:&Y];
-//                                    Par->Y=Y;
-                                }
-                                break;
-                                    
-                                default:
-                                    break;
-                            }
-                        }
-                        
-                        [Par UpdateParticle];
-                        
-//                        static int Step=0;
-//                        Step++;
-//                        NSLog(@"%d",Step);
-                    }
-                }
-            }
-            Step++;
-        }
-    }
-    
-    [self UpdatePoints];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)DelPoint{
-    
-    int StepOb=0;
-    int Step=0;
-
-    FractalString *pFStringObjects = [m_pObjMng->pStringContainer GetString:@"Object"];
-    
-    if(pFStringObjects!=nil){
-        
-        for (ObjectButton *pOb in aObjects){
-            if(pOb->m_bCheck){
-                
-                FractalString *CurObject=[pFStringObjects->aStrings objectAtIndex:StepOb];
-
-                for (ObjectButton *pObPoint in aObPoints)
-                {
-                    if(pObPoint->m_bCheck){
-                    for (int i=0; i<[CurObject->aStrings count]; i++) {
-                        
-                            FractalString *CurSringTmpProp=[CurObject->aStrings objectAtIndex:i];
-                            
-                            if([CurSringTmpProp->strUID isEqual:@"XY"]){
-                                
-                                //Получаем объкт для создания манеьких частиц
-                                Ob_ParticleCont_ForStr *pObParCont=(Ob_ParticleCont_ForStr *)
-                                [m_pObjMng GetObjectByName:@"SpriteContainer"];
-                                //////////////////////////////////////
-                                Particle_ForStr *Par=[pObParCont->m_pParticleInProc objectAtIndex:Step];
-                                [pObParCont RemoveParticle:Par];
-                                //////////////////////////////////////
-                                int iCount = [CurSringTmpProp->aStrings count];
-                                for (int j=0; j<iCount; j++){
-                                    
-                 //                   FractalString *CurSringInProp=[CurSringTmpProp->
-                 //                                       aStrings objectAtIndex:j];
-
-                                    switch (j)
-                                    {
-                                        case 0:{
-
-                             //       [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
-                              //      [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
-                                            
-                                        }
-                                        break;
-                                            
-                                        case 1:{
-                                            
-                            //        [m_pObjMng->pStringContainer->ArrayPoints RemoveDataAtIndex:Step*2];
-                             //       [CurSringInProp->ArrayPoints RemoveDataAtIndex:Step];
-                                            
-                                        }
-                                        break;
-                                            
-                                        default:
-                                            break;
-                                    }
-                                }
-                                goto EXIT;
-                            }
-                            Step++;
-                        }
-                    }
-                }
-            }
-            StepOb++;
-        }
-    }
-    
-EXIT:
-    
-    [self UpdatePoints];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)CreateNewObject{
-    
-    FractalString *pFStringProp = [m_pObjMng->pStringContainer GetString:@"Prop"];
-    FractalString *pFStringObjects = [m_pObjMng->pStringContainer GetString:@"Object"];
-
-    int iCheck=0;
-    for (ObjectButton *pOb in aProp)
-    {
-        if(pOb->m_bCheck)
-        {iCheck++;}
-    }
-    
-    if(pFStringProp!=nil && pFStringObjects!=nil && [aProp count]>0 && iCheck>0){
-        
-        FractalString *pFStringCurObj=[[FractalString alloc]
-                       initWithName:[m_pObjMng->pStringContainer GetRndName]
-                       WithParent:pFStringObjects
-                        WithContainer:m_pObjMng->pStringContainer];
-
-        int Step=0;
-        for (ObjectButton *pOb in aProp)
-        {
-            if(pOb->m_bCheck)
-            {
-                FractalString * TmpStrProp=[pFStringProp->aStrings objectAtIndex:Step];
-                
-                [[FractalString alloc] initAsCopy:TmpStrProp 
-                    WithParent:pFStringCurObj WithContainer:m_pObjMng->pStringContainer];
-            }
-
-            Step++;
-        }
-    }
-    [self Update];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)DelObject{
-        
-    FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-
-    int i=0;
-    if(pFStringOb!=nil){
-        for (ObjectButton *pOb in aObjects) {
-
-            if(pOb->m_bCheck==YES){
-                DESTROY_OBJECT(pOb);
-                [aObjects removeObjectAtIndex:i];
-                
-                FractalString *pFStrButton = [pFStringOb->aStrings objectAtIndex:i];
-                [m_pObjMng->pStringContainer DelString:pFStrButton];
-                break;
-            }
-            i++;
-        }
-        
-        [self Update];
-    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)DownLoad{
@@ -563,8 +313,9 @@ EXIT:
 
     bool bLoad = [m_pObjMng->pStringContainer LoadContainer];
 
-    if(bLoad==NO)[m_pObjMng->pStringContainer SetTemplateString];
-
+    if(bLoad==NO)[m_pObjMng->pStringContainer SetEditor];
+    [m_pObjMng->pStringContainer InitIndex];
+    
     OBJECT_PERFORM_SEL(@"GroupPlaces",@"ReLinkEmptyPlace");
     
     [ButtonGroup SetString:[m_pObjMng->pStringContainer GetString:@"Objects"]];
@@ -623,160 +374,67 @@ EXIT:
 
     DESTROY_OBJECT(BConnect);
     BConnect=nil;
+    
+    DEL_CELL(@"DropBoxString");
+    DEL_CELL(@"DragObject");
+    DEL_CELL(@"EmptyOb");
+    DEL_CELL(@"StartConnection");
+    DEL_CELL(@"DoubleTouchFractalString");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
     
-    [self ClearInterface];
-
-    if(*FCheck==4){[pResIcon Show];}
-    else
-    {
-        [self CreateButtons];
-        int *pMode=GET_INT_V(@"m_iMode");
-
-        if(pMode!=0 && *pMode==3){
-
-        if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
+    FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
             
-            PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
-                       SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
-                       SET_STRING_V(@"Button_Synh.png",@"m_UP"),
-                       SET_FLOAT_V(54,@"mWidth"),
-                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                       SET_BOOL_V(YES,@"m_bLookTouch"),
-                       SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                       SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
-                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                       SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
-        }
-        
-        OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
+        int *TmpICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0]];
 
-        if(((ObjectButton *)BDropBox)->m_bPush==YES){
-            
-            if(pInfoFile->bDropBoxWork==YES){
-                [self SetStatusBar];
-            }
-            else{
-                [self DelStatusBar];
-                [pInfoFile UpdateButt];
-            }
+    ICheck=TmpICheck;
+        int m=0;
+    
+    if(ICheck!=0){
+        [self ClearInterface];
+
+        if(*ICheck==4)
+        {
+            [pResIcon Show];
         }
         else
         {
-            [self DelStatusBar];
-            [ButtonGroup UpdateButt];
-        }
-    }
-}
-//------------------------------------------------------------------------------------------------------
-- (void)UpdatePoints{
-    
-    for (GObject *pOb in aObPoints) {
-        DESTROY_OBJECT(pOb);
-    }
-    [aObPoints removeAllObjects];
-    
-    if([aObjects count]>0){
-        
-        FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-   //     float fStartPos=280;
-        
-        if(pFStringOb!=nil){
-            int iStep=0;
-            for (ObjectButton *pOb in aObjects) {
-                if(pOb->m_bCheck){
-             //       FractalString *fStrCheck = [pFStringOb->aStrings objectAtIndex:iStep];
-           //         FractalString *fStrFirst = [fStrCheck->aStrings objectAtIndex:0];
-          //          FractalString *fStrPoints = [fStrFirst->aStrings objectAtIndex:0];
-                    
-//                    for (int k=0; k<fStrPoints->ArrayPoints->iCountInArray; k++) {
-//    
-//                        NSString *pName = [NSString stringWithFormat:@"Prop%d",k];
-//                        
-//                        GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",pName,
-//                            SET_STRING_V(@"ButtonPoint.png",@"m_DOWN"),
-//                            SET_STRING_V(@"ButtonPoint.png",@"m_UP"),
-//                            SET_FLOAT_V(54,@"mWidth"),
-//                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-//                            SET_BOOL_V(YES,@"m_bLookTouch"),
-//                            SET_INT_V(bRadioBox,@"m_iType"),
-//                            SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-//                            SET_STRING_V(@"CheckPoint",@"m_strNameStage"),
-//                            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                            SET_VECTOR_V(Vector3DMake(-320,210-k*55,0),@"m_pCurPosition"));
-//                        
-//                        fStartPos-=40;
-//                        [aObPoints addObject:pOb];
-//                    }
-                    
-                    break;
-                }
-                iStep++;
+            [self CreateButtons];
+            int *pMode=GET_INT_V(@"m_iMode");
+
+            if(pMode!=0 && *pMode==3)
+            {
+                if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
+                    PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
+                               SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
+                               SET_STRING_V(@"Button_Synh.png",@"m_UP"),
+                               SET_FLOAT_V(54,@"mWidth"),
+                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                               SET_BOOL_V(YES,@"m_bLookTouch"),
+                               SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                               SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
+                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                               SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
             }
-        }
-    }
-}
-//------------------------------------------------------------------------------------------------------
-- (void)UpdateSlider{
-    
-    for (GObject *pOb in aObSliders) {
-        DESTROY_OBJECT(pOb);
-    }
-    [aObSliders removeAllObjects];
-    
-    if([aObjects count]>0){
-        
-        FractalString *pFStringOb = [m_pObjMng->pStringContainer GetString:@"Object"];
-        float fStartPos=280;
+            
+            OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
 
-        if(pFStringOb!=nil){
-            int iStep=0;
-            for (ObjectButton *pOb in aObjects) {
-                if(pOb->m_bCheck){
-                    FractalString *fStrCheck = [pFStringOb->aStrings objectAtIndex:iStep];
-
-                    for (int k=0; k<[fStrCheck->aStrings count]; k++) {
-
-                        FractalString *fStrPropInOb = [fStrCheck->aStrings objectAtIndex:k];
-
-                        if(fStrPropInOb!=nil){
-
-                            for (int j=0; j<[fStrPropInOb->aStrings count]; j++) {
-                                
-                                Ob_Slayder *pObSl=UNFROZE_OBJECT(@"Ob_Slayder",@"SlayderX",
-                                    SET_VECTOR_V(Vector3DMake(-140, fStartPos, 0),@"m_pCurPosition"),
-                                    SET_STRING_V(@"Back_Slayder.png",@"m_pNameTexture"));
-                                
-                  //              FractalString *fStrPropInProp = [fStrPropInOb->aStrings objectAtIndex:j];
-                                
-//                                if(fStrPropInProp->ArrayPoints->iCountInArray>0 && IndexCheckPoint!=-1){
-//                                    float *fLinkTmp = (float *)[fStrPropInProp->ArrayPoints
-//                                                       GetDataAtIndex:IndexCheckPoint];
-//                                    
-//                                    pObSl->pOb_BSlayder->m_fLink=fLinkTmp;
-//                                    pObSl->pOb_BSlayder->pInsideString=fStrPropInProp;
-//                                    
-//                                    OBJECT_PERFORM_SEL(NAME(pObSl), @"SetString");
-//                                }
-//                                else
-//                                {
-//                                    pObSl->pOb_BSlayder->pInsideString=0;
-//                                    pObSl->pOb_BSlayder->m_fLink=0;
-//                                }
-
-                                OBJECT_PERFORM_SEL(NAME(pObSl->pOb_BSlayder), @"Show");
-
-                                fStartPos-=40;
-                                [aObSliders addObject:pObSl];
-                            }
-                        }
-                        fStartPos-=40;
-                    }
-                    break;
+            if(((ObjectButton *)BDropBox)->m_bPush==YES){
+                
+                if(pInfoFile->bDropBoxWork==YES){
+                    [self SetStatusBar];
                 }
-                iStep++;
+                else{
+                    [self DelStatusBar];
+                    [pInfoFile UpdateButt];
+                }
+            }
+            else
+            {
+                [self DelStatusBar];
+                [ButtonGroup UpdateButt];
             }
         }
     }
@@ -786,11 +444,7 @@ EXIT:
 //------------------------------------------------------------------------------------------------------
 - (void)PrepareProc:(ProcStage_ex *)pStage{}
 //------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{
-    
-  //  [self Update];
-//    int m=0;
-}
+- (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
