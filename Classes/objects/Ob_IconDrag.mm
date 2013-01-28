@@ -95,53 +95,55 @@
     GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
     bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
 
-    if([pObTash Intersect:Point] &&  pNeedUpload!=0){
+    if([pObTash Intersect:Point] &&  pNeedUpload!=0 && pMode!=0){
 
-        switch (pInsideString->m_iFlags){
-            case DEAD_STRING:{
-                
-                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
-                                                ArrayDumpFiles objectAtIndex:0];
-                
-                [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
-                
-                [m_pObjMng->pStringContainer DelString:pInsideString];
-                pInsideString=0;
-                *pNeedUpload=YES;
-            }
-            break;
-
-            case SYNH_AND_HEAD:{
-                CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
-                                                ArrayDumpFiles objectAtIndex:0];
-
-                [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
-                [m_pObjMng->pStringContainer DelString:pInsideString];
-                *pNeedUpload=YES;
-            }
-            break;
-
-            case SYNH_AND_LOAD:{
-                //del childs
-                [m_pObjMng->pStringContainer DelChilds:pInsideString];
-                [pInsideString SetFlag:SYNH_AND_HEAD];
-
-                *pNeedUpload=YES;
-            }
-            break;
-
-            case ONLY_IN_MEM:{
-                
-                [pODropBox DefFromUploadString:pInsideString];
-
-                [m_pObjMng->pStringContainer DelString:pInsideString];
-                pInsideString=0;
-                *pNeedUpload=YES;
-            }
-            break;
-
-            default:
+        if(*pMode==3){
+            switch (pInsideString->m_iFlags){
+                case DEAD_STRING:{
+                    
+                    CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
+                                                    ArrayDumpFiles objectAtIndex:0];
+                    
+                    [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
+                    
+                    [m_pObjMng->pStringContainer DelString:pInsideString];
+                    pInsideString=0;
+                    *pNeedUpload=YES;
+                }
                 break;
+
+                case SYNH_AND_HEAD:{
+                    CDataManager* pDataCurManager =[m_pObjMng->pStringContainer->
+                                                    ArrayDumpFiles objectAtIndex:0];
+
+                    [pDataCurManager DelFileFromDropBox:pInsideString->strUID];
+                    [m_pObjMng->pStringContainer DelString:pInsideString];
+                    *pNeedUpload=YES;
+                }
+                break;
+
+                case SYNH_AND_LOAD:{
+                    //del childs
+                    [m_pObjMng->pStringContainer DelChilds:pInsideString];
+                    [pInsideString SetFlag:SYNH_AND_HEAD];
+
+                    *pNeedUpload=YES;
+                }
+                break;
+
+                case ONLY_IN_MEM:{
+                    
+                    [pODropBox DefFromUploadString:pInsideString];
+
+                    [m_pObjMng->pStringContainer DelString:pInsideString];
+                    pInsideString=0;
+                    *pNeedUpload=YES;
+                }
+                break;
+
+                default:
+                    break;
+            }
         }
     }
     else
@@ -165,7 +167,7 @@
                                 *pNeedUpload=YES;
                             }
                             
-                            //add to save                        
+                            //add to save
                             [pODropBox AddToUploadString:pNewString];
                             [pNewString SetFlag:ONLY_IN_MEM];
                         }
@@ -190,6 +192,7 @@
         }
         else
         {
+            bool bInside=NO;
             if(pObGroup!=nil)
             {
                 for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
@@ -197,6 +200,7 @@
                     if([pObob Intersect:Point])
                     {
                         pParent=pObob->pString;
+                        bInside=YES;
                         
                         goto Exit;
                     }
@@ -211,7 +215,12 @@ Exit:
                                 WithParent:pParent WithContainer:m_pObjMng->pStringContainer
                                                 WithLink:NO];
 
-                    [self SetPos:pNewString];
+                    if(bInside==YES){
+                        
+                        pNewString->X=-440;
+                        pNewString->Y=170;
+                    }
+                    else [self SetPos:pNewString];
                 }
             }
             else if(m_pCurPosition.y<202){

@@ -16,21 +16,20 @@
     self = [super init];
 
     if(self){
-        
+
         ArrayPoints = [[FunArrayData alloc] initWithCopasity:100];
-        ArrayPoints->iCountInc=1000;
+        ArrayPoints->iCountInc=100;
         ArrayPoints->pParent=self;
-        
+
         m_OperationIndex = [[FunArrayDataIndexes alloc] init];
         m_OperationIndex->m_pParent=self;
-        
+
         DicStrings = [[NSMutableDictionary alloc] init];
         ArrayStrings = [[NSMutableArray alloc] init];
-        
+
         m_pObjMng=Parent;
 
 #ifdef EDITOR
-
         ArrayDumpFiles = [[NSMutableArray alloc] init];
 
         CDataManager *pDataManager=[[CDataManager alloc] InitWithFileFromRes:@"MainDump"];

@@ -46,7 +46,7 @@ typedef struct{
 @interface FractalString : NSObject{
 @public
     
-//MATRIX
+//MATRIX 28.01.2013
 //матрица универсальных данных---------------------------------------------------------------------
     int **pValueCopy;//int,float,string,(array)
     int **pValueLink;

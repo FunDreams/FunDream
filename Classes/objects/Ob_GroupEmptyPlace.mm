@@ -135,8 +135,16 @@
             
             if(pStrTmp!=nil)// && (pStrTmp->m_iFlags & (ONLY_IN_MEM|SYNH_AND_LOAD)))
             {
-                pObTmp->pStrInside=pStrTmp;
-                GET_TEXTURE(pObTmp->mTextureId, pStrTmp->sNameIcon);
+                if(pStrTmp->m_iFlags & (SYNH_AND_HEAD)){
+                    [Name setString:@"Objects"];
+                    pObTmp->pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
+                    GET_TEXTURE(pObTmp->mTextureId, @"EmptyPlace.png");
+                }
+                else
+                {
+                    pObTmp->pStrInside=pStrTmp;
+                    GET_TEXTURE(pObTmp->mTextureId, pStrTmp->sNameIcon);
+                 }
             }
             else
             {

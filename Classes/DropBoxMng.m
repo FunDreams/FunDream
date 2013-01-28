@@ -11,6 +11,7 @@
 #import "Ob_ResourceMng.h"
 #import "Ob_Editor_Interface.h"
 #import "InfoFile.h"
+#import "Ob_EmtyPlace.h"
 
 #define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
@@ -106,7 +107,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CreateOb:(FractalString *)pFrStr{
     ObB_DropBox *pOb=UNFROZE_OBJECT(@"ObB_DropBox",@"Ob_DropBox",
-                                    //                       SET_COLOR_V(pColorBack,@"mColorBack"),
+                                    //SET_COLOR_V(pColorBack,@"mColorBack"),
                                     SET_STRING_V(pFrStr->sNameIcon,@"m_DOWN"),
                                     SET_STRING_V(pFrStr->sNameIcon,@"m_UP"),
                                     SET_FLOAT_V(54,@"mWidth"),
@@ -145,18 +146,6 @@
 
         [self CreateOb:pFrStr];
     }
-
-//    Data=(*pDropBoxString->pPointLink);
-//    InfoStr=(InfoArrayValue *)(Data);
-//    
-//    for(int i=0;i<InfoStr->mCount;i++){
-//        
-//        int index=(Data+SIZE_INFO_STRUCT)[i];
-//        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
-//                               GetIdAtIndex:index];
-//        
-//        [self CreateOb:pFrStr];
-//    }
 ////////////////////////////////////////////////////////////////////////////////////////////
     if([m_pChildrenbjectsArr count]>0){
         if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
@@ -212,35 +201,43 @@
             [self Synhronization];
         }
     }
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    
+    Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)uploadFileFailedWithError{
-    
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
-    
+
     bDropBoxWork=NO;
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    
+    Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadFileFailedWithError{
-    bErrorDownLoad=YES;
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
     
+//    if(m_iMode==UPDATE_INFO){        
+//        bNeedUpload=YES;
+//    }
+
     bDropBoxWork=NO;
-    
-    if(m_iMode==UPDATE_INFO){        
-        bNeedUpload=YES;
-    }
+    bErrorDownLoad=YES;
+
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+
+    Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadMetadataFailedWithError{
-    bErrorMetaData=YES;
-    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
     
     bDropBoxWork=NO;
+    bErrorMetaData=YES;
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+    
+    Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedMetadata{
@@ -252,7 +249,8 @@
     else
     {
         [self LoadAndSyns];
-        OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+        Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -292,9 +290,10 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
--(void)DownLoadString:(FractalString *)pFsr{
+-(void)DownLoadString:(FractalString *)pFsr WithPlace:(int)iPlace{
     
     if(bDropBoxWork==NO){
+        m_iDownloadPlace=iPlace;
         [pDataManager relinkResClient];
         
         [NameDownLoadFile setString:pFsr->strUID];
@@ -389,6 +388,10 @@
                                           rpos:&pDataCurManager->m_iCurReadingPos];
                     
                     FractalString *pDelStr=[m_pObjMng->pStringContainer GetString:pNewString->strUID];
+                    
+                    float fX=pDelStr->X;
+                    float fY=pDelStr->Y;
+                    
                     [m_pObjMng->pStringContainer DelString:pDelStr];
                     
                     [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
@@ -397,13 +400,22 @@
 
                     [pStringContainerTmp release];
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-                    [pNewString SetFlag:SYNH_AND_LOAD];
+                    [pNewStr SetFlag:SYNH_AND_LOAD];
+                    pNewStr->X=fX;
+                    pNewStr->Y=fY;
                     
-                    OBJECT_SET_PARAMS(@"ButtonDropBox",SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+                    Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+
+                    Ob_EmtyPlace *pPlace = oInterface->Eplace->m_pChildrenbjectsArr[m_iDownloadPlace];
+                    [pPlace SetNameStr:pNewStr];
+                    
                     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+
+                    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),
+                                    SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
                 }
             }
-                break;
+            break;
                 
             default:
                 Rez=NO;
@@ -414,6 +426,7 @@
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAndSyns{
 
+    bNeedUpload=NO;
     int ReadPos=0;
 
     NSMutableArray *pFstrRez = [[NSMutableArray alloc] init];

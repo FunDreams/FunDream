@@ -22,7 +22,8 @@
     
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;
-    int *ICheck;
+    int iIndexCheck;
+    int iIndexChelf;
     
     NSMutableArray *aProp;
     NSMutableArray *aObjects;
@@ -30,7 +31,6 @@
     NSMutableArray *aObPoints;    
     int IndexCheckPoint;
     int m_iMode;
-    int m_iChelf;
     
     DropBoxMng *pInfoFile;
     GObject *PrBar;

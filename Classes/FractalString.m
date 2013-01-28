@@ -83,6 +83,9 @@
         TypeInformation=pStrSource->TypeInformation;
         NameInformation=pStrSource->NameInformation;
 
+        X=pStrSource->X;
+        Y=pStrSource->Y;
+
         if(bLink==YES)
             m_iFlags&=LINK;
         else m_iFlags&=~LINK;

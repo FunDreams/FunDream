@@ -166,8 +166,10 @@
     
     if(pStrCheck!=nil){
         
-         ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0]];
+        iIndexCheck=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0];
+        
+         int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                       GetDataAtIndex:iIndexCheck];
         
         if(ICheck)
         {
@@ -175,9 +177,7 @@
             m_iMode=(int)(*ICheck);
         }
         
-        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1]];
-        m_iChelf=(int)(*FChelf);
+        iIndexChelf=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
     }
 //////////////////
     
@@ -201,8 +201,11 @@
                    SET_VECTOR_V(Vector3DMake(-450,-60,0),@"m_pCurPosition"),
                    SET_FLOAT_V(520,@"mHeight"));
 
+    int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexChelf];
+    
     Eplace = UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
-                   SET_INT_V(m_iChelf,@"m_iCurrentSelect"),
+                   SET_INT_V(*FChelf,@"m_iCurrentSelect"),
                    SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
     
 //===================================================================================
@@ -210,7 +213,10 @@
 
     if([Eplace->m_pChildrenbjectsArr count]>0){
 
-        Ob_EmtyPlace *pEmtyPlace=[Eplace->m_pChildrenbjectsArr objectAtIndex:m_iChelf];
+        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                            GetDataAtIndex:iIndexChelf];
+
+        Ob_EmtyPlace *pEmtyPlace=[Eplace->m_pChildrenbjectsArr objectAtIndex:*FChelf];
 
         pEmtyPlace->m_bPush=YES;
 
@@ -229,6 +235,9 @@
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     m_iMode=0;//move
     *ICheck=m_iMode;
     [self UpdateB];
@@ -241,6 +250,9 @@
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     m_iMode=1;//copy
     *ICheck=m_iMode;
     [self UpdateB];
@@ -253,6 +265,9 @@
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     m_iMode=2;//link
     *ICheck=m_iMode;
     [self UpdateB];
@@ -267,6 +282,9 @@
 
     OBJECT_PERFORM_SEL(@"DropBox",@"DownLoadInfoFile");
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     m_iMode=3;//DropBox
     *ICheck=m_iMode;
     [self UpdateB];
@@ -278,7 +296,10 @@
     OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
-        
+    
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     m_iMode=5;//Connection
     *ICheck=m_iMode;
     [self UpdateB];
@@ -286,6 +307,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)DoubleTouchObject{
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     OldCheck=*ICheck;
     *ICheck=4;
     
@@ -294,6 +318,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CloseChoseIcon{
     
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     *ICheck=OldCheck;
     [self UpdateB];
 }
@@ -380,6 +407,7 @@
     DEL_CELL(@"EmptyOb");
     DEL_CELL(@"StartConnection");
     DEL_CELL(@"DoubleTouchFractalString");
+    DEL_CELL(@"ObCheckOb");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
@@ -389,8 +417,10 @@
         int *TmpICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0]];
 
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+
     ICheck=TmpICheck;
-        int m=0;
     
     if(ICheck!=0){
         [self ClearInterface];

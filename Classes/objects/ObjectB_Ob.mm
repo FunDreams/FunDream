@@ -40,6 +40,7 @@
     m_bStartPush=NO;
     m_bStartMove=NO;
     m_bFlicker=NO;
+    m_bStartTouch=NO;
     
     [m_DOWN setString:@""];
     [m_UP setString:@""];
@@ -193,35 +194,36 @@
     
     PLAY_SOUND(@"take.wav");
 
-    if(m_bNotPush==NO){
-            
-          if(m_bDrag==YES){
-              if(*pMode==4){
-                  [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"StartConnection"))];
-              }
-              
-              [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
-              
-              if(m_iLayer==layerInterfaceSpace5){
-
-                  m_bStartPush=YES;
-                  [self SetLayer:m_iLayer+1];
-                  [self SetTouch:YES WithLayer:m_iLayerTouch-1];
-         //         m_bLookTouch=NO;
-                }
+    if(m_bNotPush==NO)
+    {
+        if(m_bDrag==YES)
+        {
+            if(*pMode==4)
+            {
+                [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"StartConnection"))];
             }
+
+            [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheckOb")];
+
+            if(m_iLayer==layerInterfaceSpace5){
+
+                m_bStartPush=YES;
+                [self SetLayer:m_iLayer+1];
+                [self SetTouch:YES WithLayer:m_iLayerTouch-1];
+            }
+        }
                             
-            OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
-            [self SetPush];
+        OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);
+        [self SetPush];
     }
 
     if(m_bDoubleTouch==YES)
     {
         m_bDoubleTouch=YES;
-        
+
         DEL_CELL(@"DoubleTouchFractalString");
         SET_CELL(LINK_ID_V(pString,@"DoubleTouchFractalString"));
-        
+
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"DoubleTouchObject");
     }
     else
@@ -350,11 +352,15 @@
                     else
                     {
                         if([pObob Intersect:Point])
-                        {
-                            [[FractalString alloc] initAsCopy:pString
+                        {//копирование внутрь объекта
+                            
+                            FractalString *StrNew = [[FractalString alloc] initAsCopy:pString
                                     WithParent:pObob->pString
                                         WithContainer:m_pObjMng->pStringContainer
                                             WithLink:NO];
+                            
+                            StrNew->X=-440;
+                            StrNew->Y=170;
                             
                             [m_pObjMng->pStringContainer DelString:pString];
                             bUpdate=YES;

@@ -260,23 +260,11 @@
 
     if(DragObjectDropBoxStr!=nil)
     {
-//        FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
-        
-//        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
-//        NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
-//                                GetIdAtIndex:index];
-
         switch (DragObjectDropBoxStr->m_iFlags) {
             case ONLY_IN_MEM:
             case SYNH_AND_LOAD:
             {
-        //        [Name setString:DragObjectDropBoxStr->strUID];
                 [self SetNameStr:DragObjectDropBoxStr];
-
-//                pStrInside = DragObjectDropBoxStr;
-//                GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
-                
-                [self SetNameStr:pStrInside];
             }
             break;
                 
@@ -285,14 +273,8 @@
                 DropBoxMng *pODropBox = (DropBoxMng *)[m_pObjMng GetObjectByName:@"DropBox"];
 
                 if(pODropBox!=nil){
-          //          [Name setString:DragObjectDropBoxStr->strUID];
-                    [self SetNameStr:DragObjectDropBoxStr];
-
-//                    pStrInside = DragObjectDropBoxStr;
-//                    GET_TEXTURE(mTextureId, DragObjectDropBoxStr->sNameIcon);
-                    
-                    [pODropBox DownLoadString:DragObjectDropBoxStr];
-                    
+                //    [self SetNameStr:DragObjectDropBoxStr];
+                    [pODropBox DownLoadString:DragObjectDropBoxStr WithPlace:m_iCurIndex];
                 }
             }
             break;

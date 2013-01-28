@@ -42,7 +42,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Check{
     
-    id pObTmp = GET_ID_V(@"ObCheck");
+    id pObTmp = GET_ID_V(@"ObCheckOb");
     
     int i=0;
     if(pObTmp!=nil){
@@ -58,6 +58,8 @@
             i++;
         }
     }
+    
+    DEL_CELL(@"ObCheckOb");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Hide{
@@ -159,7 +161,8 @@
 //    }
 
     
-    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1){
+    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1)
+    {
         if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
             m_iCurrentSelect=0;
         

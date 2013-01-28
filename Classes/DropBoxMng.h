@@ -30,6 +30,7 @@
     
     NSMutableString *NameDownLoadFile;
     int m_iNumDownLoadFiles;
+    int m_iDownloadPlace;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -44,7 +45,7 @@
 -(void)AddToUploadString:(FractalString *)pStr;
 -(void)DefFromUploadString:(FractalString *)pStr;
 -(void)AddToDelArray:(FractalString *)pStr;
--(void)DownLoadString:(FractalString *)pFsr;
+-(void)DownLoadString:(FractalString *)pFsr WithPlace:(int)iPlace;
 -(void)loadAndMerge;
 
 @end
