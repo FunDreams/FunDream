@@ -67,7 +67,7 @@
                    //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-35,-295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-450,-295,0),@"m_pCurPosition"));
     
     BDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),

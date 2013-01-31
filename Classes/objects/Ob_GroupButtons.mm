@@ -83,6 +83,50 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)CreateInfo:(FractalString *)pFrStr{
+    
+    Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
+    bool bFlick=NO;
+    
+//    switch (pFrStr->TypeInformation) {
+//        case STR_DATA:
+//            ColorTmp = Color3DMake(0.4f, 0.4f, 1, 1);
+//            break;
+//        case STR_OPERATION:
+//            ColorTmp = Color3DMake(1, 0, 1, 1);
+//            break;
+//        case STR_CONTAINER:
+            ColorTmp = Color3DMake(0, 0, 0, 1);
+//            
+//            if(pFrStr->NameInformation==NAME_K_START)
+//                bFlick=YES;
+//            break;
+//            
+//        default:
+//            break;
+//    }
+    
+    ObjectB_Ob *pOb=UNFROZE_OBJECT(@"ObjectB_Info",@"Info",
+                                   SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
+                                   SET_STRING_V(@"ButtonOb.png",@"m_UP"),
+                                   SET_FLOAT_V(100,@"mWidth"),
+                                   SET_FLOAT_V(34*FACTOR_DEC,@"mHeight"),
+                                   //SET_BOOL_V(YES,@"m_bLookTouch"),
+                                   SET_INT_V(2,@"m_iType"),
+                                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+                                   SET_STRING_V(@"Check",@"m_strNameStage"),
+                                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                                   SET_BOOL_V(YES,@"m_bDrag"),
+                                   SET_COLOR_V(ColorTmp,@"mColorBack"),
+                                   SET_BOOL_V(bFlick,@"m_bFlicker"),
+                                   SET_VECTOR_V(Vector3DMake(pFrStr->X,pFrStr->Y,0),@"m_pCurPosition"));
+    
+    GET_TEXTURE(pOb->mTextureId, pFrStr->sNameIcon);
+    pOb->pString=pFrStr;
+    
+    [m_pChildrenbjectsArr addObject:pOb];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)CreateOb:(FractalString *)pFrStr{
     
     Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
@@ -145,7 +189,11 @@
         FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
                        GetIdAtIndex:index];
 
-        [self CreateOb:pFrStr];
+        if(pFrStr->NameInformation==NAME_K_INFO_WINDOW){
+            
+            [self CreateInfo:pFrStr];
+        }
+        else [self CreateOb:pFrStr];
     }
 
 //    Data=(*pInsideString->pPointLink);

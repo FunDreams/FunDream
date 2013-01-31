@@ -53,6 +53,17 @@
 //------------------------------------------------------------------------------------------------------
 -(void)AddSmallCube:(FractalString *)pFParent{
     
+    FractalString *pStrInfo=[[FractalString alloc]
+                             initWithName:@"Info" WithParent:pFParent WithContainer:self
+                             WithLink:NO];
+    
+    [pStrInfo SetNameIcon:@"R.png"];
+    pStrInfo->X=-180;
+    pStrInfo->Y=-30;
+    pStrInfo->TypeInformation=STR_CONTAINER;
+    pStrInfo->NameInformation=NAME_K_INFO_WINDOW;
+
+    
     FractalString *pStrIngib=[[FractalString alloc]
                             initWithName:@"StartActive" WithParent:pFParent WithContainer:self
                                WithLink:NO];
@@ -115,7 +126,7 @@
     pStrVR->X=-280;
     pStrVR->Y=-30;
     pStrVR->TypeInformation=STR_DATA;
-    pStrVR->NameInformation=NAME_V_FLOAT;
+    pStrVR->NameInformation=NAME_V_FLOAT;    
 }
 //------------------------------------------------------------------------------------------------------
 #define MAX_REZERV 200

@@ -40,7 +40,6 @@
 
     //дочерние струны
     pChildString=[m_pContainer->m_OperationIndex InitMemory];
- //   pPointLink=[m_pContainer->m_OperationIndex InitMemory];
 
     //связи
     pEnters = [m_pContainer->m_OperationIndex InitMemory];

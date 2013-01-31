@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1814853316B8CBD10017AE1E /* ObjectB_Info.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1814853216B8CBD10017AE1E /* ObjectB_Info.mm */; };
 		1817D5B41569599A00ED0758 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1817D5B31569599A00ED0758 /* AudioToolbox.framework */; };
 		1817D5B6156959B300ED0758 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1817D5B5156959B300ED0758 /* OpenAL.framework */; };
 		1817D5C0156C064500ED0758 /* Ob_Options.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1817D5BF156C064500ED0758 /* Ob_Options.mm */; };
@@ -120,6 +121,8 @@
 
 /* Begin PBXFileReference section */
 		1808F62012DA0ECD00522EED /* FunDreams-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "FunDreams-Info.plist"; sourceTree = "<group>"; };
+		1814853116B8CBD00017AE1E /* ObjectB_Info.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectB_Info.h; path = objects/ObjectB_Info.h; sourceTree = "<group>"; };
+		1814853216B8CBD10017AE1E /* ObjectB_Info.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = ObjectB_Info.mm; path = objects/ObjectB_Info.mm; sourceTree = "<group>"; };
 		1817D5B31569599A00ED0758 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		1817D5B5156959B300ED0758 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		1817D5BE156C064500ED0758 /* Ob_Options.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Options.h; path = objects/Ob_Options.h; sourceTree = "<group>"; };
@@ -435,6 +438,8 @@
 		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				1814853116B8CBD00017AE1E /* ObjectB_Info.h */,
+				1814853216B8CBD10017AE1E /* ObjectB_Info.mm */,
 				183D8642169825D300FC9C01 /* Ob_Arrow.h */,
 				183D8643169825D300FC9C01 /* Ob_Arrow.mm */,
 				182BF12E1636A6000051A30E /* Ob_ProgressBar.h */,
@@ -804,6 +809,7 @@
 				182BC6E2165E351700ED304E /* Ob_Tab.mm in Sources */,
 				183D8644169825D300FC9C01 /* Ob_Arrow.mm in Sources */,
 				186178A916AFFED300227777 /* InfoFile.m in Sources */,
+				1814853316B8CBD10017AE1E /* ObjectB_Info.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

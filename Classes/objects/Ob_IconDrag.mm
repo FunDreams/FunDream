@@ -150,7 +150,7 @@
     {
         if(pMode!=0 && *pMode==3){
             if(m_pCurPosition.y<202 && pInsideString!=nil){
-                if(pParent!=pInsideString){
+         //       if(pParent!=pInsideString){//сохраненив в DropBox
 
                     if(bFromEmpty==YES)
                     {                        
@@ -171,7 +171,7 @@
                             [pODropBox AddToUploadString:pNewString];
                             [pNewString SetFlag:ONLY_IN_MEM];
                         }
-                    }
+             //       }
                     else
                     {
                         FractalString *DragObjectDropBox = GET_ID_V(@"DropBoxString");

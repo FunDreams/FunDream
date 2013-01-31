@@ -5,10 +5,13 @@
 //  Created by Konstantin Maximov on 24.04.12.
 //  Copyright (c) 2012 FunDreams. All rights reserved.
 //
-#define DATA_ID     1
-#define DATA_FLOAT  2
-#define DATA_INT    3
-#define DATA_STRING 4
+#define DATA_ID             1//составной объект (matrix)
+#define DATA_LINK           2//ссылка на данные
+#define DATA_FLOAT          3
+#define DATA_INT            4
+#define DATA_STRING         5
+#define DATA_TEXTURE        6
+#define DATA_SOUND          7
 
 #import <Foundation/Foundation.h>
 @class StringContainer;
@@ -45,6 +48,7 @@
 
 - (void *)GetDataAtIndex:(int)iIndex;
 - (id)GetIdAtIndex:(int)iIndex;
+- (unsigned char)GetTypeAtIndex:(int)iIndex;
 
 -(void)selfSave:(NSMutableData *)m_pData;
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
