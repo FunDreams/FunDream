@@ -30,6 +30,8 @@
 -(int)GetDataAtIndex:(int)iIndex WithData:(int **)pData;
 -(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData;
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos WithData:(int **)pData;
+- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData;
+- (int)FindIndex:(int)IndexValue WithData:(int **)pData;
 
 @end
 

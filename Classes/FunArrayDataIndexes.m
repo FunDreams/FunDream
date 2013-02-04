@@ -35,7 +35,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ReleaseMemory:(int **)pData{
-    
+
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
 
     for(int i=0;i<InfoStr->mCount;i++){
@@ -55,24 +55,8 @@
     
     InfoStr->mCopasity=icopasity;
     
-//    InfoStr=(InfoArrayValue *)(*pData);
-//    for(int i=0;i<InfoStr->mCount;i++){
-//        
-//        int index=((*pData)+SIZE_INFO_STRUCT)[i];
-//
-//        int m=0;
-//    }
-
     int FullSize=InfoStr->mCopasity*sizeof(int)+sizeof(InfoArrayValue);
     *pData = (int *)realloc(*pData,FullSize);
-    
-//    InfoStr=(InfoArrayValue *)(*pData);
-//    for(int i=0;i<InfoStr->mCount;i++){
-//        
-//        int index=((*pData)+SIZE_INFO_STRUCT)[i];
-//        
-//        int m=0;
-//    }
 }
 //------------------------------------------------------------------------------------------
 - (void)Extend:(int **)pData{
@@ -105,6 +89,44 @@
     memcpy(StartData+iIndex, &iDataValue, sizeof(int));
     InfoStr->mCount++;
     [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
+}
+//------------------------------------------------------------------------------------------
+- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
+    
+    InfoArrayValue *InfoStrSource=(InfoArrayValue *)(*pSourceData);
+    InfoArrayValue *InfoStrDest=(InfoArrayValue *)(*pDestData);
+
+    *InfoStrDest=*InfoStrSource;
+
+    [self SetCopasity:InfoStrSource->mCopasity WithData:pDestData];
+    
+    int *StartDataSource=((*pSourceData)+SIZE_INFO_STRUCT);
+    int *StartDataDest=((*pDestData)+SIZE_INFO_STRUCT);
+    
+    memcpy(StartDataDest, StartDataSource, sizeof(int)*(InfoStrSource->mCount));
+
+    for (int i=0; i<InfoStrDest->mCount; i++) {
+        
+        int iIndex=StartDataDest[i];
+        [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
+    }
+}
+//------------------------------------------------------------------------------------------
+- (int)FindIndex:(int)IndexValue WithData:(int **)pData{
+    int iRet=-1;
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+
+    for (int i=0; i<InfoStr->mCount; i++) {
+        int iTmpIndex=StartData[i];
+        if(iTmpIndex==IndexValue){
+            iRet=i;
+            break;
+        }
+    }
+    
+    return iRet;
 }
 //------------------------------------------------------------------------------------------
 - (void)AddData:(int)IndexValue WithData:(int **)pData{

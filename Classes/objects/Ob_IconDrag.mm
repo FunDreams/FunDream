@@ -150,7 +150,7 @@
     {
         if(pMode!=0 && *pMode==3){
             if(m_pCurPosition.y<202 && pInsideString!=nil){
-         //       if(pParent!=pInsideString){//сохраненив в DropBox
+         //       if(pParent!=pInsideString){//сохранение в DropBox
 
                     if(bFromEmpty==YES)
                     {                        
@@ -193,7 +193,7 @@
         else
         {
             bool bInside=NO;
-            if(pObGroup!=nil)
+            if(pObGroup!=nil)//копирование струны в пространстве
             {
                 for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
                 {
@@ -227,7 +227,7 @@ Exit:
 
                 FractalString *pNewString =[[FractalString alloc]
                         initWithName:@"EmptyOb" WithParent:pParent
-                                    WithContainer:m_pObjMng->pStringContainer WithLink:NO];
+                                    WithContainer:m_pObjMng->pStringContainer];
 
                 [self SetPos:pNewString];
             }

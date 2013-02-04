@@ -19,7 +19,7 @@
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];        
-        
+    
 	if (self != nil)
     {
         m_iLayer = layerTemplet;
@@ -29,7 +29,7 @@
         aProp = [[NSMutableArray alloc] init];
         aObjects = [[NSMutableArray alloc] init];
         aObSliders = [[NSMutableArray alloc] init];
-        aObPoints = [[NSMutableArray alloc] init];        
+        aObPoints = [[NSMutableArray alloc] init];
     }
     
 	return self;
@@ -166,7 +166,9 @@
     
     if(pStrCheck!=nil){
         
-        iIndexCheck=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
+        
+        iIndexCheck=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[0];
         
          int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:iIndexCheck];
@@ -177,7 +179,7 @@
             m_iMode=(int)(*ICheck);
         }
         
-        iIndexChelf=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
+        iIndexChelf=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
     }
 //////////////////
     
@@ -406,16 +408,18 @@
     DEL_CELL(@"DragObject");
     DEL_CELL(@"EmptyOb");
     DEL_CELL(@"StartConnection");
-    DEL_CELL(@"DoubleTouchFractalString");
+ //   DEL_CELL(@"DoubleTouchFractalString");
     DEL_CELL(@"ObCheckOb");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
-            
+    
+    MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
+
         int *TmpICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[0]];
+                       GetDataAtIndex:(*pMatr->pValueLink+SIZE_INFO_STRUCT)[0]];
 
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];

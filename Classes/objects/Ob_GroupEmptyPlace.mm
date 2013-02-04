@@ -23,7 +23,9 @@
         pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
         
         if(pChelf!=nil){
-            InfoArrayValue *pInfo = (InfoArrayValue *)*pChelf->pValueLink;
+            MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
+
+            InfoArrayValue *pInfo = (InfoArrayValue *)*pMatr->pValueLink;
             m_iNumButton=pInfo->mCount;
         }
     }
@@ -72,7 +74,8 @@
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
         
-        int index=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
+        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
         int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                                GetDataAtIndex:index];
         
@@ -127,7 +130,8 @@
 
             [m_pChildrenbjectsArr addObject:pObTmp];
             
-            int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[i];
+            MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
+            int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[i];
             NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
                                    GetIdAtIndex:index];
 

@@ -12,8 +12,6 @@
 @public
     NSString *sNameIcon,*strUID;
     float X,Y;
-    BYTE TypeInformation;
-    short NameInformation;
     int iFlags;
 }
 

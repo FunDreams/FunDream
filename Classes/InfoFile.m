@@ -27,8 +27,6 @@
         
         X=String->X;
         Y=String->Y;
-        TypeInformation=String->TypeInformation;
-        NameInformation=String->NameInformation;
         iFlags=String->m_iFlags;
     }
     return self;
@@ -55,10 +53,6 @@
     [pData appendBytes:&Y length:sizeof(float)];
     //флаги
     [pData appendBytes:&iFlags length:sizeof(iFlags)];
-    //тип струны.
-    [pData appendBytes:&TypeInformation length:sizeof(BYTE)];
-    //Имя-число струны.
-    [pData appendBytes:&NameInformation length:sizeof(short)];
 }
 //-----------------------------------------------------------------------------------------------
 -(void)LoadFile:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
@@ -105,16 +99,6 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&iFlags range:Range];
     *iCurReadingPos += sizeof(int);
-    
-    //тип струны.
-    Range = NSMakeRange( *iCurReadingPos, sizeof(BYTE));
-    [pData getBytes:&TypeInformation range:Range];
-    *iCurReadingPos += sizeof(BYTE);
-    
-    //Имя-число струны.
-    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
-    [pData getBytes:&NameInformation range:Range];
-    *iCurReadingPos += sizeof(short);
 }
 //-----------------------------------------------------------------------------------------------
 @end

@@ -117,7 +117,9 @@
     FractalString *pStrChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
     if(pStrChelf!=nil){
 
-        int index=(*pStrChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrChelf->m_iIndex];
+
+        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
                                GetIdAtIndex:index];
 
@@ -209,8 +211,9 @@
     FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
 
     if(pChelf!=nil){
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
         
-        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
                                GetIdAtIndex:index];
 
@@ -222,8 +225,9 @@
     FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
     
     if(pChelf!=nil){
-        
-        int index=(*pChelf->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
+
+        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
                                 GetIdAtIndex:index];
         [pName setString:@"Objects"];
@@ -239,7 +243,9 @@
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     if(pStrCheck!=nil){
-        int index=(*pStrCheck->pValueLink+SIZE_INFO_STRUCT)[1];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
+
+        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
         int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                             GetDataAtIndex:index];
         (*FChelf)=(float)m_iCurIndex;

@@ -24,48 +24,72 @@
     if(Parent!=nil){
         
         pParent=Parent;
-        m_iIndex=[m_pContainer->ArrayPoints SetOb:self];
-        
-        [m_pContainer->m_OperationIndex AddData:m_iIndex WithData:Parent->pChildString];
+        m_iIndexSelf=[m_pContainer->ArrayPoints SetOb:self];
+        [m_pContainer->m_OperationIndex AddData:m_iIndexSelf WithData:Parent->pChildString];
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitMemory{
     
     if(m_pContainer==nil)return;
-    
-    //переменные-точки
-    pValueCopy = [m_pContainer->m_OperationIndex InitMemory];
-    pValueLink = [m_pContainer->m_OperationIndex InitMemory];
 
-    //дочерние струны
+    //фрактальная структура, необходима для представления информации из матрицы
     pChildString=[m_pContainer->m_OperationIndex InitMemory];
-
-    //связи
-    pEnters = [m_pContainer->m_OperationIndex InitMemory];
-    pExits = [m_pContainer->m_OperationIndex InitMemory];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
 
     [self SetFlag:ONLY_IN_MEM];
     [self SetNameIcon:@"none"];
+    m_iIndex=1;//zero
 
     X=-440;
     Y=170;
 }
 //------------------------------------------------------------------------------------------------------
-- (id)init:(StringContainer *)pContainer{
-    
-    self = [super init];
-	if (self != nil)
+- (void)CopyChild:(FractalString *)pStrSource{
+        
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pStrSource->pChildString);
+    for (int i=0; i<InfoStr->mCount; i++)
     {
-        m_pContainer=pContainer;
+        int index=((*pStrSource->pChildString)+SIZE_INFO_STRUCT)[i];
+        FractalString *TmpStr=[m_pContainer->ArrayPoints GetIdAtIndex:index];
+        
+        FractalString *pFStringTmp=[[FractalString alloc]
+                        initWithName:pStrSource->strUID
+                        WithParent:self
+                        WithContainer:m_pContainer];
 
-        [self InitMemory];
-        [self SetDefault];
+        pFStringTmp->X=TmpStr->X;
+        pFStringTmp->Y=TmpStr->Y;
+        [pFStringTmp SetNameIcon:TmpStr->sNameIcon];
+        
+        NSNumber *pNum=[NSNumber numberWithInt:TmpStr->m_iIndex];
+        NSNumber *pNumRez=[m_pContainer->ArrayPoints->pDicRename objectForKey:pNum];
+        
+        if(pNumRez!=nil){
+            pFStringTmp->m_iIndex=[pNumRez intValue];
+        }
+        else pFStringTmp->m_iIndex=TmpStr->m_iIndex;
+        
+        [pFStringTmp CopyChild:TmpStr];
     }
-    return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)AddIndex:(FractalString *)pStrParent WithIndex:(int)iIndexNew OldIndex:(int)iIndexOld{
+    
+    if(pStrParent!=nil){
+
+        MATRIXcell *pMatr=[m_pContainer->ArrayPoints GetMatrixAtIndex:pStrParent->m_iIndex];
+        if(pMatr!=0)
+        {
+            int iRet=[m_pContainer->m_OperationIndex FindIndex:iIndexOld WithData:pMatr->pValueLink];
+            if(iRet>0)[m_pContainer->m_OperationIndex AddData:iIndexNew WithData:pMatr->pValueLink];
+
+            iRet=[m_pContainer->m_OperationIndex FindIndex:iIndexOld WithData:pMatr->pValueCopy];
+            if(iRet>0)[m_pContainer->m_OperationIndex AddData:iIndexNew WithData:pMatr->pValueCopy];
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
@@ -79,35 +103,36 @@
         [self InitMemory];
         [self SetDefault];
         
-        TypeInformation=pStrSource->TypeInformation;
-        NameInformation=pStrSource->NameInformation;
-
-        X=pStrSource->X;
-        Y=pStrSource->Y;
-
-        if(bLink==YES)
-            m_iFlags&=LINK;
-        else m_iFlags&=~LINK;
-        
         strUID = [pContainer GetRndName];
         [self SetParent:Parent];
-        
         [self SetNameIcon:pStrSource->sNameIcon];
-
         [pContainer->DicStrings setObject:self forKey:strUID];
-        
-        InfoArrayValue *InfoStr=(InfoArrayValue *)(*pStrSource->pChildString);
 
-        for (int i=0; i<InfoStr->mCount; i++) {
+        if(bLink==YES){
             
-            int index=((*pStrSource->pChildString)+SIZE_INFO_STRUCT)[i];
-            FractalString *TmpStr=[pContainer->ArrayPoints GetIdAtIndex:index];
-                        
-//            [pContainer->m_OperationIndex CopyDataFrom:pStrSource->pPointLink To:pPointLink];
-
-            bool LocalLink = TmpStr->m_iFlags&LINK;
-            [[FractalString alloc] initAsCopy:TmpStr WithParent:self
-                    WithContainer:pContainer WithLink:(bool)LocalLink];
+            m_iIndex=[m_pContainer->ArrayPoints LinkDataAtIndex:pStrSource->m_iIndex];
+            if(pStrSource->pAssotiation==nil)
+            {
+                pAssotiation=[[NSMutableDictionary alloc] init];
+                pStrSource->pAssotiation=[pAssotiation retain];
+                
+                [pAssotiation setObject:self forKey:strUID];
+                [pAssotiation setObject:pStrSource forKey:pStrSource->strUID];
+            }
+            else
+            {
+                pAssotiation=[pStrSource->pAssotiation retain];
+                [pAssotiation setObject:self forKey:strUID];
+            }
+            
+            m_iIndex=[m_pContainer->ArrayPoints CopyDataAtIndex:pStrSource->m_iIndex];
+            [m_pContainer->m_OperationIndex CopyDataFrom:pStrSource->pChildString To:pChildString];
+        }
+        else
+        {
+            m_iIndex=[m_pContainer->ArrayPoints CopyDataAtIndex:pStrSource->m_iIndex];
+            [self CopyChild:pStrSource];
+            [self AddIndex:Parent WithIndex:m_iIndex OldIndex:pStrSource->m_iIndex];
         }
     }
     
@@ -115,7 +140,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithName:(NSString *)NameString WithParent:(FractalString *)Parent
-        WithContainer:(StringContainer *)pContainer WithLink:(bool)bLink{
+        WithContainer:(StringContainer *)pContainer{
 
 	self = [super init];
 	if (self != nil)
@@ -136,12 +161,30 @@
         {
             strUID = [[NSString alloc] initWithString:StrRndName];
         }
-        
+
         [self SetParent:Parent];
         [m_pContainer->DicStrings setObject:self forKey:strUID];
     }
 
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (id)init:(StringContainer *)pContainer{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        m_pContainer=pContainer;
+        
+        [self InitMemory];
+        [self SetDefault];
+    }
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)SetFlag:(int)iFlag{
+    m_iFlags &=~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
+    m_iFlags|=iFlag;
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
@@ -158,15 +201,9 @@
         [pContainer->DicStrings setObject:self forKey:strUID];
         
         pParent=Parent;
-        //      [self SetParent:Parent WithLink:m_iFlags&LINK];
     }
     
     return self;
-}
-//------------------------------------------------------------------------------------------------------
--(void)SetFlag:(int)iFlag{
-    m_iFlags &=~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
-    m_iFlags|=iFlag;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadData:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
@@ -212,20 +249,14 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&m_iFlags range:Range];
     *iCurReadingPos += sizeof(int);
-    
-    //тип струны.
-    Range = NSMakeRange( *iCurReadingPos, sizeof(BYTE));
-    [pData getBytes:&TypeInformation range:Range];
-    *iCurReadingPos += sizeof(BYTE);
-    
-    //Имя-число струны.
-    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
-    [pData getBytes:&NameInformation range:Range];
-    *iCurReadingPos += sizeof(short);
-    
-    //индекс
+        
+    //индексы
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&m_iIndex range:Range];
+    *iCurReadingPos += sizeof(int);
+
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pData getBytes:&m_iIndexSelf range:Range];
     *iCurReadingPos += sizeof(int);
 //------------------------------------------------------------------------------------
 }
@@ -252,12 +283,9 @@
     [pData appendBytes:&Y length:sizeof(float)];
     //флаги
     [pData appendBytes:&m_iFlags length:sizeof(m_iFlags)];
-    //тип струны.
-    [pData appendBytes:&TypeInformation length:sizeof(BYTE)];
-    //Имя-число струны.
-    [pData appendBytes:&NameInformation length:sizeof(short)];
-    //индекс
+    //индексы
     [pData appendBytes:&m_iIndex length:sizeof(int)];
+    [pData appendBytes:&m_iIndexSelf length:sizeof(int)];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos
@@ -266,10 +294,6 @@
     [self LoadData:pData ReadPos:iCurReadingPos];
     
     //сохраняем матрицу струны
-    [m_pContainer->m_OperationIndex selfLoad:pData rpos:iCurReadingPos WithData:pValueCopy];
-    [m_pContainer->m_OperationIndex selfLoad:pData rpos:iCurReadingPos WithData:pValueLink];
-    [m_pContainer->m_OperationIndex selfLoad:pData rpos:iCurReadingPos WithData:pEnters];
-    [m_pContainer->m_OperationIndex selfLoad:pData rpos:iCurReadingPos WithData:pExits];
     [m_pContainer->m_OperationIndex selfLoad:pData rpos:iCurReadingPos WithData:pChildString];
     
     //child string
@@ -280,16 +304,8 @@
     
     for (int i=0; i<iCount; i++) {
         
-        /*FractalString *FChild=*/[[FractalString alloc] initWithData:pData
-                    WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
-
-//        int m=0;
- //       int iIndex=[pContainer->ArrayPoints SetOb:FChild];
-        
-//        if(m_iFlags&LINK)
-//            [pContainer->m_OperationIndex AddData:iIndex WithData:pPointLink];
-//        else
-  //          [pContainer->m_OperationIndex AddData:iIndex WithData:pPointCopy];
+        [[FractalString alloc] initWithData:pData
+            WithCurRead:iCurReadingPos WithParent:self WithContainer:pContainer];
     }
 //======================================================================================
 }
@@ -302,10 +318,6 @@
             [self SaveData:m_pData];
 
             //сохраняем матрицу струны
-            [m_pContainer->m_OperationIndex selfSave:m_pData WithData:pValueCopy];
-            [m_pContainer->m_OperationIndex selfSave:m_pData WithData:pValueLink];
-            [m_pContainer->m_OperationIndex selfSave:m_pData WithData:pEnters];
-            [m_pContainer->m_OperationIndex selfSave:m_pData WithData:pExits];
             [m_pContainer->m_OperationIndex selfSave:m_pData WithData:pChildString];
             
             //child string
@@ -322,18 +334,6 @@
 
                 [FChild selfSave:m_pData WithVer:iVersion];
             }
-            
-//            InfoStr=(InfoArrayValue *)pPointLink;
-//            StartIndex=(*pPointLink)+sizeof(InfoArrayValue);
-//            iCount=InfoStr->mCount;
-//            
-//            [m_pData appendBytes:&iCount length:sizeof(int)];
-//            
-//            for (int i=0; i<iCount; i++) {
-//                FractalString *FChild=(id)[m_pContainer->ArrayPoints GetDataAtIndex:*StartIndex];
-//                
-//                [FChild selfSave:m_pData WithVer:iVersion];
-//            }
         }
         break;
             
@@ -345,15 +345,10 @@
 - (void)dealloc
 {
     [sNameIcon release];
+    [pAssotiation release];
     
     [strUID release];
-
-    [m_pContainer->m_OperationIndex ReleaseMemory:pValueCopy];
-    [m_pContainer->m_OperationIndex ReleaseMemory:pValueLink];
     [m_pContainer->m_OperationIndex ReleaseMemory:pChildString];
-//    [m_pContainer->m_OperationIndex ReleaseMemory:pPointLink];
-    [m_pContainer->m_OperationIndex ReleaseMemory:pEnters];
-    [m_pContainer->m_OperationIndex ReleaseMemory:pExits];
     
     [super dealloc];
 }

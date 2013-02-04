@@ -24,6 +24,8 @@
         
         pNamesOb = [[NSMutableDictionary alloc] init];
         pNamesValue = [[NSMutableDictionary alloc] init];
+        pMartixDic = [[NSMutableDictionary alloc] init];
+        pDicRename = [[NSMutableDictionary alloc] init];
         
         [self Increase:iCopasity];
     }
@@ -76,6 +78,48 @@
     return IndexFree;
 }
 //------------------------------------------------------------------------------------------
+- (int)LinkDataAtIndex:(int)iIndex{
+    
+    [self IncDataAtIndex:iIndex];
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (int)CopyDataAtIndex:(int)iIndex{
+    BYTE bType=(*(pType+iIndex));
+    float *pDataTmp=(pData+iIndex);
+
+    int iRetIndex=0;
+    
+    switch (bType) {
+        case DATA_ID:
+            iRetIndex = [self SetOb:*((FractalString **)pDataTmp)];
+            break;
+            
+        case DATA_MATRIX:
+        {
+            [pDicRename removeAllObjects];
+            iRetIndex = [self SetMatrix:*((MATRIXcell **)pDataTmp)];
+        }
+        break;
+
+        case DATA_FLOAT:
+            iRetIndex = [self SetFloat:*pDataTmp];
+            break;
+
+        case DATA_INT:
+            iRetIndex = [self SetInt:*((int *)pDataTmp)];
+            break;
+
+        case DATA_STRING:
+            iRetIndex = [self SetName:*((NSMutableString **)pDataTmp)];
+            break;
+
+        default:
+            break;
+    }
+    return iRetIndex;
+}
+//------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 - (int)SetFloat:(float)DataValue{
 
@@ -84,8 +128,6 @@
     float *TmpLink=pData+iIndex;
     
     *TmpLink=DataValue;
-//    (*((int *)pDataInt+iIndex))++;
-//    iCountInArray++;
 
     (*(pType+iIndex))=DATA_FLOAT;
 
@@ -99,8 +141,6 @@
     int *TmpLink=(int *)pData+iIndex;
     
     *TmpLink=DataValue;
-//    (*((int *)pDataInt+iIndex))++;
-//    iCountInArray++;
     
     (*(pType+iIndex))=DATA_INT;
     
@@ -116,10 +156,7 @@
     
     id *TmpLink=(id *)(pData+iIndex);
     *(TmpLink)=DataValue;
-    
-//    (*((int *)pDataInt+iIndex))++;
-//    iCountInArray++;
-    
+        
     (*(pType+iIndex))=DATA_STRING;
     
     return iIndex;
@@ -135,19 +172,106 @@
     id *TmpLink=(id *)(pData+iIndex);
     *(TmpLink)=DataValue;
 
-//    (*((int *)pDataInt+iIndex))++;
-//    iCountInArray++;
-
     (*(pType+iIndex))=DATA_ID;
     DataValue->m_iIndex=iIndex;
 
     return iIndex;
 }
 //------------------------------------------------------------------------------------------
+- (void)InitMemoryMatrix:(MATRIXcell *)pMatr{
+    
+    if(pParent==nil)return;
+    
+    //переменные-точки
+    pMatr->pValueCopy = [pParent->m_OperationIndex InitMemory];
+    pMatr->pValueLink = [pParent->m_OperationIndex InitMemory];
+    
+    //связи
+    pMatr->pQueue = [pParent->m_OperationIndex InitMemory];
+    
+    pMatr->TypeInformation=0;
+    pMatr->NameInformation=0;
+}
+//------------------------------------------------------------------------------------------------------
+- (int)SetMatrix:(MATRIXcell *)DataMatrix{
+
+    int iIndex=[self GetFree];
+
+    MATRIXcell *pNewMatr=(MATRIXcell *)malloc(sizeof(MATRIXcell));
+    [self InitMemoryMatrix:pNewMatr];
+
+    MATRIXcell **TmpLink=(MATRIXcell **)(pData+iIndex);
+    *TmpLink=pNewMatr;
+    
+    (*(pType+iIndex))=DATA_MATRIX;
+    pNewMatr->iIndexSelf=iIndex;
+    
+    if(DataMatrix!=0){
+//copy matrix ========================================================================
+        pNewMatr->NameInformation=DataMatrix->NameInformation;
+        pNewMatr->TypeInformation=DataMatrix->TypeInformation;
+                
+        //копируем link
+        [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pValueLink To:pNewMatr->pValueLink];
+        
+        //копируем copy
+        InfoArrayValue *InfoStr=(InfoArrayValue *)(*DataMatrix->pValueCopy);
+        int *StartData=((*DataMatrix->pValueCopy)+SIZE_INFO_STRUCT);
+
+        for (int i=0; i<InfoStr->mCount; i++) {
+            int iTmpIndex=StartData[i];
+            
+            NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
+            NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
+            
+            if(pNewNum==nil){
+                int iNewIndex=[self CopyDataAtIndex:iTmpIndex];
+                
+                NSNumber *pNumTmp=[NSNumber numberWithInt:iNewIndex];
+                [pDicRename setObject:pNumTmp forKey:pOldNum];
+                
+                [pParent->m_OperationIndex AddData:iNewIndex WithData:pNewMatr->pValueCopy];
+            }
+            else
+            {
+                int IncIndex = [pNewNum intValue];
+                [pParent->m_OperationIndex AddData:IncIndex WithData:pNewMatr->pValueCopy];
+            }
+        }
+        
+        //pNewMatr->pQueue// copy queue
+//===================================================================================
+    }
+    
+    NSValue *pObj = [NSValue value:pNewMatr withObjCType:@encode(MATRIXcell)];
+    NSNumber *pVal = [NSNumber numberWithInt:iIndex];
+    [pMartixDic setObject:pObj forKey:pVal];
+
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (MATRIXcell *)GetMatrixAtIndex:(int)iIndex{
+    if(iIndex>iCount)return 0;
+    
+    BYTE iType=(*(pType+iIndex));
+    
+    MATRIXcell **fRet=0;
+    
+    if(iType==DATA_MATRIX){
+        fRet=(MATRIXcell **)(pData+iIndex);
+        return *fRet;
+    }
+    else return 0;
+}
+//------------------------------------------------------------------------------------------
 - (void *)GetDataAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
     
-    void *fRet=(pData+iIndex);
+    BYTE iType=(*(pType+iIndex));
+
+    void *fRet=0;
+    if(iType!=DATA_MATRIX && iType!=DATA_ID)
+        fRet=(pData+iIndex);
     
     return fRet;
 }
@@ -155,8 +279,14 @@
 - (id)GetIdAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
     
-    id *fRet=(id *)(pData+iIndex);
-    return *fRet;
+    BYTE iType=(*(pType+iIndex));
+
+    id *fRet=0;
+    if(iType==DATA_ID || iType==DATA_STRING){
+        fRet=(id *)(pData+iIndex);
+        return *fRet;
+    }
+    else return 0;
 }
 //------------------------------------------------------------------------------------------
 - (int)GetIncAtIndex:(int)iIndex{
@@ -165,7 +295,7 @@
 }
 //------------------------------------------------------------------------------------------
 - (unsigned char)GetTypeAtIndex:(int)iIndex{
-    unsigned char iRet=(*(pType+iIndex));
+    BYTE iRet=(*(pType+iIndex));
     return iRet;
 }
 //------------------------------------------------------------------------------------------
@@ -181,28 +311,54 @@
     
     int *TmpIndex=((int *)pDataInt+iIndex);
     
-    (*TmpIndex)--;
-    if(*TmpIndex==0)
-    {
-        unsigned char uType = (*(pType+iIndex));
+    if(*TmpIndex>0){
+        
+        (*TmpIndex)--;
+        if(*TmpIndex==0)
+        {
+            unsigned char uType = (*(pType+iIndex));
 
-        NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
+            NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
 
-        if(uType==DATA_ID){
-            NSString * pName = [pNamesOb objectForKey:pKey];
-            FractalString *pFStr = [pParent->DicStrings objectForKey:pName];
-            [pFStr release];
+            switch (uType) {
+                case DATA_ID:
+                {
+                    NSString * pName = [pNamesOb objectForKey:pKey];
+                    FractalString *pFStr = [pParent->DicStrings objectForKey:pName];
+                    
+                    [pFStr release];
+                    
+                    [pNamesOb removeObjectForKey:pKey];
+                }
+                break;
 
-            [pNamesOb removeObjectForKey:pKey];
+                case DATA_MATRIX:
+                {
+                    MATRIXcell *pMatr=[pParent->ArrayPoints GetMatrixAtIndex:iIndex];
+                    
+                    [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueCopy];
+                    [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueLink];
+                    
+                    NSNumber *pVal = [NSNumber numberWithInt:pMatr->iIndexSelf];
+                    [pMartixDic removeObjectForKey:pVal];
+
+                    free(pMatr);
+                }
+                break;
+
+                case DATA_STRING:
+                    [pNamesValue removeObjectForKey:pKey];
+                
+                    break;
+
+                default:
+                    break;
+            }
+
+            iCountInArray--;
+            NSNumber *pNum=[NSNumber numberWithInt:iIndex];
+            [pFreeArray addObject:pNum];
         }
-        else if(uType==DATA_STRING){
-            [pNamesValue removeObjectForKey:pKey];
-//            [pNamesValue release];
-        }
-
-        iCountInArray--;
-        NSNumber *pNum=[NSNumber numberWithInt:iIndex];
-        [pFreeArray addObject:pNum];
     }
 }
 //------------------------------------------------------------------------------------------
@@ -235,8 +391,21 @@
     [m_pData appendBytes:&iLen length:sizeof(int)];
     [m_pData appendData:data];
 //--------------------------------------------------------------------------------
+    iLen = [pMartixDic count];
+    [m_pData appendBytes:&iLen length:sizeof(int)];
+
+    //сохраняем матрицы
+    NSEnumerator *Matr_enumerator = [pMartixDic objectEnumerator];
+    NSValue *pValueMatr;
+    
+    while ((pValueMatr = [Matr_enumerator nextObject])){
+        
+        MATRIXcell pMatr;
+        [pValueMatr getValue:&pMatr];
+        [self SaveMatrix:m_pData WithMatr:&pMatr];
+    }
 }
-//------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------
 -(void)PrepareLoadData{
     
     NSEnumerator *Key_enumerator = [pNamesOb keyEnumerator];
@@ -260,7 +429,7 @@
     while ((pNameKey = [Key_enumerator nextObject])) {
         
         NSString * pName = [pNamesValue objectForKey:pNameKey];
-        
+
         int iKey=[pNameKey intValue];
         id *fRet=((id *)(pData+iKey));
         
@@ -317,8 +486,65 @@
     
     if(pNamesValue!=nil)[pNamesValue release];
     pNamesValue = [[NSKeyedUnarchiver unarchiveObjectWithData:iv] retain];
+    
+    *iCurReadingPos += iLen;
+//--------------------------------------------------------------------------------
+    [pMartixDic removeAllObjects];
+    [m_pData getBytes:&iLen range:NSMakeRange( *iCurReadingPos, sizeof(int))];
+    *iCurReadingPos += sizeof(int);
+
+    for (int i=0; i<iLen; i++) {
+        
+        MATRIXcell *pMatr=(MATRIXcell *)malloc(sizeof(MATRIXcell));
+        [self InitMemoryMatrix:pMatr];
+
+        [self LoadMatrix:m_pData rpos:iCurReadingPos WithMatr:pMatr];
+        
+        NSValue *pObj = [NSValue value:pMatr withObjCType:@encode(MATRIXcell)];
+        NSNumber *pVal = [NSNumber numberWithInt:pMatr->iIndexSelf];
+        [pMartixDic setObject:pObj forKey:pVal];
+        
+        MATRIXcell **TmpLinkMatr=(MATRIXcell **)(pData+pMatr->iIndexSelf);
+        *TmpLinkMatr=pMatr;
+    }
 //--------------------------------------------------------------------------------
     [self PrepareLoadData];
+}
+//------------------------------------------------------------------------------------------
+- (void)LoadMatrix:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos WithMatr:(MATRIXcell *)pMatr{
+    
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pValueCopy];
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pValueLink];
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pQueue];
+
+    //тип струны.
+    NSRange Range = NSMakeRange( *iCurReadingPos, sizeof(BYTE));
+    [pMutData getBytes:&pMatr->TypeInformation range:Range];
+    *iCurReadingPos += sizeof(BYTE);
+    
+    //Имя-число струны.
+    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
+    [pMutData getBytes:&pMatr->NameInformation range:Range];
+    *iCurReadingPos += sizeof(short);
+
+    //индекс струны.
+    Range = NSMakeRange( *iCurReadingPos, sizeof(int));
+    [pMutData getBytes:&pMatr->iIndexSelf range:Range];
+    *iCurReadingPos += sizeof(int);
+}
+//------------------------------------------------------------------------------------------
+- (void)SaveMatrix:(NSMutableData *)pMutData WithMatr:(MATRIXcell *)pMatr{
+    
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pValueCopy];
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pValueLink];
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pQueue];
+
+    //тип струны.
+    [pMutData appendBytes:&pMatr->TypeInformation length:sizeof(BYTE)];
+    //Имя-число струны.
+    [pMutData appendBytes:&pMatr->NameInformation length:sizeof(short)];
+    //Индекс струны.
+    [pMutData appendBytes:&pMatr->iIndexSelf length:sizeof(int)];
 }
 //------------------------------------------------------------------------------------------
 - (void)dealloc
@@ -330,6 +556,8 @@
     
     [pNamesOb release];
     [pNamesValue release];
+    [pMartixDic release];
+    [pDicRename release];
 
     [super dealloc];
 }

@@ -53,80 +53,103 @@
 //------------------------------------------------------------------------------------------------------
 -(void)AddSmallCube:(FractalString *)pFParent{
     
+    MATRIXcell *pMatrObject=[ArrayPoints GetMatrixAtIndex:pFParent->m_iIndex];
+
+    //парент objects
     FractalString *pStrInfo=[[FractalString alloc]
-                             initWithName:@"Info" WithParent:pFParent WithContainer:self
-                             WithLink:NO];
+                             initWithName:@"Info" WithParent:pFParent WithContainer:self];
     
     [pStrInfo SetNameIcon:@"R.png"];
     pStrInfo->X=-180;
     pStrInfo->Y=-30;
-    pStrInfo->TypeInformation=STR_CONTAINER;
-    pStrInfo->NameInformation=NAME_K_INFO_WINDOW;
-
     
+    pStrInfo->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pStrInfo->m_iIndex WithData:pMatrObject->pValueCopy];
+    MATRIXcell *pMatrInfo=[ArrayPoints GetMatrixAtIndex:pStrInfo->m_iIndex];
+    pMatrInfo->TypeInformation=STR_COMPLEX;
+    pMatrInfo->NameInformation=NAME_SIMPLE;
+//--------------------------------------------------------------------------------------------------
     FractalString *pStrIngib=[[FractalString alloc]
-                            initWithName:@"StartActive" WithParent:pFParent WithContainer:self
-                               WithLink:NO];
+                            initWithName:@"StartActive" WithParent:pStrInfo WithContainer:self];
     
     [pStrIngib SetNameIcon:@"StartActivity.png"];
     pStrIngib->X=-400;
     pStrIngib->Y=130;
-    pStrIngib->TypeInformation=STR_CONTAINER;
-    pStrIngib->NameInformation=NAME_K_START;
+    
+    pStrIngib->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pStrIngib->m_iIndex WithData:pMatrInfo->pValueCopy];
+    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pStrIngib->m_iIndex];
+    pMatr->TypeInformation=STR_CONTAINER;
+    pMatr->NameInformation=NAME_K_START;
     
     FractalString *pStrButton=[[FractalString alloc]
-                            initWithName:@"Action" WithParent:pFParent WithContainer:self
-                                WithLink:NO];
+                            initWithName:@"Action" WithParent:pStrInfo WithContainer:self];
 
     [pStrButton SetNameIcon:@"ButtonAction.png"];
     pStrButton->X=-300;
     pStrButton->Y=130;
-    pStrButton->TypeInformation=STR_CONTAINER;
-    pStrButton->NameInformation=NAME_K_BUTTON_ENVENT;
+    
+    pStrButton->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pStrButton->m_iIndex WithData:pMatrInfo->pValueCopy];
+    pMatr=[ArrayPoints GetMatrixAtIndex:pStrButton->m_iIndex];
+    pMatr->TypeInformation=STR_CONTAINER;
+    pMatr->NameInformation=NAME_K_BUTTON_ENVENT;
 
 
     FractalString *pStrPlus=[[FractalString alloc]
-                            initWithName:@"Plus" WithParent:pFParent WithContainer:self
-                              WithLink:NO];
+                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
     
     [pStrPlus SetNameIcon:@"o_plus.png"];
     pStrPlus->X=-350;
     pStrPlus->Y=50;
-    pStrPlus->TypeInformation=STR_OPERATION;
-    pStrPlus->NameInformation=NAME_O_PLUS;
+    
+    pStrPlus->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pStrPlus->m_iIndex WithData:pMatrInfo->pValueCopy];
+    pMatr=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
+    pMatr->TypeInformation=STR_OPERATION;
+    pMatr->NameInformation=NAME_O_PLUS;
 
 
     FractalString *pStrVA=[[FractalString alloc]
-                        initWithName:@"A" WithParent:pFParent WithContainer:self
-                            WithLink:NO];
+                        initWithName:@"A" WithParent:pStrInfo WithContainer:self];
     
     [pStrVA SetNameIcon:@"A.png"];
     pStrVA->X=-420;
     pStrVA->Y=-30;
-    pStrVA->TypeInformation=STR_DATA;
-    pStrVA->NameInformation=NAME_V_FLOAT;
-
+    
+    pStrVA->m_iIndex=[ArrayPoints SetFloat:44.56];
+    [m_OperationIndex AddData:pStrVA->m_iIndex WithData:pMatrInfo->pValueCopy];
 
     FractalString *pStrVB=[[FractalString alloc]
-                           initWithName:@"B" WithParent:pFParent WithContainer:self
-                            WithLink:NO];
+                           initWithName:@"B" WithParent:pStrInfo WithContainer:self];
     
     [pStrVB SetNameIcon:@"B.png"];
     pStrVB->X=-350;
     pStrVB->Y=-70;
-    pStrVB->TypeInformation=STR_DATA;
-    pStrVB->NameInformation=NAME_V_FLOAT;
-
+    
+    pStrVB->m_iIndex=[ArrayPoints SetFloat:100.2];
+    [m_OperationIndex AddData:pStrVB->m_iIndex WithData:pMatrInfo->pValueCopy];
 
     FractalString *pStrVR=[[FractalString alloc]
-                           initWithName:@"R" WithParent:pFParent WithContainer:self
-                            WithLink:NO];
+                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
     
     [pStrVR SetNameIcon:@"R.png"];
     pStrVR->X=-280;
     pStrVR->Y=-30;
-    pStrVR->TypeInformation=STR_DATA;
-    pStrVR->NameInformation=NAME_V_FLOAT;    
+    
+    pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
+    [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
+
+
+    FractalString *pStrVT=[[FractalString alloc]
+                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
+    
+    [pStrVT SetNameIcon:@"R.png"];
+    pStrVT->X=-280;
+    pStrVT->Y=-160;
+    
+    pStrVT->m_iIndex=[ArrayPoints SetInt:123456];
+    [m_OperationIndex AddData:pStrVT->m_iIndex WithData:pMatrInfo->pValueCopy];
 }
 //------------------------------------------------------------------------------------------------------
 #define MAX_REZERV 200
@@ -141,21 +164,23 @@
 //------------------------------------------------------------------------------------------------------
 -(void)SetKernel{
     FractalString *pFStringZero=[[FractalString alloc]
-                                 initWithName:@"Zero" WithParent:nil WithContainer:self WithLink:NO];
-    pFStringZero->m_iIndex=[ArrayPoints SetOb:pFStringZero];
-////////////////////////////////////////////////////////////////////////////////////////////////////    
+                                 initWithName:@"Zero" WithParent:nil WithContainer:self];
+    pFStringZero->m_iIndex=[ArrayPoints SetMatrix:0];
+    [ArrayPoints IncDataAtIndex:pFStringZero->m_iIndex];
+    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pFStringZero->m_iIndex];
+////////////////////////////////////////////////////////////////////////////////////////////////////
     //zero point
-    int iZeroPoint=[ArrayPoints SetFloat:0.0f];//1
-    [ArrayPoints IncDataAtIndex:iZeroPoint];
+    int iZeroPoint=[ArrayPoints SetFloat:0];//1
+    [m_OperationIndex AddData:iZeroPoint WithData:pMatr->pValueLink];
 
     //delta time
     int iDeltaTime=[ArrayPoints SetFloat:0.0f];//2
-    [ArrayPoints IncDataAtIndex:iDeltaTime];
+    [m_OperationIndex AddData:iDeltaTime WithData:pMatr->pValueLink];
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     //резервируем индексы ядра
     for (int i=0; i<MAX_REZERV; i++) {
         int iIndexRezerv=[ArrayPoints SetFloat:0.0f];
-        [ArrayPoints IncDataAtIndex:iIndexRezerv];
+        [m_OperationIndex AddData:iIndexRezerv WithData:pMatr->pValueLink];
         iIndexMaxSys=iIndexRezerv;
     }
 }
@@ -165,35 +190,49 @@
     [self SetKernel];
     
     FractalString *pFStringZero = [self GetString:@"Zero"];
+    MATRIXcell *pZeroMatr=[ArrayPoints GetMatrixAtIndex:pFStringZero->m_iIndex];
     
     FractalString *pFStringEditor=[[FractalString alloc]
-                                   initWithName:@"Editor" WithParent:pFStringZero WithContainer:self
-                                    WithLink:NO];
+                                   initWithName:@"Editor" WithParent:pFStringZero WithContainer:self];
+    pFStringEditor->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pFStringEditor->m_iIndex WithData:pZeroMatr->pValueLink];
+    MATRIXcell *pMatrEditor=[ArrayPoints GetMatrixAtIndex:pFStringEditor->m_iIndex];
 ///////////////////////////////////////////
     FractalString *pFSCurrentCheck=[[FractalString alloc]
         initWithName:@"CurrentCheck" WithParent:pFStringEditor
-        WithContainer:self WithLink:NO];
-    
+        WithContainer:self];
+    pFSCurrentCheck->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pFStringEditor->m_iIndex WithData:pMatrEditor->pValueLink];
+    MATRIXcell *pMatrCheck=[ArrayPoints GetMatrixAtIndex:pFSCurrentCheck->m_iIndex];
+
     //для режимов
-    [m_OperationIndex AddData:[ArrayPoints SetInt:0] WithData:pFSCurrentCheck->pValueLink];
+    [m_OperationIndex AddData:[ArrayPoints SetInt:0] WithData:pMatrCheck->pValueLink];
     //для текущей полки
-    [m_OperationIndex AddData:[ArrayPoints SetInt:0] WithData:pFSCurrentCheck->pValueLink];
+    [m_OperationIndex AddData:[ArrayPoints SetInt:0] WithData:pMatrCheck->pValueLink];
 //струны на полке
     FractalString *pFSChelf=[[FractalString alloc]
             initWithName:@"ChelfStirngs" WithParent:pFStringEditor
-            WithContainer:self WithLink:NO];    
+            WithContainer:self];
+    pFSChelf->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pFSChelf->m_iIndex WithData:pMatrEditor->pValueLink];
+    MATRIXcell *pMatrChelf=[ArrayPoints GetMatrixAtIndex:pFSChelf->m_iIndex];
     
     for(int i=0;i<8;i++){//записываем имя струны на полке
         NSMutableString *ZeroString = [NSMutableString stringWithString:@"Objects"];
         
-        [m_OperationIndex AddData:[ArrayPoints SetName:ZeroString] WithData:pFSChelf->pValueLink];
+        int iIndexZeroName=[ArrayPoints SetName:ZeroString];
+        [m_OperationIndex AddData:iIndexZeroName WithData:pMatrChelf->pValueLink];
     }
 /////
-    [[FractalString alloc]
-        initWithName:@"DropBox" WithParent:pFStringEditor WithContainer:self WithLink:NO];
+    FractalString *pFSDropBox=[[FractalString alloc]
+        initWithName:@"DropBox" WithParent:pFStringEditor WithContainer:self];
+    pFSDropBox->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pFSDropBox->m_iIndex WithData:pMatrEditor->pValueLink];
 
     pFStringObjects=[[FractalString alloc]
-        initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self WithLink:NO];
+        initWithName:@"Objects" WithParent:pFStringEditor WithContainer:self];
+    pFStringObjects->m_iIndex=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pFStringObjects->m_iIndex WithData:pMatrEditor->pValueLink];
     
     [pFStringObjects SetNameIcon:@"EmptyPlace.png"];
 
@@ -209,8 +248,7 @@
 //------------------------------------------------------------------------------------------------------
 -(void)AddObject{
     
-    [[FractalString alloc] initWithName:@"Prop" WithParent:pFStringObjects
-                          WithContainer:self WithLink:NO];
+    [[FractalString alloc] initWithName:@"Prop" WithParent:pFStringObjects WithContainer:self];
 }
 //------------------------------------------------------------------------------------------------------
 -(NSString *)GetRndName{
@@ -344,8 +382,11 @@ repeate:
 //-------------------------------------------------------------------------------------------
     FractalString *pDestStr = [[FractalString alloc] init:self];
     
-    pDestStr->TypeInformation=SourceStr->TypeInformation;
-    pDestStr->NameInformation=SourceStr->NameInformation;
+    MATRIXcell *pMatrDest=[ArrayPoints GetMatrixAtIndex:pDestStr->m_iIndex];
+    MATRIXcell *pMatrSource=[ArrayPoints GetMatrixAtIndex:SourceStr->m_iIndex];
+
+    pMatrSource->TypeInformation=pMatrDest->TypeInformation;
+    pMatrSource->NameInformation=pMatrDest->NameInformation;
     
     [pDestStr->strUID release];
     pDestStr->strUID = [[NSString alloc] initWithString:SourceStr->strUID];
@@ -359,14 +400,12 @@ repeate:
     [pDestStr SetParent:pParent];
     [DicStrings setObject:pDestStr forKey:pDestStr->strUID];
 //-------------------------------------------------------------------------------------------
-    [self CopyData:SourceStr->pValueCopy DestData:pDestStr->pValueCopy
+    [self CopyData:pMatrSource->pValueCopy DestData:pMatrDest->pValueCopy
                dic:pDic SourceContainer:SourceContainer];
-    [self CopyData:SourceStr->pValueLink DestData:pDestStr->pValueLink
+    [self CopyData:pMatrSource->pValueLink DestData:pMatrDest->pValueLink
                dic:pDic SourceContainer:SourceContainer];
 
-    [self CopyData:SourceStr->pEnters DestData:pDestStr->pEnters
-               dic:pDic SourceContainer:SourceContainer];
-    [self CopyData:SourceStr->pExits  DestData:pDestStr->pExits
+    [self CopyData:pMatrSource->pQueue DestData:pMatrDest->pQueue
                dic:pDic SourceContainer:SourceContainer];
 //-------------------------------------------------------------------------------------------
     int *Data=(*SourceStr->pChildString);
@@ -433,8 +472,12 @@ repeate:
                                        GetIdAtIndex:index];
                 
                 if(strDel->m_iIndex==pFrStr->m_iIndex){//нашли себя в струне парента
-                    
-                    [self DelChilds:pFrStr];
+                                        
+                    if(strDel->pAssotiation!=nil && [strDel->pAssotiation count]>1){
+                        
+                        [strDel->pAssotiation removeObjectForKey:strDel->strUID];
+                    }
+                    else [self DelChilds:pFrStr];
                     
                     [m_OperationIndex RemoveDataAtIndex:i WithData:(Data)];
                     
@@ -464,10 +507,14 @@ END:;
     if(StartString==nil)return;
     //stack
     FractalString *pCurString=StartString;
+    MATRIXcell *pMatrChelf=[ArrayPoints GetMatrixAtIndex:pCurString->m_iIndex];
+
+    //    int a,y;
+    //    __asm__("mov %0, %1, ASR #1" : "=r" (y) : "r" (a));
     
 LOOP:
     
-    switch (pCurString->TypeInformation)
+    switch (pMatrChelf->TypeInformation)
     {
         case STR_OPERATION:
             //update

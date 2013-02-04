@@ -217,9 +217,9 @@
 //------------------------------------------------------------------------------------------------------
 -(void)loadFileFailedWithError{
     
-//    if(m_iMode==UPDATE_INFO){        
-//        bNeedUpload=YES;
-//    }
+    if(m_iMode==UPDATE_INFO){//если в DropBox'е нет INFO файла
+        bNeedUpload=YES;
+    }
 
     bDropBoxWork=NO;
     bErrorDownLoad=YES;
@@ -470,8 +470,6 @@ Repeate:;
 
                 pLoadFstr->X=pTmpHead->X;
                 pLoadFstr->Y=pTmpHead->Y;
-                pLoadFstr->TypeInformation=pTmpHead->TypeInformation;
-                pLoadFstr->NameInformation=pTmpHead->NameInformation;
                 pLoadFstr->m_iFlags=pTmpHead->iFlags;
 
                 [pFstrRez addObject:pLoadFstr];

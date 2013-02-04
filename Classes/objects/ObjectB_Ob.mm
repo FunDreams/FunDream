@@ -11,6 +11,7 @@
 #import "Ob_IconDrag.h"
 #import "Ob_Editor_Interface.h"
 #import "Ob_Arrow.h"
+#import "Ob_Editor_Num.h"
 
 @implementation ObjectB_Ob
 //------------------------------------------------------------------------------------------------------
@@ -57,6 +58,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
+
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iTypeStr,m_strName,@"m_iTypeStr")];
     
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
@@ -95,6 +98,11 @@
         ASSIGN_STAGE(@"Stop", @"Idle:",nil)
         ASSIGN_STAGE(@"ActionFlick",@"ActionFlick:",nil);
     [self END_QUEUE:pProc name:@"Flick"];    
+
+    pProc = [self START_QUEUE:@"Wait"];
+        ASSIGN_STAGE(@"Stop", @"Idle:",nil)
+        ASSIGN_STAGE(@"Wait",@"Wait:",nil);
+    [self END_QUEUE:pProc name:@"Wait"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -115,6 +123,7 @@
     m_vEndPos=m_pCurPosition;
     m_vEndPos.y-=1000;
     m_bStartPush=NO;
+    SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
     
     if(m_bFlicker==YES)[self setFlick];
     else [self setUnFlick];
@@ -163,6 +172,26 @@
     mColorBack.alpha=0.5f*cos(m_fPhase)+0.5f;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)Wait:(Processor_ex *)pProc{
+    m_fWaitTime+=DELTA;
+    
+    if(m_fWaitTime>1){
+        int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:pString->m_iIndex];
+        
+        if(iType==DATA_FLOAT){
+            Ob_Editor_Num *EditorNum =  UNFROZE_OBJECT(@"Ob_Editor_Num",@"Editor_Num",nil);
+
+            float *fValue=(float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pString->m_iIndex];
+            
+            EditorNum->pObInd->m_fCurValue=fValue;
+            [EditorNum->pObInd UpdateNum];
+        }
+
+        
+        SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Proc:(Processor_ex *)pProc{
     
 //    if(m_bDrag==YES){
@@ -183,6 +212,9 @@
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     int *pMode=GET_INT_V(@"m_iMode");
+    
+    SET_STAGE_EX(NAME(self), @"Wait", @"Wait");
+    m_fWaitTime=0;
 
     LOCK_TOUCH;
     
@@ -221,7 +253,6 @@
     {
         m_bDoubleTouch=YES;
 
-        DEL_CELL(@"DoubleTouchFractalString");
         SET_CELL(LINK_ID_V(pString,@"DoubleTouchFractalString"));
 
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"DoubleTouchObject");
@@ -236,6 +267,8 @@
 -(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn{
         
     int *pMode=GET_INT_V(@"m_iMode");
+    SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
+
     if(*pMode==0){
         
         if(m_bDrag==YES && m_bStartPush==YES){
@@ -302,6 +335,7 @@
 - (void)touchesMovedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
 //    if(m_bLookTouch==YES)LOCK_TOUCH;
+    SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
 
     if(m_bStartPush==NO)[self SetUnPush];
     
@@ -314,6 +348,7 @@
 - (void)EndTouch{
         
     bool bUpdate=NO;
+    SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
     
     if(m_bStartPush==YES)
         PLAY_SOUND(@"drop.wav");
@@ -403,33 +438,110 @@ Exit:
     [self EndTouch];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)drawText:(NSString*)theString AtX:(float)X Y:(float)Y {
+    
+    glLoadIdentity();
+    glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
+    
+    int iFontSize=20;
+    // Set up texture
+    Texture2D* statusTexture = [[Texture2D alloc] initWithString:theString
+                                                      dimensions:CGSizeMake(mWidth-10, iFontSize+4) alignment:UITextAlignmentLeft
+                                                        fontName:@"Helvetica" fontSize:iFontSize];
+    
+    statusTexture->_color=Color3DMake(0, 0, 0, 1);
+    
+    // Bind texture
+    glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
+    // Draw
+    [statusTexture drawAtPoint:CGPointMake(X/*+m_fOffsetText*/,Y)];
+    
+    [statusTexture release];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
 
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+    switch (m_iTypeStr)
+    {
+        case DATA_FLOAT:
+        case DATA_INT:
+        {
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+            
+            glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+                         m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
+                         m_pCurPosition.z);
+            
+            glRotatef(m_pCurAngle.z, 0, 0, 1);
+            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+            
+            [self SetColor:mColorBack];
+            
+            glBindTexture(GL_TEXTURE_2D, -1);
+            
+            if(m_bBack==YES){
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            }
+            
+            //   glBindTexture(GL_TEXTURE_2D, mTextureId);
+            
+            glScalef(0.9f,0.9f,m_pCurScale.z);
+            [self SetColor:mColor];
+            
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            
+            NSMutableString *pStr=nil;
+            
+            if(m_iTypeStr==DATA_FLOAT){
+                float *Tmpf=(float *)[m_pObjMng->pStringContainer->
+                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                
+                pStr = [NSMutableString stringWithFormat:@"%1.2f",*Tmpf];
+            }
+            else if(m_iTypeStr==DATA_INT){
+                int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
 
-	glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
-				 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
-				 m_pCurPosition.z);
+                pStr = [NSMutableString stringWithFormat:@"%d",*Tmpi];
+            }
+            [self drawText:pStr AtX:m_pCurPosition.x Y:m_pCurPosition.y];
+//draw text======================================================================================
+//===============================================================================================
+        }
+            break;
+            
+        case DATA_MATRIX:
+            
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+            
+            glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+                         m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
+                         m_pCurPosition.z);
+            
+            glRotatef(m_pCurAngle.z, 0, 0, 1);
+            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+            
+            [self SetColor:mColorBack];
+            
+            glBindTexture(GL_TEXTURE_2D, -1);
+            
+            if(m_bBack==YES){
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            }
+            
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
+            
+            glScalef(0.9f,0.9f,m_pCurScale.z);
+            [self SetColor:mColor];
+            
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
 
-    glRotatef(m_pCurAngle.z, 0, 0, 1);
-    glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
-
-    [self SetColor:mColorBack];
-
-    glBindTexture(GL_TEXTURE_2D, -1);
-
-    if(m_bBack==YES){
-        glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            break;
     }
-
-    glBindTexture(GL_TEXTURE_2D, mTextureId);
-    
-	glScalef(0.9f,0.9f,m_pCurScale.z);
-    [self SetColor:mColor];
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{

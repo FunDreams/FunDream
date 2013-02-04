@@ -45,6 +45,10 @@
     
     FractalString *pString;
     GObject *pObEmptyPlace;
+    
+    int m_iTypeStr;
+    
+    float m_fWaitTime;
 }
 
 /** Инициализирует объект **/
