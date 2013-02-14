@@ -92,12 +92,12 @@
     Point.x=m_pCurPosition.x;
     Point.y=m_pCurPosition.y;
 
-    GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
+ //   GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
     bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
 
-    if([pObTash Intersect:Point] &&  pNeedUpload!=0 && pMode!=0){
+    if([pObTash Intersect:Point] &&  pNeedUpload!=0 && pMode!=M_MOVE){
 
-        if(*pMode==3){
+        if(*pMode==M_DROP_BOX){
             switch (pInsideString->m_iFlags){
                 case DEAD_STRING:{
                     
@@ -148,7 +148,8 @@
     }
     else
     {
-        if(pMode!=0 && *pMode==3){
+        if(pMode!=0 && *pMode==M_DROP_BOX)
+        {
             if(m_pCurPosition.y<202 && pInsideString!=nil){
          //       if(pParent!=pInsideString){//сохранение в DropBox
 
@@ -156,7 +157,9 @@
                     {                        
                         if(pInsideString->m_iFlags & (SYNH_AND_LOAD|ONLY_IN_MEM)){
                             FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                    WithParent:pDropBoxStr WithContainer:m_pObjMng->pStringContainer
+                                    WithParent:pDropBoxStr
+                                    WithContainer:m_pObjMng->pStringContainer
+                                    WithSourceContainer:m_pObjMng->pStringContainer
                                                         WithLink:NO];
                             
                             [self SetPos:pNewString];
@@ -192,36 +195,40 @@
         }
         else
         {
-            bool bInside=NO;
-            if(pObGroup!=nil)//копирование струны в пространстве
-            {
-                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
-                {
-                    if([pObob Intersect:Point])
-                    {
-                        pParent=pObob->pString;
-                        bInside=YES;
-                        
-                        goto Exit;
-                    }
-                }
-            }
+//            bool bInside=NO;
+//            if(pObGroup!=nil)//копирование струны в пространстве
+//            {
+//                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+//                {
+//                    if([pObob Intersect:Point])
+//                    {
+//                        pParent=pObob->pString;
+//                        bInside=YES;
+//                        
+//                        goto Exit;
+//                    }
+//                }
+//            }
 Exit:
             if(m_pCurPosition.y<202 && pInsideString!=nil &&
                ![pInsideString->strUID isEqualToString:@"Objects"]){
 
-                if(pParent!=pInsideString){
+                bool bLink=NO;
+                
+                if(*pMode==M_LINK)bLink=YES;
+                
                     FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
                                 WithParent:pParent WithContainer:m_pObjMng->pStringContainer
-                                                WithLink:NO];
+                                                WithSourceContainer:m_pObjMng->pStringContainer
+                                                WithLink:bLink];
 
-                    if(bInside==YES){
-                        
-                        pNewString->X=-440;
-                        pNewString->Y=170;
-                    }
-                    else [self SetPos:pNewString];
-                }
+//                    if(bInside==YES){
+//                        
+//                        pNewString->X=-440;
+//                        pNewString->Y=170;
+//                    }
+//                    else
+                        [self SetPos:pNewString];
             }
             else if(m_pCurPosition.y<202){
 

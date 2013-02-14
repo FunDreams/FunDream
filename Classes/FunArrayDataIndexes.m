@@ -23,6 +23,8 @@
     InfoStr->mCount=0;
     InfoStr->mCopasity=0;
     InfoStr->mCountAdd=1;
+    InfoStr->ParentMatrix=0;
+    InfoStr->ParentMatrix=0;
 }
 //------------------------------------------------------------------------------------------------------
 - (int **)InitMemory{
@@ -85,32 +87,37 @@
 
     int *StartData=((*pData)+SIZE_INFO_STRUCT);
 
+    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iDataValue];
+    if(iType==DATA_MATRIX){
+        [self SetParentMatrix:iDataValue WithData:pData];
+    }
+
     memcpy(StartData+iIndex+1, StartData+iIndex, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
     memcpy(StartData+iIndex, &iDataValue, sizeof(int));
     InfoStr->mCount++;
     [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
-- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
-    
-    InfoArrayValue *InfoStrSource=(InfoArrayValue *)(*pSourceData);
-    InfoArrayValue *InfoStrDest=(InfoArrayValue *)(*pDestData);
-
-    *InfoStrDest=*InfoStrSource;
-
-    [self SetCopasity:InfoStrSource->mCopasity WithData:pDestData];
-    
-    int *StartDataSource=((*pSourceData)+SIZE_INFO_STRUCT);
-    int *StartDataDest=((*pDestData)+SIZE_INFO_STRUCT);
-    
-    memcpy(StartDataDest, StartDataSource, sizeof(int)*(InfoStrSource->mCount));
-
-    for (int i=0; i<InfoStrDest->mCount; i++) {
-        
-        int iIndex=StartDataDest[i];
-        [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
-    }
-}
+//- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
+//    
+//    InfoArrayValue *InfoStrSource=(InfoArrayValue *)(*pSourceData);
+//    InfoArrayValue *InfoStrDest=(InfoArrayValue *)(*pDestData);
+//
+//    *InfoStrDest=*InfoStrSource;
+//
+//    [self SetCopasity:InfoStrSource->mCopasity WithData:pDestData];
+//    
+//    int *StartDataSource=((*pSourceData)+SIZE_INFO_STRUCT);
+//    int *StartDataDest=((*pDestData)+SIZE_INFO_STRUCT);
+//    
+//    memcpy(StartDataDest, StartDataSource, sizeof(int)*(InfoStrSource->mCount));
+//
+//    for (int i=0; i<InfoStrDest->mCount; i++) {
+//        
+//        int iIndex=StartDataDest[i];
+//        [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
+//    }
+//}
 //------------------------------------------------------------------------------------------
 - (int)FindIndex:(int)IndexValue WithData:(int **)pData{
     int iRet=-1;
@@ -129,8 +136,22 @@
     return iRet;
 }
 //------------------------------------------------------------------------------------------
-- (void)AddData:(int)IndexValue WithData:(int **)pData{
+- (void)SetParentMatrix:(int)IndexValue WithData:(int **)pData{
     
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    
+    MATRIXcell *TmpMatr=[m_pParent->ArrayPoints GetMatrixAtIndex:IndexValue];
+    InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*TmpMatr->pLinks);
+    
+    [self Extend:TmpMatr->pLinks];
+    
+    int *StartDataLinks=((*TmpMatr->pLinks)+SIZE_INFO_STRUCT);
+    StartDataLinks[InfoStrLinks->mCount]=InfoStr->ParentMatrix->iIndexSelf;
+    InfoStrLinks->mCount++;
+}
+//------------------------------------------------------------------------------------------
+- (void)AddData:(int)IndexValue WithData:(int **)pData{
+        
     [self Extend:pData];
     
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
@@ -138,30 +159,152 @@
     int *StartData=((*pData)+SIZE_INFO_STRUCT);
 
     StartData[InfoStr->mCount]=IndexValue;
+    
+    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:IndexValue];
+    if(iType==DATA_MATRIX){
+        [self SetParentMatrix:IndexValue WithData:pData];
+    }
+
     InfoStr->mCount++;
     [m_pParent->ArrayPoints IncDataAtIndex:IndexValue];
 }
 //------------------------------------------------------------------------------------------
-- (void)RemoveDataAtIndex:(int)iIndex WithData:(int **)pData{
+- (bool)CheckHierarhy:(NSMutableDictionary *)DataLoops
+             RootMatr:(MATRIXcell *)pRootMatr SearchCurIndex:(int)iIndex{
+    
+    bool bRez=NO;
+    InfoArrayValue *InfoStr;
+    int *StartData;
+    
+//    for (int k=0; k<2; k++) {
+    
+//        if(k==0)
+//        {
+            InfoStr=(InfoArrayValue *)(*pRootMatr->pValueCopy);
+            StartData=((*pRootMatr->pValueCopy)+SIZE_INFO_STRUCT);
+//        }
+//        else
+//        {
+//            InfoStr=(InfoArrayValue *)(*pRootMatr->pValueLink);
+//            StartData=((*pRootMatr->pValueLink)+SIZE_INFO_STRUCT);
+//        }
+
+        for (int i=0; i<InfoStr->mCount; i++) {
+            
+            int iTmpIndex=StartData[i];
+            
+            if(iIndex==iTmpIndex){
+                bRez=YES;
+                break;
+            }
+
+            int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iTmpIndex];
+            if(iType==DATA_MATRIX){
+
+                NSNumber *pNum=[NSNumber numberWithInt:iTmpIndex];
+                NSNumber *TmpNum=[DataLoops objectForKey:pNum];
+
+                if(TmpNum==nil)
+                {
+                    MATRIXcell *pMatrDeep=[m_pParent->ArrayPoints GetMatrixAtIndex:iTmpIndex];
+                    [DataLoops setObject:pNum forKey:pNum];
+                    bRez=[self CheckHierarhy:DataLoops RootMatr:pMatrDeep SearchCurIndex:iIndex];
+                    if(bRez==YES)break;
+                }
+            }
+        }
+//    }
+    
+    return bRez;
+}
+//------------------------------------------------------------------------------------------
+- (void)RemoveDataAtPlace:(int)iPlace WithData:(int **)pData{
     
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
-    if(iIndex+1>InfoStr->mCount)return;
+    if(iPlace+1>InfoStr->mCount)return;
     
     int *StartData=((*pData)+SIZE_INFO_STRUCT);
 
-    if(InfoStr->mFlags && F_ORDER)
-    {
-        if(iIndex+1<InfoStr->mCount)
-            memcpy(StartData+iIndex, StartData+iIndex+1, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
+    int iTmpIndex=StartData[iPlace];
+//проверяем вложеные сслылки на удаляемую матрицу================================================
+    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iTmpIndex];
+    if(iType==DATA_MATRIX){
+
+        MATRIXcell *pCurrentMatrix=InfoStr->ParentMatrix;
+        int iIndexCurrentMatr=pCurrentMatrix->iIndexSelf;
+        
+        MATRIXcell *TmpMatrForDel=[m_pParent->ArrayPoints GetMatrixAtIndex:iTmpIndex];
+        InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*TmpMatrForDel->pLinks);
+        int *StartDataLink=((*TmpMatrForDel->pLinks)+SIZE_INFO_STRUCT);
+        
+        for (int i=0; i<InfoStr->mCount; i++) {
+            int itmpIndex = StartDataLink[i];
+            
+            if(itmpIndex==iIndexCurrentMatr)
+            {
+                memcpy(StartDataLink+i, StartDataLink+(InfoStrLinks->mCount-1), sizeof(int));
+                InfoStrLinks->mCount--;
+                break;
+            }
+        }
+//delete index
+        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
+        
+        if(InfoStr->mFlags && F_ORDER)
+        {
+            if(iPlace+1<InfoStr->mCount)
+                memcpy(StartData+iPlace, StartData+iPlace+1, sizeof(int)*(InfoStr->mCount-(iPlace+1)));
+        }
+        else
+        {
+            if(iPlace+1<InfoStr->mCount)
+                memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+        }
+        
+        InfoStr->mCount--;
+///////////////////////////////////////////////////
+        if(InfoStrLinks->mCount>0){
+            
+            MATRIXcell *pMatrZero=[m_pParent->ArrayPoints GetMatrixAtIndex:0];
+            
+            NSMutableDictionary *DataLoops = [[NSMutableDictionary alloc] init];
+            bool Rez=[self CheckHierarhy:DataLoops RootMatr:pMatrZero SearchCurIndex:iTmpIndex];
+            [DataLoops release];
+            
+            if(Rez==NO){//удалаем все ссылки на данную струну из матрицы
+                
+                for (int i=0; i<InfoStrLinks->mCount; i++) {
+                    int iInsideIndex = StartDataLink[i];//индекс матрицы парента
+                    
+                    MATRIXcell *pMatr=[m_pParent->ArrayPoints GetMatrixAtIndex:iInsideIndex];
+
+                    int iRet=-1;
+//                    iRet=[self FindIndex:iTmpIndex WithData:pMatr->pValueLink];
+//                    if(iRet>-1)[self RemoveDataAtPlace:iRet WithData:pMatr->pValueLink];
+                    iRet=[self FindIndex:iTmpIndex WithData:pMatr->pValueCopy];
+                    if(iRet>-1)[self RemoveDataAtPlace:iRet WithData:pMatr->pValueCopy];
+                }
+            }
+        }
     }
+//================================================================================================
     else
     {
-        if(iIndex+1<InfoStr->mCount)
-            memcpy(StartData+iIndex, StartData+(InfoStr->mCount-1), sizeof(int));
+        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
+
+        if(InfoStr->mFlags && F_ORDER)
+        {
+            if(iPlace+1<InfoStr->mCount)
+                memcpy(StartData+iPlace, StartData+iPlace+1, sizeof(int)*(InfoStr->mCount-(iPlace+1)));
+        }
+        else
+        {
+            if(iPlace+1<InfoStr->mCount)
+                memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+        }
+        
+        InfoStr->mCount--;
     }
-    
-    InfoStr->mCount--;
-    [m_pParent->ArrayPoints DecDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData{

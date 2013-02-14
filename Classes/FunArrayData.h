@@ -8,12 +8,11 @@
 #define DATA_ZERO           0//пустая струна
 #define DATA_ID             1//струна, объект для отображения информации
 #define DATA_MATRIX         2//матрица данных
-#define DATA_LINK           3//ссылка на данные
-#define DATA_FLOAT          4
-#define DATA_INT            5
-#define DATA_STRING         6
-#define DATA_TEXTURE        7
-#define DATA_SOUND          8
+#define DATA_FLOAT          3
+#define DATA_INT            4
+#define DATA_STRING         5
+#define DATA_TEXTURE        6
+#define DATA_SOUND          7
 
 #import <Foundation/Foundation.h>
 @class StringContainer;
@@ -24,6 +23,7 @@
 #define STR_OPERATION       1//объект-операция
 #define STR_CONTAINER       2//объект со спецефическими свойствами
 #define STR_COMPLEX         3//составной объект
+#define STR_ARRAY           4//матрица массив
 //-------------------------------------------------------------------------------------------------
 //имена ячеек матрицы
 #define NAME_SIMPLE               0
@@ -36,11 +36,14 @@
 typedef struct{
 //MATRIX 28.01.2013
 //матрица универсальных данных---------------------------------------------------------------------
-    int **pValueCopy;//int,float,string,(array), указатели и матрицы.
-    int **pValueLink;
+    //    int **pValueLink;
+    
+    int **pLinks;//индексы для указаний родителей                   (Parents)
+    int **pValueCopy;//int,float,string,(array), указатели и матрицы. (childs)
+
     //последовательности
     int **pQueue;//индексы для последовательности
-    
+
     //типы
     BYTE TypeInformation;//тип матрицы.
     short NameInformation;//Имя-число матрицы.
@@ -51,10 +54,15 @@ typedef struct{
 @interface FunArrayData : NSObject{
 @public
     StringContainer *pParent;//контейнер родитель
+
     float *pData;//единый массив данных
     int *pDataInt;//данные о копиях ячейки
     BYTE *pType;//тип данных
-    
+
+    float *pDataSrc;//исходный массив данных при копировании
+    int *pDataIntSrc;//исходный массив данных при копировании
+    BYTE *pTypeSrc;//тип данных исходника
+
     int iCount;//ёмкость массива
     int iCountInc;//шаг расширения массива
     int iCountInArray;//количесво элементов внутри массива
@@ -65,11 +73,13 @@ typedef struct{
     NSMutableDictionary *pNamesValue;//словарь с простыми именами
     NSMutableDictionary *pMartixDic;//словарь с ячейками матрицы
     NSMutableDictionary *pDicRename;//словарь для переименования индексов
+    NSMutableDictionary *DicAllAssociations;//для списков ссылок
 }
 
 -(id)initWithCopasity:(int)iCopasity;
 - (void)Increase:(int)CountInc;
 - (int)GetFree;
+- (void)SetCellFreeAtIndex:(int)iIndex;
 
 - (void)InitMemoryMatrix:(MATRIXcell *)pMatr;
 
@@ -81,6 +91,7 @@ typedef struct{
 
 - (void)IncDataAtIndex:(int)iIndex;
 - (void)DecDataAtIndex:(int)iIndex;
+- (int)GetCountAtIndex:(int)iIndex;
 
 - (MATRIXcell *)GetMatrixAtIndex:(int)iIndex;
 - (void *)GetDataAtIndex:(int)iIndex;
@@ -97,6 +108,8 @@ typedef struct{
 
 - (void)Reserv:(int)iCountTmp;
 -(void)PrepareLoadData;
+
+- (void)SetSrc:(FunArrayData *)pSourceData;
 
 - (void)dealloc;
 

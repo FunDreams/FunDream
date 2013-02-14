@@ -13,6 +13,7 @@
 #import "ObB_DropBox.h"
 #import "Ob_GroupButtons.h"
 #import "DropBoxMng.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation Ob_EmtyPlace
 //------------------------------------------------------------------------------------------------------
@@ -119,7 +120,7 @@
 
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrChelf->m_iIndex];
 
-        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
                                GetIdAtIndex:index];
 
@@ -171,28 +172,28 @@
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
 
     int *pMode=GET_INT_V(@"m_iMode");
-
+    
     if(m_bStartMove==NO && m_bStartPush==YES){
-
+        
         Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
                                         SET_FLOAT_V(54,@"mWidth"),
                                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                                         SET_BOOL_V(YES,@"bFromEmpty"),
                                         SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                                         SET_STRING_V(pStrInside->sNameIcon,@"m_pNameTexture"));
-
+        
         pOb->pInsideString=pStrInside;
         m_bStartMove=YES;
-
+        
         int TmpIndexTexture=-1;
         GET_TEXTURE(TmpIndexTexture, @"EmptyPlace.png");
-
+        
         if(mTextureId!=TmpIndexTexture && pStrInside!=nil){
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pStrInside,@"DragObject"))];
             [m_pObjMng->pMegaTree SetCell:(SET_BOOL_V(YES,@"FromPlace"))];
             
-
-            if(pMode!=0 && *pMode==0){
+            
+            if(pMode!=0 && *pMode==M_MOVE){
                 [self SetEmpty];
             }
         }
@@ -207,13 +208,26 @@
 //}
 //------------------------------------------------------------------------------------------------------
 - (void)SetNameStr:(FractalString *)StrTmp{
-    
+
     FractalString *pChelf = [m_pObjMng->pStringContainer GetString:@"ChelfStirngs"];
 
     if(pChelf!=nil){
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
         
-        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        InfoArrayValue *pInfo=(InfoArrayValue *)(*pMatr->pValueCopy);
+        
+        for (int i=0; i<pInfo->mCount; i++) {
+            
+            if(i==m_iCurIndex)continue;
+            int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[i];
+            NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
+                                    GetIdAtIndex:index];
+            
+            if([pName isEqualToString:StrTmp->strUID])
+                [pName setString:@"Objects"];
+        }
+        
+        int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
                                GetIdAtIndex:index];
 
@@ -227,7 +241,7 @@
     if(pChelf!=nil){
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
 
-        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[m_iCurIndex];
+        int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[m_iCurIndex];
         NSMutableString *pName=[m_pObjMng->pStringContainer->ArrayPoints
                                 GetIdAtIndex:index];
         [pName setString:@"Objects"];
@@ -235,7 +249,6 @@
 
     pStrInside = [m_pObjMng->pStringContainer GetString:@"Objects"];
     GET_TEXTURE(mTextureId, @"EmptyPlace.png");
-//    pStrInside->iIndexIcon=mTextureId;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Click{
@@ -245,7 +258,7 @@
     if(pStrCheck!=nil){
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
 
-        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
+        int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
         int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                             GetDataAtIndex:index];
         (*FChelf)=(float)m_iCurIndex;
@@ -308,7 +321,7 @@
             DEL_CELL(@"DragObject");
             DEL_CELL(@"FromPlace");
         }
-        else if(pObObTmpStr!=nil && pMode!=0 && (*pMode)!=0){
+        else if(pObObTmpStr!=nil && pMode!=0 && (*pMode)!=M_MOVE){
 
             pStrInside = pObObTmpStr;
             GET_TEXTURE(mTextureId, pObObTmpStr->sNameIcon);

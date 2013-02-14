@@ -58,9 +58,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-
-    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iTypeStr,m_strName,@"m_iTypeStr")];
     
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iTypeStr,m_strName,@"m_iTypeStr")];
+
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bFlicker,m_strName,@"m_bFlicker")];
@@ -126,7 +126,49 @@
     SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
     
     if(m_bFlicker==YES)[self setFlick];
-    else [self setUnFlick];
+    else [self setUnFlick];    
+}
+//------------------------------------------------------------------------------------------------------
+- (void)UpdateTextureOnFace{
+    
+    if(pString==nil)return;
+    
+    switch (m_iTypeStr)
+    {
+        case DATA_FLOAT:
+        case DATA_INT:
+        {
+            NSString *pStr=nil;
+            
+            if(m_iTypeStr==DATA_FLOAT){
+                float *Tmpf=(float *)[m_pObjMng->pStringContainer->
+                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                
+                pStr = [NSString stringWithFormat:@"%1.2f",*Tmpf];
+            }
+            else if(m_iTypeStr==DATA_INT){
+                int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                                  ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                
+                pStr = [NSString stringWithFormat:@"%d",*Tmpi];
+            }
+            
+            if(![StrValueOnFace isEqualToString:pStr])
+            {
+                [StrValueOnFace release];
+                StrValueOnFace=[[NSString stringWithString:pStr] retain];
+                
+                int iFontSize=20;
+                TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
+                        Tex:TextureIndicatorValue fSize:iFontSize
+                        dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+            }
+        }
+            
+            
+        default:
+            break;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
@@ -178,13 +220,12 @@
     if(m_fWaitTime>1){
         int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:pString->m_iIndex];
         
-        if(iType==DATA_FLOAT){
-            Ob_Editor_Num *EditorNum =  UNFROZE_OBJECT(@"Ob_Editor_Num",@"Editor_Num",nil);
-
-            float *fValue=(float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:pString->m_iIndex];
+        if(iType==DATA_FLOAT || iType==DATA_INT){
             
-            EditorNum->pObInd->m_fCurValue=fValue;
-            [EditorNum->pObInd UpdateNum];
+            Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+            
+            pInterface->iIndexForNum=pString->m_iIndex;
+            [pInterface SetMode:M_EDIT_NUM];
         }
 
         
@@ -210,7 +251,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    
+
     int *pMode=GET_INT_V(@"m_iMode");
     
     SET_STAGE_EX(NAME(self), @"Wait", @"Wait");
@@ -230,7 +271,7 @@
     {
         if(m_bDrag==YES)
         {
-            if(*pMode==4)
+            if(*pMode==M_CONNECT)
             {
                 [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"StartConnection"))];
             }
@@ -269,7 +310,7 @@
     int *pMode=GET_INT_V(@"m_iMode");
     SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
 
-    if(*pMode==0){
+    if(*pMode==M_MOVE){
         
         if(m_bDrag==YES && m_bStartPush==YES){
 
@@ -292,7 +333,7 @@
     }
     else
     {
-        if(*pMode==5){
+        if(*pMode==M_CONNECT){
             
             if(m_bStartMove==NO  && m_bStartTouch==YES){
 
@@ -305,6 +346,7 @@
         {
             if(m_bStartMove==NO && m_bStartTouch==YES){
 
+
                 [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
 
                 Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
@@ -315,7 +357,6 @@
                                SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
 
                 pOb->pInsideString=pString;
-
                 m_bStartMove=YES;
             }
         }
@@ -353,7 +394,7 @@
     if(m_bStartPush==YES)
         PLAY_SOUND(@"drop.wav");
     
-    int *pMode=GET_INT_V(@"m_iMode");
+//    int *pMode=GET_INT_V(@"m_iMode");
     
     if(m_iLayer==layerInterfaceSpace6){
      //   m_bLookTouch=YES;
@@ -375,37 +416,37 @@
             bUpdate=YES;
             goto Exit;
         }
-        else if(pMode!=0 && *pMode==0 && m_bStartMove==YES)
-        {
-            GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
-
-            if(pObGroup!=nil)
-            {
-                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
-                {
-                    if(pObob==self)continue;
-                    else
-                    {
-                        if([pObob Intersect:Point])
-                        {//копирование внутрь объекта
-                            
-                            FractalString *StrNew = [[FractalString alloc] initAsCopy:pString
-                                    WithParent:pObob->pString
-                                        WithContainer:m_pObjMng->pStringContainer
-                                            WithLink:NO];
-                            
-                            StrNew->X=-440;
-                            StrNew->Y=170;
-                            
-                            [m_pObjMng->pStringContainer DelString:pString];
-                            bUpdate=YES;
-
-                            goto Exit;
-                        }
-                    }
-                }
-            }
-        }
+ //       else if(pMode!=0 && *pMode==0 && m_bStartMove==YES)
+ //       {
+//            GObject *pObGroup = [m_pObjMng GetObjectByName:@"GroupButtons"];
+//
+//            if(pObGroup!=nil)
+//            {
+//                for (ObjectB_Ob *pObob in pObGroup->m_pChildrenbjectsArr)
+//                {
+//                    if(pObob==self)continue;
+//                    else
+//                    {
+//                        if([pObob Intersect:Point])
+//                        {//копирование внутрь объекта
+//                            
+//                            FractalString *StrNew = [[FractalString alloc] initAsCopy:pString
+//                                    WithParent:pObob->pString
+//                                        WithContainer:m_pObjMng->pStringContainer
+//                                            WithLink:NO];
+//                            
+//                            StrNew->X=-440;
+//                            StrNew->Y=170;
+//                            
+//                            [m_pObjMng->pStringContainer DelString:pString];
+//                            bUpdate=YES;
+//
+//                            goto Exit;
+//                        }
+//                    }
+//                }
+//            }
+ //       }
         
 Exit:
         
@@ -436,27 +477,6 @@ Exit:
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     [self EndTouch];
-}
-//------------------------------------------------------------------------------------------------------
-- (void)drawText:(NSString*)theString AtX:(float)X Y:(float)Y {
-    
-    glLoadIdentity();
-    glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
-    
-    int iFontSize=20;
-    // Set up texture
-    Texture2D* statusTexture = [[Texture2D alloc] initWithString:theString
-                                                      dimensions:CGSizeMake(mWidth-10, iFontSize+4) alignment:UITextAlignmentLeft
-                                                        fontName:@"Helvetica" fontSize:iFontSize];
-    
-    statusTexture->_color=Color3DMake(0, 0, 0, 1);
-    
-    // Bind texture
-    glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
-    // Draw
-    [statusTexture drawAtPoint:CGPointMake(X/*+m_fOffsetText*/,Y)];
-    
-    [statusTexture release];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
@@ -492,21 +512,9 @@ Exit:
             
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             
-            NSMutableString *pStr=nil;
-            
-            if(m_iTypeStr==DATA_FLOAT){
-                float *Tmpf=(float *)[m_pObjMng->pStringContainer->
-                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
-                
-                pStr = [NSMutableString stringWithFormat:@"%1.2f",*Tmpf];
-            }
-            else if(m_iTypeStr==DATA_INT){
-                int *Tmpi=(int *)[m_pObjMng->pStringContainer->
-                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
-
-                pStr = [NSMutableString stringWithFormat:@"%d",*Tmpi];
-            }
-            [self drawText:pStr AtX:m_pCurPosition.x Y:m_pCurPosition.y];
+            [self UpdateTextureOnFace];
+            [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y
+                        Color:Color3DMake(0,0,0,1) Tex:TextureIndicatorValue];
 //draw text======================================================================================
 //===============================================================================================
         }
@@ -539,14 +547,48 @@ Exit:
             [self SetColor:mColor];
             
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
-
             break;
+            
+        default:
+            break;
+    }
+    
+    int iCount=[m_pObjMng->pStringContainer->ArrayPoints GetCountAtIndex:pString->m_iIndex];
+    //рисуем количество ассоциаций
+    if(iCount>1){
+        NSString *pStr = [NSString stringWithFormat:@"%d",iCount];
+
+        if(![StrValueOnLink isEqualToString:pStr])
+        {
+            [StrValueOnLink release];
+            StrValueOnLink=[[NSString stringWithString:pStr] retain];
+            
+            int iFontSize=20;
+            TextureIndicatorLink=[self CreateText:StrValueOnLink al:UITextAlignmentCenter
+                                Tex:TextureIndicatorLink fSize:iFontSize
+                                dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+        }
+    }
+
+    if (TextureIndicatorLink!=nil) {
+        [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y+32
+                    Color:Color3DMake(0,1,0,1) Tex:TextureIndicatorLink];
     }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     
     [self SetTouch:NO];
+    
+    [TextureIndicatorLink release];
+    TextureIndicatorLink=0;
+    [TextureIndicatorValue release];
+    TextureIndicatorValue=0;
+    [StrValueOnFace release];
+    StrValueOnFace=0;
+    [StrValueOnLink release];
+    StrValueOnLink=0;
+    
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

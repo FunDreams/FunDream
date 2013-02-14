@@ -49,12 +49,20 @@
     int m_iTypeStr;
     
     float m_fWaitTime;
+    
+    Texture2D* TextureIndicatorValue;
+    NSString *StrValueOnFace;
+    
+    Texture2D* TextureIndicatorLink;
+    NSString *StrValueOnLink;
 }
 
 /** Инициализирует объект **/
 -(id)Init:(id)Parent WithName:(NSString *)strName;
 
 -(void)Start;
+
+- (void)UpdateTextureOnFace;
 
 -(void)Proc:(Processor_ex *)pProc;
 -(void)MoveObject:(CGPoint)Point WithMode:(bool)bMoveIn;

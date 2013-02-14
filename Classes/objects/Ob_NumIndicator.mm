@@ -258,10 +258,10 @@ repeate:
         
         m_bDoubleTouch=YES;
         
-        Ob_Editor_Num *EditorNum =  UNFROZE_OBJECT(@"Ob_Editor_Num",@"Editor_Num",nil);
+ //       Ob_Editor_Num *EditorNum =  UNFROZE_OBJECT(@"Ob_Editor_Num",@"Editor_Num",nil);
         
-        EditorNum->pObInd->m_fCurValue=m_fCurValue;
-        [EditorNum->pObInd UpdateNum];
+//        EditorNum->pObInd->m_fCurValue=m_fCurValue;
+//        [EditorNum->pObInd UpdateNum];
     }
     else{
         NEXT_STAGE_EX(NAME(self), @"DTouch")

@@ -14,6 +14,7 @@
 #import "Ob_Slayder.h"
 #import "ObjectButton.h"
 #import "Ob_EmtyPlace.h"
+#import "Ob_Editor_Num.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -77,7 +78,7 @@
                   SET_FLOAT_V(46,@"mWidth"),
                   SET_FLOAT_V(46*FACTOR_DEC,@"mHeight"),
                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                  SET_BOOL_V((m_iMode==3)?YES:NO,@"m_bIsPush"),
+                  SET_BOOL_V((m_iMode==M_DROP_BOX)?YES:NO,@"m_bIsPush"),
                   SET_INT_V(bRadioBox,@"m_iType"),
                   SET_BOOL_V(YES,@"m_bBack"),
                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
@@ -93,7 +94,7 @@
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V((m_iMode==0)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==M_MOVE)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckMove",@"m_strNameStage"),
@@ -108,7 +109,7 @@
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V((m_iMode==1)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==M_COPY)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckCopy",@"m_strNameStage"),
@@ -123,7 +124,7 @@
                    SET_FLOAT_V(54,@"mWidth"),
                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V((m_iMode==2)?YES:NO,@"m_bIsPush"),
+                   SET_BOOL_V((m_iMode==M_LINK)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckLink",@"m_strNameStage"),
@@ -138,7 +139,7 @@
                          SET_FLOAT_V(54,@"mWidth"),
                          SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                          SET_BOOL_V(YES,@"m_bLookTouch"),
-                         SET_BOOL_V((m_iMode==5)?YES:NO,@"m_bIsPush"),
+                         SET_BOOL_V((m_iMode==M_CONNECT)?YES:NO,@"m_bIsPush"),
                          SET_INT_V(bRadioBox,@"m_iType"),
                          SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                          SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
@@ -168,18 +169,18 @@
         
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
         
-        iIndexCheck=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[0];
+        iIndexCheck=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[0];
         
          int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:iIndexCheck];
         
         if(ICheck)
         {
-            if(*ICheck==4)*ICheck=0;
+            if(*ICheck==M_EDIT_PROP || *ICheck==M_EDIT_NUM)*ICheck=0;
             m_iMode=(int)(*ICheck);
         }
         
-        iIndexChelf=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
+        iIndexChelf=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
     }
 //////////////////
     
@@ -230,6 +231,17 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SetMode:(int)iModeTmp{
+
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+    
+    OldInterfaceMode=m_iMode;
+    m_iMode=iModeTmp;//move
+    *ICheck=m_iMode;
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)CheckMove{
     
     OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
@@ -240,7 +252,7 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
-    m_iMode=0;//move
+    m_iMode=M_MOVE;//move
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -255,7 +267,7 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
-    m_iMode=1;//copy
+    m_iMode=M_COPY;//copy
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -270,7 +282,7 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
-    m_iMode=2;//link
+    m_iMode=M_LINK;//link
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -287,7 +299,7 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
-    m_iMode=3;//DropBox
+    m_iMode=M_DROP_BOX;//DropBox
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -302,7 +314,7 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
-    m_iMode=5;//Connection
+    m_iMode=M_CONNECT;//Connection
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -313,7 +325,7 @@
                         GetDataAtIndex:iIndexCheck];
 
     OldCheck=*ICheck;
-    *ICheck=4;
+    *ICheck=M_EDIT_PROP;
     
     [self UpdateB];
 }
@@ -419,7 +431,7 @@
     MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
 
         int *TmpICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                       GetDataAtIndex:(*pMatr->pValueLink+SIZE_INFO_STRUCT)[0]];
+                       GetDataAtIndex:(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[0]];
 
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
@@ -429,47 +441,62 @@
     if(ICheck!=0){
         [self ClearInterface];
 
-        if(*ICheck==4)
-        {
-            [pResIcon Show];
-        }
-        else
-        {
-            [self CreateButtons];
-            int *pMode=GET_INT_V(@"m_iMode");
+        switch (*ICheck) {
+            case M_EDIT_PROP:
+                [pResIcon Show];
+                break;
 
-            if(pMode!=0 && *pMode==3)
+            case M_EDIT_NUM:
             {
-                if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
-                    PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
-                               SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
-                               SET_STRING_V(@"Button_Synh.png",@"m_UP"),
-                               SET_FLOAT_V(54,@"mWidth"),
-                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                               SET_BOOL_V(YES,@"m_bLookTouch"),
-                               SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                               SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
-                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+                if(iIndexForNum!=0 && EditorNum==nil){
+                    EditorNum =  UNFROZE_OBJECT(@"Ob_Editor_Num",@"Editor_Num",
+                                                SET_INT_V(iIndexForNum,@"iIndex"));
+                    ((Ob_Editor_Num *)EditorNum)->OldInterfaceMode=OldInterfaceMode;
+                    OBJECT_PERFORM_SEL(NAME(EditorNum), @"UpdateNum");
+                }
             }
-            
-            OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
+            break;
 
-            if(((ObjectButton *)BDropBox)->m_bPush==YES){
+            default:
+            {
+                [self CreateButtons];
+                int *pMode=GET_INT_V(@"m_iMode");
                 
-                if(pInfoFile->bDropBoxWork==YES){
-                    [self SetStatusBar];
+                if(pMode!=0 && *pMode==3)
+                {
+                    if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
+                        PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
+                                             SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
+                                             SET_STRING_V(@"Button_Synh.png",@"m_UP"),
+                                             SET_FLOAT_V(54,@"mWidth"),
+                                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                             SET_BOOL_V(YES,@"m_bLookTouch"),
+                                             SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                                             SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
+                                             SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                                             SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
                 }
-                else{
+                
+                OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
+                
+                if(((ObjectButton *)BDropBox)->m_bPush==YES){
+                    
+                    if(pInfoFile->bDropBoxWork==YES){
+                        [self SetStatusBar];
+                    }
+                    else{
+                        [self DelStatusBar];
+                        [pInfoFile UpdateButt];
+                    }
+                }
+                else
+                {
                     [self DelStatusBar];
-                    [pInfoFile UpdateButt];
+                    [ButtonGroup UpdateButt];
                 }
+
             }
-            else
-            {
-                [self DelStatusBar];
-                [ButtonGroup UpdateButt];
-            }
+                break;
         }
     }
 }

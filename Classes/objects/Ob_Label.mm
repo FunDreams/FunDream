@@ -98,31 +98,28 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
-- (void)drawText:(NSString*)theString AtX:(float)X Y:(float)Y {
-
-    glLoadIdentity();
-    glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
-
-    int iFontSize=20;
-    // Set up texture
-    Texture2D* statusTexture = [[Texture2D alloc] initWithString:theString
-                dimensions:CGSizeMake(mWidth-55, iFontSize+4) alignment:UITextAlignmentLeft
-                fontName:@"Helvetica" fontSize:iFontSize];
-
-    statusTexture->_color=Color3DMake(0, 0, 0, 1);
-
-    // Bind texture
-    glBindTexture(GL_TEXTURE_2D, [statusTexture name]);
-    // Draw
-    [statusTexture drawAtPoint:CGPointMake(X+m_fOffsetText,Y)];
-
-    [statusTexture release];
-}
-//------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
 
     [super SelfDrawOffset];
-    [self drawText:pNameLabel AtX:m_pCurPosition.x Y:m_pCurPosition.y];
+    
+    //рисуем найвание файла
+    NSString *StrTmp=pNameLabel;
+    
+    if(![StrValue isEqualToString:StrTmp])
+    {
+        [StrValue release];
+        StrValue=[[NSString stringWithString:StrTmp] retain];
+        
+        int iFontSize=20;
+        TextureIndicator=[self CreateText:StrValue al:UITextAlignmentLeft
+                                          Tex:TextureIndicator fSize:iFontSize
+                                   dimensions:CGSizeMake(mWidth-55, iFontSize+4) fontName:@"Helvetica"];
+    }
+    
+    if (TextureIndicator!=nil) {
+        [self drawTextAtX:m_pCurPosition.x+20 Y:m_pCurPosition.y
+                    Color:Color3DMake(0,0,0,1) Tex:TextureIndicator];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateLabel{
@@ -192,7 +189,6 @@
         DESTROY_OBJECT([m_pChildrenbjectsArr objectAtIndex:i]);
     }
     [m_pChildrenbjectsArr removeAllObjects];
-
     
     [super Destroy];
 }

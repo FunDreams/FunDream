@@ -14,7 +14,7 @@
 
 @interface Ob_Editor_Num : GObject {
 @public
-    GObject *pOb;
+  //  GObject *pOb;
     GObject *pObBtnClose;
     GObject *pObBtnClear;
     GObject *pObBtnMinus;
@@ -22,7 +22,14 @@
     GObject *pObBtnPoint2;
     
     Ob_NumIndicator *pObInd;
+    int iIndex;
+    int iType;
     float m_fTmp;
+    int m_iTmp;
+    int OldInterfaceMode;
+    
+    Texture2D* TextureIndicatorValue;
+    NSString *StrValue;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -33,5 +40,6 @@
 -(void)Close;
 -(void)ClickMinus;
 - (void)AddValue:(int)V;
+- (void)UpdateNum;
     
 @end

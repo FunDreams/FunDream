@@ -13,7 +13,6 @@
 
 @interface StringContainer : NSObject{//пространство струн 
 @public
-    NSMutableArray *ArrayStrings;
     FunArrayData *ArrayPoints;
     NSMutableDictionary *DicStrings;
     FunArrayDataIndexes *m_OperationIndex;
@@ -25,7 +24,7 @@
     int m_iCurFile;
     NSMutableArray *ArrayDumpFiles;
     CDataManager *pDataCurManagerTmp;
-        
+
     FunArrayData *ArrayPointsTmp;
     //Массив параметно для сохранения/загрузки
     

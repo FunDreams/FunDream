@@ -227,7 +227,7 @@
     if (cell != nil)
     {
         cell->mpType=@"id";
-        cell->mpIdPoint=[*parPoint retain];
+        cell->mpIdPoint=*parPoint;//[*parPoint retain];
         cell->mppIdPoint=parPoint;
         cell->mbLocal=NO;
         cell->mSize=sizeof(id);
@@ -298,7 +298,7 @@
 {
     if ([mpType isEqualToString:@"id"] || [mpType isEqualToString:@"s"])
     {
-        if(mpIdPoint!=nil)[mpIdPoint release];
+      //  if(mpIdPoint!=nil)[mpIdPoint release];
     }
     else
     {

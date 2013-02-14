@@ -394,8 +394,12 @@
                     
                     [m_pObjMng->pStringContainer DelString:pDelStr];
                     
+                    //копируем струну в основной контейнер
                     [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
                     FractalString *pNewStr = [m_pObjMng->pStringContainer GetString:pNewString->strUID];
+                    
+                    //очищаем индекс и устанавливаем родителя
+//                    [m_pObjMng->pStringContainer->ArrayPoints SetCellFreeAtIndex:pNewStr->m_iIndexSelf];
                     [pNewStr SetParent:StrDropBox];
 
                     [pStringContainerTmp release];
@@ -548,7 +552,6 @@ Repeate2:;//главная синхронизация
 
                 goto Repeate2;
             }
-
         }
     }
     

@@ -16,6 +16,14 @@
 #import "DropBoxMng.h"
 #import "Ob_ResourceMng.h"
 
+#define M_MOVE          0
+#define M_COPY          1
+#define M_LINK          2
+#define M_DROP_BOX      3
+#define M_EDIT_PROP     4
+#define M_CONNECT       5
+#define M_EDIT_NUM      6
+
 @interface Ob_Editor_Interface : GObject {
 @public
     Ob_ResourceMng *pResIcon;
@@ -30,7 +38,9 @@
     NSMutableArray *aObSliders;    
     NSMutableArray *aObPoints;    
     int IndexCheckPoint;
+    
     int m_iMode;
+    int OldInterfaceMode;
     
     DropBoxMng *pInfoFile;
     GObject *PrBar;
@@ -44,6 +54,9 @@
 
     GObject *BTash;
     GObject *PrSyn;
+    
+    GObject *EditorNum;
+    int iIndexForNum;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -57,6 +70,8 @@
 -(void)Start;
 - (void)CreateButtons;
 - (void)CloseChoseIcon;
+
+- (void)SetMode:(int)iModeTmp;
 
 - (void)SetDropBox;
 - (void)ClearInterface;

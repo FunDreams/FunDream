@@ -25,7 +25,7 @@
         if(pChelf!=nil){
             MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
 
-            InfoArrayValue *pInfo = (InfoArrayValue *)*pMatr->pValueLink;
+            InfoArrayValue *pInfo = (InfoArrayValue *)*pMatr->pValueCopy;
             m_iNumButton=pInfo->mCount;
         }
     }
@@ -75,7 +75,7 @@
     if(pStrCheck!=nil){
         
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
-        int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[1];
+        int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
         int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                                GetDataAtIndex:index];
         
@@ -131,7 +131,7 @@
             [m_pChildrenbjectsArr addObject:pObTmp];
             
             MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pChelf->m_iIndex];
-            int index=(*pMatr->pValueLink+SIZE_INFO_STRUCT)[i];
+            int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[i];
             NSMutableString *Name=[m_pObjMng->pStringContainer->ArrayPoints
                                    GetIdAtIndex:index];
 

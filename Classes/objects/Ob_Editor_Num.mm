@@ -8,6 +8,7 @@
 
 #import "Ob_Editor_Num.h"
 #import "Ob_NumIndicator.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation Ob_Editor_Num
 //------------------------------------------------------------------------------------------------------
@@ -17,13 +18,13 @@
     {
         m_iLayer = layerTemplet;
         m_iLayerTouch=layerTouch_0;//слой касания
-        m_bHiden=YES;
+        m_bHiden=NO;
     }
     
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)SetDefault{}
+- (void)SetDefault{m_bHiden=NO;}
 //- (void)PostSetParams{}
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
@@ -35,7 +36,7 @@
     [self END_QUEUE:pProc name:@"Proc"];
     
 //====//различные параметры=============================================================================
-//   [m_pObjMng->pMegaTree SetCell:(LINK_BOOL_V(m_bDimMirrorY,m_strName,@"m_bDimMirrorY"));
+   [m_pObjMng->pMegaTree SetCell:(LINK_INT_V(iIndex,m_strName,@"iIndex"))];
     
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
@@ -46,27 +47,52 @@
     //   GET_DIM_FROM_TEXTURE(@"");
 	mWidth  = 50;
 	mHeight = 50;
+    m_bHiden=NO;
 
 	[super Start];
 
+    iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:iIndex];
+    
+    switch (iType) {
+        case DATA_FLOAT:
+        {
+            float *Tmpf=(float *)[m_pObjMng->pStringContainer->
+                                  ArrayPoints GetDataAtIndex:iIndex];
+            m_fTmp = *Tmpf;
+        }
+            break;
+            
+        case DATA_INT:
+        {
+            int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                              ArrayPoints GetDataAtIndex:iIndex];
+            m_iTmp = *Tmpi;
+        }
+            break;
+            
+        default:
+            break;
+    }
+
+    
     //   [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId, m_pNameTexture);
+//    GET_TEXTURE(mTextureId, m_pNameTexture);
 
-    pObInd = UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator1",
-                 SET_STRING_V(@"ParticlesFroIndicator",@"m_strNameContainer"),
-                 SET_VECTOR_V(Vector3DMake(-200,260,0),@"m_pOffsetCurPosition"),
-                 SET_FLOAT_V(1.5f,@"m_fScale"),
-                 LINK_ID_V(self,@"m_pOwner"));
+//    pObInd = UNFROZE_OBJECT(@"Ob_NumIndicator",@"testIndicator1",
+//                 SET_STRING_V(@"ParticlesFroIndicator",@"m_strNameContainer"),
+//                 SET_VECTOR_V(Vector3DMake(-200,260,0),@"m_pOffsetCurPosition"),
+//                 SET_FLOAT_V(1.5f,@"m_fScale"),
+//                 LINK_ID_V(self,@"m_pOwner"));
 
-    pOb = UNFROZE_OBJECT(@"ObjectFade",@"Fade",
-                   SET_FLOAT_V(1024,@"mWidth"),
-                   SET_FLOAT_V(768,@"mHeight"),
-                   SET_INT_V(layerInterfaceSpace7,@"m_iLayer"),
-                   SET_INT_V(layerTouch_1N,@"m_iLayerTouch"),
-                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                   SET_BOOL_V(YES,@"m_bObTouch"),
-                   SET_FLOAT_V(5,@"m_fVelFade"),
-                   SET_COLOR_V(Color3DMake(0.4f, 0.4f, 0.4f, 1),@"mColor"));
+//    pOb = UNFROZE_OBJECT(@"ObjectFade",@"Fade",
+//                   SET_FLOAT_V(1024,@"mWidth"),
+//                   SET_FLOAT_V(768,@"mHeight"),
+//                   SET_INT_V(layerInterfaceSpace7,@"m_iLayer"),
+//                   SET_INT_V(layerTouch_1N,@"m_iLayerTouch"),
+//                   SET_BOOL_V(YES,@"m_bLookTouch"),
+//                   SET_BOOL_V(YES,@"m_bObTouch"),
+//                   SET_FLOAT_V(5,@"m_fVelFade"),
+//                   SET_COLOR_V(Color3DMake(0.4f, 0.4f, 0.4f, 1),@"mColor"));
 
     pObBtnClose=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClose",
                    SET_STRING_V(@"Close.png",@"m_DOWN"),
@@ -79,81 +105,100 @@
                    SET_STRING_V(NAME(self),@"m_strNameObject"),
                    SET_STRING_V(@"Close",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(440,280,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-40,280,0),@"m_pCurPosition"));
 
     pObBtnMinus=UNFROZE_OBJECT(@"ObjectButton",@"ButtonMinus",
-                               SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
-                               SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
-                               SET_FLOAT_V(90,@"mWidth"),
-                               SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
-                               SET_BOOL_V(YES,@"m_bLookTouch"),
-                               SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                               SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
-                               SET_STRING_V(NAME(self),@"m_strNameObject"),
-                               SET_STRING_V(@"ClickMinus",@"m_strNameStage"),
-                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-300,130,0),@"m_pCurPosition"));
+                   SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
+                   SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
+                   SET_FLOAT_V(90,@"mWidth"),
+                   SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                   SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+                   SET_STRING_V(@"ClickMinus",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-420,130,0),@"m_pCurPosition"));
 
-    pObBtnPoint=UNFROZE_OBJECT(@"ObjectButton",@"ButtonPoint",
-                               SET_STRING_V(@"Point.png",@"m_DOWN"),
-                               SET_STRING_V(@"Point.png",@"m_UP"),
-                               SET_FLOAT_V(90,@"mWidth"),
-                               SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
-                               SET_BOOL_V(YES,@"m_bLookTouch"),
-                               SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                               SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
-                               SET_STRING_V(NAME(self),@"m_strNameObject"),
-                               SET_STRING_V(@"ClickPoint",@"m_strNameStage"),
-                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-200,130,0),@"m_pCurPosition"));
+    if(iType==DATA_FLOAT){
+        pObBtnPoint=UNFROZE_OBJECT(@"ObjectButton",@"ButtonPoint",
+                       SET_STRING_V(@"Point.png",@"m_DOWN"),
+                       SET_STRING_V(@"Point.png",@"m_UP"),
+                       SET_FLOAT_V(90,@"mWidth"),
+                       SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                       SET_BOOL_V(YES,@"m_bLookTouch"),
+                       SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                       SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                       SET_STRING_V(NAME(self),@"m_strNameObject"),
+                       SET_STRING_V(@"ClickPoint",@"m_strNameStage"),
+                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                       SET_VECTOR_V(Vector3DMake(-330,130,0),@"m_pCurPosition"));
 
-    pObBtnPoint2=UNFROZE_OBJECT(@"ObjectButton",@"ButtonPoint",
-                               SET_STRING_V(@"Point.png",@"m_DOWN"),
-                               SET_STRING_V(@"Point.png",@"m_UP"),
-                               SET_FLOAT_V(90,@"mWidth"),
-                               SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
-                               SET_BOOL_V(YES,@"m_bLookTouch"),
-                               SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                               SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
-                               SET_STRING_V(NAME(self),@"m_strNameObject"),
-                               SET_STRING_V(@"ClickPoint2",@"m_strNameStage"),
-                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-100,130,0),@"m_pCurPosition"));
+        pObBtnPoint2=UNFROZE_OBJECT(@"ObjectButton",@"ButtonPoint",
+                       SET_STRING_V(@"Point.png",@"m_DOWN"),
+                       SET_STRING_V(@"Point.png",@"m_UP"),
+                       SET_FLOAT_V(90,@"mWidth"),
+                       SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                       SET_BOOL_V(YES,@"m_bLookTouch"),
+                       SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                       SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                       SET_STRING_V(NAME(self),@"m_strNameObject"),
+                       SET_STRING_V(@"ClickPoint2",@"m_strNameStage"),
+                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                       SET_VECTOR_V(Vector3DMake(-240,130,0),@"m_pCurPosition"));
+    }
 
     pObBtnClear=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClear",
-                               SET_STRING_V(@"Clear.png",@"m_DOWN"),
-                               SET_STRING_V(@"Clear.png",@"m_UP"),
-                               SET_FLOAT_V(90,@"mWidth"),
-                               SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
-                               SET_BOOL_V(YES,@"m_bLookTouch"),
-                               SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                               SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
-                               SET_STRING_V(NAME(self),@"m_strNameObject"),
-                               SET_STRING_V(@"Clear",@"m_strNameStage"),
-                               SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(80,130,0),@"m_pCurPosition"));
+                   SET_STRING_V(@"Clear.png",@"m_DOWN"),
+                   SET_STRING_V(@"Clear.png",@"m_UP"),
+                   SET_FLOAT_V(90,@"mWidth"),
+                   SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                   SET_BOOL_V(YES,@"m_bLookTouch"),
+                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                   SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                   SET_STRING_V(NAME(self),@"m_strNameObject"),
+                   SET_STRING_V(@"Clear",@"m_strNameStage"),
+                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                   SET_VECTOR_V(Vector3DMake(-150,130,0),@"m_pCurPosition"));
 
     float Step=90;
-    for(int i=0;i<10;i++){
+    for(int i=0;i<9;i++){
         
-        NSString *StrContainer = [NSString stringWithFormat:@"%d.png",i];
-        NSString *StrSel = [NSString stringWithFormat:@"Click%d",i];
+        NSString *StrContainer = [NSString stringWithFormat:@"%d.png",i+1];
+        NSString *StrSel = [NSString stringWithFormat:@"Click%d",i+1];
+        int X=i%3;
+        int Y=i/3;
         
         GObject *pObBtnNum=UNFROZE_OBJECT(@"ObjectButton",@"ButtonNum",
-                                   SET_STRING_V(StrContainer,@"m_DOWN"),
-                                   SET_STRING_V(StrContainer,@"m_UP"),
-                                   SET_FLOAT_V(80,@"mWidth"),
-                                   SET_FLOAT_V(80*FACTOR_DEC,@"mHeight"),
-                                   SET_BOOL_V(YES,@"m_bLookTouch"),
-                                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                                   SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
-                                   SET_STRING_V(NAME(self),@"m_strNameObject"),
-                                   SET_STRING_V(StrSel,@"m_strNameStage"),
-                                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                                   SET_VECTOR_V(Vector3DMake(-400+i*Step,0,0),@"m_pCurPosition"));
+                       SET_STRING_V(StrContainer,@"m_DOWN"),
+                       SET_STRING_V(StrContainer,@"m_UP"),
+                       SET_FLOAT_V(80,@"mWidth"),
+                       SET_FLOAT_V(80*FACTOR_DEC,@"mHeight"),
+                       SET_BOOL_V(YES,@"m_bLookTouch"),
+                       SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                       SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                       SET_STRING_V(NAME(self),@"m_strNameObject"),
+                       SET_STRING_V(StrSel,@"m_strNameStage"),
+                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                       SET_VECTOR_V(Vector3DMake(-400+X*Step,-Y*Step,0),@"m_pCurPosition"));
         
         [m_pChildrenbjectsArr addObject:pObBtnNum];
     }
+    
+    GObject *pObBtnNum=UNFROZE_OBJECT(@"ObjectButton",@"ButtonNum",
+                                      SET_STRING_V(@"0.png",@"m_DOWN"),
+                                      SET_STRING_V(@"0.png",@"m_UP"),
+                                      SET_FLOAT_V(80,@"mWidth"),
+                                      SET_FLOAT_V(80*FACTOR_DEC,@"mHeight"),
+                                      SET_BOOL_V(YES,@"m_bLookTouch"),
+                                      SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+                                      SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
+                                      SET_STRING_V(NAME(self),@"m_strNameObject"),
+                                      SET_STRING_V(@"Click0",@"m_strNameStage"),
+                                      SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
+                                      SET_VECTOR_V(Vector3DMake(-400+1*Step,-3*Step,0),@"m_pCurPosition"));
+
+    [m_pChildrenbjectsArr addObject:pObBtnNum];
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
@@ -169,8 +214,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)AddValue:(int)V{
     
-    if(pObInd->m_fCurValue!=0){
-        float TmpFloat=*pObInd->m_fCurValue;
+    if(iType==DATA_FLOAT){
+        float TmpFloat=m_fTmp;
         int TmpValue=(int)TmpFloat;
         float TmpFloat2=TmpFloat-TmpValue;
         
@@ -180,10 +225,20 @@
             
             TmpFloat=TmpValue+TmpFloat2;
         }
-        
-        *pObInd->m_fCurValue=TmpFloat;
-        [pObInd UpdateNum];
+    
+        m_fTmp=TmpFloat;
     }
+    else if(iType==DATA_INT){
+        
+        int TmpInt=m_iTmp;
+        
+        TmpInt*=10;
+        TmpInt+=V;
+        
+        m_iTmp=TmpInt;
+    }
+    
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Click0{
@@ -228,55 +283,47 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Clear{
     
-    if(pObInd->m_fCurValue!=0){
-        *pObInd->m_fCurValue=0.0f;
-        
-        [pObInd UpdateNum];
-    }
-
+    m_fTmp=0;
+    m_iTmp=0;
+    
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ClickPoint{
     
-    if(pObInd->m_fCurValue!=0){
-        float TmpFloat=*pObInd->m_fCurValue;
-        
-        if(fabs(TmpFloat)>0.001f)
-            TmpFloat/=10;
-        
-        *pObInd->m_fCurValue=TmpFloat;
-        
-        [pObInd UpdateNum];
-    }
+    float TmpFloat=m_fTmp;
+    
+    if(fabs(TmpFloat)>0.001f)
+        TmpFloat/=10;
+    
+    m_fTmp=TmpFloat;
+    
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ClickPoint2{
     
-    if(pObInd->m_fCurValue!=0){
-        float TmpFloat=*pObInd->m_fCurValue;
-        
-        if(fabs(TmpFloat)<10000000.0f)
-            TmpFloat*=10;
-        
-        *pObInd->m_fCurValue=TmpFloat;
-        
-        [pObInd UpdateNum];
-    }
+    float TmpFloat=m_fTmp;
+    
+    if(fabs(TmpFloat)<10000000.0f)
+        TmpFloat*=10;
+    
+    m_fTmp=TmpFloat;
+    
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ClickClear{
     
-    if(pObInd->m_fCurValue!=0){
-        *pObInd->m_fCurValue=0;
-        [pObInd UpdateNum];
-    }
+    m_fTmp=0;
+    m_iTmp=0;
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)ClickMinus{
-    if(pObInd->m_fCurValue!=0){
-        *pObInd->m_fCurValue=-(*pObInd->m_fCurValue);
-        [pObInd UpdateNum];
-    }
+    m_fTmp=-m_fTmp;
+    m_iTmp=-m_iTmp;
+    [self UpdateNum];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
@@ -289,20 +336,95 @@
 //    STOP_SOUND(@"");
 }
 //------------------------------------------------------------------------------------------------------
+- (void)UpdateNum{
+    
+    NSString *pStr=nil;
+    iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:iIndex];
+    
+    switch (iType) {
+        case DATA_FLOAT:
+        {
+            pStr = [NSString stringWithFormat:@"%1.2f",m_fTmp];
+        }
+        break;
+
+        case DATA_INT:
+        {
+            pStr = [NSString stringWithFormat:@"%d",m_iTmp];
+        }
+        break;
+
+        default:
+            break;
+    }
+    
+    if(![StrValue isEqualToString:pStr])
+    {
+        [StrValue release];
+        StrValue=[[NSString stringWithString:pStr] retain];
+        
+        int iFontSize=60;
+        TextureIndicatorValue=[self CreateText:StrValue al:UITextAlignmentCenter
+                                           Tex:TextureIndicatorValue fSize:iFontSize
+                                    dimensions:CGSizeMake(300, iFontSize+4) fontName:@"Helvetica"];
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SelfDrawOffset{
+    
+    [self UpdateNum];
+    [self drawTextAtX:-280 Y:260
+                Color:Color3DMake(1,0.5f,0.5f,1) Tex:TextureIndicatorValue];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)Destroy{
     
-    DESTROY_OBJECT(pOb);
+//    DESTROY_OBJECT(pOb);
     DESTROY_OBJECT(pObBtnClose);
     DESTROY_OBJECT(pObBtnClear);
     DESTROY_OBJECT(pObBtnMinus);
     DESTROY_OBJECT(pObBtnPoint);
     DESTROY_OBJECT(pObBtnPoint2);
-    DESTROY_OBJECT(pObInd);
+//    DESTROY_OBJECT(pObInd);
+    
+    [TextureIndicatorValue release];
+    TextureIndicatorValue=0;
+    [StrValue release];
+    StrValue=0;
+
     
     for (GObject *pObTmp in m_pChildrenbjectsArr) {
         DESTROY_OBJECT(pObTmp);
     }
     
+    Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    pInterface->EditorNum=nil;
+    
+    [pInterface SetMode:OldInterfaceMode];
+
+    
+    switch (iType) {
+        case DATA_FLOAT:
+        {
+            float *Tmpf=(float *)[m_pObjMng->pStringContainer->
+                                  ArrayPoints GetDataAtIndex:iIndex];
+            *Tmpf=m_fTmp;
+        }
+        break;
+            
+        case DATA_INT:
+        {
+            int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                              ArrayPoints GetDataAtIndex:iIndex];
+             *Tmpi=m_iTmp;
+        }
+        break;
+            
+        default:
+            break;
+    }
+
+
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------

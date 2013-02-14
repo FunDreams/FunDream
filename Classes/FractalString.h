@@ -15,10 +15,8 @@
 #define SYNH_AND_HEAD       0x00000002//струна на сервере, а в памяти только структура-заголовок (жёлтый)
 #define SYNH_AND_LOAD       0x00000004//струна загружена и синхронизирована с хранилищем (зелёный)
 #define ONLY_IN_MEM         0x00000008//струна только в локальной памяти устройства (синий)
-
-//#define LINK                0x00000100//струна-ссылка
 //-------------------------------------------------------------------------------------------------
-#define SIZE_INFO_STRUCT    2
+#define SIZE_INFO_STRUCT    3
 typedef struct{
     short mCount;     //количество элементов в массиве
     short mCopasity;  //ёмкость
@@ -26,6 +24,7 @@ typedef struct{
     BYTE  mFlags;     //флаги массива-переменной
     BYTE mType;        //тип данных в массиве
     BYTE mReserv;
+    MATRIXcell *ParentMatrix;
 }InfoArrayValue;
 //-------------------------------------------------------------------------------------------------
 @interface FractalString : NSObject{
@@ -41,7 +40,7 @@ typedef struct{
     StringContainer *m_pContainer;//контейнер содержащий струну
     FractalString *pParent;//струна родитель
     
-    NSMutableDictionary *pAssotiation;
+    bool bAlradySave;
 //--------------------------------------------------------------------------------------------------
     //информация для редактора
     float X;
@@ -49,6 +48,7 @@ typedef struct{
     
     NSString *sNameIcon;//имя иконки
     int m_iFlags;
+    NSMutableDictionary *pAssotiation;//ассоциации
 }
 
 - (id)init:(StringContainer *)pContainer;
@@ -64,7 +64,8 @@ typedef struct{
         WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer;
 
 - (id)initAsCopy:(FractalString *)pStrSource WithParent:(FractalString *)Parent
-   WithContainer:(StringContainer *)pContainer WithLink:(bool)bLink;
+   WithContainer:(StringContainer *)pContainer WithSourceContainer:(StringContainer *)pSrcContainer
+        WithLink:(bool)bLink;
 
 -(void)LoadData:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos;
 -(void)SaveData:(NSMutableData *)pData;
@@ -73,7 +74,9 @@ typedef struct{
 -(void)selfLoad:(NSMutableData *)m_pData ReadPos:(int *)iCurReadingPos
         WithContainer:(StringContainer *)pContainer;
 
-- (void)AddIndex:(FractalString *)pStrParent WithIndex:(int)iIndexNew OldIndex:(int)iIndexOld;
+- (void)CopyChild:(int)iNewCopy WithDic:(NSMutableDictionary *)pDicRename
+       WithParent:(FractalString *)Parent WithSourceContainer:(StringContainer *)pSrcContainer
+        WithModel:(FractalString *)pModel;
 
 -(void)SetFlag:(int)iFlag;
 //--------------------------------------------------------------------------------------------------

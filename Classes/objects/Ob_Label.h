@@ -17,6 +17,9 @@
     float m_fOffsetText;
     bool bTexture;
     bool bStartPush;
+    
+    NSString *StrValue;
+    Texture2D *TextureIndicator;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -29,6 +32,5 @@
 - (void)SetPush;
 - (void)SetUnPush;
 
-- (void) drawText:(NSString*)theString AtX:(float)X Y:(float)Y;
     
 @end

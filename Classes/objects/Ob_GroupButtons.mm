@@ -191,6 +191,7 @@
     
     GET_TEXTURE(pOb->mTextureId, pFrStr->sNameIcon);
     pOb->pString=pFrStr;
+    pOb->m_iTypeStr=iType;
     
     [m_pChildrenbjectsArr addObject:pOb];
 }

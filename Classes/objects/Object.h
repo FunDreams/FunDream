@@ -258,6 +258,11 @@ typedef struct{float x_min, y_min, x_max, y_max;}rect2d;
 //постать объекту сообщение
 - (void)OBJECT_PERFORM_SEL:(NSString*)NameObject selector:(NSString*)SelectorName;
 
+//------------------------------------------------------------------------------------------------------
+//инициализациа и отрисовка текста
+- (Texture2D *)CreateText:(NSString*)theString al:(NSTextAlignment)Alig Tex:(Texture2D*)pTex
+                    fSize:(int)iFontSize dimensions:(CGSize)dimensions fontName:(NSString *)pNameFont;
+- (void)drawTextAtX:(float)X Y:(float)Y Color:(Color3D)BackColor Tex:(Texture2D*)pTex;
 //utils------------------------------------------------------------------------------------------------
 //возвращает NSArray символов таймера
 - (void)ParseTime:(float)fTime OutSec:(int *)fSec OutMin:(int *)fMin OutHour:(int *)fHour;

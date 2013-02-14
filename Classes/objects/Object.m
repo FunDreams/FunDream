@@ -369,6 +369,34 @@
 	}
 }
 //------------------------------------------------------------------------------------------------------
+- (Texture2D *)CreateText:(NSString*)theString al:(NSTextAlignment)Alig Tex:(Texture2D*)pTex
+                    fSize:(int)iFontSize dimensions:(CGSize)dimensions fontName:(NSString *)pNameFont{
+    
+    [pTex release];
+    
+    // Set up texture
+    Texture2D* statusTexture = [[Texture2D alloc] initWithString:theString
+                                                      dimensions:dimensions alignment:Alig
+                                                        fontName:pNameFont fontSize:iFontSize];
+    
+    return statusTexture;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)drawTextAtX:(float)X Y:(float)Y Color:(Color3D)BackColor Tex:(Texture2D*)pTex{
+    
+    if(pTex==nil)return;
+    
+    glLoadIdentity();
+    glRotatef(m_pObjMng->fCurrentAngleRotateOffset, 0, 0, 1);
+    
+    pTex->_color=BackColor;
+    
+    // Bind texture
+    glBindTexture(GL_TEXTURE_2D, [pTex name]);
+    // Draw
+    [pTex drawAtPoint:CGPointMake(X,Y)];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
 //------------------------------------------------------------------------------------------------------
 - (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
