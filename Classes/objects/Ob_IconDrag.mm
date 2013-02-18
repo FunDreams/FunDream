@@ -217,10 +217,13 @@ Exit:
                 
                 if(*pMode==M_LINK)bLink=YES;
                 
-                    FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                WithParent:pParent WithContainer:m_pObjMng->pStringContainer
-                                                WithSourceContainer:m_pObjMng->pStringContainer
-                                                WithLink:bLink];
+                FractalString *pSourceStr=pInsideString;
+                
+                FractalString *pNewString =[[FractalString alloc] initAsCopy:pSourceStr
+                            WithParent:pParent WithContainer:m_pObjMng->pStringContainer
+                                            WithSourceContainer:m_pObjMng->pStringContainer
+                                            WithLink:bLink];
+                
 
 //                    if(bInside==YES){
 //                        

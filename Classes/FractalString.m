@@ -52,10 +52,10 @@
         WithModel:(FractalString *)pModel{
     
     MATRIXcell *pMatr=[m_pContainer->ArrayPoints GetMatrixAtIndex:iNewCopy];
-//    InfoArrayValue *InfoStrNewCopy=(InfoArrayValue *)(*pMatr->pValueCopy);
+    InfoArrayValue *InfoStrNewCopy=(InfoArrayValue *)(*pMatr->pValueCopy);
 
-    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pModel->pChildString);
-    for (int i=0; i<InfoStr->mCount; i++)
+//    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pModel->pChildString);
+    for (int i=0; i<InfoStrNewCopy->mCount; i++)
     {
         int indexExistingString=((*pModel->pChildString)+SIZE_INFO_STRUCT)[i];
         int indexDoNotConnect=((*pMatr->pValueCopy)+SIZE_INFO_STRUCT)[i];
@@ -70,7 +70,6 @@
         pFStringChild->X=TmpSource->X;
         pFStringChild->Y=TmpSource->Y;
         [pFStringChild SetNameIcon:TmpSource->sNameIcon];
-        [m_pContainer->DicStrings setObject:self forKey:strUID];
         pFStringChild->m_iIndex=indexDoNotConnect;
         
         NSNumber *pNum = [NSNumber numberWithInt:pFStringChild->m_iIndex];
@@ -101,8 +100,8 @@
                 
                 NSNumber *pNumSource=[NSNumber numberWithInt:pTmpString->m_iIndexSelf];
                 
-                [pAssotiation setObject:pNumSelf forKey:pNumSelf];
-                [pAssotiation setObject:pNumSource forKey:pNumSource];
+                [pFStringChild->pAssotiation setObject:pNumSelf forKey:pNumSelf];
+                [pFStringChild->pAssotiation setObject:pNumSource forKey:pNumSource];
                 
                 NSString *pKey = [NSString stringWithFormat:@"%p",pFStringChild->pAssotiation];
                 [m_pContainer->ArrayPoints->DicAllAssociations
@@ -113,6 +112,10 @@
                 pFStringChild->pAssotiation=[pTmpString->pAssotiation retain];
                 [pFStringChild->pAssotiation setObject:pNumSelf forKey:pNumSelf];
             }
+            
+            //для ссылок используем один и тот же массив
+            [m_pContainer->m_OperationIndex ReleaseMemory:pFStringChild->pChildString];
+            pFStringChild->pChildString=pTmpString->pChildString;
         }
     }
 }
@@ -129,7 +132,19 @@
         [self InitMemory];
         [self SetDefault];
         
-        strUID = [m_pContainer GetRndName];
+        NSString *StrRndName = [m_pContainer GetRndName];
+        id TmpId=[m_pContainer->DicStrings objectForKey:pStrSource->strUID];
+        
+        if(TmpId==nil)
+        {
+            strUID = [[NSString alloc] initWithString:pStrSource->strUID];
+        }
+        else
+        {
+            strUID = StrRndName;
+        }
+
+        
         X=pStrSource->X;
         Y=pStrSource->Y;
         [self SetNameIcon:pStrSource->sNameIcon];
@@ -160,7 +175,7 @@
 
                 [pAssotiation setObject:pNumSelf forKey:pNumSelf];
                 [pAssotiation setObject:pNumSource forKey:pNumSource];
-                
+
                 NSString *pKey = [NSString stringWithFormat:@"%p",pAssotiation];
                 [m_pContainer->ArrayPoints->DicAllAssociations setObject:pAssotiation forKey:pKey];
             }
@@ -177,25 +192,29 @@
         else
         {
             [m_pContainer->ArrayPoints SetSrc:pSrcContainer->ArrayPoints];
+            [m_pContainer->ArrayPoints->pDicRename removeAllObjects];
+
             m_iIndex=[m_pContainer->ArrayPoints CopyDataAtIndex:pStrSource->m_iIndex];
             [m_pContainer->ArrayPoints SetSrc:m_pContainer->ArrayPoints];
-            
-            int iType=[m_pContainer->ArrayPoints GetTypeAtIndex:Parent->m_iIndex];
-            
+                        
+            int iType=[pSrcContainer->ArrayPoints GetTypeAtIndex:pStrSource->m_iIndex];
+        
             if(iType==DATA_MATRIX){
-
-                if(Parent!=nil){
-                    MATRIXcell *pMatr=[m_pContainer->ArrayPoints GetMatrixAtIndex:Parent->m_iIndex];
-                    [m_pContainer->m_OperationIndex AddData:m_iIndex WithData:pMatr->pValueCopy];
-                }
 
                 NSMutableDictionary *pDicRename=[[NSMutableDictionary alloc] init];
                 
+                NSNumber *pNum = [NSNumber numberWithInt:self->m_iIndex];
+                [pDicRename setObject:self forKey:pNum];
+                    
                 [self CopyChild:m_iIndex WithDic:pDicRename WithParent:self
                       WithSourceContainer:pSrcContainer WithModel:pStrSource];
                 
                 [pDicRename release];
-
+            }
+            
+            if(Parent!=nil){
+                MATRIXcell *pMatr=[m_pContainer->ArrayPoints GetMatrixAtIndex:Parent->m_iIndex];
+                [m_pContainer->m_OperationIndex AddData:m_iIndex WithData:pMatr->pValueCopy];
             }
         }
     }
@@ -223,7 +242,7 @@
         }
         else
         {
-            strUID = [[NSString alloc] initWithString:StrRndName];
+            strUID = StrRndName;
         }
 
         [self SetParent:Parent];
@@ -249,25 +268,6 @@
 -(void)SetFlag:(int)iFlag{
     m_iFlags &=~(DEAD_STRING|SYNH_AND_HEAD|SYNH_AND_LOAD|ONLY_IN_MEM);
     m_iFlags|=iFlag;
-}
-//------------------------------------------------------------------------------------------------------
-- (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos 
-        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
-    
-    self = [super init];
-	if (self != nil)
-    {
-        m_pContainer=pContainer;
-        [self InitMemory];
-        [self SetDefault];
-                
-        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
-        [pContainer->DicStrings setObject:self forKey:strUID];
-        
-        pParent=Parent;
-    }
-    
-    return self;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadData:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos{
@@ -352,6 +352,25 @@
     [pData appendBytes:&m_iIndexSelf length:sizeof(int)];
 }
 //------------------------------------------------------------------------------------------------------
+- (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos
+        WithParent:(FractalString *)Parent WithContainer:(StringContainer *)pContainer{
+    
+    self = [super init];
+	if (self != nil)
+    {
+        m_pContainer=pContainer;
+        [self InitMemory];
+        [self SetDefault];
+        
+        [self selfLoad:pData ReadPos:iCurReadingPos WithContainer:pContainer];
+        [pContainer->DicStrings setObject:self forKey:strUID];
+        
+        pParent=Parent;
+    }
+    
+    return self;
+}
+//------------------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)pData ReadPos:(int *)iCurReadingPos
   WithContainer:(StringContainer *)pContainer{
     
@@ -392,6 +411,21 @@
             
             if(bAlradySave==NO){
                 bAlradySave=YES;
+                if(pAssotiation!=nil){
+                    
+                    id array = [pAssotiation allKeys];
+                    
+                    for (int i=0; i<[array count]; i++) {
+                        
+                        int pIndexCurrentAss=[[array objectAtIndex:i] intValue];
+                        
+                        if(pIndexCurrentAss!=m_iIndexSelf)
+                        {
+                            FractalString *FAssoc=[m_pContainer->ArrayPoints GetIdAtIndex:pIndexCurrentAss];
+                            FAssoc->bAlradySave=YES;
+                        }
+                    }
+                }
                 
                 [m_pData appendBytes:&iCount length:sizeof(int)];
                 
@@ -401,10 +435,11 @@
                     FractalString *FChild=[m_pContainer->ArrayPoints GetIdAtIndex:index];
                     
                     [FChild selfSave:m_pData WithVer:iVersion];
-                }
+                }                
             }
-            else {
-                int iCount=0;
+            else
+            {
+                iCount=0;
                 [m_pData appendBytes:&iCount length:sizeof(int)];
             }
         }
@@ -420,8 +455,11 @@
     [sNameIcon release];
     [strUID release];
 
-    if(pAssotiation!=nil)
+    if(pAssotiation==nil)
+    {
+        [m_pContainer DelChilds:self];
         [m_pContainer->m_OperationIndex ReleaseMemory:pChildString];
+    }
     else [pAssotiation release];
 
     [super dealloc];

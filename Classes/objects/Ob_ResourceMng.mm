@@ -297,6 +297,23 @@ exit:
                 m_iCurrentSelect=i;
                 [Fstring SetNameIcon:pOb->pNameLabel];
                 
+                if(Fstring->pAssotiation!=nil){
+                    
+                    id array = [Fstring->pAssotiation allKeys];
+                    
+                    for (int i=0; i<[array count]; i++) {
+                        
+                        int pIndexCurrentAss=[[array objectAtIndex:i] intValue];
+                        
+                        if(pIndexCurrentAss!=Fstring->m_iIndexSelf)
+                        {
+                            FractalString *FAssoc=[m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:pIndexCurrentAss];
+                            [FAssoc SetNameIcon:pOb->pNameLabel];
+                        }
+                    }
+                }
+
+                
                 continue;
             }
             else

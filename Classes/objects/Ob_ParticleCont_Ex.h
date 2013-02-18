@@ -30,7 +30,7 @@
 
 -(void)UpdateParticleMatr;
 -(void)UpdateParticleColor;
-    
+
 -(void)SetFrame:(int)iFrame;
 
 -(void)dealloc;

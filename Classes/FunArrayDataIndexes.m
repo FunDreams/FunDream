@@ -39,10 +39,16 @@
 - (void)ReleaseMemory:(int **)pData{
 
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int iCount=InfoStr->mCount;
 
-    for(int i=0;i<InfoStr->mCount;i++){
+    for(int i=0;i<iCount;i++){
         
-        int index=(*pData+SIZE_INFO_STRUCT)[i];
+        int index=(*pData+SIZE_INFO_STRUCT)[0];
+        int **pCurnData=InfoStr->ParentMatrix->pValueCopy;
+        
+        int iRet=[m_pParent->m_OperationIndex FindIndex:index WithData:pCurnData];
+        if(iRet>-1)[m_pParent->m_OperationIndex RemoveDataAtPlace:iRet WithData:pCurnData];
+
         [m_pParent->ArrayPoints DecDataAtIndex:index];
     }
     
@@ -138,12 +144,11 @@
 //------------------------------------------------------------------------------------------
 - (void)SetParentMatrix:(int)IndexValue WithData:(int **)pData{
     
-    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
-    
     MATRIXcell *TmpMatr=[m_pParent->ArrayPoints GetMatrixAtIndex:IndexValue];
-    InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*TmpMatr->pLinks);
-    
     [self Extend:TmpMatr->pLinks];
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*TmpMatr->pLinks);
     
     int *StartDataLinks=((*TmpMatr->pLinks)+SIZE_INFO_STRUCT);
     StartDataLinks[InfoStrLinks->mCount]=InfoStr->ParentMatrix->iIndexSelf;
@@ -247,8 +252,7 @@
                 break;
             }
         }
-//delete index
-        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
+//удаляем пару
         
         if(InfoStr->mFlags && F_ORDER)
         {
@@ -260,7 +264,6 @@
             if(iPlace+1<InfoStr->mCount)
                 memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
         }
-        
         InfoStr->mCount--;
 ///////////////////////////////////////////////////
         if(InfoStrLinks->mCount>0){
@@ -286,6 +289,8 @@
                 }
             }
         }
+        
+        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
     }
 //================================================================================================
     else

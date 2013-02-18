@@ -141,6 +141,7 @@
     for(int i=0;i<InfoStr->mCount;i++){
         
         int index=(Data+SIZE_INFO_STRUCT)[i];
+//        int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:index];
         FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
                                GetIdAtIndex:index];
 
@@ -335,6 +336,7 @@
                 [pDataManager Clear];
 //////////////////////////////////////////////////////////////////////////////////////////////////
                 StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                [pStringContainerTmp SetKernel];
                 [pStringContainerTmp CopyStrFrom:m_pObjMng->pStringContainer WithId:pStr];
                 
                 id pEncodeString = [pStringContainerTmp GetString:pStr->strUID];
@@ -378,28 +380,48 @@
                 {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                     StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                    [pStringContainerTmp SetKernel];
 
                     FractalString *pNewString = [[FractalString alloc]
                                     initWithData:pDataCurManager->m_pDataDmp
                                     WithCurRead:&pDataCurManager->m_iCurReadingPos
                                     WithParent:nil WithContainer:pStringContainerTmp];
-                                        
+
                     [pStringContainerTmp->ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
                                           rpos:&pDataCurManager->m_iCurReadingPos];
                     
                     FractalString *pDelStr=[m_pObjMng->pStringContainer GetString:pNewString->strUID];
+                    float fX;
+                    float fY;
+
+                    //
+                    FractalString *pStrDropBox = [m_pObjMng->pStringContainer GetString:@"DropBox"];
+                                        
+                    int **DataDropBox=(pStrDropBox->pChildString);
+                    InfoArrayValue *InfoStrDropBox=(InfoArrayValue *)(*DataDropBox);
                     
-                    float fX=pDelStr->X;
-                    float fY=pDelStr->Y;
+                    if(pStrDropBox!=nil){
+                        for (int i=0; i<InfoStrDropBox->mCount; i++){//делаем массив линков из DropBox'a
+                            
+                        }
+                    }
+                    //
+
                     
-                    [m_pObjMng->pStringContainer DelString:pDelStr];
+                    if(pDelStr!=nil){
+                        fX=pDelStr->X;
+                        fY=pDelStr->Y;
+                        
+                        [m_pObjMng->pStringContainer DelString:pDelStr];
+                    }
                     
                     //копируем струну в основной контейнер
                     [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
                     FractalString *pNewStr = [m_pObjMng->pStringContainer GetString:pNewString->strUID];
                     
+       //             [pNewString->m_pContainer LogString:pNewString];
+                    
                     //очищаем индекс и устанавливаем родителя
-//                    [m_pObjMng->pStringContainer->ArrayPoints SetCellFreeAtIndex:pNewStr->m_iIndexSelf];
                     [pNewStr SetParent:StrDropBox];
 
                     [pStringContainerTmp release];

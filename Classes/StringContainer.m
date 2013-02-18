@@ -25,6 +25,7 @@
         m_OperationIndex->m_pParent=self;
 
         DicStrings = [[NSMutableDictionary alloc] init];
+        DicLog = [[NSMutableDictionary alloc] init];
 
         m_pObjMng=Parent;
 
@@ -39,6 +40,197 @@
 #endif
     }
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LogInfo:(FractalString *)fString{
+    NSLog(@"Str:%@ %p Ind:%d IndS:%d ic:%@",fString->strUID,self,fString->m_iIndex,
+          fString->m_iIndexSelf,fString->sNameIcon);
+
+    if(fString->pParent!=nil){
+        NSLog(@"Par:%@ %p Ind:%d IndS:%d ic:%@",fString->pParent->strUID,
+              fString->pParent,fString->pParent->m_iIndex,
+              fString->pParent->m_iIndexSelf,fString->pParent->sNameIcon);
+    }
+
+    NSLog(@"Association:%p",fString->pAssotiation);
+
+    NSLog(@"m_iIndexSelf: %d",fString->m_iIndexSelf);
+    
+    [self LogDataPoint:fString->pChildString Name:@"ChildsInString"];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LogDataPoint:(int**)pData Name:(NSString *)Name{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+
+    NSString *pStr= [NSString stringWithFormat:@"%p %@(%d):",pData,Name,InfoStr->mCount];
+    NSString *pStrLog = [NSString stringWithString:pStr];
+    
+    for (int i=0; i<InfoStr->mCount; i++) {
+        int iTmpIndex=StartData[i];
+        
+        pStrLog=[pStrLog stringByAppendingFormat:@"%d.",iTmpIndex];
+    }
+
+    NSLog(@"%@",pStrLog);
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LogInfoIndex:(int)iIndex{
+    
+    int iType = [ArrayPoints GetTypeAtIndex:iIndex];
+    int iCount = [ArrayPoints GetCountAtIndex:iIndex];
+    NSLog(@"количесво ссылок (Count): %d",iCount);
+    
+    switch (iType) {
+        case DATA_ID:
+        {
+            NSLog(@"DATA_ID");
+            FractalString * pTmpString = [ArrayPoints GetIdAtIndex:iIndex];
+            NSLog(@"V=%@",pTmpString->strUID);
+        }
+        break;
+
+        case DATA_MATRIX:
+        {
+            MATRIXcell * pTmpMatrix = [ArrayPoints GetMatrixAtIndex:iIndex];
+
+            NSLog(@"DATA_MATRIX IndexSelf=%d",pTmpMatrix->iIndexSelf);
+
+            [self LogDataPoint:pTmpMatrix->pLinks Name:@"Links"];
+            [self LogDataPoint:pTmpMatrix->pValueCopy Name:@"Childs"];
+//          int iCount = [ArrayPoints GetCountAtIndex:pTmpMatrix->iIndexSelf];
+        }
+        break;
+
+        case DATA_FLOAT:
+        {
+            float * pTmpfloat = [ArrayPoints GetDataAtIndex:iIndex];
+            NSLog(@"DATA_FLOAT V=%1.2f",*pTmpfloat);
+        }
+        break;
+
+        case DATA_INT:
+        {
+            int * pTmpInt = [ArrayPoints GetDataAtIndex:iIndex];
+            NSLog(@"DATA_INT V=%d",*pTmpInt);
+        }
+        break;
+
+        case DATA_STRING:
+        {
+            NSString * pTmpStr = [ArrayPoints GetIdAtIndex:iIndex];
+            NSLog(@"DATA_STRING V=%@",pTmpStr);
+        }
+        break;
+
+        case DATA_TEXTURE:
+        {
+            NSString * pTmpStr = [ArrayPoints GetIdAtIndex:iIndex];
+            NSLog(@"DATA_TEXTURE V=%@",pTmpStr);
+        }
+        break;
+
+        case DATA_SOUND:
+        {
+            NSString * pTmpStr = [ArrayPoints GetIdAtIndex:iIndex];
+            NSLog(@"DATA_SOUND V=%@",pTmpStr);
+        }
+        break;
+
+        default:
+            NSLog(@"тип неизвестен");
+            break;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LogChild:(FractalString *)fString{
+
+    NSNumber *pNum=[NSNumber numberWithInt:fString->m_iIndex];
+    NSNumber *pTmpNum=[DicLog objectForKey:pNum];
+    
+    NSLog(@"=====================================================");
+    [self LogInfoIndex:fString->m_iIndex];
+    [self LogInfo:fString];
+    NSLog(@"=====================================================");
+
+    if(pTmpNum==nil){
+
+        [DicLog setObject:pNum forKey:pNum];
+
+        InfoArrayValue *InfoStr=(InfoArrayValue *)(*fString->pChildString);
+        int *StartIndex=(*fString->pChildString)+SIZE_INFO_STRUCT;
+        int iCount=InfoStr->mCount;
+        
+        NSLog(@"Child string %d",iCount);
+        
+        for (int i=0; i<iCount; i++) {
+            
+            int index=(StartIndex)[i];
+            FractalString *FChild=[ArrayPoints GetIdAtIndex:index];
+            [self LogChild:FChild];
+        }
+    }
+    else
+    {
+        NSLog(@"link Alrady in use");
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)LogString:(FractalString *)StartString{
+
+    [DicLog removeAllObjects];
+
+    NSLog(@"Start=====================================================");
+    NSLog(@"общее количество струн %d",[DicStrings count]);
+    NSLog(@"общее количество имён %d",[ArrayPoints->pNamesValue count]);
+    NSLog(@"общее количество матриц %d",[ArrayPoints->pMartixDic count]);
+    NSLog(@"общее количество имён струн %d (струны в матрице)",[ArrayPoints->pNamesOb count]);
+
+    NSLog(@"общее количество ассоциаций %d",[ArrayPoints->DicAllAssociations count]);
+
+    NSEnumerator *Key_enumerator = [ArrayPoints->DicAllAssociations keyEnumerator];
+    NSString *pNameKey;
+    
+    while ((pNameKey = [Key_enumerator nextObject])) {
+        
+        NSMutableDictionary * pGroupsLinks = [ArrayPoints->DicAllAssociations objectForKey:pNameKey];
+        
+        NSString *pStr= [NSString stringWithFormat:@"%p (%d):",pGroupsLinks,[pGroupsLinks count]];
+        NSString *pStrLog = [NSString stringWithString:pStr];
+
+        if(pGroupsLinks!=nil){
+            NSEnumerator *pTmpEnumerator = [pGroupsLinks objectEnumerator];
+            NSNumber *pNum=nil;
+
+            while ((pNum = [pTmpEnumerator nextObject])) {
+                int iIndex=[pNum integerValue];
+                
+                pStrLog=[pStrLog stringByAppendingFormat:@"%d.",iIndex];
+            }
+        }
+        NSLog(@"%@",pStrLog);
+    }
+
+    NSLog(@"=====================================================");
+    [self LogInfoIndex:StartString->m_iIndex];
+    [self LogInfo:StartString];
+    NSLog(@"=====================================================");
+    
+    NSNumber *pNum=[NSNumber numberWithInt:StartString->m_iIndex];
+    [DicLog setObject:pNum forKeyedSubscript:pNum];
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*StartString->pChildString);
+    int *StartIndex=(*StartString->pChildString)+SIZE_INFO_STRUCT;
+    int iCount=InfoStr->mCount;
+    
+    for (int i=0; i<iCount; i++) {
+        
+        int index=(StartIndex)[i];
+        FractalString *FChild=[ArrayPoints GetIdAtIndex:index];
+        [self LogChild:FChild];
+    }
+    NSLog(@"End=====================================================");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)ReLinkDataManager{
@@ -79,48 +271,48 @@
     pMatrInfo->TypeInformation=STR_COMPLEX;
     pMatrInfo->NameInformation=NAME_SIMPLE;
     
-    return;
+//  return;
 //--------------------------------------------------------------------------------------------------
-    FractalString *pStrIngib=[[FractalString alloc]
-                            initWithName:@"StartActive" WithParent:pStrInfo WithContainer:self];
-    
-    [pStrIngib SetNameIcon:@"StartActivity.png"];
-    pStrIngib->X=-400;
-    pStrIngib->Y=130;
-    
-    pStrIngib->m_iIndex=[ArrayPoints SetMatrix:0];
-    [m_OperationIndex AddData:pStrIngib->m_iIndex WithData:pMatrInfo->pValueCopy];
-    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pStrIngib->m_iIndex];
-    pMatr->TypeInformation=STR_CONTAINER;
-    pMatr->NameInformation=NAME_K_START;
-    
-    FractalString *pStrButton=[[FractalString alloc]
-                            initWithName:@"Action" WithParent:pStrInfo WithContainer:self];
-
-    [pStrButton SetNameIcon:@"ButtonAction.png"];
-    pStrButton->X=-300;
-    pStrButton->Y=130;
-    
-    pStrButton->m_iIndex=[ArrayPoints SetMatrix:0];
-    [m_OperationIndex AddData:pStrButton->m_iIndex WithData:pMatrInfo->pValueCopy];
-    pMatr=[ArrayPoints GetMatrixAtIndex:pStrButton->m_iIndex];
-    pMatr->TypeInformation=STR_CONTAINER;
-    pMatr->NameInformation=NAME_K_BUTTON_ENVENT;
-
-
-    FractalString *pStrPlus=[[FractalString alloc]
-                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
-    
-    [pStrPlus SetNameIcon:@"o_plus.png"];
-    pStrPlus->X=-350;
-    pStrPlus->Y=50;
-    
-    pStrPlus->m_iIndex=[ArrayPoints SetMatrix:0];
-    [m_OperationIndex AddData:pStrPlus->m_iIndex WithData:pMatrInfo->pValueCopy];
-    pMatr=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
-    pMatr->TypeInformation=STR_OPERATION;
-    pMatr->NameInformation=NAME_O_PLUS;
-
+//    FractalString *pStrIngib=[[FractalString alloc]
+//                            initWithName:@"StartActive" WithParent:pStrInfo WithContainer:self];
+//    
+//    [pStrIngib SetNameIcon:@"StartActivity.png"];
+//    pStrIngib->X=-400;
+//    pStrIngib->Y=130;
+//    
+//    pStrIngib->m_iIndex=[ArrayPoints SetMatrix:0];
+//    [m_OperationIndex AddData:pStrIngib->m_iIndex WithData:pMatrInfo->pValueCopy];
+//    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pStrIngib->m_iIndex];
+//    pMatr->TypeInformation=STR_CONTAINER;
+//    pMatr->NameInformation=NAME_K_START;
+//    
+//    FractalString *pStrButton=[[FractalString alloc]
+//                            initWithName:@"Action" WithParent:pStrInfo WithContainer:self];
+//
+//    [pStrButton SetNameIcon:@"ButtonAction.png"];
+//    pStrButton->X=-300;
+//    pStrButton->Y=130;
+//    
+//    pStrButton->m_iIndex=[ArrayPoints SetMatrix:0];
+//    [m_OperationIndex AddData:pStrButton->m_iIndex WithData:pMatrInfo->pValueCopy];
+//    pMatr=[ArrayPoints GetMatrixAtIndex:pStrButton->m_iIndex];
+//    pMatr->TypeInformation=STR_CONTAINER;
+//    pMatr->NameInformation=NAME_K_BUTTON_ENVENT;
+//
+//
+//    FractalString *pStrPlus=[[FractalString alloc]
+//                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
+//    
+//    [pStrPlus SetNameIcon:@"o_plus.png"];
+//    pStrPlus->X=-350;
+//    pStrPlus->Y=50;
+//    
+//    pStrPlus->m_iIndex=[ArrayPoints SetMatrix:0];
+//    [m_OperationIndex AddData:pStrPlus->m_iIndex WithData:pMatrInfo->pValueCopy];
+//    pMatr=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
+//    pMatr->TypeInformation=STR_OPERATION;
+//    pMatr->NameInformation=NAME_O_PLUS;
+//
 
     FractalString *pStrVA=[[FractalString alloc]
                         initWithName:@"A" WithParent:pStrInfo WithContainer:self];
@@ -142,29 +334,29 @@
     pStrVB->m_iIndex=[ArrayPoints SetFloat:100.2];
     [m_OperationIndex AddData:pStrVB->m_iIndex WithData:pMatrInfo->pValueCopy];
 
-    FractalString *pStrVR=[[FractalString alloc]
-                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
-    
-    [pStrVR SetNameIcon:@"R.png"];
-    pStrVR->X=-280;
-    pStrVR->Y=-30;
-    
-    pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
-    [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
-
-    FractalString *pStrVT=[[FractalString alloc]
-                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
-    
-    [pStrVT SetNameIcon:@"R.png"];
-    pStrVT->X=-280;
-    pStrVT->Y=-160;
-    
-    pStrVT->m_iIndex=[ArrayPoints SetInt:123456];
-    [m_OperationIndex AddData:pStrVT->m_iIndex WithData:pMatrInfo->pValueCopy];
+//    FractalString *pStrVR=[[FractalString alloc]
+//                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
+//    
+//    [pStrVR SetNameIcon:@"R.png"];
+//    pStrVR->X=-280;
+//    pStrVR->Y=-30;
+//    
+//    pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
+//    [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
+//
+//    FractalString *pStrVT=[[FractalString alloc]
+//                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
+//    
+//    [pStrVT SetNameIcon:@"R.png"];
+//    pStrVT->X=-280;
+//    pStrVT->Y=-160;
+//    
+//    pStrVT->m_iIndex=[ArrayPoints SetInt:123456];
+//    [m_OperationIndex AddData:pStrVT->m_iIndex WithData:pMatrInfo->pValueCopy];
 }
 //------------------------------------------------------------------------------------------------------
 #define MAX_REZERV 200
--(void)InitIndex{
+-(void)InitIndex{//линкуем константы к контейнеру
     FractalString *pFStringZero = [self GetString:@"Zero"];
     if(pFStringZero!=nil){
         
@@ -173,7 +365,7 @@
     }
 }
 //------------------------------------------------------------------------------------------------------
--(void)SetKernel{
+-(void)SetKernel{//устанавливаем константы для ядра (эти индексы не переименовываются)
     FractalString *pFStringZero=[[FractalString alloc]
                                  initWithName:@"Zero" WithParent:nil WithContainer:self];
     pFStringZero->m_iIndex=[ArrayPoints SetMatrix:0];
@@ -188,11 +380,11 @@
     int iDeltaTime=[ArrayPoints SetFloat:0.0f];//2
     [m_OperationIndex AddData:iDeltaTime WithData:pMatr->pValueCopy];
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-    //резервируем индексы ядра
+    //резервируем константы ядра
     for (int i=0; i<MAX_REZERV; i++) {
         int iIndexRezerv=[ArrayPoints SetFloat:0.0f];
         [m_OperationIndex AddData:iIndexRezerv WithData:pMatr->pValueCopy];
-        iIndexMaxSys=iIndexRezerv;
+        iIndexMaxSys=iIndexRezerv+1;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -305,10 +497,12 @@ repeate:
         switch (iLenVersion) {
             case 1:
             {
+                //загрузка струн
                 [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
                                 WithCurRead:&pDataCurManager->m_iCurReadingPos
                                 WithParent:nil WithContainer:self];
                 
+                //загрузка матрицы
                 [ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
                                  rpos:&pDataCurManager->m_iCurReadingPos];
             }
@@ -480,17 +674,13 @@ repeate:
 //------------------------------------------------------------------------------------------------------
 //копируем струну в другое пространство (перекодирование имён параметров)
 -(void)CopyStrFrom:(StringContainer*)SourceContainer WithId:(FractalString *)SourceStr{
-
-    FractalString *pDestStr = [[FractalString alloc] initAsCopy:SourceStr
-        WithParent:nil WithContainer:self WithSourceContainer:SourceContainer WithLink:NO];
-
     
-//    NSMutableDictionary *pDicRename=[[NSMutableDictionary alloc] init];
-//
-//    [self DeepString:SourceStr dic:pDicRename
-//            SourceContainer:(StringContainer*)SourceContainer parent:nil];
-//
-//    [pDicRename release];
+    FractalString *pFStringZero=[self GetString:@"Zero"];
+    
+    /*FractalString *pDestStr = */[[FractalString alloc] initAsCopy:SourceStr
+        WithParent:pFStringZero WithContainer:self WithSourceContainer:SourceContainer WithLink:NO];
+
+ //   [pDestStr->m_pContainer LogString:pDestStr];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)DelChilds:(FractalString *)strDelChilds{
@@ -528,8 +718,9 @@ repeate:
 //если нашли себя в струне парента, то удаляем -------------------------------------------------------
                     //удаляем данные связаные со струной
                     MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:strDel->pParent->m_iIndex];
+                    int Count=[ArrayPoints GetCountAtIndex:strDel->pParent->m_iIndex];
 
-                    if(pMatr!=0)
+                    if(pMatr!=0 && Count>0)
                     {
                         int iRet=-1;
 
@@ -548,45 +739,62 @@ repeate:
 //удаляем ассоциации=======================================================================================
                     if(pFrStr->pAssotiation!=nil)
                     {
-                        NSNumber *pNumSource=[NSNumber numberWithInt:pFrStr->m_iIndexSelf];
-                        [pFrStr->pAssotiation removeObjectForKey:pNumSource];
+                        //смотрим на матрицу данных
+                        int Count=[ArrayPoints GetCountAtIndex:pFrStr->m_iIndex];
                         
+                        NSMutableDictionary *TmpAssotionation=pFrStr->pAssotiation;
+                        
+                        if(Count==0)
+                        {
+                            NSNumber *pNumSource=[NSNumber numberWithInt:pFrStr->m_iIndexSelf];
+                            [pFrStr->pAssotiation removeObjectForKey:pNumSource];
+                            [pFrStr->pAssotiation release];
+                            pFrStr->pAssotiation=nil;
 
-                        if([pFrStr->pAssotiation count]==1)
-                        {//если больше нет ссылок очищаем массив
-
-                            NSArray *keys = [pFrStr->pAssotiation allKeys];
-                            id aKey = [keys objectAtIndex:0];
-                            NSNumber *pNum = [pFrStr->pAssotiation objectForKey:aKey];
-                            FractalString *TmpStr = [ArrayPoints GetIdAtIndex:[pNum intValue]];
-
-                            NSString *pKey = [NSString stringWithFormat:@"%p",TmpStr->pAssotiation];
+                            NSArray *Objects = [TmpAssotionation allValues];
+                            
+                            for (int i=0; i<[Objects count]; i++) {
+                                NSNumber *pNum = [Objects objectAtIndex:i];
+                                
+                                FractalString *TmpStrInside = [ArrayPoints GetIdAtIndex:[pNum intValue]];
+                                
+                                int **DataChild=(TmpStrInside->pParent->pChildString);
+                                int iRet=[m_OperationIndex FindIndex:TmpStrInside->
+                                          m_iIndexSelf WithData:DataChild];
+                                
+                                if(iRet>-1)
+                                    [m_OperationIndex RemoveDataAtPlace:iRet WithData:DataChild];
+                                [DicStrings removeObjectForKey:TmpStrInside->strUID];
+                                [TmpStrInside release];
+                            }
+                            
+                            NSString *pKey = [NSString stringWithFormat:@"%p",TmpAssotionation];
                             [ArrayPoints->DicAllAssociations removeObjectForKey:pKey];
+                        }
+                        else
+                        {
+                            NSNumber *pNumSource=[NSNumber numberWithInt:pFrStr->m_iIndexSelf];
+                            [pFrStr->pAssotiation removeObjectForKey:pNumSource];
+                            
 
-                            [TmpStr->pAssotiation release];
-                            TmpStr->pAssotiation=nil;
+                            if([pFrStr->pAssotiation count]==1)
+                            {//если больше нет ссылок очищаем массив
+
+                                NSArray *keys = [pFrStr->pAssotiation allKeys];
+                                id aKey = [keys objectAtIndex:0];
+                                NSNumber *pNum = [pFrStr->pAssotiation objectForKey:aKey];
+                                FractalString *TmpStr = [ArrayPoints GetIdAtIndex:[pNum intValue]];
+
+                                NSString *pKey = [NSString stringWithFormat:@"%p",TmpStr->pAssotiation];
+                                [ArrayPoints->DicAllAssociations removeObjectForKey:pKey];
+
+                                [TmpStr->pAssotiation release];
+                                TmpStr->pAssotiation=nil;
+                            }
                         }
                         
                     }
                     
-                    //смотрим на матрицу данных
-                    int Count=[ArrayPoints GetCountAtIndex:pFrStr->m_iIndex];
-                    
-                    if(Count==0)
-                    {
-                        NSArray *Objects = [pFrStr->pAssotiation allValues];
-                        
-                        for (int i=0; i<[Objects count]; i++) {
-                            NSNumber *pNum = [Objects objectAtIndex:i];
-                            
-                            FractalString *TmpStr = [ArrayPoints GetIdAtIndex:[pNum intValue]];
-                            
-                            int **DataChild=(TmpStr->pParent->pChildString);
-                            int iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndexSelf WithData:DataChild];
-                            if(iRet>-1)[m_OperationIndex RemoveDataAtPlace:iRet WithData:DataChild];
-                            [TmpStr release];
-                        }
-                    }
 //==========================================================================================================
                     //удаляемся из парента саму струну
                     [m_OperationIndex RemoveDataAtPlace:i WithData:Data];
@@ -643,6 +851,7 @@ LOOP:
 - (void)dealloc
 {
     [DicStrings release];
+    [DicLog release];
 
     [ArrayPoints release];
     [m_OperationIndex release];

@@ -115,7 +115,6 @@
             
         case DATA_MATRIX:
         {
-            [pDicRename removeAllObjects];
             iRetIndex = [self SetMatrix:*((MATRIXcell **)pDataTmp)];
         }
         break;
@@ -191,7 +190,6 @@
     *(TmpLink)=DataValue;
 
     (*(pType+iIndex))=DATA_ID;
-    DataValue->m_iIndex=iIndex;
 
     return iIndex;
 }
@@ -252,21 +250,42 @@
         for (int i=0; i<InfoStr->mCount; i++) {
             int iTmpIndex=StartData[i];
             
-            NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
-            NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
-            
-            if(pNewNum==nil){
-                int iNewIndex=[self CopyDataAtIndex:iTmpIndex];
-                
-                NSNumber *pNumTmp=[NSNumber numberWithInt:iNewIndex];
-                [pDicRename setObject:pNumTmp forKey:pOldNum];
-                
-                [pParent->m_OperationIndex AddData:iNewIndex WithData:pNewMatr->pValueCopy];
+            if(iTmpIndex<pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
+            {
+                [pParent->m_OperationIndex AddData:iTmpIndex WithData:pNewMatr->pValueCopy];
             }
             else
             {
-                int IncIndex = [pNewNum intValue];
-                [pParent->m_OperationIndex AddData:IncIndex WithData:pNewMatr->pValueCopy];
+                NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
+                NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
+                
+
+                if(pNewNum==nil){
+
+                    if(DataMatrix->iIndexSelf==iTmpIndex)
+                    {
+                        NSNumber *pNumFutureNewIndex=[NSNumber numberWithInt:pNewMatr->iIndexSelf];
+                        [pDicRename setObject:pNumFutureNewIndex forKey:pOldNum];
+
+                        [pParent->m_OperationIndex AddData:pNewMatr->iIndexSelf
+                                                    WithData:pNewMatr->pValueCopy];
+                    }
+                    else
+                    {
+                        int iNewIndex=[self CopyDataAtIndex:iTmpIndex];
+
+                        NSNumber *pNumFutureNewIndex=[NSNumber numberWithInt:iNewIndex];
+                        [pDicRename setObject:pNumFutureNewIndex forKey:pOldNum];
+
+                        [pParent->m_OperationIndex AddData:iNewIndex
+                                                  WithData:pNewMatr->pValueCopy];
+                    }
+                }
+                else
+                {
+                    int IncIndex = [pNewNum intValue];
+                    [pParent->m_OperationIndex AddData:IncIndex WithData:pNewMatr->pValueCopy];
+                }
             }
         }
         
@@ -379,8 +398,13 @@
                     
                     [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueCopy];
             //        [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueLink];
-                    [pParent->m_OperationIndex ReleaseMemory:pMatr->pQueue];
-                    [pParent->m_OperationIndex ReleaseMemory:pMatr->pLinks];
+
+                    free(*pMatr->pQueue);
+                    free(pMatr->pQueue);
+
+                    free(*pMatr->pLinks);
+                    free(pMatr->pLinks);
+
 
                     NSNumber *pVal = [NSNumber numberWithInt:pMatr->iIndexSelf];
                     [pMartixDic removeObjectForKey:pVal];
@@ -507,10 +531,19 @@
             bool bFirst=YES;
             int **TmpChild=0;
 
+//            while ((pNum = [pTmpEnumerator nextObject])) {
+//                int iIndex=[pNum integerValue];
+//                
+//                FractalString *TmpString = [self GetIdAtIndex:iIndex];
+//                InfoArrayValue *pInfoChild=(InfoArrayValue *)(*TmpString->pChildString);
+//                int m=0;
+//            }
+            
             while ((pNum = [pTmpEnumerator nextObject])) {
                 int iIndex=[pNum integerValue];
                 
                 FractalString *TmpString = [self GetIdAtIndex:iIndex];
+                TmpString->pAssotiation=[pGroupsLinks retain];
                 
                 if(TmpString!=0){
                     if(bFirst==YES){
@@ -523,9 +556,7 @@
                         free(TmpString->pChildString);
                         TmpString->pChildString=TmpChild;
                     }
-                    TmpString->pAssotiation=[pGroupsLinks retain];
-
-                }                
+                }
             }
         }
     }
@@ -579,8 +610,7 @@
     iv = [m_pData subdataWithRange:NSMakeRange(*iCurReadingPos, iLen)];
     
     if(pNamesValue!=nil)[pNamesValue release];
-    pNamesValue = [[NSKeyedUnarchiver unarchiveObjectWithData:iv] retain];
-    
+    pNamesValue = [[NSKeyedUnarchiver unarchiveObjectWithData:iv]retain];
     *iCurReadingPos += iLen;
 //--------------------------------------------------------------------------------
 
@@ -602,6 +632,7 @@
         if(TmpDic!=nil){
             NSString *pKey = [NSString stringWithFormat:@"%p",TmpDic];
             [DicAllAssociations setObject:TmpDic forKey:pKey];
+            [TmpDic release];
         }
         
         *iCurReadingPos += iLen;

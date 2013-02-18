@@ -15,6 +15,7 @@
 @public
     FunArrayData *ArrayPoints;
     NSMutableDictionary *DicStrings;
+    NSMutableDictionary *DicLog;
     FunArrayDataIndexes *m_OperationIndex;
     
     FractalString *pFStringObjects;
@@ -49,6 +50,7 @@
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
 -(void)AddSmallCube:(FractalString *)pFParent;
+- (void)LogString:(FractalString *)fString;
 
 -(void)CopyStrFrom:(StringContainer*)SourceContainer WithId:(FractalString *)SourceStr;
 -(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr;

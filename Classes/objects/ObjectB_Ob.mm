@@ -37,7 +37,7 @@
     m_bNotPush=NO;
     m_bHiden=NO;
     m_bPush=NO;
-    m_bDrag=NO;
+    m_bDrag=YES;
     m_bStartPush=NO;
     m_bStartMove=NO;
     m_bFlicker=NO;
