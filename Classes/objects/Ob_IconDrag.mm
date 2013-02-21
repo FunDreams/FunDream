@@ -151,44 +151,43 @@
         if(pMode!=0 && *pMode==M_DROP_BOX)
         {
             if(m_pCurPosition.y<202 && pInsideString!=nil){
-         //       if(pParent!=pInsideString){//сохранение в DropBox
 
-                    if(bFromEmpty==YES)
-                    {                        
-                        if(pInsideString->m_iFlags & (SYNH_AND_LOAD|ONLY_IN_MEM)){
-                            FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
-                                    WithParent:pDropBoxStr
-                                    WithContainer:m_pObjMng->pStringContainer
-                                    WithSourceContainer:m_pObjMng->pStringContainer
-                                                        WithLink:NO];
-                            
-                            [self SetPos:pNewString];
-                            
-                            bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
-                            
-                            if(pNeedUpload!=0){
-                                *pNeedUpload=YES;
-                            }
-                            
-                            //add to save
-                            [pODropBox AddToUploadString:pNewString];
-                            [pNewString SetFlag:ONLY_IN_MEM];
-                        }
-             //       }
-                    else
+                if(bFromEmpty==YES)
+                {                        
+                    if(pInsideString->m_iFlags & (SYNH_AND_LOAD|ONLY_IN_MEM))
                     {
-                        FractalString *DragObjectDropBox = GET_ID_V(@"DropBoxString");
-
-                        if(DragObjectDropBox!=nil){
-
-                            [self SetPos:DragObjectDropBox];
-                        }
+                        FractalString *pNewString =[[FractalString alloc] initAsCopy:pInsideString
+                                WithParent:pDropBoxStr
+                                WithContainer:m_pObjMng->pStringContainer
+                                WithSourceContainer:m_pObjMng->pStringContainer
+                                                    WithLink:NO];
+                        
+                        [self SetPos:pNewString];
                         
                         bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
                         
                         if(pNeedUpload!=0){
                             *pNeedUpload=YES;
                         }
+                        
+                        //add to save
+                        [pODropBox AddToUploadString:pNewString];
+                        [pNewString SetFlag:ONLY_IN_MEM];
+                    }
+                }
+                else
+                {
+                    FractalString *DragObjectDropBox = GET_ID_V(@"DropBoxString");
+
+                    if(DragObjectDropBox!=nil){
+
+                        [self SetPos:DragObjectDropBox];
+                    }
+                    
+                    bool *pNeedUpload=GET_BOOL_V(@"bNeedUpload");
+                    
+                    if(pNeedUpload!=0){
+                        *pNeedUpload=YES;
                     }
                 }
             }

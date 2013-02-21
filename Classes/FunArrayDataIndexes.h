@@ -30,8 +30,9 @@
 -(int)GetDataAtIndex:(int)iIndex WithData:(int **)pData;
 -(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData;
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos WithData:(int **)pData;
-//- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData;
+- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData;
 - (int)FindIndex:(int)IndexValue WithData:(int **)pData;
+- (void)OnlyRemoveDataAtIndex:(int)iIndex WithData:(int **)pData;
 
 - (bool)CheckHierarhy:(NSMutableDictionary *)DataLoops
              RootMatr:(MATRIXcell *)pRootMatr SearchCurIndex:(int)iIndex;

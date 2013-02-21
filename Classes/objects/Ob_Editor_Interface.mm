@@ -426,7 +426,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
 
- //   FractalString *pStrObjects = [m_pObjMng->pStringContainer GetString:@"Objects"];
+//    FractalString *pStrObjects = [m_pObjMng->pStringContainer GetString:@"Objects"];
 //    [pStrObjects->m_pContainer LogString:pStrObjects];
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];

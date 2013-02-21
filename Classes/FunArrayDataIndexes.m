@@ -104,26 +104,20 @@
     [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
-//- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
-//    
-//    InfoArrayValue *InfoStrSource=(InfoArrayValue *)(*pSourceData);
-//    InfoArrayValue *InfoStrDest=(InfoArrayValue *)(*pDestData);
-//
-//    *InfoStrDest=*InfoStrSource;
-//
-//    [self SetCopasity:InfoStrSource->mCopasity WithData:pDestData];
-//    
-//    int *StartDataSource=((*pSourceData)+SIZE_INFO_STRUCT);
-//    int *StartDataDest=((*pDestData)+SIZE_INFO_STRUCT);
-//    
-//    memcpy(StartDataDest, StartDataSource, sizeof(int)*(InfoStrSource->mCount));
-//
-//    for (int i=0; i<InfoStrDest->mCount; i++) {
-//        
-//        int iIndex=StartDataDest[i];
-//        [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
-//    }
-//}
+- (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
+    
+    InfoArrayValue *InfoStrSource=(InfoArrayValue *)(*pSourceData);
+    InfoArrayValue *InfoStrDest=(InfoArrayValue *)(*pDestData);
+
+    *InfoStrDest=*InfoStrSource;
+
+    [self SetCopasity:InfoStrSource->mCopasity WithData:pDestData];
+    
+    int *StartDataSource=((*pSourceData)+SIZE_INFO_STRUCT);
+    int *StartDataDest=((*pDestData)+SIZE_INFO_STRUCT);
+    
+    memcpy(StartDataDest, StartDataSource, sizeof(int)*(InfoStrSource->mCount));
+}
 //------------------------------------------------------------------------------------------
 - (int)FindIndex:(int)IndexValue WithData:(int **)pData{
     int iRet=-1;
@@ -221,6 +215,27 @@
 //    }
     
     return bRez;
+}
+//------------------------------------------------------------------------------------------
+- (void)OnlyRemoveDataAtIndex:(int)iIndex WithData:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+    
+    for (int i=0; i<InfoStr->mCount; i++) {
+        int itmpIndex = StartData[i];
+        
+        if(itmpIndex==iIndex){
+            
+            if(i+1<InfoStr->mCount)
+                memcpy(StartData+i, StartData+i+1, sizeof(int)*(InfoStr->mCount-(i+1)));
+            
+            InfoStr->mCount--;
+            [self SetCopasity:InfoStr->mCount WithData:pData];
+
+            return;
+        }
+    }
 }
 //------------------------------------------------------------------------------------------
 - (void)RemoveDataAtPlace:(int)iPlace WithData:(int **)pData{

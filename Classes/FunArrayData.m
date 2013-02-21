@@ -108,31 +108,37 @@
 
     int iRetIndex=0;
     
-    switch (bType) {
-        case DATA_ID:
-            iRetIndex = [self SetOb:*((FractalString **)pDataTmp)];
+    if(iIndex<=pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
+    {
+        iRetIndex=iIndex;
+    }
+    else {
+        switch (bType) {
+            case DATA_ID:
+                iRetIndex = [self SetOb:*((FractalString **)pDataTmp)];
+                break;
+                
+            case DATA_MATRIX:
+            {
+                iRetIndex = [self SetMatrix:*((MATRIXcell **)pDataTmp)];
+            }
             break;
-            
-        case DATA_MATRIX:
-        {
-            iRetIndex = [self SetMatrix:*((MATRIXcell **)pDataTmp)];
+
+            case DATA_FLOAT:
+                iRetIndex = [self SetFloat:*pDataTmp];
+                break;
+
+            case DATA_INT:
+                iRetIndex = [self SetInt:*((int *)pDataTmp)];
+                break;
+
+            case DATA_STRING:
+                iRetIndex = [self SetName:*((NSMutableString **)pDataTmp)];
+                break;
+
+            default:
+                break;
         }
-        break;
-
-        case DATA_FLOAT:
-            iRetIndex = [self SetFloat:*pDataTmp];
-            break;
-
-        case DATA_INT:
-            iRetIndex = [self SetInt:*((int *)pDataTmp)];
-            break;
-
-        case DATA_STRING:
-            iRetIndex = [self SetName:*((NSMutableString **)pDataTmp)];
-            break;
-
-        default:
-            break;
     }
     return iRetIndex;
 }
@@ -198,28 +204,56 @@
     
     if(pParent==nil)return;
     
-    //переменные-точки
-    pMatr->pValueCopy = [pParent->m_OperationIndex InitMemory];
-    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pMatr->pValueCopy);
+    //паренты
+    pMatr->pLinks = [pParent->m_OperationIndex InitMemory];
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pMatr->pLinks);
     InfoStr->ParentMatrix=pMatr;
 
-//    pMatr->pValueLink = [pParent->m_OperationIndex InitMemory];
-//    InfoStr=(InfoArrayValue *)(*pMatr->pValueLink);
-//    InfoStr->ParentMatrix=pMatr;
-    
+    //чилды
+    pMatr->pValueCopy = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pMatr->pValueCopy);
+    InfoStr->ParentMatrix=pMatr;
+
+    //входные параметны
+    pMatr->pEnters = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pMatr->pEnters);
+    InfoStr->ParentMatrix=pMatr;
+    InfoStr->mFlags&=F_ORDER;
+
+    //выходные параметны
+    pMatr->pExits = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pMatr->pExits);
+    InfoStr->ParentMatrix=pMatr;
+    InfoStr->mFlags&=F_ORDER;
+
     //связи
     pMatr->pQueue = [pParent->m_OperationIndex InitMemory];
     InfoStr=(InfoArrayValue *)(*pMatr->pQueue);
     InfoStr->ParentMatrix=pMatr;
 
-    //линки
-    pMatr->pLinks = [pParent->m_OperationIndex InitMemory];
-    InfoStr=(InfoArrayValue *)(*pMatr->pLinks);
-    InfoStr->ParentMatrix=pMatr;
 
     pMatr->TypeInformation=0;
     pMatr->NameInformation=0;
     pMatr->iIndexSelf=0;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)RenameIndexData:(int **)Data Dic:(NSMutableDictionary *)pDic{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*Data);
+    int *StartData=((*Data)+SIZE_INFO_STRUCT);
+    
+    for (int i=0; i<InfoStr->mCount; i++) {//копируем все дочерние объекты
+        int iTmpIndex=StartData[i];
+        
+        if(iTmpIndex<pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
+            continue;
+
+        NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
+        NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
+        
+        if(pNewNum!=nil)
+            StartData[i]=[pNewNum intValue];
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (int)SetMatrix:(MATRIXcell *)DataMatrix{
@@ -239,15 +273,12 @@
 //copy matrix ========================================================================
         pNewMatr->NameInformation=DataMatrix->NameInformation;
         pNewMatr->TypeInformation=DataMatrix->TypeInformation;
-                
-        //копируем link
-    //    [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pValueLink To:pNewMatr->pValueLink];
-        
+
         //копируем copy
         InfoArrayValue *InfoStr=(InfoArrayValue *)(*DataMatrix->pValueCopy);
         int *StartData=((*DataMatrix->pValueCopy)+SIZE_INFO_STRUCT);
 
-        for (int i=0; i<InfoStr->mCount; i++) {
+        for (int i=0; i<InfoStr->mCount; i++) {//копируем все дочерние объекты
             int iTmpIndex=StartData[i];
             
             if(iTmpIndex<pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
@@ -258,7 +289,6 @@
             {
                 NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
                 NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
-                
 
                 if(pNewNum==nil){
 
@@ -288,6 +318,12 @@
                 }
             }
         }
+        
+        //копируем индексы для параметров выхода/входа
+        [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pEnters To:pNewMatr->pEnters];
+        [self RenameIndexData:pNewMatr->pEnters Dic:pDicRename];
+        [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pExits To:pNewMatr->pExits];
+        [self RenameIndexData:pNewMatr->pExits Dic:pDicRename];
         
         //pNewMatr->pQueue// copy queue
 //===================================================================================
@@ -405,6 +441,11 @@
                     free(*pMatr->pLinks);
                     free(pMatr->pLinks);
 
+                    free(*pMatr->pEnters);
+                    free(pMatr->pEnters);
+
+                    free(*pMatr->pExits);
+                    free(pMatr->pExits);
 
                     NSNumber *pVal = [NSNumber numberWithInt:pMatr->iIndexSelf];
                     [pMartixDic removeObjectForKey:pVal];
@@ -665,10 +706,6 @@
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pMatr->pValueCopy);
     InfoStr->ParentMatrix=pMatr;
 
-//    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pValueLink];
-//    InfoStr=(InfoArrayValue *)(*pMatr->pValueLink);
-//    InfoStr->ParentMatrix=pMatr;
-
     [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pQueue];
     InfoStr=(InfoArrayValue *)(*pMatr->pQueue);
     InfoStr->ParentMatrix=pMatr;
@@ -677,6 +714,13 @@
     InfoStr=(InfoArrayValue *)(*pMatr->pLinks);
     InfoStr->ParentMatrix=pMatr;
 
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pEnters];
+    InfoStr=(InfoArrayValue *)(*pMatr->pEnters);
+    InfoStr->ParentMatrix=pMatr;
+
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pExits];
+    InfoStr=(InfoArrayValue *)(*pMatr->pExits);
+    InfoStr->ParentMatrix=pMatr;
 
     //тип струны.
     NSRange Range = NSMakeRange( *iCurReadingPos, sizeof(BYTE));
@@ -697,9 +741,11 @@
 - (void)SaveMatrix:(NSMutableData *)pMutData WithMatr:(MATRIXcell *)pMatr{
     
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pValueCopy];
-//    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pValueLink];
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pQueue];
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pLinks];
+
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pEnters];
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pExits];
 
     //тип струны.
     [pMutData appendBytes:&pMatr->TypeInformation length:sizeof(BYTE)];

@@ -15,6 +15,10 @@
 #define SYNH_AND_HEAD       0x00000002//струна на сервере, а в памяти только структура-заголовок (жёлтый)
 #define SYNH_AND_LOAD       0x00000004//струна загружена и синхронизирована с хранилищем (зелёный)
 #define ONLY_IN_MEM         0x00000008//струна только в локальной памяти устройства (синий)
+
+#define ADIT_TYPE_SIMPLE      0x0001//для внутренных использований
+#define ADIT_TYPE_ENTER       0x0002//для входных параметров
+#define ADIT_TYPE_EXIT        0x0003//для выходных параметров
 //-------------------------------------------------------------------------------------------------
 #define SIZE_INFO_STRUCT    3
 typedef struct{
@@ -48,6 +52,7 @@ typedef struct{
     
     NSString *sNameIcon;//имя иконки
     int m_iFlags;
+    short m_iAdditionalType;
     NSMutableDictionary *pAssotiation;//ассоциации
 }
 

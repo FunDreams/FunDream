@@ -31,6 +31,7 @@
     NSMutableString *NameDownLoadFile;
     int m_iNumDownLoadFiles;
     int m_iDownloadPlace;
+    FractalString *StringDownLoad;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

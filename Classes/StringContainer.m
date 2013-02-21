@@ -43,7 +43,7 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LogInfo:(FractalString *)fString{
-    NSLog(@"Str:%@ %p Ind:%d IndS:%d ic:%@",fString->strUID,self,fString->m_iIndex,
+    NSLog(@"Str:%@ %p Ind:%d IndS:%d ic:%@",fString->strUID,fString,fString->m_iIndex,
           fString->m_iIndexSelf,fString->sNameIcon);
 
     if(fString->pParent!=nil){
@@ -285,7 +285,7 @@
 //    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pStrIngib->m_iIndex];
 //    pMatr->TypeInformation=STR_CONTAINER;
 //    pMatr->NameInformation=NAME_K_START;
-//    
+//
 //    FractalString *pStrButton=[[FractalString alloc]
 //                            initWithName:@"Action" WithParent:pStrInfo WithContainer:self];
 //
@@ -299,7 +299,7 @@
 //    pMatr->TypeInformation=STR_CONTAINER;
 //    pMatr->NameInformation=NAME_K_BUTTON_ENVENT;
 //
-//
+
 //    FractalString *pStrPlus=[[FractalString alloc]
 //                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
 //    
@@ -312,7 +312,7 @@
 //    pMatr=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
 //    pMatr->TypeInformation=STR_OPERATION;
 //    pMatr->NameInformation=NAME_O_PLUS;
-//
+
 
     FractalString *pStrVA=[[FractalString alloc]
                         initWithName:@"A" WithParent:pStrInfo WithContainer:self];
@@ -334,28 +334,18 @@
     pStrVB->m_iIndex=[ArrayPoints SetFloat:100.2];
     [m_OperationIndex AddData:pStrVB->m_iIndex WithData:pMatrInfo->pValueCopy];
 
-//    FractalString *pStrVR=[[FractalString alloc]
-//                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
-//    
-//    [pStrVR SetNameIcon:@"R.png"];
-//    pStrVR->X=-280;
-//    pStrVR->Y=-30;
-//    
-//    pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
-//    [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
-//
-//    FractalString *pStrVT=[[FractalString alloc]
-//                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
-//    
-//    [pStrVT SetNameIcon:@"R.png"];
-//    pStrVT->X=-280;
-//    pStrVT->Y=-160;
-//    
-//    pStrVT->m_iIndex=[ArrayPoints SetInt:123456];
-//    [m_OperationIndex AddData:pStrVT->m_iIndex WithData:pMatrInfo->pValueCopy];
+    FractalString *pStrVR=[[FractalString alloc]
+                           initWithName:@"R" WithParent:pStrInfo WithContainer:self];
+    
+    [pStrVR SetNameIcon:@"R.png"];
+    pStrVR->X=-280;
+    pStrVR->Y=-30;
+    
+    pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
+    [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
 }
 //------------------------------------------------------------------------------------------------------
-#define MAX_REZERV 200
+#define MAX_REZERV 4000
 -(void)InitIndex{//линкуем константы к контейнеру
     FractalString *pFStringZero = [self GetString:@"Zero"];
     if(pFStringZero!=nil){
@@ -384,7 +374,7 @@
     for (int i=0; i<MAX_REZERV; i++) {
         int iIndexRezerv=[ArrayPoints SetFloat:0.0f];
         [m_OperationIndex AddData:iIndexRezerv WithData:pMatr->pValueCopy];
-        iIndexMaxSys=iIndexRezerv+1;
+        iIndexMaxSys=iIndexRezerv;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -445,8 +435,8 @@
 //------------------------------------------------------------------------------------------------------
 -(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr
 {
-//    int **pEnters;
-//    int **pExits;
+    MATRIXcell *pMatrStart=[ArrayPoints GetMatrixAtIndex:StartStr->m_iIndex];
+    pMatrStart->pQueue;
 }
 //------------------------------------------------------------------------------------------------------
 -(void)AddObject{
@@ -724,18 +714,16 @@ repeate:
                     {
                         int iRet=-1;
 
-//                        if(pFrStr->m_bLink==YES)
-//                        {
-//                            iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndex WithData:pMatr->pValueLink];
-//                          if(iRet>-1)[m_OperationIndex RemoveDataAtPlace:iRet WithData:pMatr->pValueLink];
-//                        }
-//                        else
-//                        {
-                            iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndex WithData:pMatr->pValueCopy];
-                            if(iRet>-1)[m_OperationIndex RemoveDataAtPlace:iRet WithData:pMatr->pValueCopy];
-           //             }
+                        iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndex WithData:pMatr->pValueCopy];
+                        if(iRet>-1)[m_OperationIndex RemoveDataAtPlace:iRet WithData:pMatr->pValueCopy];
                     }
 
+                    if(pFrStr->m_iAdditionalType==ADIT_TYPE_ENTER)
+                        [m_OperationIndex OnlyRemoveDataAtIndex:pFrStr->m_iIndex
+                                            WithData:pMatr->pEnters];
+                    else if(pFrStr->m_iAdditionalType==ADIT_TYPE_EXIT)
+                        [m_OperationIndex OnlyRemoveDataAtIndex:pFrStr->m_iIndex
+                                            WithData:pMatr->pExits];
 //удаляем ассоциации=======================================================================================
                     if(pFrStr->pAssotiation!=nil)
                     {
@@ -775,8 +763,29 @@ repeate:
                         {
                             NSNumber *pNumSource=[NSNumber numberWithInt:pFrStr->m_iIndexSelf];
                             [pFrStr->pAssotiation removeObjectForKey:pNumSource];
-                            
+//переназначаем парентов с случае удаления ссылки========================================================
+                            NSArray *keys_Tmp = [pFrStr->pAssotiation allKeys];
+                            id aKey_Tmp = [keys_Tmp objectAtIndex:0];
+                            NSNumber *pNum_Tmp = [pFrStr->pAssotiation objectForKey:aKey_Tmp];
+                            FractalString *StrDiffParrent = [ArrayPoints GetIdAtIndex:[pNum_Tmp intValue]];
 
+                            int **DataChild=(strDel->pChildString);
+                            InfoArrayValue *InfoStr_Childs=(InfoArrayValue *)(*DataChild);
+                            int *StartDataInDelChild=((*DataChild)+SIZE_INFO_STRUCT);
+                                
+                            int iChildInd=StartDataInDelChild[0];
+                            FractalString *ChildStrInDelString = [ArrayPoints GetIdAtIndex:iChildInd];
+
+                            if(ChildStrInDelString->pParent==strDel)
+                            {
+                                for (int i=0; i<InfoStr_Childs->mCount; i++) {
+                                    
+                                    iChildInd=StartDataInDelChild[i];
+                                    FractalString *Tmp_Str = [ArrayPoints GetIdAtIndex:iChildInd];
+                                    Tmp_Str->pParent=StrDiffParrent;
+                                }
+                            }
+//=======================================================================================================
                             if([pFrStr->pAssotiation count]==1)
                             {//если больше нет ссылок очищаем массив
 
@@ -792,9 +801,7 @@ repeate:
                                 TmpStr->pAssotiation=nil;
                             }
                         }
-                        
                     }
-                    
 //==========================================================================================================
                     //удаляемся из парента саму струну
                     [m_OperationIndex RemoveDataAtPlace:i WithData:Data];

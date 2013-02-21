@@ -309,6 +309,8 @@
         m_iNumDownLoadFiles = 1;
         
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
+        
+        StringDownLoad=pFsr;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -390,39 +392,29 @@
                     [pStringContainerTmp->ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
                                           rpos:&pDataCurManager->m_iCurReadingPos];
                     
-                    FractalString *pDelStr=[m_pObjMng->pStringContainer GetString:pNewString->strUID];
                     float fX;
                     float fY;
-
-                    //
-                    FractalString *pStrDropBox = [m_pObjMng->pStringContainer GetString:@"DropBox"];
-                                        
-                    int **DataDropBox=(pStrDropBox->pChildString);
-                    InfoArrayValue *InfoStrDropBox=(InfoArrayValue *)(*DataDropBox);
                     
-                    if(pStrDropBox!=nil){
-                        for (int i=0; i<InfoStrDropBox->mCount; i++){//делаем массив линков из DropBox'a
-                            
-                        }
-                    }
-                    //
-
-                    
-                    if(pDelStr!=nil){
-                        fX=pDelStr->X;
-                        fY=pDelStr->Y;
+                    if(StringDownLoad!=nil){
+                        fX=StringDownLoad->X;
+                        fY=StringDownLoad->Y;
                         
-                        [m_pObjMng->pStringContainer DelString:pDelStr];
+                        [m_pObjMng->pStringContainer DelString:StringDownLoad];
                     }
                     
                     //копируем струну в основной контейнер
-                    [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
+                    
+                    [[FractalString alloc] initAsCopy:pNewString
+                            WithParent:StrDropBox WithContainer:m_pObjMng->pStringContainer
+                                WithSourceContainer:pStringContainerTmp WithLink:NO];
+                    
+           //         [m_pObjMng->pStringContainer CopyStrFrom:pStringContainerTmp WithId:pNewString];
                     FractalString *pNewStr = [m_pObjMng->pStringContainer GetString:pNewString->strUID];
                     
        //             [pNewString->m_pContainer LogString:pNewString];
                     
                     //очищаем индекс и устанавливаем родителя
-                    [pNewStr SetParent:StrDropBox];
+//                    [pNewStr SetParent:StrDropBox];
 
                     [pStringContainerTmp release];
 /////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -611,12 +603,10 @@ Repeate2:;//главная синхронизация
         for(int i=0;i<[pFstrRez count];i++){
             
             FractalString *pFstrTmp=[pFstrRez objectAtIndex:i];
-            
-            int index=[m_pObjMng->pStringContainer->ArrayPoints SetOb:pFstrTmp];
-            [m_pObjMng->pStringContainer->m_OperationIndex
-                                       AddData:index WithData:DataDropBox];
 
-            pFstrTmp->pParent=pStrDropBox;
+            [pFstrTmp SetParent:pStrDropBox];
+            
+            pFstrTmp->m_iIndex=[m_pObjMng->pStringContainer->ArrayPoints SetMatrix:0];
             
             if(pFstrTmp->m_iFlags & SYNH_AND_LOAD)
                 [pFstrTmp SetFlag:SYNH_AND_HEAD];

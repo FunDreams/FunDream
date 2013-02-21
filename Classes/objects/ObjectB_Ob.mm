@@ -466,7 +466,7 @@ Exit:
 - (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
     
     int *pMode=GET_INT_V(@"m_iMode");
-    if(pMode!=0 && *pMode==4 && m_bStartTouch==NO){
+    if(pMode!=0 && *pMode==M_CONNECT && m_bStartTouch==NO){
         FractalString *StartStr=GET_ID_V(@"StartConnection");
         
         [m_pObjMng->pStringContainer ConnectStart:StartStr End:pString];

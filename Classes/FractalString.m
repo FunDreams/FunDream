@@ -42,6 +42,7 @@
     [self SetFlag:ONLY_IN_MEM];
     [self SetNameIcon:@"none"];
     m_iIndex=1;//zero
+    m_iAdditionalType=ADIT_TYPE_SIMPLE;
 
     X=-440;
     Y=170;
@@ -322,6 +323,11 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pData getBytes:&m_iIndexSelf range:Range];
     *iCurReadingPos += sizeof(int);
+
+    //дополнительныей тип
+    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
+    [pData getBytes:&m_iAdditionalType range:Range];
+    *iCurReadingPos += sizeof(short);
 //------------------------------------------------------------------------------------
 }
 //------------------------------------------------------------------------------------------------------
@@ -350,6 +356,8 @@
     //индексы
     [pData appendBytes:&m_iIndex length:sizeof(int)];
     [pData appendBytes:&m_iIndexSelf length:sizeof(int)];
+
+    [pData appendBytes:&m_iAdditionalType length:sizeof(short)];
 }
 //------------------------------------------------------------------------------------------------------
 - (id)initWithData:(NSMutableData *)pData WithCurRead:(int *)iCurReadingPos
