@@ -154,6 +154,8 @@
         
         if(bLink==YES){
             
+            m_iAdditionalType=pStrSource->m_iAdditionalType;
+
             m_iIndex=[m_pContainer->ArrayPoints LinkDataAtIndex:pStrSource->m_iIndex];
 
             if(Parent!=nil){

@@ -149,6 +149,17 @@
     InfoStrLinks->mCount++;
 }
 //------------------------------------------------------------------------------------------
+- (void)OnlyAddData:(int)IndexValue WithData:(int **)pData{
+    
+    [self Extend:pData];
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+    
+    StartData[InfoStr->mCount]=IndexValue;
+    InfoStr->mCount++;
+}
+//------------------------------------------------------------------------------------------
 - (void)AddData:(int)IndexValue WithData:(int **)pData{
         
     [self Extend:pData];

@@ -23,6 +23,8 @@
 		182BC6E2165E351700ED304E /* Ob_Tab.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182BC6E1165E351600ED304E /* Ob_Tab.mm */; };
 		182BF1301636A6030051A30E /* Ob_ProgressBar.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */; };
 		182C14A2140CD60000D6E732 /* ObjectWorld.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182C14A0140CD60000D6E732 /* ObjectWorld.mm */; };
+		182D400C16D78EA10075AAEE /* Ob_Selection.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182D400B16D78EA00075AAEE /* Ob_Selection.mm */; };
+		182D400F16D7CEB10075AAEE /* Ob_SelectionConn.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182D400E16D7CEAF0075AAEE /* Ob_SelectionConn.mm */; };
 		182EF73515CA9A61004AB5A5 /* Ob_NumIndicator.mm in Sources */ = {isa = PBXBuildFile; fileRef = 182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */; };
 		1836A55015A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm in Sources */ = {isa = PBXBuildFile; fileRef = 1836A54F15A9DF03001B87AC /* Ob_ParticleCont_ForStr.mm */; };
 		183C009013CE08F60013CB08 /* Dictionary_Ex.m in Sources */ = {isa = PBXBuildFile; fileRef = 183C008F13CE08F60013CB08 /* Dictionary_Ex.m */; };
@@ -150,6 +152,10 @@
 		182BF12F1636A6010051A30E /* Ob_ProgressBar.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_ProgressBar.mm; path = objects/Ob_ProgressBar.mm; sourceTree = "<group>"; };
 		182C14A0140CD60000D6E732 /* ObjectWorld.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; lineEnding = 0; name = ObjectWorld.mm; path = objects/ObjectWorld.mm; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
 		182C14A1140CD60000D6E732 /* ObjectWorld.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ObjectWorld.h; path = objects/ObjectWorld.h; sourceTree = "<group>"; };
+		182D400A16D78E9F0075AAEE /* Ob_Selection.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Selection.h; path = objects/Ob_Selection.h; sourceTree = "<group>"; };
+		182D400B16D78EA00075AAEE /* Ob_Selection.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Selection.mm; path = objects/Ob_Selection.mm; sourceTree = "<group>"; };
+		182D400D16D7CEAF0075AAEE /* Ob_SelectionConn.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_SelectionConn.h; path = objects/Ob_SelectionConn.h; sourceTree = "<group>"; };
+		182D400E16D7CEAF0075AAEE /* Ob_SelectionConn.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_SelectionConn.mm; path = objects/Ob_SelectionConn.mm; sourceTree = "<group>"; };
 		182EF73315CA9A61004AB5A5 /* Ob_NumIndicator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_NumIndicator.h; path = objects/Ob_NumIndicator.h; sourceTree = "<group>"; };
 		182EF73415CA9A61004AB5A5 /* Ob_NumIndicator.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_NumIndicator.mm; path = objects/Ob_NumIndicator.mm; sourceTree = "<group>"; };
 		1836A54E15A9DF03001B87AC /* Ob_ParticleCont_ForStr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_ParticleCont_ForStr.h; path = objects/Ob_ParticleCont_ForStr.h; sourceTree = "<group>"; };
@@ -451,6 +457,10 @@
 				18DEE3CB1581150500C4DAB5 /* Ob_EditorPoint.mm */,
 				1817D5C4156C069C00ED0758 /* Ob_Editor_Interface.h */,
 				1817D5C5156C069C00ED0758 /* Ob_Editor_Interface.mm */,
+				182D400A16D78E9F0075AAEE /* Ob_Selection.h */,
+				182D400B16D78EA00075AAEE /* Ob_Selection.mm */,
+				182D400D16D7CEAF0075AAEE /* Ob_SelectionConn.h */,
+				182D400E16D7CEAF0075AAEE /* Ob_SelectionConn.mm */,
 				186495D915FB91D300C8F9B7 /* Ob_EmtyPlace.h */,
 				186495DA15FB91D300C8F9B7 /* Ob_EmtyPlace.mm */,
 				181F2BA612D5019E008A6482 /* ObjectButton.h */,
@@ -804,6 +814,8 @@
 				182BC6E2165E351700ED304E /* Ob_Tab.mm in Sources */,
 				183D8644169825D300FC9C01 /* Ob_Arrow.mm in Sources */,
 				186178A916AFFED300227777 /* InfoFile.m in Sources */,
+				182D400C16D78EA10075AAEE /* Ob_Selection.mm in Sources */,
+				182D400F16D7CEB10075AAEE /* Ob_SelectionConn.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

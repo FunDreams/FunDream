@@ -38,5 +38,6 @@
              RootMatr:(MATRIXcell *)pRootMatr SearchCurIndex:(int)iIndex;
 
 - (void)SetParentMatrix:(int)IndexValue WithData:(int **)pData;
+- (void)OnlyAddData:(int)IndexValue WithData:(int **)pData;
 @end
 

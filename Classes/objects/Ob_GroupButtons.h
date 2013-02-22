@@ -26,6 +26,7 @@
 - (void)Hide;
 - (void)Show;
 - (void)UpdateButt;
+- (void)SetButton;
 
 - (void)CreateOb:(FractalString *)pFrStr;
 - (void)CreateInfo:(FractalString *)pFrStr;

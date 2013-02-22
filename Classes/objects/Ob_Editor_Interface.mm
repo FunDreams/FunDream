@@ -15,6 +15,7 @@
 #import "ObjectButton.h"
 #import "Ob_EmtyPlace.h"
 #import "Ob_Editor_Num.h"
+#import "Ob_Selection.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -145,6 +146,34 @@
                          SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
                          SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                          SET_VECTOR_V(Vector3DMake(-200,295,0),@"m_pCurPosition"));
+
+    
+}
+//------------------------------------------------------------------------------------------------------
+- (void)RemButtonEdit{
+    if(BSetProp!=nil){
+        DESTROY_OBJECT(BSetProp);
+        BSetProp=0;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetButtonEdit{
+    
+    [self RemButtonEdit];
+    
+    BSetProp=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSetProp",
+                            SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                            SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                            SET_STRING_V(@"ButtonTime.png",@"m_DOWN"),
+                            SET_STRING_V(@"ButtonTime.png",@"m_UP"),
+                            SET_FLOAT_V(54,@"mWidth"),
+                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                            SET_BOOL_V(YES,@"m_bLookTouch"),
+                            SET_INT_V(bSimple,@"m_iType"),
+                            SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                            SET_STRING_V(@"CheckSetProp",@"m_strNameStage"),
+                            SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                            SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -330,6 +359,22 @@
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)CheckSetProp{
+    
+    OBJECT_PERFORM_SEL(NAME(BMove),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+    
+    OldInterfaceMode=m_iMode;
+    m_iMode=M_EDIT_EN_EX;//prop
+    *ICheck=m_iMode;
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)CloseChoseIcon{
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
@@ -415,6 +460,9 @@
 
     DESTROY_OBJECT(BConnect);
     BConnect=nil;
+
+    DESTROY_OBJECT(BSetProp);
+    BSetProp=nil;
     
     DEL_CELL(@"DropBoxString");
     DEL_CELL(@"DragObject");
@@ -460,6 +508,23 @@
             }
             break;
 
+            case M_EDIT_EN_EX:
+            {
+                if(EditorSelect==nil){
+
+                    EditorSelect =  UNFROZE_OBJECT(@"Ob_Selection",@"Selection",
+                                       SET_FLOAT_V(54,@"mWidth"),
+                                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                       SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
+                    
+                    ((Ob_Selection *)EditorSelect)->OldInterfaceMode=OldInterfaceMode;
+                    ((Ob_Selection *)EditorSelect)->CurrentStr=StringSelect;
+                    
+                    OBJECT_PERFORM_SEL(NAME(EditorSelect), @"UpdateTmp");
+                }
+            }
+            break;
+                
             default:
             {
                 [self CreateButtons];

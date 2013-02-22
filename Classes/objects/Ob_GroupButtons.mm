@@ -8,6 +8,7 @@
 
 #import "Ob_GroupButtons.h"
 #import "ObjectB_Ob.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation Ob_GroupButtons
 //------------------------------------------------------------------------------------------------------
@@ -59,6 +60,28 @@
         }
     }
     
+    [self SetButton];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetButton{
+    ObjectB_Ob *pOb = [m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
+    int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:pOb->pString->m_iIndex];
+    
+    if(iType==DATA_FLOAT || iType==DATA_INT ||
+       iType==DATA_STRING || iType==DATA_TEXTURE || iType==DATA_SOUND)
+    {
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SetButtonEdit");
+    }
+    else
+    {
+        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"RemButtonEdit");
+    }
+    
+    Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
+                            GetObjectByName:@"Ob_Editor_Interface"];
+    
+    pInterface->StringSelect=pOb->pString;
+
     DEL_CELL(@"ObCheckOb");
 }
 //------------------------------------------------------------------------------------------------------
@@ -87,6 +110,10 @@
     
     Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
     bool bFlick=NO;
+    
+    
+
+    
     
 //    switch (pFrStr->TypeInformation) {
 //        case STR_DATA:
@@ -140,9 +167,25 @@
     {
         case DATA_FLOAT:
         case DATA_INT:
-            ColorTmp = Color3DMake(0.4f, 0.4f, 1, 1);
             Width=100;
             Height=34;
+
+            switch (pFrStr->m_iAdditionalType) {
+                case ADIT_TYPE_SIMPLE:
+                    ColorTmp = Color3DMake(0.4f, 0.4f, 1, 1);
+                    break;
+
+                case ADIT_TYPE_ENTER:
+                    ColorTmp = Color3DMake(1, 1, 0, 1);
+                    break;
+
+                case ADIT_TYPE_EXIT:
+                    ColorTmp = Color3DMake(0, 1, 0, 1);
+                    break;
+
+                default:
+                    break;
+            }
 
             break;
         case DATA_MATRIX:
@@ -226,6 +269,7 @@
         
         OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
     }
+    [self SetButton];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetString:(FractalString *)Str{

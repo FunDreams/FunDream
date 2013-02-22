@@ -23,6 +23,7 @@
 #define M_EDIT_PROP     4
 #define M_CONNECT       5
 #define M_EDIT_NUM      6
+#define M_EDIT_EN_EX     7
 
 @interface Ob_Editor_Interface : GObject {
 @public
@@ -51,12 +52,15 @@
     GObject *BCopy;
     GObject *BLink;
     GObject *BConnect;
+    GObject *BSetProp;
 
     GObject *BTash;
     GObject *PrSyn;
     
     GObject *EditorNum;
+    GObject *EditorSelect;
     int iIndexForNum;
+    FractalString *StringSelect;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -85,6 +89,9 @@
 - (void)DelStatusBar;
 
 - (void)DoubleTouchObject;
+
+- (void)RemButtonEdit;
+- (void)SetButtonEdit;
 
 -(void)dealloc;
     

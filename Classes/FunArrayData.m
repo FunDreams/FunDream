@@ -571,31 +571,26 @@
             
             bool bFirst=YES;
             int **TmpChild=0;
-
-//            while ((pNum = [pTmpEnumerator nextObject])) {
-//                int iIndex=[pNum integerValue];
-//                
-//                FractalString *TmpString = [self GetIdAtIndex:iIndex];
-//                InfoArrayValue *pInfoChild=(InfoArrayValue *)(*TmpString->pChildString);
-//                int m=0;
-//            }
             
             while ((pNum = [pTmpEnumerator nextObject])) {
                 int iIndex=[pNum integerValue];
                 
                 FractalString *TmpString = [self GetIdAtIndex:iIndex];
-                TmpString->pAssotiation=[pGroupsLinks retain];
                 
                 if(TmpString!=0){
-                    if(bFirst==YES){
-                        bFirst=NO;
-                        TmpChild=TmpString->pChildString;
-                    }
-                    else {
-                        
-                        free(*TmpString->pChildString);
-                        free(TmpString->pChildString);
-                        TmpString->pChildString=TmpChild;
+                    TmpString->pAssotiation=[pGroupsLinks retain];
+                    
+                    if(TmpString!=0){
+                        if(bFirst==YES){
+                            bFirst=NO;
+                            TmpChild=TmpString->pChildString;
+                        }
+                        else {
+                            
+                            free(*TmpString->pChildString);
+                            free(TmpString->pChildString);
+                            TmpString->pChildString=TmpChild;
+                        }
                     }
                 }
             }

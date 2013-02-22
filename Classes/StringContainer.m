@@ -300,19 +300,15 @@
 //    pMatr->NameInformation=NAME_K_BUTTON_ENVENT;
 //
 
-//    FractalString *pStrPlus=[[FractalString alloc]
-//                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
-//    
-//    [pStrPlus SetNameIcon:@"o_plus.png"];
-//    pStrPlus->X=-350;
-//    pStrPlus->Y=50;
-//    
-//    pStrPlus->m_iIndex=[ArrayPoints SetMatrix:0];
-//    [m_OperationIndex AddData:pStrPlus->m_iIndex WithData:pMatrInfo->pValueCopy];
-//    pMatr=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
-//    pMatr->TypeInformation=STR_OPERATION;
-//    pMatr->NameInformation=NAME_O_PLUS;
-
+    FractalString *pStrPlus=[[FractalString alloc]
+                            initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
+    
+    [pStrPlus SetNameIcon:@"o_plus.png"];
+    pStrPlus->X=-350;
+    pStrPlus->Y=50;
+    
+    pStrPlus->m_iIndex=4;
+    
 
     FractalString *pStrVA=[[FractalString alloc]
                         initWithName:@"A" WithParent:pStrInfo WithContainer:self];
@@ -360,20 +356,27 @@
                                  initWithName:@"Zero" WithParent:nil WithContainer:self];
     pFStringZero->m_iIndex=[ArrayPoints SetMatrix:0];
     [ArrayPoints IncDataAtIndex:pFStringZero->m_iIndex];
-    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pFStringZero->m_iIndex];
+    MATRIXcell *pMatrZero=[ArrayPoints GetMatrixAtIndex:pFStringZero->m_iIndex];
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     //zero point
     int iZeroPoint=[ArrayPoints SetFloat:0];//1
-    [m_OperationIndex AddData:iZeroPoint WithData:pMatr->pValueCopy];
+    [m_OperationIndex AddData:iZeroPoint WithData:pMatrZero->pValueCopy];
 
     //delta time
     int iDeltaTime=[ArrayPoints SetFloat:0.0f];//2
-    [m_OperationIndex AddData:iDeltaTime WithData:pMatr->pValueCopy];
+    [m_OperationIndex AddData:iDeltaTime WithData:pMatrZero->pValueCopy];
+    
+    
+    MATRIXcell *pMatrPlus=[ArrayPoints SetMatrix:0];
+    [m_OperationIndex AddData:pMatrPlus->iIndexSelf WithData:pMatrZero->pValueCopy];
+    pMatrPlus->TypeInformation=STR_OPERATION;
+    pMatrPlus->NameInformation=NAME_O_PLUS;
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     //резервируем константы ядра
     for (int i=0; i<MAX_REZERV; i++) {
         int iIndexRezerv=[ArrayPoints SetFloat:0.0f];
-        [m_OperationIndex AddData:iIndexRezerv WithData:pMatr->pValueCopy];
+        [m_OperationIndex AddData:iIndexRezerv WithData:pMatrZero->pValueCopy];
         iIndexMaxSys=iIndexRezerv;
     }
 }
@@ -693,6 +696,7 @@ repeate:
     if(strDel!=nil){
         if(strDel->pParent!=nil){
 
+            int TypeDel=[ArrayPoints GetTypeAtIndex:strDel->m_iIndex];
             int **Data=(strDel->pParent->pChildString);
             InfoArrayValue *InfoStr=(InfoArrayValue *)(*Data);
             int iCount=InfoStr->mCount;
@@ -764,25 +768,28 @@ repeate:
                             NSNumber *pNumSource=[NSNumber numberWithInt:pFrStr->m_iIndexSelf];
                             [pFrStr->pAssotiation removeObjectForKey:pNumSource];
 //переназначаем парентов с случае удаления ссылки========================================================
-                            NSArray *keys_Tmp = [pFrStr->pAssotiation allKeys];
-                            id aKey_Tmp = [keys_Tmp objectAtIndex:0];
-                            NSNumber *pNum_Tmp = [pFrStr->pAssotiation objectForKey:aKey_Tmp];
-                            FractalString *StrDiffParrent = [ArrayPoints GetIdAtIndex:[pNum_Tmp intValue]];
+                            if(TypeDel==DATA_MATRIX){
+                                NSArray *keys_Tmp = [pFrStr->pAssotiation allKeys];
+                                id aKey_Tmp = [keys_Tmp objectAtIndex:0];
+                                NSNumber *pNum_Tmp = [pFrStr->pAssotiation objectForKey:aKey_Tmp];
+                                FractalString *StrDiffParrent = [ArrayPoints
+                                                                 GetIdAtIndex:[pNum_Tmp intValue]];
 
-                            int **DataChild=(strDel->pChildString);
-                            InfoArrayValue *InfoStr_Childs=(InfoArrayValue *)(*DataChild);
-                            int *StartDataInDelChild=((*DataChild)+SIZE_INFO_STRUCT);
-                                
-                            int iChildInd=StartDataInDelChild[0];
-                            FractalString *ChildStrInDelString = [ArrayPoints GetIdAtIndex:iChildInd];
-
-                            if(ChildStrInDelString->pParent==strDel)
-                            {
-                                for (int i=0; i<InfoStr_Childs->mCount; i++) {
+                                int **DataChild=(strDel->pChildString);
+                                InfoArrayValue *InfoStr_Childs=(InfoArrayValue *)(*DataChild);
+                                int *StartDataInDelChild=((*DataChild)+SIZE_INFO_STRUCT);
                                     
-                                    iChildInd=StartDataInDelChild[i];
-                                    FractalString *Tmp_Str = [ArrayPoints GetIdAtIndex:iChildInd];
-                                    Tmp_Str->pParent=StrDiffParrent;
+                                int iChildInd=StartDataInDelChild[0];
+                                FractalString *ChildStrInDelString = [ArrayPoints GetIdAtIndex:iChildInd];
+
+                                if(ChildStrInDelString->pParent==strDel)
+                                {
+                                    for (int i=0; i<InfoStr_Childs->mCount; i++) {
+                                        
+                                        iChildInd=StartDataInDelChild[i];
+                                        FractalString *Tmp_Str = [ArrayPoints GetIdAtIndex:iChildInd];
+                                        Tmp_Str->pParent=StrDiffParrent;
+                                    }
                                 }
                             }
 //=======================================================================================================
