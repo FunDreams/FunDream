@@ -9,6 +9,7 @@
 #import "Ob_GroupButtons.h"
 #import "ObjectB_Ob.h"
 #import "Ob_Editor_Interface.h"
+#import "Ob_Connectors.h"
 
 @implementation Ob_GroupButtons
 //------------------------------------------------------------------------------------------------------
@@ -21,6 +22,8 @@
         m_bHiden=YES;
         mHeight=330;
         m_iNumButton=9;
+        
+        m_pChildrenbjectsArrConn = [[NSMutableArray alloc] init];
     }
     
 	return self;
@@ -64,25 +67,28 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetButton{
-    ObjectB_Ob *pOb = [m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
-    int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:pOb->pString->m_iIndex];
     
-    if(iType==DATA_FLOAT || iType==DATA_INT ||
-       iType==DATA_STRING || iType==DATA_TEXTURE || iType==DATA_SOUND)
-    {
-        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SetButtonEdit");
-    }
-    else
-    {
-        OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"RemButtonEdit");
-    }
-    
-    Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
-                            GetObjectByName:@"Ob_Editor_Interface"];
-    
-    pInterface->StringSelect=pOb->pString;
+    if([m_pChildrenbjectsArr count]>0){
+        ObjectB_Ob *pOb = [m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
+        int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:pOb->pString->m_iIndex];
+        
+        if(iType==DATA_FLOAT || iType==DATA_INT ||
+           iType==DATA_STRING || iType==DATA_TEXTURE || iType==DATA_SOUND)
+        {
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SetButtonEdit");
+        }
+        else
+        {
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"RemButtonEdit");
+        }
+        
+        Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
+                                GetObjectByName:@"Ob_Editor_Interface"];
+        
+        pInterface->StringSelect=pOb->pString;
 
-    DEL_CELL(@"ObCheckOb");
+        DEL_CELL(@"ObCheckOb");
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Hide{
@@ -92,10 +98,10 @@
     }
     [m_pChildrenbjectsArr removeAllObjects];
 
-//    for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
-//        [pOb SetTouch:NO];
-//        [pOb DeleteFromDraw];
-//    }
+    for (Ob_Connectors *pOb in m_pChildrenbjectsArrConn) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsArrConn removeAllObjects];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -247,6 +253,11 @@
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArr removeAllObjects];
+
+    for (Ob_Connectors *pOb in m_pChildrenbjectsArrConn) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsArrConn removeAllObjects];
     
     int *Data=(*pInsideString->pChildString);
     InfoArrayValue *InfoStr=(InfoArrayValue *)(Data);
@@ -257,8 +268,99 @@
         FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
                        GetIdAtIndex:index];
 
-            [self CreateOb:pFrStr];
+        [self CreateOb:pFrStr];
     }
+    
+    MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pInsideString->m_iIndex];
+    if(pMatr!=0){
+        
+        InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*pMatr->pQueue);
+        int *StartDataQ=(*pMatr->pQueue)+SIZE_INFO_STRUCT;
+        
+        for (int i=0; i<InfoStrQueue->mCount; i++) {
+            HeartMatr *pHeart=(HeartMatr *)StartDataQ[i];
+            
+            if(pHeart!=nil){
+                InfoArrayValue *InfoStrNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                int *StartDataNext=(*pHeart->pNextPlaces)+SIZE_INFO_STRUCT;
+                
+                for (int j=0; j<InfoStrNext->mCount; j++) {
+
+//                    int indexFirst=(Data+SIZE_INFO_STRUCT)[i];
+//                    FractalString *pFrStrFirst=[m_pObjMng->pStringContainer->ArrayPoints
+//                                                 GetIdAtIndex:indexFirst];
+
+                    int Place=StartDataNext[j];
+//                    int indexSecond=(Data+SIZE_INFO_STRUCT)[Place];
+//                    FractalString *pFrStrSecond=[m_pObjMng->pStringContainer->ArrayPoints
+//                                           GetIdAtIndex:indexSecond];
+
+                    ObjectB_Ob *pObFirst=[m_pChildrenbjectsArr objectAtIndex:i];
+                    ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:Place];
+
+                    Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
+                                                SET_COLOR_V(Color3DMake(1, 0, 1, 0.5f),@"mColor"));
+                    pObConn->Start=&pObFirst->m_pCurPosition;
+                    pObConn->End=&pObSecond->m_pCurPosition;
+                    [m_pChildrenbjectsArrConn addObject:pObConn];
+                }
+                
+                //инициализируем связи для параметров
+                InfoArrayValue *InfoStrEnterPar=(InfoArrayValue *)(*pHeart->pEnPairPar);
+                int *StartEnterPar=(*pHeart->pEnPairPar)+SIZE_INFO_STRUCT;
+
+                for (int j=0; j<InfoStrEnterPar->mCount; j++) {
+                    
+                    int iCurIndex=StartEnterPar[j];
+                    ObjectB_Ob *pObFirst=0;
+                    
+                    for (int k=0; k<[m_pChildrenbjectsArr count]; k++) {
+                        ObjectB_Ob *pObTmp=[m_pChildrenbjectsArr objectAtIndex:k];
+                        
+                        if(iCurIndex==pObTmp->pString->m_iIndex)
+                            pObFirst=pObTmp;
+                        
+                    }
+        
+                    ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
+
+                    Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
+                                                SET_COLOR_V(Color3DMake(0, 0.5f, 1, 0.5f),@"mColor"));
+                    
+                    pObConn->Start=&pObFirst->m_pCurPosition;
+                    pObConn->End=&pObSecond->m_pCurPosition;
+                    [m_pChildrenbjectsArrConn addObject:pObConn];
+                }
+                
+                InfoArrayValue *InfoStrExitPar=(InfoArrayValue *)(*pHeart->pExPairPar);
+                int *StartExitPar=(*pHeart->pExPairPar)+SIZE_INFO_STRUCT;
+                
+                for (int j=0; j<InfoStrExitPar->mCount; j++) {
+                    
+                    int iCurIndex=StartExitPar[j];
+                    ObjectB_Ob *pObFirst=0;
+                    
+                    for (int k=0; k<[m_pChildrenbjectsArr count]; k++) {
+                        ObjectB_Ob *pObTmp=[m_pChildrenbjectsArr objectAtIndex:k];
+                        
+                        if(iCurIndex==pObTmp->pString->m_iIndex)
+                            pObFirst=pObTmp;
+                        
+                    }
+                    
+                    ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
+                    
+                    Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
+                                            SET_COLOR_V(Color3DMake(0, 0.5f, 1, 0.5f),@"mColor"));
+                    
+                    pObConn->Start=&pObFirst->m_pCurPosition;
+                    pObConn->End=&pObSecond->m_pCurPosition;
+                    [m_pChildrenbjectsArrConn addObject:pObConn];
+                }
+            }
+        }
+    }
+
     
     if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1)
     {
@@ -303,5 +405,9 @@
     [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
-//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+- (void)dealloc
+{
+    [m_pChildrenbjectsArrConn release];
+    [super dealloc];
+}
 @end

@@ -56,6 +56,8 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
+    
+    [m_pObjMng->pMegaTree SetCell:LINK_INT_V(m_iNum,m_strName,@"m_iNum")];
 
     [m_pObjMng->pMegaTree SetCell:LINK_COLOR_V(mColorBack,m_strName,@"mColorBack")];
     [m_pObjMng->pMegaTree SetCell:LINK_BOOL_V(m_bBack,m_strName,@"m_bBack")];
@@ -218,6 +220,7 @@
             }
             else
             {
+                [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ButtonPush")];
                 [m_pParent PlaySound:m_strNameSound];
                 [self SetPush];
                 OBJECT_PERFORM_SEL(m_strNameObject, m_strNameStage);

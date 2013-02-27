@@ -23,7 +23,8 @@
 #define M_EDIT_PROP     4
 #define M_CONNECT       5
 #define M_EDIT_NUM      6
-#define M_EDIT_EN_EX     7
+#define M_EDIT_EN_EX    7
+#define M_CONNECT_IND   8
 
 @interface Ob_Editor_Interface : GObject {
 @public
@@ -59,8 +60,14 @@
     
     GObject *EditorNum;
     GObject *EditorSelect;
+    GObject *EditorSelectPar;
     int iIndexForNum;
     FractalString *StringSelect;
+    
+    MATRIXcell *pMatrTmp;
+    HeartMatr *EndHeart;
+    FractalString *pConnString;
+    int m_iIndexStart;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -92,6 +99,8 @@
 
 - (void)RemButtonEdit;
 - (void)SetButtonEdit;
+
+- (void)UpdateB;
 
 -(void)dealloc;
     

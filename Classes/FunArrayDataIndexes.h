@@ -39,5 +39,7 @@
 
 - (void)SetParentMatrix:(int)IndexValue WithData:(int **)pData;
 - (void)OnlyAddData:(int)IndexValue WithData:(int **)pData;
+- (void)OnlyRemoveDataAtPlace:(int)iPlace WithData:(int **)pData;
+
 @end
 

@@ -54,6 +54,7 @@ typedef enum tagTypeButton {
     bool m_bLookTouch;
     Color3D mColorBack;
     bool m_bBack;
+    int m_iNum;
 }
 
 /** Инициализирует объект **/

@@ -45,6 +45,7 @@ typedef struct{
 
     //последовательности
     int **pQueue;//индексы для последовательности
+    //в виде мини матриц связей
 
     //типы
     BYTE TypeInformation;//тип матрицы.
@@ -52,6 +53,18 @@ typedef struct{
     int iIndexSelf;//индекс-указатель на себя
 //-------------------------------------------------------------------------------------------------
 } MATRIXcell;
+////мини матрица (используется для создания последовательностей)
+typedef struct{
+    
+    int **pEnPairPar;//входные параметны парент
+    int **pEnPairChi;//входные параметны чилд
+
+    int **pExPairPar;//выходные параметны парент
+    int **pExPairChi;//выходные параметны чилд
+
+    int **pNextPlaces;//следующее место в очереди матрицы
+
+} HeartMatr;
 
 @interface FunArrayData : NSObject{
 @public
@@ -84,6 +97,8 @@ typedef struct{
 - (void)SetCellFreeAtIndex:(int)iIndex;
 
 - (void)InitMemoryMatrix:(MATRIXcell *)pMatr;
+- (void)InitMemoryHeart:(HeartMatr *)pHeart parent:(MATRIXcell *)pMatr;
+- (void)ReleaseMemoryHeart:(HeartMatr *)pHeart;
 
 - (int)SetFloat:(float)DataValue;
 - (int)SetInt:(int)DataValue;
@@ -107,6 +122,10 @@ typedef struct{
 
 - (void)LoadMatrix:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos WithMatr:(MATRIXcell *)pMatr;
 - (void)SaveMatrix:(NSMutableData *)pData WithMatr:(MATRIXcell *)pMatr;
+
+- (void)LoadHeart:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos
+         WithHeat:(HeartMatr *)pHeart WithMatr:(MATRIXcell *)pMatr;
+- (void)SaveHeart:(NSMutableData *)pMutData WithMatr:(HeartMatr *)pHeart;
 
 - (void)Reserv:(int)iCountTmp;
 -(void)PrepareLoadData;

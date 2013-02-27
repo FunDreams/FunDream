@@ -8,6 +8,7 @@
 
 #import "StringContainer.h"
 #import "DropBoxMng.h"
+#import "Ob_Editor_Interface.h"
 
 @implementation StringContainer
 //------------------------------------------------------------------------------------------------------
@@ -302,12 +303,17 @@
 
     FractalString *pStrPlus=[[FractalString alloc]
                             initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
-    
-    [pStrPlus SetNameIcon:@"o_plus.png"];
+    pStrPlus->m_iIndex=4;
+    MATRIXcell *pMatrPlus=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
+        
+    int index=(*pMatrPlus->pValueCopy+SIZE_INFO_STRUCT)[0];
+    NSMutableString *pNameIcon=[m_pObjMng->pStringContainer->ArrayPoints
+                            GetIdAtIndex:index];
+    [m_OperationIndex AddData:pStrPlus->m_iIndex WithData:pMatrInfo->pValueCopy];
+
+    [pStrPlus SetNameIcon:pNameIcon];
     pStrPlus->X=-350;
     pStrPlus->Y=50;
-    
-    pStrPlus->m_iIndex=4;
     
 
     FractalString *pStrVA=[[FractalString alloc]
@@ -339,6 +345,17 @@
     
     pStrVR->m_iIndex=[ArrayPoints SetFloat:99.3];
     [m_OperationIndex AddData:pStrVR->m_iIndex WithData:pMatrInfo->pValueCopy];
+    
+    
+//    //----------------------------------------------------------------------
+//    InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatrInfo->pQueue);
+//    int *StartDataQueue=((*pMatrInfo->pQueue)+SIZE_INFO_STRUCT);
+//    
+//    for(int i=0;i<InfoQueue->mCount;i++){
+//        HeartMatr *pHeart=StartDataQueue[i];
+//        int m=0;
+//    }
+//    //----------------------------------------------------------------------
 }
 //------------------------------------------------------------------------------------------------------
 #define MAX_REZERV 4000
@@ -366,12 +383,45 @@
     int iDeltaTime=[ArrayPoints SetFloat:0.0f];//2
     [m_OperationIndex AddData:iDeltaTime WithData:pMatrZero->pValueCopy];
     
-    
-    MATRIXcell *pMatrPlus=[ArrayPoints SetMatrix:0];
-    [m_OperationIndex AddData:pMatrPlus->iIndexSelf WithData:pMatrZero->pValueCopy];
+//операции -----------------------------------------------------------------------------------------
+    int m_iIndexOpetations=[ArrayPoints SetMatrix:0];//матрица списка всех операций
+    MATRIXcell *pMatrOperations=[ArrayPoints GetMatrixAtIndex:m_iIndexOpetations];
+    [m_OperationIndex AddData:m_iIndexOpetations WithData:pMatrZero->pValueCopy];
+//операция "плюс"----------------------------------------------------------------------------------
+    int IndexMatrPlus=[ArrayPoints SetMatrix:0];//4
+    MATRIXcell *pMatrPlus=[ArrayPoints GetMatrixAtIndex:IndexMatrPlus];
+    [m_OperationIndex AddData:pMatrPlus->iIndexSelf WithData:pMatrOperations->pValueCopy];
     pMatrPlus->TypeInformation=STR_OPERATION;
     pMatrPlus->NameInformation=NAME_O_PLUS;
+    
+    //заглавный смысл
+    NSMutableString *pNameIcon = [NSMutableString stringWithString:@"o_plus.png"];
+    int iIndIconName=[ArrayPoints SetName:pNameIcon];
+    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
+//Enter===============================================================================================
+    int iIndexA=[ArrayPoints SetFloat:0];//A
+    [m_OperationIndex AddData:iIndexA WithData:pMatrPlus->pValueCopy];
+    pNameIcon = [NSMutableString stringWithString:@"A.png"];
+    iIndIconName=[ArrayPoints SetName:pNameIcon];
+    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
 
+    int iIndexB=[ArrayPoints SetFloat:0];//B
+    [m_OperationIndex AddData:iIndexB WithData:pMatrPlus->pValueCopy];
+    pNameIcon = [NSMutableString stringWithString:@"B.png"];
+    iIndIconName=[ArrayPoints SetName:pNameIcon];
+    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
+    
+    [m_OperationIndex OnlyAddData:iIndexA  WithData:pMatrPlus->pEnters];
+    [m_OperationIndex OnlyAddData:iIndexB  WithData:pMatrPlus->pEnters];
+//exit===============================================================================================
+    int iIndexR=[ArrayPoints SetFloat:0];//R
+    [m_OperationIndex AddData:iIndexR WithData:pMatrPlus->pValueCopy];
+    pNameIcon = [NSMutableString stringWithString:@"R.png"];
+    iIndIconName=[ArrayPoints SetName:pNameIcon];
+    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
+//==================================================================================================
+    [m_OperationIndex OnlyAddData:iIndexR  WithData:pMatrPlus->pExits];
+//-------------------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////////////////
     //резервируем константы ядра
     for (int i=0; i<MAX_REZERV; i++) {
@@ -438,8 +488,134 @@
 //------------------------------------------------------------------------------------------------------
 -(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr
 {
-    MATRIXcell *pMatrStart=[ArrayPoints GetMatrixAtIndex:StartStr->m_iIndex];
-    pMatrStart->pQueue;
+    int **DataParent=(StartStr->pParent->pChildString);
+    InfoArrayValue *InfoStrParent=(InfoArrayValue *)(*DataParent);
+    int iCount=InfoStrParent->mCount;
+    int *StartData=((*DataParent)+SIZE_INFO_STRUCT);
+    
+    int PlaceStart=-1,PlaceEnd=-1;
+    for (int i=0; i<iCount; i++){
+
+        int index=(StartData)[i];
+        FractalString *pFrStr=*((FractalString **)(ArrayPoints->pData+index));
+
+        if(StartStr->m_iIndexSelf==pFrStr->m_iIndexSelf)
+        {
+            PlaceStart=i;
+        }
+
+        if(EndStr->m_iIndexSelf==pFrStr->m_iIndexSelf)
+        {
+            PlaceEnd=i;
+        }
+    }
+    
+    MATRIXcell *pMatrStart=[ArrayPoints GetMatrixAtIndex:StartStr->pParent->m_iIndex];
+    //----------------------------------------------------------------------
+ //   InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatrStart->pQueue);
+    int *StartDataQueue=((*pMatrStart->pQueue)+SIZE_INFO_STRUCT);
+    
+//    for(int i=0;i<InfoQueue->mCount;i++){
+//        HeartMatr *pHeart=StartDataQueue[i];
+//        int m=0;
+//    }
+    //----------------------------------------------------------------------
+    int iTypeStart=[ArrayPoints GetTypeAtIndex:StartStr->m_iIndex];
+    int iTypeEnd=[ArrayPoints GetTypeAtIndex:EndStr->m_iIndex];
+    
+    if(((iTypeStart==DATA_FLOAT)||(iTypeStart==DATA_INT)||(iTypeStart==DATA_STRING)||
+        (iTypeStart==DATA_TEXTURE)||(iTypeStart==DATA_SOUND)) && iTypeEnd==DATA_MATRIX){
+        
+        MATRIXcell *pMatrEnd=[ArrayPoints GetMatrixAtIndex:EndStr->m_iIndex];
+        
+        if(pMatrEnd!=0){
+            InfoArrayValue *pEnters=(InfoArrayValue *)(*pMatrEnd->pEnters);
+            InfoArrayValue *pExits=(InfoArrayValue *)(*pMatrEnd->pExits);
+            
+            if(pEnters->mCount>0 || pExits->mCount>0){
+                
+                HeartMatr *pHeartStart = (HeartMatr *)StartDataQueue[PlaceEnd];
+                
+                //если индекс уже есть в паре, то удалаем его
+                bool bFind=NO;
+                
+                InfoArrayValue *InfoPairPar=(InfoArrayValue *)(*pHeartStart->pEnPairPar);
+                int *StartPairChild=*pHeartStart->pEnPairPar+SIZE_INFO_STRUCT;
+                
+                for (int k=0; k<InfoPairPar->mCount; k++){
+                    int iIndexPair=StartPairChild[k];
+                    
+                    if(StartStr->m_iIndex==iIndexPair){
+                        [m_pObjMng->pStringContainer->m_OperationIndex
+                         OnlyRemoveDataAtPlace:k WithData:pHeartStart->pEnPairChi];
+                        
+                        [m_pObjMng->pStringContainer->m_OperationIndex
+                         OnlyRemoveDataAtPlace:k WithData:pHeartStart->pEnPairPar];
+                        
+                        bFind=YES;
+                    }
+                }
+
+                InfoPairPar=(InfoArrayValue *)(*pHeartStart->pExPairPar);
+                StartPairChild=*pHeartStart->pExPairPar+SIZE_INFO_STRUCT;
+                
+                for (int k=0; k<InfoPairPar->mCount; k++){
+                    int iIndexPair=StartPairChild[k];
+                    
+                    if(StartStr->m_iIndex==iIndexPair){
+                        [m_pObjMng->pStringContainer->m_OperationIndex
+                         OnlyRemoveDataAtPlace:k WithData:pHeartStart->pExPairChi];
+                        
+                        [m_pObjMng->pStringContainer->m_OperationIndex
+                         OnlyRemoveDataAtPlace:k WithData:pHeartStart->pExPairPar];
+                        
+                        bFind=YES;
+                    }
+                }
+
+                if(bFind==YES){
+                    Ob_Editor_Interface *pObInterface = (Ob_Editor_Interface *)
+                    [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+
+                    [pObInterface UpdateB];
+                    return;
+                }
+                
+                int iIndexStart=StartStr->m_iIndex;
+                
+                Ob_Editor_Interface *pObInterface = (Ob_Editor_Interface *)
+                [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+                
+                pObInterface->m_iIndexStart=iIndexStart;
+                pObInterface->EndHeart=pHeartStart;
+                pObInterface->pMatrTmp=pMatrEnd;
+                pObInterface->pConnString=EndStr;
+                
+                [pObInterface SetMode:M_CONNECT_IND];
+                [pObInterface UpdateB];
+            }
+        }
+    }
+    else if(iTypeStart==DATA_MATRIX && iTypeEnd==DATA_MATRIX){
+        
+        HeartMatr *pHeartStart = (HeartMatr *)StartDataQueue[PlaceStart];
+   //     HeartMatr *pHeartEnd = StartDataQueue[PlaceEnd];
+        
+        InfoArrayValue *InfoHeartStartNextPlace=(InfoArrayValue *)(*pHeartStart->pNextPlaces);
+        int *NexpPlaces=((*pHeartStart->pNextPlaces)+SIZE_INFO_STRUCT);
+        
+        if(InfoHeartStartNextPlace->mCount>0){
+            int TmpPlace=NexpPlaces[0];
+            
+            if(TmpPlace==PlaceEnd){
+                [m_OperationIndex OnlyRemoveDataAtIndex:TmpPlace WithData:pHeartStart->pNextPlaces];
+            }
+            else NexpPlaces[0]=PlaceEnd;
+        }
+        else [m_OperationIndex OnlyAddData:PlaceEnd WithData:pHeartStart->pNextPlaces];
+    }
+    
+    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 }
 //------------------------------------------------------------------------------------------------------
 -(void)AddObject{
@@ -528,143 +704,6 @@ repeate:
     [pDataCurManager Save];
 }
 //------------------------------------------------------------------------------------------------------
-//-(void)CopyData:(int **)Data DestData:(int **)DestData dic:(NSMutableDictionary *)pDic
-//    SourceContainer:(StringContainer*)SourceContainer{
-//    
-//    int *StartData=((*Data)+SIZE_INFO_STRUCT);
-//    InfoArrayValue *InfoStr=(InfoArrayValue *)(*Data);
-//    int iCount=InfoStr->mCount;
-//    
-//    for (int i=0; i<iCount; i++) {
-//        
-//        int iIndexSource=StartData[i];
-//        
-//        NSNumber *pNumSource = [NSNumber numberWithInt:iIndexSource];
-//        NSNumber *pNumDest = [pDic objectForKey:pNumSource];
-//        
-//        if(pNumDest==nil){
-//            if(iIndexSource>iIndexMaxSys){
-//                
-// //               float *pValue=SourceContainer->ArrayPoints->pData+iIndexSource;
-//   //             BYTE *pType=SourceContainer->ArrayPoints->pType+iIndexSource;
-//                
-//                int iIndexDest=[ArrayPoints GetFree];
-//                
-////                float *pValueDest=ArrayPoints->pData+iIndexDest;
-////                BYTE *pTypeDest=ArrayPoints->pType+iIndexDest;
-//                
-////                *pTypeDest=*pType;
-//                
-////                switch (*pType) {
-////                    case <#constant#>:
-////                        <#statements#>
-////                        break;
-////                        
-////                    default:
-////                        break;
-////                }
-////                *pValueDest=*pValue;
-//
-//                [m_OperationIndex AddData:iIndexDest WithData:DestData];
-//                
-//                NSNumber *pNumSource = [NSNumber numberWithInt:iIndexSource];
-//                NSNumber *pNumDest = [NSNumber numberWithInt:iIndexDest];
-//                
-//                [m_OperationIndex AddData:iIndexDest WithData:DestData];
-//                
-//                [pDic setObject:pNumDest forKey:pNumSource];
-//            }
-//        }
-//        else
-//        {
-//            int iIndexDest=[pNumDest intValue];
-//            int *pCountDest=ArrayPoints->pDataInt+iIndexDest;
-//            (*pCountDest)++;
-//        }
-//    }
-//}
-////------------------------------------------------------------------------------------------------------
-//-(void)DeepString:(FractalString *)SourceStr dic:(NSMutableDictionary *)pDic
-//  SourceContainer:(StringContainer*)SourceContainer parent:(FractalString *)pParent{
-////-------------------------------------------------------------------------------------------
-//    FractalString *pDestStr = [[FractalString alloc] init:self];
-//    
-//    [pDestStr->strUID release];
-//    pDestStr->strUID = [[NSString alloc] initWithString:SourceStr->strUID];
-//    [pDestStr->sNameIcon release];
-//    pDestStr->sNameIcon = [[NSString alloc] initWithString:SourceStr->sNameIcon];
-//    
-//    pDestStr->X=SourceStr->X;
-//    pDestStr->Y=SourceStr->Y;
-//    pDestStr->m_iFlags=SourceStr->m_iFlags;
-//    
-//    [pDestStr SetParent:pParent];
-//    [DicStrings setObject:pDestStr forKey:pDestStr->strUID];
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//    //копируем данные
-//    int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:SourceStr->m_iIndex];
-//    
-////#define DATA_ZERO           0//пустая струна
-////#define DATA_ID             1//струна, объект для отображения информации
-////#define DATA_MATRIX         2//матрица данных
-////#define DATA_FLOAT          4
-////#define DATA_INT            5
-////#define DATA_STRING         6
-////#define DATA_TEXTURE        7
-////#define DATA_SOUND          8
-//
-//    switch (iType) {
-//
-//        case DATA_FLOAT:
-//        case DATA_INT:
-//        case DATA_STRING:
-//        case DATA_TEXTURE:
-//        case DATA_SOUND:
-//        {
-//        }
-//        break;
-//            
-//        case DATA_MATRIX:
-//        {
-//            pDestStr->m_iIndexSelf=[ArrayPoints SetMatrix:0];
-//            MATRIXcell *pMatrDest=[ArrayPoints GetMatrixAtIndex:pDestStr->m_iIndexSelf];
-//            MATRIXcell *pMatrSource=[ArrayPoints GetMatrixAtIndex:SourceStr->m_iIndexSelf];
-//            
-//            pMatrSource->TypeInformation=pMatrDest->TypeInformation;
-//            pMatrSource->NameInformation=pMatrDest->NameInformation;
-//
-//            [self CopyData:pMatrSource->pValueCopy DestData:pMatrDest->pValueCopy
-//                       dic:pDic SourceContainer:SourceContainer];
-////            [self CopyData:pMatrSource->pValueLink DestData:pMatrDest->pValueLink
-////                       dic:pDic SourceContainer:SourceContainer];
-//            
-//            [self CopyData:pMatrSource->pQueue DestData:pMatrDest->pQueue
-//                       dic:pDic SourceContainer:SourceContainer];
-//
-//            [self CopyData:pMatrSource->pLinks DestData:pMatrDest->pLinks
-//                       dic:pDic SourceContainer:SourceContainer];
-//}
-//        break;
-//            
-//        default:
-//            break;
-//    }
-////-------------------------------------------------------------------------------------------
-//    //копируем childs
-//    int *Data=(*SourceStr->pChildString);
-//    InfoArrayValue *InfoStr=(InfoArrayValue *)(Data);
-//
-//    for(int i=0;i<InfoStr->mCount;i++){
-//        
-//        int index=(Data+SIZE_INFO_STRUCT)[i];
-//        FractalString *pFrStr=[SourceContainer->ArrayPoints
-//                               GetIdAtIndex:index];
-//        
-//        [self DeepString:pFrStr dic:pDic
-//            SourceContainer:(StringContainer*)SourceContainer parent:pDestStr];
-//    }
-//}
-//------------------------------------------------------------------------------------------------------
 //копируем струну в другое пространство (перекодирование имён параметров)
 -(void)CopyStrFrom:(StringContainer*)SourceContainer WithId:(FractalString *)SourceStr{
     
@@ -716,10 +755,10 @@ repeate:
 
                     if(pMatr!=0 && Count>0)
                     {
-                        int iRet=-1;
-
-                        iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndex WithData:pMatr->pValueCopy];
-                        if(iRet>-1)[m_OperationIndex RemoveDataAtPlace:iRet WithData:pMatr->pValueCopy];
+//                        int iRet=-1;
+//                        iRet=[m_OperationIndex FindIndex:pFrStr->m_iIndex WithData:pMatr->pValueCopy];
+//                        if(iRet>-1)
+                          [m_OperationIndex RemoveDataAtPlace:i WithData:pMatr->pValueCopy];
                     }
 
                     if(pFrStr->m_iAdditionalType==ADIT_TYPE_ENTER)
@@ -777,18 +816,21 @@ repeate:
 
                                 int **DataChild=(strDel->pChildString);
                                 InfoArrayValue *InfoStr_Childs=(InfoArrayValue *)(*DataChild);
-                                int *StartDataInDelChild=((*DataChild)+SIZE_INFO_STRUCT);
-                                    
-                                int iChildInd=StartDataInDelChild[0];
-                                FractalString *ChildStrInDelString = [ArrayPoints GetIdAtIndex:iChildInd];
-
-                                if(ChildStrInDelString->pParent==strDel)
-                                {
-                                    for (int i=0; i<InfoStr_Childs->mCount; i++) {
+                                
+                                if(InfoStr_Childs->mCount>0){
+                                    int *StartDataInDelChild=((*DataChild)+SIZE_INFO_STRUCT);
                                         
-                                        iChildInd=StartDataInDelChild[i];
-                                        FractalString *Tmp_Str = [ArrayPoints GetIdAtIndex:iChildInd];
-                                        Tmp_Str->pParent=StrDiffParrent;
+                                    int iChildInd=StartDataInDelChild[0];
+                                    FractalString *ChildStrInDelString=[ArrayPoints GetIdAtIndex:iChildInd];
+
+                                    if(ChildStrInDelString->pParent==strDel)
+                                    {
+                                        for (int i=0; i<InfoStr_Childs->mCount; i++) {
+                                            
+                                            iChildInd=StartDataInDelChild[i];
+                                            FractalString *Tmp_Str = [ArrayPoints GetIdAtIndex:iChildInd];
+                                            Tmp_Str->pParent=StrDiffParrent;
+                                        }
                                     }
                                 }
                             }

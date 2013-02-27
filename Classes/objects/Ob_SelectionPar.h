@@ -11,18 +11,25 @@
 #import "Object.h"
 #import "ObjectParticle.h"
 
-@interface Ob_SelectionConn : GObject {
+@interface Ob_SelectionPar : GObject {
 @public
     int OldInterfaceMode;
-    FractalString *CurrentStr;
-    
     GObject *pObBtnClose;
-    GObject *pObBtnUp;
-    GObject *pObBtnDown;
     
-    GObject *pObBtnSetSimple;
-    GObject *pObBtnSetEnter;
-    GObject *pObBtnSetExit;
+    HeartMatr *EndHeart;
+    int m_iIndexStart;
+    MATRIXcell *pMatr;
+    FractalString *pConnString;
+    
+    NSMutableArray *pArrayEnter;
+    NSMutableArray *pArrayExit;
+
+    NSMutableArray *pArrayEnterUse;
+    NSMutableArray *pArrayExitUse;
+        
+    GObject *IconEnters;
+    GObject *IconExits;
+    GObject *Line;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

@@ -200,6 +200,48 @@
     return iIndex;
 }
 //------------------------------------------------------------------------------------------
+- (void)ReleaseMemoryHeart:(HeartMatr *)pHeart{
+    
+    free(*pHeart->pEnPairPar);
+    free(pHeart->pEnPairPar);
+
+    free(*pHeart->pEnPairChi);
+    free(pHeart->pEnPairChi);
+
+    free(*pHeart->pExPairPar);
+    free(pHeart->pExPairPar);
+
+    free(*pHeart->pExPairChi);
+    free(pHeart->pExPairChi);
+
+    free(*pHeart->pNextPlaces);
+    free(pHeart->pNextPlaces);
+}
+//------------------------------------------------------------------------------------------
+- (void)InitMemoryHeart:(HeartMatr *)pHeart parent:(MATRIXcell *)pMatr{
+    if(pParent==nil)return;
+        
+    pHeart->pEnPairPar = [pParent->m_OperationIndex InitMemory];
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pHeart->pEnPairPar);
+    InfoStr->ParentMatrix=pMatr;
+
+    pHeart->pEnPairChi = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pHeart->pEnPairChi);
+    InfoStr->ParentMatrix=pMatr;
+
+    pHeart->pExPairPar = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pHeart->pExPairPar);
+    InfoStr->ParentMatrix=pMatr;
+
+    pHeart->pExPairChi = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pHeart->pExPairChi);
+    InfoStr->ParentMatrix=pMatr;
+
+    pHeart->pNextPlaces = [pParent->m_OperationIndex InitMemory];
+    InfoStr=(InfoArrayValue *)(*pHeart->pNextPlaces);
+    InfoStr->ParentMatrix=pMatr;
+}
+//------------------------------------------------------------------------------------------
 - (void)InitMemoryMatrix:(MATRIXcell *)pMatr{
     
     if(pParent==nil)return;
@@ -232,7 +274,7 @@
     InfoStr->ParentMatrix=pMatr;
 
 
-    pMatr->TypeInformation=0;
+    pMatr->TypeInformation=STR_COMPLEX;
     pMatr->NameInformation=0;
     pMatr->iIndexSelf=0;
 }
@@ -433,10 +475,6 @@
                     MATRIXcell *pMatr=[pParent->ArrayPoints GetMatrixAtIndex:iIndex];
                     
                     [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueCopy];
-            //        [pParent->m_OperationIndex ReleaseMemory:pMatr->pValueLink];
-
-                    free(*pMatr->pQueue);
-                    free(pMatr->pQueue);
 
                     free(*pMatr->pLinks);
                     free(pMatr->pLinks);
@@ -449,6 +487,22 @@
 
                     NSNumber *pVal = [NSNumber numberWithInt:pMatr->iIndexSelf];
                     [pMartixDic removeObjectForKey:pVal];
+
+                    //вычищаем последовательность
+                    InfoArrayValue *pInfoQueue=(InfoArrayValue *)(*pMatr->pQueue);
+                    int *pStartQueue=*pMatr->pQueue+SIZE_INFO_STRUCT;
+                    
+                    for (int i=0; i<pInfoQueue->mCount; i++) {
+                        HeartMatr *pHeart=(HeartMatr *)pStartQueue[i];
+                        
+                        if(pHeart!=0){
+                            [self ReleaseMemoryHeart:pHeart];
+                            free(pHeart);
+                        }
+                    }
+                    
+                    free(*pMatr->pQueue);
+                    free(pMatr->pQueue);
 
                     free(pMatr);
                 }
@@ -695,14 +749,34 @@
     [self PrepareLoadData];
 }
 //------------------------------------------------------------------------------------------
+- (void)LoadHeart:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos
+         WithHeat:(HeartMatr *)pHeart WithMatr:(MATRIXcell *)pMatr{
+    
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pHeart->pEnPairPar];
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pHeart->pEnPairChi);
+    InfoStr->ParentMatrix=pMatr;
+
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pHeart->pEnPairChi];
+    InfoStr=(InfoArrayValue *)(*pHeart->pEnPairChi);
+    InfoStr->ParentMatrix=pMatr;
+
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pHeart->pExPairPar];
+    InfoStr=(InfoArrayValue *)(*pHeart->pExPairPar);
+    InfoStr->ParentMatrix=pMatr;
+
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pHeart->pExPairChi];
+    InfoStr=(InfoArrayValue *)(*pHeart->pExPairChi);
+    InfoStr->ParentMatrix=pMatr;
+
+    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pHeart->pNextPlaces];
+    InfoStr=(InfoArrayValue *)(*pHeart->pNextPlaces);
+    InfoStr->ParentMatrix=pMatr;
+}
+//------------------------------------------------------------------------------------------
 - (void)LoadMatrix:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos WithMatr:(MATRIXcell *)pMatr{
     
     [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pValueCopy];
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pMatr->pValueCopy);
-    InfoStr->ParentMatrix=pMatr;
-
-    [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pQueue];
-    InfoStr=(InfoArrayValue *)(*pMatr->pQueue);
     InfoStr->ParentMatrix=pMatr;
 
     [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pLinks];
@@ -716,7 +790,7 @@
     [pParent->m_OperationIndex selfLoad:pMutData rpos:iCurReadingPos WithData:pMatr->pExits];
     InfoStr=(InfoArrayValue *)(*pMatr->pExits);
     InfoStr->ParentMatrix=pMatr;
-
+    
     //тип струны.
     NSRange Range = NSMakeRange( *iCurReadingPos, sizeof(BYTE));
     [pMutData getBytes:&pMatr->TypeInformation range:Range];
@@ -731,12 +805,54 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pMutData getBytes:&pMatr->iIndexSelf range:Range];
     *iCurReadingPos += sizeof(int);
+
+    //количество сердец.
+    short sCountHearts=0;
+    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
+    [pMutData getBytes:&sCountHearts range:Range];
+    *iCurReadingPos += sizeof(short);
+
+    
+    InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatr->pQueue);
+    int *StartDataQueue=((*pMatr->pQueue)+SIZE_INFO_STRUCT);
+    int *StartDataCopy=((*pMatr->pValueCopy)+SIZE_INFO_STRUCT);
+
+    for (int i=0; i<sCountHearts; i++) {
+        
+        int iIndexValue=StartDataCopy[i];
+        int iType=[self GetTypeAtIndex:iIndexValue];
+        [pParent->m_OperationIndex Extend:pMatr->pQueue];
+        InfoQueue=(InfoArrayValue *)(*pMatr->pQueue);
+        StartDataQueue=((*pMatr->pQueue)+SIZE_INFO_STRUCT);
+
+        HeartMatr *pNewHeart=0;
+        if(iType==DATA_MATRIX){
+            pNewHeart=(HeartMatr *)malloc(sizeof(HeartMatr));
+            [self InitMemoryHeart:pNewHeart parent:pMatr];
+            [self LoadHeart:pMutData rpos:iCurReadingPos WithHeat:pNewHeart WithMatr:pMatr];
+        }
+        
+        HeartMatr **TmpHeart=(HeartMatr **)(StartDataQueue+InfoQueue->mCount);
+        *TmpHeart=pNewHeart;
+        
+        InfoQueue->mCount++;
+    }
+}
+//------------------------------------------------------------------------------------------
+- (void)SaveHeart:(NSMutableData *)pMutData WithMatr:(HeartMatr *)pHeart{
+    
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pEnPairPar];    
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pEnPairChi];
+
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pExPairPar];
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pExPairChi];
+
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pNextPlaces];
 }
 //------------------------------------------------------------------------------------------
 - (void)SaveMatrix:(NSMutableData *)pMutData WithMatr:(MATRIXcell *)pMatr{
     
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pValueCopy];
-    [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pQueue];
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pLinks];
 
     [pParent->m_OperationIndex selfSave:pMutData WithData:pMatr->pEnters];
@@ -748,6 +864,17 @@
     [pMutData appendBytes:&pMatr->NameInformation length:sizeof(short)];
     //Индекс струны.
     [pMutData appendBytes:&pMatr->iIndexSelf length:sizeof(int)];
+
+    InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*pMatr->pQueue);
+    int *StartDataQueue=(*pMatr->pQueue+SIZE_INFO_STRUCT);
+    [pMutData appendBytes:&InfoStrQueue->mCount length:sizeof(short)];
+    
+    for (int i=0; i<InfoStrQueue->mCount; i++) {
+        HeartMatr *pHeatr=(HeartMatr *)StartDataQueue[i];
+        
+        if(pHeatr!=nil)
+            [self SaveHeart:pMutData WithMatr:pHeatr];
+    }
 }
 //------------------------------------------------------------------------------------------
 - (void)dealloc

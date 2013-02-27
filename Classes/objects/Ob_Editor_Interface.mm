@@ -16,6 +16,7 @@
 #import "Ob_EmtyPlace.h"
 #import "Ob_Editor_Num.h"
 #import "Ob_Selection.h"
+#import "Ob_SelectionPar.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -205,7 +206,8 @@
         
         if(ICheck)
         {
-            if(*ICheck==M_EDIT_PROP || *ICheck==M_EDIT_NUM)*ICheck=0;
+            if(*ICheck==M_EDIT_PROP || *ICheck==M_EDIT_NUM || *ICheck==M_EDIT_EN_EX
+               || *ICheck==M_CONNECT_IND)*ICheck=0;
             m_iMode=(int)(*ICheck);
         }
         
@@ -497,6 +499,26 @@
                 [pResIcon Show];
                 break;
 
+            case M_CONNECT_IND:
+            {
+                if(EditorSelectPar==nil){
+                    
+                    EditorSelectPar =  UNFROZE_OBJECT(@"Ob_SelectionPar",@"SelectionPar",
+                                                   SET_FLOAT_V(54,@"mWidth"),
+                                                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                                   SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
+                    
+                    ((Ob_SelectionPar *)EditorSelectPar)->OldInterfaceMode=OldInterfaceMode;
+                    ((Ob_SelectionPar *)EditorSelectPar)->EndHeart=EndHeart;
+                    ((Ob_SelectionPar *)EditorSelectPar)->m_iIndexStart=m_iIndexStart;
+                    ((Ob_SelectionPar *)EditorSelectPar)->pMatr=pMatrTmp;
+                    ((Ob_SelectionPar *)EditorSelectPar)->pConnString=pConnString;
+
+                    OBJECT_PERFORM_SEL(NAME(EditorSelectPar), @"UpdateTmp");
+                }
+            }
+                break;
+                
             case M_EDIT_NUM:
             {
                 if(iIndexForNum!=0 && EditorNum==nil){

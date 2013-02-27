@@ -15,6 +15,7 @@
     int m_iNumButton;
     int m_iCurrentSelect;
     FractalString *pInsideString;
+    NSMutableArray* m_pChildrenbjectsArrConn;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

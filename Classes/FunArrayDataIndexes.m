@@ -48,8 +48,6 @@
         
         int iRet=[m_pParent->m_OperationIndex FindIndex:index WithData:pCurnData];
         if(iRet>-1)[m_pParent->m_OperationIndex RemoveDataAtPlace:iRet WithData:pCurnData];
-
-        [m_pParent->ArrayPoints DecDataAtIndex:index];
     }
     
     free(*pData);
@@ -76,32 +74,6 @@
                 
         [self SetCopasity:InfoStr->mCopasity WithData:pData];        
     }
-}
-//------------------------------------------------------------------------------------------
-- (void)Insert:(int)iDataValue index:(int)iIndex WithData:(int **)pData{
-    
-    if(iIndex<0)return;
-    [self Extend:pData];
-
-    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
-    
-    if(iIndex+1>InfoStr->mCount){
-        
-        [self AddData:iDataValue WithData:pData];
-        return;
-    }
-
-    int *StartData=((*pData)+SIZE_INFO_STRUCT);
-
-    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iDataValue];
-    if(iType==DATA_MATRIX){
-        [self SetParentMatrix:iDataValue WithData:pData];
-    }
-
-    memcpy(StartData+iIndex+1, StartData+iIndex, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
-    memcpy(StartData+iIndex, &iDataValue, sizeof(int));
-    InfoStr->mCount++;
-    [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
 }
 //------------------------------------------------------------------------------------------
 - (void)CopyDataFrom:(int **)pSourceData To:(int **)pDestData{
@@ -160,6 +132,53 @@
     InfoStr->mCount++;
 }
 //------------------------------------------------------------------------------------------
+- (void)Insert:(int)iDataValue index:(int)iIndex WithData:(int **)pData{
+    
+    if(iIndex<0)return;
+    [self Extend:pData];
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    
+    if(iIndex+1>InfoStr->mCount){
+        
+        [self AddData:iDataValue WithData:pData];
+        return;
+    }
+    
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+    
+    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iDataValue];
+    if(iType==DATA_MATRIX){
+        [self SetParentMatrix:iDataValue WithData:pData];        
+    }
+    
+    if(InfoStr->ParentMatrix!=0){
+        //добавляем пустое место в queue
+        MATRIXcell *pMatrPar = InfoStr->ParentMatrix;
+        
+        [self Extend:pMatrPar->pQueue];
+        InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatrPar->pQueue);
+        int *StartDataQueue=((*pMatrPar->pQueue)+SIZE_INFO_STRUCT);
+        
+        memcpy(StartDataQueue+iIndex+1, StartDataQueue+iIndex, sizeof(int)*(InfoQueue->mCount-(iIndex)));
+        
+        //инициализация heart
+        HeartMatr *pNewHeart=(HeartMatr *)malloc(sizeof(HeartMatr));
+        [m_pParent->ArrayPoints InitMemoryHeart:pNewHeart parent:pMatrPar];
+        
+        //копирование в массив
+        HeartMatr **TmpHeart=(HeartMatr **)(StartDataQueue+iIndex);
+        *TmpHeart=pNewHeart;
+        
+        InfoQueue->mCount++;
+    }
+    
+    memcpy(StartData+iIndex+1, StartData+iIndex, sizeof(int)*(InfoStr->mCount-(iIndex+1)));
+    memcpy(StartData+iIndex, &iDataValue, sizeof(int));
+    InfoStr->mCount++;
+    [m_pParent->ArrayPoints IncDataAtIndex:iIndex];
+}
+//------------------------------------------------------------------------------------------
 - (void)AddData:(int)IndexValue WithData:(int **)pData{
         
     [self Extend:pData];
@@ -172,7 +191,30 @@
     
     int iType=[m_pParent->ArrayPoints GetTypeAtIndex:IndexValue];
     if(iType==DATA_MATRIX){
-        [self SetParentMatrix:IndexValue WithData:pData];
+        [self SetParentMatrix:IndexValue WithData:pData];        
+    }
+    
+    if(InfoStr->ParentMatrix!=0){
+        //добавляем пустое место в queue
+        MATRIXcell *pMatrPar = InfoStr->ParentMatrix;
+        
+        [self Extend:pMatrPar->pQueue];
+        InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatrPar->pQueue);
+        int *StartDataQueue=((*pMatrPar->pQueue)+SIZE_INFO_STRUCT);
+        
+        //инициализация heart
+        HeartMatr *pNewHeart=0;
+        
+        if(iType==DATA_MATRIX){
+            pNewHeart=(HeartMatr *)malloc(sizeof(HeartMatr));
+            [m_pParent->ArrayPoints InitMemoryHeart:pNewHeart parent:pMatrPar];
+        }
+        
+        //копирование в массив
+        HeartMatr **TmpHeart=(HeartMatr **)(StartDataQueue+InfoQueue->mCount);
+        *TmpHeart=pNewHeart;
+        
+        InfoQueue->mCount++;
     }
 
     InfoStr->mCount++;
@@ -226,6 +268,18 @@
 //    }
     
     return bRez;
+}
+//------------------------------------------------------------------------------------------
+- (void)OnlyRemoveDataAtPlace:(int)iPlace WithData:(int **)pData{
+    
+    InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
+    int *StartData=((*pData)+SIZE_INFO_STRUCT);
+    
+    if(iPlace+1<InfoStr->mCount)
+        memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+    
+    InfoStr->mCount--;
+    [self SetCopasity:InfoStr->mCount WithData:pData];
 }
 //------------------------------------------------------------------------------------------
 - (void)OnlyRemoveDataAtIndex:(int)iIndex WithData:(int **)pData{
@@ -282,13 +336,87 @@
         
         if(InfoStr->mFlags && F_ORDER)
         {
-            if(iPlace+1<InfoStr->mCount)
-                memcpy(StartData+iPlace, StartData+iPlace+1, sizeof(int)*(InfoStr->mCount-(iPlace+1)));
+//            if(iPlace+1<InfoStr->mCount){
+//                memcpy(StartData+iPlace, StartData+iPlace+1, sizeof(int)*(InfoStr->mCount-(iPlace+1)));
+//                
+//                //удаляем место в queue
+//                MATRIXcell *Parrent=InfoStr->ParentMatrix;
+//                InfoArrayValue *InfoQueue=(InfoArrayValue *)(*Parrent->pQueue);
+//                int *StartDataQueue=((*Parrent->pQueue)+SIZE_INFO_STRUCT);
+//                HeartMatr *pHeart=*((HeartMatr **)(StartDataQueue+iPlace));
+//                
+//                if(pHeart!=0){
+//                    int m=0;
+//                }
+//                memcpy(StartDataQueue+iPlace, StartDataQueue+iPlace+1,
+//                       sizeof(int)*(InfoQueue->mCount-(iPlace+1)));
+//
+//                InfoQueue->mCount--;
+//                [self SetCopasity:InfoQueue->mCount WithData:Parrent->pQueue];
+//
+//            }
         }
         else
         {
-            if(iPlace+1<InfoStr->mCount)
+    //        if(iPlace+1<InfoStr->mCount){
                 memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+            
+                //удаляем место в queue
+                MATRIXcell *Parrent=InfoStr->ParentMatrix;
+                InfoArrayValue *InfoQueue=(InfoArrayValue *)(*Parrent->pQueue);
+                int *StartDataQueue=((*Parrent->pQueue)+SIZE_INFO_STRUCT);
+                HeartMatr *pHeart=*((HeartMatr **)(StartDataQueue+iPlace));
+
+                if(pHeart!=0){//удаляем ссылки на текущий
+
+                    for (int i=0; i<InfoQueue->mCount; i++) {
+                        HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                        
+                        if(pHeart!=0){
+                            
+                            InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                            int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                            
+                            for (int j=0; j<InfoNext->mCount; j++)
+                            {
+                                int iTmpPlace=StartDataNext[j];
+                                if(iTmpPlace==iPlace){
+                                    [self OnlyRemoveDataAtPlace:i WithData:pHeart->pNextPlaces];
+                                    j--;
+                                }
+                            }
+                            [self SetCopasity:InfoNext->mCount WithData:pHeart->pNextPlaces];
+                        }
+                    }
+                    
+                    for (int i=0; i<InfoQueue->mCount; i++) {//переименовываем
+                        HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+    
+                        if(pHeart!=0){
+                            
+                            InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                            int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                            
+                            for (int j=0; j<InfoNext->mCount; j++)
+                            {
+                                int iTmpPlace=StartDataNext[j];
+                                if(iTmpPlace==(InfoQueue->mCount-1)){
+                                    StartDataNext[j]=iPlace;
+                                }
+                            }
+                        }
+                    }
+
+                    
+                    [m_pParent->ArrayPoints ReleaseMemoryHeart:pHeart];
+                    free(pHeart);
+                }
+                memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
+                
+                InfoQueue->mCount--;
+                [self SetCopasity:InfoQueue->mCount WithData:Parrent->pQueue];
+
+    //        }
         }
         InfoStr->mCount--;
 ///////////////////////////////////////////////////

@@ -83,10 +83,15 @@
             int iType=[m_pContainer->ArrayPoints GetTypeAtIndex:indexDoNotConnect];
             if(iType==DATA_MATRIX)
             {
+                MATRIXcell *pMatrInside=[m_pContainer->ArrayPoints GetMatrixAtIndex:indexDoNotConnect];
+                
+                if(pMatrInside->TypeInformation==STR_COMPLEX){
+                
                 [self CopyChild:indexDoNotConnect WithDic:pDicRename
                      WithParent:pFStringChild
                       WithSourceContainer:pSrcContainer
                       WithModel:TmpSource];
+                }
             }
         }
         else
@@ -208,9 +213,13 @@
                 
                 NSNumber *pNum = [NSNumber numberWithInt:self->m_iIndex];
                 [pDicRename setObject:self forKey:pNum];
-                    
-                [self CopyChild:m_iIndex WithDic:pDicRename WithParent:self
-                      WithSourceContainer:pSrcContainer WithModel:pStrSource];
+                
+                MATRIXcell *pMatrInside=[m_pContainer->ArrayPoints GetMatrixAtIndex:pStrSource->m_iIndex];
+                if(pMatrInside->TypeInformation==STR_COMPLEX){
+
+                    [self CopyChild:m_iIndex WithDic:pDicRename WithParent:self
+                          WithSourceContainer:pSrcContainer WithModel:pStrSource];
+                }
                 
                 [pDicRename release];
             }

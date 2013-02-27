@@ -469,7 +469,8 @@ Exit:
     if(pMode!=0 && *pMode==M_CONNECT && m_bStartTouch==NO){
         FractalString *StartStr=GET_ID_V(@"StartConnection");
         
-        [m_pObjMng->pStringContainer ConnectStart:StartStr End:pString];
+        if(StartStr!=nil)
+            [m_pObjMng->pStringContainer ConnectStart:StartStr End:pString];
     }
 
     [self EndTouch];
