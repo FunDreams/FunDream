@@ -19,6 +19,7 @@
 -(id)init;
 - (int **)InitMemory;
 - (void)ReleaseMemory:(int **)pData;
+- (void)OnlyReleaseMemory:(int **)pData;
 - (void)InitStructure:(int **)pData;
 
 -(void)SetCopasity:(int)icopasity WithData:(int **)pData;

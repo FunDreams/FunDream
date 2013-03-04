@@ -68,6 +68,7 @@
                         WithParent:Parent
                         WithContainer:m_pContainer];
 
+        pFStringChild->m_iAdditionalType=TmpSource->m_iAdditionalType;
         pFStringChild->X=TmpSource->X;
         pFStringChild->Y=TmpSource->Y;
         [pFStringChild SetNameIcon:TmpSource->sNameIcon];
@@ -155,12 +156,11 @@
         Y=pStrSource->Y;
         [self SetNameIcon:pStrSource->sNameIcon];
         [m_pContainer->DicStrings setObject:self forKey:strUID];
+        m_iAdditionalType=pStrSource->m_iAdditionalType;
         [self SetParent:Parent];
         
         if(bLink==YES){
             
-            m_iAdditionalType=pStrSource->m_iAdditionalType;
-
             m_iIndex=[m_pContainer->ArrayPoints LinkDataAtIndex:pStrSource->m_iIndex];
 
             if(Parent!=nil){
@@ -214,7 +214,7 @@
                 NSNumber *pNum = [NSNumber numberWithInt:self->m_iIndex];
                 [pDicRename setObject:self forKey:pNum];
                 
-                MATRIXcell *pMatrInside=[m_pContainer->ArrayPoints GetMatrixAtIndex:pStrSource->m_iIndex];
+                MATRIXcell *pMatrInside=[pSrcContainer->ArrayPoints GetMatrixAtIndex:pStrSource->m_iIndex];
                 if(pMatrInside->TypeInformation==STR_COMPLEX){
 
                     [self CopyChild:m_iIndex WithDic:pDicRename WithParent:self

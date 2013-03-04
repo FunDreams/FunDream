@@ -185,7 +185,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMoveNormal:(id)pDeltaTime{
 
-    FractalString *StartStr = [pStringContainer GetString:@"StartActive"];
+    FractalString *StartStr = [pStringContainer GetString:@"Objects"];
     [pStringContainer Update:StartStr];
     
     NSNumber *NumDelta=pDeltaTime;

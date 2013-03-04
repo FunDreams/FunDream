@@ -33,6 +33,7 @@
         aObjects = [[NSMutableArray alloc] init];
         aObSliders = [[NSMutableArray alloc] init];
         aObPoints = [[NSMutableArray alloc] init];
+        pArrayToDel = [[NSMutableArray alloc] init];
     }
     
 	return self;
@@ -152,15 +153,27 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RemButtonEdit{
-    if(BSetProp!=nil){
-        DESTROY_OBJECT(BSetProp);
-        BSetProp=0;
+        
+    for (int i=0; i<[pArrayToDel count]; i++) {
+        GObject *pOb=[pArrayToDel objectAtIndex:i];
+        DESTROY_OBJECT(pOb);
     }
+    
+    [pArrayToDel removeAllObjects];
+    
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetButtonEdit{
+        
+    if(BSetActivity!=nil){
+        [pArrayToDel addObject:BSetActivity];
+        BSetActivity=nil;
+    }
     
-    [self RemButtonEdit];
+    if(BSetProp!=nil){
+        [pArrayToDel addObject:BSetProp];
+        BSetProp=nil;
+    }
     
     BSetProp=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSetProp",
                             SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
@@ -169,12 +182,50 @@
                             SET_STRING_V(@"ButtonTime.png",@"m_UP"),
                             SET_FLOAT_V(54,@"mWidth"),
                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                            SET_BOOL_V(YES,@"m_bLookTouch"),
                             SET_INT_V(bSimple,@"m_iType"),
                             SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                             SET_STRING_V(@"CheckSetProp",@"m_strNameStage"),
                             SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
                             SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+    
+    [self RemButtonEdit];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetButtonEnterPoint{
+
+    if(BSetActivity!=nil){
+        [pArrayToDel addObject:BSetActivity];
+        BSetActivity=nil;
+    }
+
+    if(BSetProp!=nil){
+        [pArrayToDel addObject:BSetProp];
+        BSetProp=nil;
+    }
+
+    BSetActivity=UNFROZE_OBJECT(@"ObjectButton",@"ButtonActivity",
+                            SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                            SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                            SET_STRING_V(@"StartActivity.png",@"m_DOWN"),
+                            SET_STRING_V(@"StartActivity.png",@"m_UP"),
+                            SET_FLOAT_V(54,@"mWidth"),
+                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                            SET_INT_V(bSimple,@"m_iType"),
+                            SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                            SET_STRING_V(@"SetActivFirstOperation",@"m_strNameStage"),
+                            SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                            SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+
+    [self RemButtonEdit];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetActivFirstOperation
+{
+    MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints
+                       GetMatrixAtIndex:ButtonGroup->pInsideString->m_iIndex];
+    
+    if(pMatr!=nil)
+        pMatr->sStartPlace=ButtonGroup->m_iCurrentSelect;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -355,8 +406,11 @@
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
+    pResIcon->OldInterfaceMode=m_iMode;
+    OldInterfaceMode=m_iMode;
+    m_iMode=M_EDIT_PROP;//prop
     OldCheck=*ICheck;
-    *ICheck=M_EDIT_PROP;
+    *ICheck=m_iMode;
     
     [self UpdateB];
 }
@@ -472,12 +526,24 @@
     DEL_CELL(@"StartConnection");
  //   DEL_CELL(@"DoubleTouchFractalString");
     DEL_CELL(@"ObCheckOb");
+    
+    if(BSetActivity!=nil){
+        [pArrayToDel addObject:BSetActivity];
+        BSetActivity=nil;
+    }
+    
+    if(BSetProp!=nil){
+        [pArrayToDel addObject:BSetProp];
+        BSetProp=nil;
+    }
+
+    [self RemButtonEdit];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateB{
 
-//    FractalString *pStrObjects = [m_pObjMng->pStringContainer GetString:@"Objects"];
-//    [pStrObjects->m_pContainer LogString:pStrObjects];
+//    FractalString *pStrOb = [m_pObjMng->pStringContainer GetString:@"Objects"];
+//    [m_pObjMng->pStringContainer LogString:pStrOb];
     
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     
@@ -486,8 +552,7 @@
         int *TmpICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                        GetDataAtIndex:(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[0]];
 
-    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                        GetDataAtIndex:iIndexCheck];
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:iIndexCheck];
 
     ICheck=TmpICheck;
     
@@ -504,9 +569,9 @@
                 if(EditorSelectPar==nil){
                     
                     EditorSelectPar =  UNFROZE_OBJECT(@"Ob_SelectionPar",@"SelectionPar",
-                                                   SET_FLOAT_V(54,@"mWidth"),
-                                                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                                                   SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
+                                            SET_FLOAT_V(54,@"mWidth"),
+                                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                            SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
                     
                     ((Ob_SelectionPar *)EditorSelectPar)->OldInterfaceMode=OldInterfaceMode;
                     ((Ob_SelectionPar *)EditorSelectPar)->EndHeart=EndHeart;
@@ -552,7 +617,7 @@
                 [self CreateButtons];
                 int *pMode=GET_INT_V(@"m_iMode");
                 
-                if(pMode!=0 && *pMode==3)
+                if(pMode!=0 && *pMode==M_DROP_BOX)
                 {
                     if(pInfoFile->bNeedUpload==YES && pInfoFile->bDropBoxWork==NO)
                         PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
@@ -601,6 +666,7 @@
 //------------------------------------------------------------------------------------------------------
 -(void) dealloc
 {
+    [pArrayToDel release];
     [pInfoFile release];
     [aObPoints release];
     [aObSliders release];

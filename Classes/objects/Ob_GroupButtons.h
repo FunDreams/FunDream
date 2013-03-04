@@ -12,6 +12,7 @@
 #import "ObjectParticle.h"
 
 @interface Ob_GroupButtons : GObject {
+@public
     int m_iNumButton;
     int m_iCurrentSelect;
     FractalString *pInsideString;

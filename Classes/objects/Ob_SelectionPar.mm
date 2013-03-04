@@ -78,14 +78,14 @@
                                SET_VECTOR_V(Vector3DMake(-40,286,0),@"m_pCurPosition"));
     
     IconEnters=UNFROZE_OBJECT(@"StaticObject",@"Enter",
-                               SET_STRING_V(@"Button_From_box_Down.png",@"m_pNameTexture"),
+                               SET_STRING_V(@"In.png",@"m_pNameTexture"),
                                SET_FLOAT_V(64,@"mWidth"),
                                SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
                                SET_VECTOR_V(Vector3DMake(-360,170,0),@"m_pCurPosition"),
                                SET_INT_V(layerInterfaceSpace6,@"m_iLayer"));
 
     IconExits=UNFROZE_OBJECT(@"StaticObject",@"Exit",
-                              SET_STRING_V(@"Button_From_box_Up.png",@"m_pNameTexture"),
+                              SET_STRING_V(@"Out.png",@"m_pNameTexture"),
                               SET_FLOAT_V(64,@"mWidth"),
                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
                               SET_VECTOR_V(Vector3DMake(-120,170,0),@"m_pCurPosition"),

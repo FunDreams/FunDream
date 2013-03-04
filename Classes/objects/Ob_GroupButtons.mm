@@ -17,10 +17,10 @@
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerTemplet;
+        m_iLayer = layerInterfaceSpace9;
         m_iLayerTouch=layerTouch_0;//слой касания
-        m_bHiden=YES;
-        mHeight=330;
+        m_bHiden=NO;
+        mHeight=30;
         m_iNumButton=9;
         
         m_pChildrenbjectsArrConn = [[NSMutableArray alloc] init];
@@ -76,6 +76,10 @@
            iType==DATA_STRING || iType==DATA_TEXTURE || iType==DATA_SOUND)
         {
             OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SetButtonEdit");
+        }
+        else if(iType==DATA_MATRIX)
+        {
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SetButtonEnterPoint");
         }
         else
         {
@@ -351,7 +355,7 @@
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
                     
                     Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
-                                            SET_COLOR_V(Color3DMake(0, 0.5f, 1, 0.5f),@"mColor"));
+                                            SET_COLOR_V(Color3DMake(1, 0.5f, 0, 0.5f),@"mColor"));
                     
                     pObConn->Start=&pObFirst->m_pCurPosition;
                     pObConn->End=&pObSecond->m_pCurPosition;
@@ -387,9 +391,14 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
-    
+
+    mWidth=30;
+    mHeight=30*FACTOR_DEC;
+
 	[super Start];
-    
+
+    GET_TEXTURE(mTextureId, @"StartActivity.png");
+
     pInsideString = [m_pObjMng->pStringContainer GetString:@"Objects"];
     [m_pObjMng->pMegaTree SetCell:LINK_ID_V(pInsideString,@"ParentString")];
 
@@ -403,6 +412,49 @@
     [m_pChildrenbjectsArr removeAllObjects];
 
     [super Destroy];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SelfDrawOffset{
+
+    Ob_Editor_Interface *Interface=(Ob_Editor_Interface *)
+            [m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
+    
+    if(Interface!=nil && (Interface->m_iMode==M_MOVE || Interface->m_iMode==M_COPY ||
+                          Interface->m_iMode==M_LINK || Interface->m_iMode==M_CONNECT))
+    {
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints
+                           GetMatrixAtIndex:pInsideString->m_iIndex];
+        
+        if(pMatr!=nil && pMatr->sStartPlace>-1){
+            
+            int *StartData=*pInsideString->pChildString+SIZE_INFO_STRUCT;
+            
+            int IndexString=StartData[pMatr->sStartPlace];
+            
+            FractalString *pStr=[m_pObjMng->pStringContainer->ArrayPoints
+                                 GetIdAtIndex:IndexString];
+            
+            m_pCurPosition.x=pStr->X-30;
+            m_pCurPosition.y=pStr->Y+30;
+            
+            [self SetColor:mColor];
+            
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+            
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
+            
+            glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+                         m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
+                         m_pCurPosition.z);
+            
+            glRotatef(m_pCurAngle.z, 0, 0, 1);
+            glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
+            
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+        }
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc

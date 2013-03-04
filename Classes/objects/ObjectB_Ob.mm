@@ -131,43 +131,50 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateTextureOnFace{
     
-    if(pString==nil)return;
+    mCountTmp++;
     
-    switch (m_iTypeStr)
+    if(mCountTmp==10)
     {
-        case DATA_FLOAT:
-        case DATA_INT:
+        mCountTmp=0;
+        
+        if(pString==nil)return;
+        
+        switch (m_iTypeStr)
         {
-            NSString *pStr=nil;
-            
-            if(m_iTypeStr==DATA_FLOAT){
-                float *Tmpf=(float *)[m_pObjMng->pStringContainer->
-                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
-                
-                pStr = [NSString stringWithFormat:@"%1.2f",*Tmpf];
-            }
-            else if(m_iTypeStr==DATA_INT){
-                int *Tmpi=(int *)[m_pObjMng->pStringContainer->
-                                  ArrayPoints GetDataAtIndex:pString->m_iIndex];
-                
-                pStr = [NSString stringWithFormat:@"%d",*Tmpi];
-            }
-            
-            if(![StrValueOnFace isEqualToString:pStr])
+            case DATA_FLOAT:
+            case DATA_INT:
             {
-                [StrValueOnFace release];
-                StrValueOnFace=[[NSString stringWithString:pStr] retain];
+                NSString *pStr=nil;
                 
-                int iFontSize=20;
-                TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
-                        Tex:TextureIndicatorValue fSize:iFontSize
-                        dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+                if(m_iTypeStr==DATA_FLOAT){
+                    float *Tmpf=(float *)[m_pObjMng->pStringContainer->
+                                          ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                    
+                    pStr = [NSString stringWithFormat:@"%1.2f",*Tmpf];
+                }
+                else if(m_iTypeStr==DATA_INT){
+                    int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                                      ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                    
+                    pStr = [NSString stringWithFormat:@"%d",*Tmpi];
+                }
+                
+                if(![StrValueOnFace isEqualToString:pStr])
+                {
+                    [StrValueOnFace release];
+                    StrValueOnFace=[[NSString stringWithString:pStr] retain];
+                    
+                    int iFontSize=20;
+                    TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
+                            Tex:TextureIndicatorValue fSize:iFontSize
+                            dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+                }
             }
+                
+                
+            default:
+                break;
         }
-            
-            
-        default:
-            break;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -506,15 +513,18 @@ Exit:
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-            //   glBindTexture(GL_TEXTURE_2D, mTextureId);
-            
             glScalef(0.9f,0.9f,m_pCurScale.z);
             [self SetColor:mColor];
             
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             
+            glTranslatef(-0.68f,0,0);
+            glScalef(0.35f,1,m_pCurScale.z);
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+
             [self UpdateTextureOnFace];
-            [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y
+            [self drawTextAtX:m_pCurPosition.x+15 Y:m_pCurPosition.y
                         Color:Color3DMake(0,0,0,1) Tex:TextureIndicatorValue];
 //draw text======================================================================================
 //===============================================================================================

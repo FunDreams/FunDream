@@ -36,6 +36,11 @@
     return pData;
 }
 //------------------------------------------------------------------------------------------------------
+- (void)OnlyReleaseMemory:(int **)pData{
+    free(*pData);
+    free(pData);
+}
+//------------------------------------------------------------------------------------------------------
 - (void)ReleaseMemory:(int **)pData{
 
     InfoArrayValue *InfoStr=(InfoArrayValue *)(*pData);
@@ -358,65 +363,72 @@
         }
         else
         {
-    //        if(iPlace+1<InfoStr->mCount){
-                memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+            //редактируем точку входа
+            if(pCurrentMatrix->sStartPlace==iPlace){
+                pCurrentMatrix->sStartPlace=-1;
+            }
+
+            if(pCurrentMatrix->sStartPlace==(InfoStr->mCount-1)){
+                pCurrentMatrix->sStartPlace=iPlace;
+            }
             
-                //удаляем место в queue
-                MATRIXcell *Parrent=InfoStr->ParentMatrix;
-                InfoArrayValue *InfoQueue=(InfoArrayValue *)(*Parrent->pQueue);
-                int *StartDataQueue=((*Parrent->pQueue)+SIZE_INFO_STRUCT);
-                HeartMatr *pHeart=*((HeartMatr **)(StartDataQueue+iPlace));
+            //удаление индека с матрицы парента
+            memcpy(StartData+iPlace, StartData+(InfoStr->mCount-1), sizeof(int));
+            
+            //удаляем место в queue
+            MATRIXcell *Parrent=InfoStr->ParentMatrix;
+            InfoArrayValue *InfoQueue=(InfoArrayValue *)(*Parrent->pQueue);
+            int *StartDataQueue=((*Parrent->pQueue)+SIZE_INFO_STRUCT);
+            HeartMatr *pHeart=*((HeartMatr **)(StartDataQueue+iPlace));
 
-                if(pHeart!=0){//удаляем ссылки на текущий
+            if(pHeart!=0){//удаляем ссылки на текущий
 
-                    for (int i=0; i<InfoQueue->mCount; i++) {
-                        HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                for (int i=0; i<InfoQueue->mCount; i++) {
+                    HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                    
+                    if(pHeart!=0){
                         
-                        if(pHeart!=0){
-                            
-                            InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
-                            int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
-                            
-                            for (int j=0; j<InfoNext->mCount; j++)
-                            {
-                                int iTmpPlace=StartDataNext[j];
-                                if(iTmpPlace==iPlace){
-                                    [self OnlyRemoveDataAtPlace:i WithData:pHeart->pNextPlaces];
-                                    j--;
-                                }
-                            }
-                            [self SetCopasity:InfoNext->mCount WithData:pHeart->pNextPlaces];
-                        }
-                    }
-                    
-                    for (int i=0; i<InfoQueue->mCount; i++) {//переименовываем
-                        HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
-    
-                        if(pHeart!=0){
-                            
-                            InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
-                            int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
-                            
-                            for (int j=0; j<InfoNext->mCount; j++)
-                            {
-                                int iTmpPlace=StartDataNext[j];
-                                if(iTmpPlace==(InfoQueue->mCount-1)){
-                                    StartDataNext[j]=iPlace;
-                                }
+                        InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                        int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                        
+                        for (int j=0; j<InfoNext->mCount; j++)
+                        {
+                            int iTmpPlace=StartDataNext[j];
+                            if(iTmpPlace==iPlace){
+                                [self OnlyRemoveDataAtPlace:i WithData:pHeart->pNextPlaces];
+                                j--;
                             }
                         }
+                        [self SetCopasity:InfoNext->mCount WithData:pHeart->pNextPlaces];
                     }
-
-                    
-                    [m_pParent->ArrayPoints ReleaseMemoryHeart:pHeart];
-                    free(pHeart);
                 }
-                memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
                 
-                InfoQueue->mCount--;
-                [self SetCopasity:InfoQueue->mCount WithData:Parrent->pQueue];
+                for (int i=0; i<InfoQueue->mCount; i++) {//переименовываем
+                    HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
 
-    //        }
+                    if(pHeart!=0){
+                        
+                        InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                        int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                        
+                        for (int j=0; j<InfoNext->mCount; j++)
+                        {
+                            int iTmpPlace=StartDataNext[j];
+                            if(iTmpPlace==(InfoQueue->mCount-1)){
+                                StartDataNext[j]=iPlace;
+                            }
+                        }
+                    }
+                }
+
+                
+                [m_pParent->ArrayPoints ReleaseMemoryHeart:pHeart];
+                free(pHeart);
+            }
+            memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
+            
+            InfoQueue->mCount--;
+            [self SetCopasity:InfoQueue->mCount WithData:Parrent->pQueue];
         }
         InfoStr->mCount--;
 ///////////////////////////////////////////////////
@@ -436,8 +448,6 @@
                     MATRIXcell *pMatr=[m_pParent->ArrayPoints GetMatrixAtIndex:iInsideIndex];
 
                     int iRet=-1;
-//                    iRet=[self FindIndex:iTmpIndex WithData:pMatr->pValueLink];
-//                    if(iRet>-1)[self RemoveDataAtPlace:iRet WithData:pMatr->pValueLink];
                     iRet=[self FindIndex:iTmpIndex WithData:pMatr->pValueCopy];
                     if(iRet>-1)[self RemoveDataAtPlace:iRet WithData:pMatr->pValueCopy];
                 }
@@ -448,7 +458,96 @@
     }
 //================================================================================================
     else
-    {
+    {//удаление из связей (сначала в текущей матрице)
+        
+        if(iType==DATA_FLOAT || iType==DATA_INT){
+            [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pEnters];
+            [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pExits];
+            
+            InfoArrayValue *InfoQueue=(InfoArrayValue *)(*InfoStr->ParentMatrix->pQueue);
+            int *StartDataQueue=((*InfoStr->ParentMatrix->pQueue)+SIZE_INFO_STRUCT);
+
+            for (int i=0; i<InfoQueue->mCount; i++) {
+                HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                
+                if(pHeart!=nil){
+                    
+                    InfoArrayValue *InfoEntersH=(InfoArrayValue *)(*pHeart->pEnPairPar);
+                    int *StartDataParEnter=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT);
+                    
+                    for (int j=0; j<InfoEntersH->mCount; j++) {
+                        int TmpIndexInLink=StartDataParEnter[j];
+                        
+                        if(TmpIndexInLink==iTmpIndex){
+                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairPar];
+                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairChi];
+                            break;
+                        }
+                    }
+
+                    InfoArrayValue *InfoExitrH=(InfoArrayValue *)(*pHeart->pExPairPar);
+                    int *StartDataParExit=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT);
+                    for (int j=0; j<InfoExitrH->mCount; j++) {
+                        int TmpIndexInLink=StartDataParExit[j];
+                        
+                        if(TmpIndexInLink==iTmpIndex){
+                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairPar];
+                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairChi];
+                            break;
+                        }
+                    }
+                }
+            }
+            
+            //удаляем связи из все парентов для данной матрицы
+            InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*InfoStr->ParentMatrix->pLinks);
+            int *StartDataLink=((*InfoStr->ParentMatrix->pLinks)+SIZE_INFO_STRUCT);
+            
+            for (int i=0; i<InfoStrLinks->mCount; i++) {
+                int iMatrIndex = StartDataLink[i];
+                MATRIXcell *TmpMatrInLinks=[m_pParent->ArrayPoints GetMatrixAtIndex:iMatrIndex];
+                
+                if(TmpMatrInLinks!=nil){
+                    
+                    InfoArrayValue *InfoQueue=(InfoArrayValue *)(*TmpMatrInLinks->pQueue);
+                    int *StartDataQueue=((*TmpMatrInLinks->pQueue)+SIZE_INFO_STRUCT);
+                    
+                    for (int i=0; i<InfoQueue->mCount; i++) {
+                        HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                        
+                        if(pHeart!=nil){
+                            
+                            InfoArrayValue *InfoEntersH=(InfoArrayValue *)(*pHeart->pEnPairChi);
+                            int *StartDataParEnter=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT);
+                            
+                            for (int j=0; j<InfoEntersH->mCount; j++) {
+                                int TmpIndexInLink=StartDataParEnter[j];
+                                
+                                if(TmpIndexInLink==iTmpIndex){
+                                    [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairPar];
+                                    [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairChi];
+                                    break;
+                                }
+                            }
+                            
+                            InfoArrayValue *InfoExitrH=(InfoArrayValue *)(*pHeart->pExPairChi);
+                            int *StartDataParExit=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT);
+                            for (int j=0; j<InfoExitrH->mCount; j++) {
+                                int TmpIndexInLink=StartDataParExit[j];
+                                
+                                if(TmpIndexInLink==iTmpIndex){
+                                    [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairPar];
+                                    [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairChi];
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        //
+        
         [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
 
         if(InfoStr->mFlags && F_ORDER)

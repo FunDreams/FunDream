@@ -54,6 +54,9 @@
     GObject *BLink;
     GObject *BConnect;
     GObject *BSetProp;
+    GObject *BSetActivity;
+    
+    NSMutableArray *pArrayToDel;
 
     GObject *BTash;
     GObject *PrSyn;

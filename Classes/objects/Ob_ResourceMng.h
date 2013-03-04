@@ -59,6 +59,8 @@
     NSFileManager *fm;
     int iCountInc;
     NSMutableString *NameFolerSelect;
+    
+    int OldInterfaceMode;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

@@ -9,6 +9,7 @@
 #import "Ob_ResourceMng.h"
 #import "Ob_Label.h"
 #import "Ob_Tab.h"
+#import "Ob_Editor_Interface.h"
 
 @interface Ob_ResourceMng () <DBRestClientDelegate>
 @end
@@ -81,6 +82,11 @@
         DESTROY_OBJECT([m_pFolderButton objectAtIndex:i]);
     }
     [m_pFolderButton removeAllObjects];
+    
+    Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng
+                                GetObjectByName:@"Ob_Editor_Interface"];
+    
+    [pInterface SetMode:OldInterfaceMode];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -886,8 +892,9 @@ Rep:
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
 
-    [super Destroy];
     LoadData=NO;
+
+    [super Destroy];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)touchesEndedOut:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{

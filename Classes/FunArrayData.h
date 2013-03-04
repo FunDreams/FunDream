@@ -48,9 +48,10 @@ typedef struct{
     //в виде мини матриц связей
 
     //типы
-    BYTE TypeInformation;//тип матрицы.
-    short NameInformation;//Имя-число матрицы.
-    int iIndexSelf;//индекс-указатель на себя
+    BYTE    TypeInformation;//тип матрицы.
+    short   NameInformation;//Имя-число матрицы.
+    int     iIndexSelf;//индекс-указатель на себя
+    short   sStartPlace;//точка входа
 //-------------------------------------------------------------------------------------------------
 } MATRIXcell;
 ////мини матрица (используется для создания последовательностей)
@@ -126,6 +127,8 @@ typedef struct{
 - (void)LoadHeart:(NSMutableData *)pMutData rpos:(int *)iCurReadingPos
          WithHeat:(HeartMatr *)pHeart WithMatr:(MATRIXcell *)pMatr;
 - (void)SaveHeart:(NSMutableData *)pMutData WithMatr:(HeartMatr *)pHeart;
+-(void)CopyAndRenameHeartData:(HeartMatr *)pHeartSelf from:(HeartMatr *)pHeartData
+                          Dic:(NSMutableDictionary *)pDic;
 
 - (void)Reserv:(int)iCountTmp;
 -(void)PrepareLoadData;

@@ -24,6 +24,9 @@
 
         m_OperationIndex = [[FunArrayDataIndexes alloc] init];
         m_OperationIndex->m_pParent=self;
+        
+        pParMatrixStack=[m_OperationIndex InitMemory];
+        pCurPlaceStack=[m_OperationIndex InitMemory];
 
         DicStrings = [[NSMutableDictionary alloc] init];
         DicLog = [[NSMutableDictionary alloc] init];
@@ -43,6 +46,72 @@
     return self;
 }
 //------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
+- (void)LogQueue:(FractalString*)pStr{
+    MATRIXcell *pMatr=[ArrayPoints GetMatrixAtIndex:pStr->m_iIndex];
+    
+    if(pMatr!=nil){
+        InfoArrayValue *InfoStr=(InfoArrayValue *)(*pMatr->pQueue);
+        int *StartData=((*pMatr->pQueue)+SIZE_INFO_STRUCT);
+        
+        for (int i=0; i<InfoStr->mCount; i++) {
+            HeartMatr *pHeart=(HeartMatr *)StartData[i];
+            
+            if(pHeart!=0){
+                
+                NSLog(@"Heart:%p Place:%d",pHeart,i);
+                
+                InfoArrayValue *InfoStrEnPar=(InfoArrayValue *)(*pHeart->pEnPairPar);
+                int *StartDataEnPar=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT);
+
+//                InfoArrayValue *InfoStrEnChi=(InfoArrayValue *)(*pHeart->pEnPairChi);
+                int *StartDataEnChi=((*pHeart->pEnPairChi)+SIZE_INFO_STRUCT);
+
+            
+                InfoArrayValue *InfoStrExPar=(InfoArrayValue *)(*pHeart->pExPairPar);
+                int *StartDataExPar=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT);
+                
+//                InfoArrayValue *InfoStrExChi=(InfoArrayValue *)(*pHeart->pExPairChi);
+                int *StartDataExChi=((*pHeart->pExPairChi)+SIZE_INFO_STRUCT);
+                
+                NSString *pStrLogOut = @"EntersPair:";
+
+                for (int j=0; j<InfoStrEnPar->mCount; j++) {
+                    int iIndexPar=StartDataEnPar[j];
+                    int iIndexChi=StartDataEnChi[j];
+                    
+                    pStrLogOut=[pStrLogOut stringByAppendingFormat:@"%d-%d.",iIndexPar,iIndexChi];
+                }
+                NSLog(@"%@",pStrLogOut);
+
+                pStrLogOut = @"ExitPair:";
+                
+                for (int j=0; j<InfoStrExPar->mCount; j++) {
+                    int iIndexPar=StartDataExPar[j];
+                    int iIndexChi=StartDataExChi[j];
+                    
+                    pStrLogOut=[pStrLogOut stringByAppendingFormat:@"%d-%d.",iIndexPar,iIndexChi];
+                }
+                NSLog(@"%@",pStrLogOut);
+                
+                InfoArrayValue *InfoStrNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                pStrLogOut = @"Places:";
+
+                for (int j=0; j<InfoStrNext->mCount; j++) {
+                    
+                    int Place=StartDataNext[j];
+                    
+                    pStrLogOut=[pStrLogOut stringByAppendingFormat:@"%d.",Place];
+                }
+                NSLog(@"%@",pStrLogOut);
+            }
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
 - (void)LogInfo:(FractalString *)fString{
     NSLog(@"Str:%@ %p Ind:%d IndS:%d ic:%@",fString->strUID,fString,fString->m_iIndex,
           fString->m_iIndexSelf,fString->sNameIcon);
@@ -54,10 +123,9 @@
     }
 
     NSLog(@"Association:%p",fString->pAssotiation);
-
-    NSLog(@"m_iIndexSelf: %d",fString->m_iIndexSelf);
     
     [self LogDataPoint:fString->pChildString Name:@"ChildsInString"];
+    [self LogQueue:fString];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LogDataPoint:(int**)pData Name:(NSString *)Name{
@@ -233,6 +301,8 @@
     }
     NSLog(@"End=====================================================");
 }
+//------------------------------------------------------------------------------------------------------
+//------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 -(void)ReLinkDataManager{
     
@@ -599,20 +669,32 @@
     else if(iTypeStart==DATA_MATRIX && iTypeEnd==DATA_MATRIX){
         
         HeartMatr *pHeartStart = (HeartMatr *)StartDataQueue[PlaceStart];
-   //     HeartMatr *pHeartEnd = StartDataQueue[PlaceEnd];
+  //      HeartMatr *pHeartEnd = (HeartMatr *)StartDataQueue[PlaceEnd];
         
         InfoArrayValue *InfoHeartStartNextPlace=(InfoArrayValue *)(*pHeartStart->pNextPlaces);
         int *NexpPlaces=((*pHeartStart->pNextPlaces)+SIZE_INFO_STRUCT);
-        
+
+  //      InfoArrayValue *InfoHeartEndNextPlace=(InfoArrayValue *)(*pHeartEnd->pNextPlaces);
+ //       int *NexpPlacesEnd=((*pHeartEnd->pNextPlaces)+SIZE_INFO_STRUCT);
+
         if(InfoHeartStartNextPlace->mCount>0){
             int TmpPlace=NexpPlaces[0];
             
             if(TmpPlace==PlaceEnd){
                 [m_OperationIndex OnlyRemoveDataAtIndex:TmpPlace WithData:pHeartStart->pNextPlaces];
+//                NexpPlacesEnd[0]=-1;
             }
             else NexpPlaces[0]=PlaceEnd;
         }
         else [m_OperationIndex OnlyAddData:PlaceEnd WithData:pHeartStart->pNextPlaces];
+        
+//        if(InfoHeartEndNextPlace->mCount>0){
+////            NexpPlacesEnd[0]=-1;
+//        }
+//        else
+//        {
+//            [m_OperationIndex OnlyAddData:-1 WithData:pHeartEnd->pNextPlaces];
+//        }
     }
     
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
@@ -760,13 +842,6 @@ repeate:
 //                        if(iRet>-1)
                           [m_OperationIndex RemoveDataAtPlace:i WithData:pMatr->pValueCopy];
                     }
-
-                    if(pFrStr->m_iAdditionalType==ADIT_TYPE_ENTER)
-                        [m_OperationIndex OnlyRemoveDataAtIndex:pFrStr->m_iIndex
-                                            WithData:pMatr->pEnters];
-                    else if(pFrStr->m_iAdditionalType==ADIT_TYPE_EXIT)
-                        [m_OperationIndex OnlyRemoveDataAtIndex:pFrStr->m_iIndex
-                                            WithData:pMatr->pExits];
 //удаляем ассоциации=======================================================================================
                     if(pFrStr->pAssotiation!=nil)
                     {
@@ -877,31 +952,145 @@ repeate:
 }
 //------------------------------------------------------------------------------------------------------
 -(void)Update:(FractalString *)StartString{
+//главный цикл обработки матрицы
+        
+    short iCurrentPlace;
+    int iCurrentIndex;
+    int *pQueue;
+    HeartMatr *pHeart;
+    InfoArrayValue *pInfoTmp;
     
+    float *F1,*F2,*F3;
+    int iIndexValue;
+    
+    InfoArrayValue *InfoParMatrix=(InfoArrayValue *)(*pParMatrixStack);
+    InfoArrayValue *InfoCurPlace=(InfoArrayValue *)(*pCurPlaceStack);
+    
+    int *StartDataParMatrix=((*pParMatrixStack)+SIZE_INFO_STRUCT);
+    int *StartDataCurPlace=((*pCurPlaceStack)+SIZE_INFO_STRUCT);
+//------------------------------------------------------------------------------------
     if(StartString==nil)return;
-    //stack
-    FractalString *pCurString=StartString;
-    MATRIXcell *pMatrChelf=[ArrayPoints GetMatrixAtIndex:pCurString->m_iIndex];
+    MATRIXcell *pParMatrix=[ArrayPoints GetMatrixAtIndex:StartString->m_iIndex];
+    if(pParMatrix->sStartPlace==-1)return;
+    iCurrentPlace=pParMatrix->sStartPlace;
 
-    //    int a,y;
-    //    __asm__("mov %0, %1, ASR #1" : "=r" (y) : "r" (a));
+    int IndexInside=((*pParMatrix->pValueCopy) + SIZE_INFO_STRUCT)[pParMatrix->sStartPlace];
+    MATRIXcell *pCurrentMatr=[ArrayPoints GetMatrixAtIndex:IndexInside];
+    if(pCurrentMatr==nil)return;
+        
+    pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
+    pHeart=(HeartMatr *)pQueue[iCurrentPlace];
+
+LOOP://бесконечный цикл
     
-LOOP:
-    
-    switch (pMatrChelf->TypeInformation)
+    switch (pCurrentMatr->TypeInformation)
     {
+//операции===========================================================================
         case STR_OPERATION:
-            //update
-            break;
+
+            switch (pCurrentMatr->NameInformation)
+            {
+//операция плюс----------------------------------------------------------------------
+                case NAME_O_PLUS:
+                    
+                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//A
+                    F1=(ArrayPoints->pData+iIndexValue);
+                    
+                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//B
+                    F2=(ArrayPoints->pData+iIndexValue);
+                    
+                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//R
+                    F3=(ArrayPoints->pData+iIndexValue);
+                    
+                    *F3+=*F1+*F2;
+                    break;
+//-----------------------------------------------------------------------------------
+                default://имя операции не найдено
+                    break;
+            }
+//следующая операция=================================================================
+            pInfoTmp=(InfoArrayValue *)(*pHeart->pNextPlaces);
             
+            if(pInfoTmp->mCount>0){
+                iCurrentPlace=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT)[0];
+                IndexInside=((*pParMatrix->pValueCopy) + SIZE_INFO_STRUCT)[iCurrentPlace];
+                
+                pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
+                pHeart=(HeartMatr *)pQueue[iCurrentPlace];
+            }
+            else
+            {
+LEVEL_UP:
+                if(InfoParMatrix->mCount==0)return;//выходим из обработки если стек пуст
+                
+                //достаём данные из стека
+                InfoParMatrix->mCount--;
+                InfoCurPlace->mCount--;
+
+                pParMatrix=*((MATRIXcell **)(StartDataParMatrix+InfoParMatrix->mCount));
+                iCurrentPlace=StartDataCurPlace[InfoCurPlace->mCount];
+
+                pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
+                pHeart=(HeartMatr *)pQueue[iCurrentPlace];
+NEXT_HEART:
+                pInfoTmp=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                if(pInfoTmp->mCount>0){
+                    iCurrentPlace=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT)[0];
+                    iCurrentIndex=((*pParMatrix->pValueCopy)+SIZE_INFO_STRUCT)[iCurrentPlace];
+                    pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
+                }
+                else
+                {
+                    goto LEVEL_UP;
+                }
+            }
+            goto LOOP;
+        break;
+//составная матрица==================================================================
         case STR_COMPLEX:
-            break;
+            if(pCurrentMatr->sStartPlace==-1)
+            {
+                goto NEXT_HEART;
+            }
             
-        default:
+            //заносим старые данные в стек
+            if(InfoParMatrix->mCount==InfoParMatrix->mCopasity)
+            {                
+                InfoParMatrix->mCopasity+=100;
+                InfoCurPlace->mCopasity+=100;
+                
+                int FullSize=InfoParMatrix->mCopasity*sizeof(int)+sizeof(InfoArrayValue);
+                *pParMatrixStack = (int *)realloc(*pParMatrixStack,FullSize);
+                *pCurPlaceStack = (int *)realloc(*pCurPlaceStack,FullSize);
+                
+                InfoParMatrix=(InfoArrayValue *)(*pParMatrixStack);
+                InfoCurPlace=(InfoArrayValue *)(*pCurPlaceStack);
+                
+                StartDataParMatrix=((*pParMatrixStack)+SIZE_INFO_STRUCT);
+                StartDataCurPlace=((*pCurPlaceStack)+SIZE_INFO_STRUCT);
+            }
+            
+            //копируем данные в стек
+            MATRIXcell **TmpLink=(MATRIXcell **)(StartDataParMatrix+InfoParMatrix->mCount);
+            *TmpLink=pParMatrix;
+            StartDataCurPlace[InfoCurPlace->mCount]=iCurrentPlace;
+            
+            InfoParMatrix->mCount++;
+            InfoCurPlace->mCount++;
+
+            pParMatrix=pCurrentMatr;
+            iCurrentPlace=pCurrentMatr->sStartPlace;
+            iCurrentIndex=((*pCurrentMatr->pValueCopy)+SIZE_INFO_STRUCT)[iCurrentPlace];
+            pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
+            pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
+            pHeart=(HeartMatr *)pQueue[iCurrentPlace];
+
+            goto LOOP;//входим в матрицу
+        break;
+//===================================================================================
+        default://тип не найден
             break;
     }
-    
-    //if next operation goto loop
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
@@ -916,7 +1105,10 @@ LOOP:
         [pManager release];
     }
     [ArrayDumpFiles release];
-            
+    
+    [m_OperationIndex OnlyReleaseMemory:pCurPlaceStack];
+    [m_OperationIndex OnlyReleaseMemory:pParMatrixStack];
+    
     [super dealloc];
 }
 //------------------------------------------------------------------------------------------------------

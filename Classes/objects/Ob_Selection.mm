@@ -99,8 +99,8 @@
     
     pObBtnSetSimple=UNFROZE_OBJECT(@"ObjectButton",@"SetSimple",
                               SET_INT_V(bRadioBox,@"m_iType"),
-                              SET_STRING_V(@"ButtonMail_Up.png",@"m_DOWN"),
-                              SET_STRING_V(@"ButtonMail_Up.png",@"m_UP"),
+                              SET_STRING_V(@"Simple.png",@"m_DOWN"),
+                              SET_STRING_V(@"Simple.png",@"m_UP"),
                               SET_FLOAT_V(64,@"mWidth"),
                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
                               SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -112,8 +112,8 @@
                               SET_VECTOR_V(Vector3DMake(-300,0,0),@"m_pCurPosition"));
     pObBtnSetEnter=UNFROZE_OBJECT(@"ObjectButton",@"SetEnter",
                               SET_INT_V(bRadioBox,@"m_iType"),
-                              SET_STRING_V(@"ButtonEditor_Up.png",@"m_DOWN"),
-                              SET_STRING_V(@"ButtonEditor_Up.png",@"m_UP"),
+                              SET_STRING_V(@"Enter.png",@"m_DOWN"),
+                              SET_STRING_V(@"Enter.png",@"m_UP"),
                               SET_FLOAT_V(64,@"mWidth"),
                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
                               SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -125,8 +125,8 @@
                               SET_VECTOR_V(Vector3DMake(-230,0,0),@"m_pCurPosition"));
     pObBtnSetExit=UNFROZE_OBJECT(@"ObjectButton",@"SetExit",
                               SET_INT_V(bRadioBox,@"m_iType"),
-                              SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
-                              SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
+                              SET_STRING_V(@"Exit.png",@"m_DOWN"),
+                              SET_STRING_V(@"Exit.png",@"m_UP"),
                               SET_FLOAT_V(64,@"mWidth"),
                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
                               SET_BOOL_V(YES,@"m_bLookTouch"),

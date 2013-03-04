@@ -260,13 +260,13 @@
     pMatr->pEnters = [pParent->m_OperationIndex InitMemory];
     InfoStr=(InfoArrayValue *)(*pMatr->pEnters);
     InfoStr->ParentMatrix=pMatr;
-    InfoStr->mFlags&=F_ORDER;
+//    InfoStr->mFlags&=F_ORDER;
 
     //выходные параметны
     pMatr->pExits = [pParent->m_OperationIndex InitMemory];
     InfoStr=(InfoArrayValue *)(*pMatr->pExits);
     InfoStr->ParentMatrix=pMatr;
-    InfoStr->mFlags&=F_ORDER;
+//    InfoStr->mFlags&=F_ORDER;
 
     //связи
     pMatr->pQueue = [pParent->m_OperationIndex InitMemory];
@@ -277,6 +277,26 @@
     pMatr->TypeInformation=STR_COMPLEX;
     pMatr->NameInformation=0;
     pMatr->iIndexSelf=0;
+    pMatr->sStartPlace=-1;
+}
+//------------------------------------------------------------------------------------------------------
+-(void)CopyAndRenameHeartData:(HeartMatr *)pHeartSelf from:(HeartMatr *)pHeartData
+                          Dic:(NSMutableDictionary *)pDic{
+    
+    [pParent->m_OperationIndex CopyDataFrom:pHeartData->pEnPairPar To:pHeartSelf->pEnPairPar];
+    [self RenameIndexData:pHeartSelf->pEnPairPar Dic:pDicRename];
+
+    [pParent->m_OperationIndex CopyDataFrom:pHeartData->pEnPairChi To:pHeartSelf->pEnPairChi];
+    [self RenameIndexData:pHeartSelf->pEnPairChi Dic:pDicRename];
+
+
+    [pParent->m_OperationIndex CopyDataFrom:pHeartData->pExPairPar To:pHeartSelf->pExPairPar];
+    [self RenameIndexData:pHeartSelf->pExPairPar Dic:pDicRename];
+
+    [pParent->m_OperationIndex CopyDataFrom:pHeartData->pExPairChi To:pHeartSelf->pExPairChi];
+    [self RenameIndexData:pHeartSelf->pExPairChi Dic:pDicRename];
+
+    [pParent->m_OperationIndex CopyDataFrom:pHeartData->pNextPlaces To:pHeartSelf->pNextPlaces];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RenameIndexData:(int **)Data Dic:(NSMutableDictionary *)pDic{
@@ -315,6 +335,7 @@
 //copy matrix ========================================================================
         pNewMatr->NameInformation=DataMatrix->NameInformation;
         pNewMatr->TypeInformation=DataMatrix->TypeInformation;
+        pNewMatr->sStartPlace=DataMatrix->sStartPlace;
 
         //копируем copy
         InfoArrayValue *InfoStr=(InfoArrayValue *)(*DataMatrix->pValueCopy);
@@ -367,7 +388,34 @@
         [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pExits To:pNewMatr->pExits];
         [self RenameIndexData:pNewMatr->pExits Dic:pDicRename];
         
+        //copy enters/exit
+//        InfoArrayValue *InfoStrEnters=(InfoArrayValue *)(*DataMatrix->pEnters);
+//        int *StartDataEnters=((*DataMatrix->pEnters)+SIZE_INFO_STRUCT);
+//        
+//        for (int i=0; i<InfoStrEnters->mCount; i++) {//
+//            int iTmpIndex=StartDataEnters[i];
+//            
+//            NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
+//            NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
+//        }
+//
+//        InfoArrayValue *InfoStrExit=(InfoArrayValue *)(*DataMatrix->pExits);
+//        int *StartDataExit=((*DataMatrix->pExits)+SIZE_INFO_STRUCT);
+        
         //pNewMatr->pQueue// copy queue
+        InfoArrayValue *InfoStrQueueSelf=(InfoArrayValue *)(*pNewMatr->pQueue);
+        int *StartDataQueueSelf=((*pNewMatr->pQueue)+SIZE_INFO_STRUCT);
+
+//        InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*DataMatrix->pQueue);
+        int *StartDataQueue=((*DataMatrix->pQueue)+SIZE_INFO_STRUCT);
+        
+        for (int i=0; i<InfoStrQueueSelf->mCount; i++) {//
+            HeartMatr *pHeartSelf=(HeartMatr *)StartDataQueueSelf[i];
+            HeartMatr *pHeartData=(HeartMatr *)StartDataQueue[i];
+            
+            if(pHeartSelf!=nil && pHeartData!=nil)
+                [self CopyAndRenameHeartData:pHeartSelf from:pHeartData Dic:pDicRename];
+        }
 //===================================================================================
     }
     
@@ -805,13 +853,17 @@
     Range = NSMakeRange( *iCurReadingPos, sizeof(int));
     [pMutData getBytes:&pMatr->iIndexSelf range:Range];
     *iCurReadingPos += sizeof(int);
+    
+    //точка входа.
+    Range = NSMakeRange( *iCurReadingPos, sizeof(short));
+    [pMutData getBytes:&pMatr->sStartPlace range:Range];
+    *iCurReadingPos += sizeof(short);
 
     //количество сердец.
     short sCountHearts=0;
     Range = NSMakeRange( *iCurReadingPos, sizeof(short));
     [pMutData getBytes:&sCountHearts range:Range];
     *iCurReadingPos += sizeof(short);
-
     
     InfoArrayValue *InfoQueue=(InfoArrayValue *)(*pMatr->pQueue);
     int *StartDataQueue=((*pMatr->pQueue)+SIZE_INFO_STRUCT);
@@ -864,6 +916,8 @@
     [pMutData appendBytes:&pMatr->NameInformation length:sizeof(short)];
     //Индекс струны.
     [pMutData appendBytes:&pMatr->iIndexSelf length:sizeof(int)];
+    //точка входа.
+    [pMutData appendBytes:&pMatr->sStartPlace length:sizeof(short)];
 
     InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*pMatr->pQueue);
     int *StartDataQueue=(*pMatr->pQueue+SIZE_INFO_STRUCT);
