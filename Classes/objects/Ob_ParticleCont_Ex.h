@@ -39,7 +39,6 @@
 
 @interface Ob_ParticleCont_Ex : GObject {
 @public
-    NSMutableArray *pStrings;//контейнер для управляющих струн
     NSMutableArray *m_pParticleInProc;//контейнер для отображающихся частиц
     NSMutableArray *m_pParticleInFreeze;//контейнер для замороженых частиц.
     

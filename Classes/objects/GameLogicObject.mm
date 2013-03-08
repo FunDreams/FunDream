@@ -28,13 +28,16 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LoadTextureAtlases
 {
-    AtlasContainer *tmpAtlas=[[AtlasContainer alloc] InitWithName:@"NumbersAtl"
-                    NameStartTexture:@"0-01@2x.png" CountX:10 CountY:11 NumLoadTextures:102 SizeAtlas:Vector3DMake(512,1024,0)];
+//    AtlasContainer *tmpAtlas=[[AtlasContainer alloc] InitWithName:@"NumbersAtl"
+//                    NameStartTexture:@"0-01@2x.png" CountX:10 CountY:11 NumLoadTextures:102
+//                    SizeAtlas:Vector3DMake(512,1024,0)];
+//    
+//    [m_pParent LoadTextureAtlas:tmpAtlas];
     
-    [m_pParent LoadTextureAtlas:tmpAtlas];
-    
-     tmpAtlas=[[AtlasContainer alloc] InitWithName:@"PensilAtl"
-                     NameStartTexture:@"Particle_001.png" CountX:1 CountY:1 NumLoadTextures:1 SizeAtlas:Vector3DMake(32,32,0)];
+     AtlasContainer *tmpAtlas=[[AtlasContainer alloc] InitWithName:@"PensilAtl"
+                     NameStartTexture:@"Particle_001.png"
+                     CountX:1 CountY:1 NumLoadTextures:1
+                     SizeAtlas:Vector3DMake(32,32,0)];
     
     [m_pParent LoadTextureAtlas:tmpAtlas];
 }
@@ -66,21 +69,22 @@
 - (void)CreateObject_Editor{
 
     [self ClearAllObjects];
-
-    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesScore",
-                   SET_INT_V(layerOb6,@"m_iLayer"),
-                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
-
-    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesForIndicator",
-                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
-                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
-
-    UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
-
-    CREATE_NEW_OBJECT(@"Ob_ParticleCont_ForStr",@"SpriteContainer",
+    
+    Ob_ParticleCont_ForStr *pOb = CREATE_NEW_OBJECT(@"Ob_ParticleCont_ForStr",@"SpriteContainer",
                       SET_STRING_V(@"PensilAtl",@"m_pNameAtlas"),
                       SET_VECTOR_V(Vector3DMake(0, 0, 0),@"m_pCurPosition"));
+    
+    m_pObjMng->pStringContainer->ArrayPoints->pCurrenContPar=pOb;
+    UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
+    
 
+//    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesScore",
+//                   SET_INT_V(layerOb6,@"m_iLayer"),
+//                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
+//
+//    UNFROZE_OBJECT(@"ObjectParticle",@"ParticlesForIndicator",
+//                   SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
+//                   SET_STRING_V(@"NumbersAtl",@"m_pNameAtlas"));
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonRestart",
 //                   SET_STRING_V(@"ButtonRestart_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),

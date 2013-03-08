@@ -33,13 +33,13 @@
     int      m_INumLoadTextures;
     NSString *m_psNameStartTexture;
 }
-
+//------------------------------------------------------------------------------------------------------
 - (id)InitWithName:(NSString *)pNamet
-  NameStartTexture:(NSString *)pNameStart
+            NameStartTexture:(NSString *)pNameStart
             CountX:(int)iCountX
             CountY:(int)iCountY
-   NumLoadTextures:(int)iNumLoadTextures
-         SizeAtlas:(Vector3D)vSize;
+            NumLoadTextures:(int)iNumLoadTextures
+            SizeAtlas:(Vector3D)vSize;
 
 @end
 //------------------------------------------------------------------------------------------------------

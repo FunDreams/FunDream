@@ -75,8 +75,6 @@
     PLAY_SOUND(@"Attract.wav");
 
     iCountParInShape=iDiff;
-    
-    pStrings = [[NSMutableArray alloc] init];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)InitProc:(ProcStage_ex *)pStage{}
@@ -217,12 +215,6 @@
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{
-
-    for (Particle_Shape *pString in pStrings) {
-        [pString release];
-    }
-
-    [pStrings release];
     
     [self RemoveAllParticles];
     [super Destroy];

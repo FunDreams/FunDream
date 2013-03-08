@@ -1074,7 +1074,7 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)setupView:(GLView*)view
 {
-	glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
+	glClearColor(0.0f, 0.5f, 0.4f, 1.0f);
 	
 	glDisable(GL_DEPTH_TEST);
 	glMatrixMode(GL_PROJECTION);

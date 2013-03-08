@@ -10,9 +10,10 @@
 #import "FractalString.h"
 @class FunArrayDataIndexes;
 @class CObjectManager;
+@class Ob_ParticleCont_ForStr;
 
 @interface StringContainer : NSObject{//пространство струн 
-@public
+@public    
     FunArrayData *ArrayPoints;
     NSMutableDictionary *DicStrings;
     NSMutableDictionary *DicLog;

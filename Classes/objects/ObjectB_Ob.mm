@@ -126,14 +126,16 @@
     SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
     
     if(m_bFlicker==YES)[self setFlick];
-    else [self setUnFlick];    
+    else [self setUnFlick];
+    
+    mCountTmp=30;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateTextureOnFace{
     
     mCountTmp++;
     
-    if(mCountTmp==10)
+    if(mCountTmp>=10)
     {
         mCountTmp=0;
         
@@ -141,6 +143,29 @@
         
         switch (m_iTypeStr)
         {
+            case DATA_SPRITE:
+            {
+                NSString *pStr=nil;
+                int *Tmpi=(int *)[m_pObjMng->pStringContainer->
+                                  ArrayPoints GetDataAtIndex:pString->m_iIndex];
+                
+                pStr = [NSString stringWithFormat:@"%d",*Tmpi];
+
+                if(![StrValueSprite isEqualToString:pStr])
+                {
+                    [StrValueSprite release];
+                    StrValueSprite=[[NSString stringWithString:pStr] retain];
+                    
+                    int iFontSize=20;
+                    TextureIndicatorSprite=[self CreateText:StrValueSprite al:UITextAlignmentCenter
+                                                Tex:TextureIndicatorValue fSize:iFontSize
+                                                dimensions:CGSizeMake(mWidth-10, iFontSize+4)
+                                                fontName:@"Helvetica"];
+                }
+
+            }
+            break;
+                
             case DATA_FLOAT:
             case DATA_INT:
             {
@@ -164,7 +189,7 @@
                     [StrValueOnFace release];
                     StrValueOnFace=[[NSString stringWithString:pStr] retain];
                     
-                    int iFontSize=20;
+                    int iFontSize=10;
                     TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
                             Tex:TextureIndicatorValue fSize:iFontSize
                             dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
@@ -532,6 +557,7 @@ Exit:
             break;
             
         case DATA_MATRIX:
+        case DATA_SPRITE:
             
             glVertexPointer(3, GL_FLOAT, 0, vertices);
             glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
@@ -546,18 +572,31 @@ Exit:
             
             [self SetColor:mColorBack];
             
-            glBindTexture(GL_TEXTURE_2D, -1);
-            
             if(m_bBack==YES){
+                glBindTexture(GL_TEXTURE_2D, -1);
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-            glBindTexture(GL_TEXTURE_2D, mTextureId);
+            if(m_iTypeStr==DATA_MATRIX)
+            {
+                glBindTexture(GL_TEXTURE_2D, mTextureId);
+            }
+            else
+            {
+                glBindTexture(GL_TEXTURE_2D, -1);
+            }
             
             glScalef(0.9f,0.9f,m_pCurScale.z);
             [self SetColor:mColor];
             
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            
+            if(m_iTypeStr==DATA_SPRITE)
+            {
+                [self UpdateTextureOnFace];
+                [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y
+                            Color:Color3DMake(0,0,0,1) Tex:TextureIndicatorSprite];
+            }
             break;
             
         default:

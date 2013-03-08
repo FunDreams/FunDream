@@ -18,7 +18,8 @@
 
 //структура перечисле для слоёв отрисовки
 typedef enum tagLayerID {
-	layerOpenGL = 0,
+    layerGame = 0,
+	layerOpenGL,
     layerSystem,
     layerNotShow,
 	layerBackground,	

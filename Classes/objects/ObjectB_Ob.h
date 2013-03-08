@@ -56,6 +56,9 @@
     Texture2D* TextureIndicatorLink;
     NSString *StrValueOnLink;
     int mCountTmp;
+
+    Texture2D* TextureIndicatorSprite;
+    NSString *StrValueSprite;
 }
 
 /** Инициализирует объект **/

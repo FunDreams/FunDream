@@ -166,7 +166,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CreateOb:(FractalString *)pFrStr{
     
-    Color3D ColorTmp = Color3DMake(0, 0, 0, 1);
+    Color3D ColorTmp = Color3DMake(1, 1, 1, 1);
     bool bFlick=NO;
     float Width=44;
     float Height=44;
@@ -175,6 +175,11 @@
     
     switch (iType)
     {
+
+        case DATA_SPRITE:
+            ColorTmp = Color3DMake(1, 1, 1, 1);
+            break;
+
         case DATA_FLOAT:
         case DATA_INT:
             Width=100;
@@ -222,7 +227,6 @@
         }
         default:
             break;
-
     }
     
     
@@ -233,7 +237,6 @@
                            SET_FLOAT_V(Width,@"mWidth"),
                            SET_FLOAT_V(Height*FACTOR_DEC,@"mHeight"),
                            //SET_BOOL_V(YES,@"m_bLookTouch"),
-                           SET_INT_V(2,@"m_iType"),
                            SET_STRING_V(NAME(self),@"m_strNameObject"),
                            SET_STRING_V(@"Check",@"m_strNameStage"),
                            SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),

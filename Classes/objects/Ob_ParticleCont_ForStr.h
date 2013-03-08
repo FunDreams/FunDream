@@ -21,7 +21,7 @@
     int m_iCurrentOffset;
     int m_iCurFrame;
     int m_iStage;
-    
+
     float *X;
     float *Y;
 }
@@ -41,9 +41,7 @@
 
 @interface Ob_ParticleCont_ForStr : GObject {
 @public
-    NSMutableArray *pStrings;//контейнер для управляющих струн
-    NSMutableArray *m_pParticleInProc;//контейнер для отображающихся частиц
-    NSMutableArray *m_pParticleInFreeze;//контейнер для замороженых частиц.
+    int **pIndexParticles; //индексы частиц в матрице
     
     NSMutableString *m_pNameAtlas;
     AtlasContainer *m_pAtlasContainer;
@@ -57,10 +55,15 @@
 
 /** Добавим/удалим частицу **/
 -(id)NewParticle;
--(id)CreateParticle;
--(void)RemoveParticle:(Particle_ForStr *)pParticle;
--(void)FrezeParticle:(Particle_ForStr *)pParticle;
+-(int)CreateParticle;
+-(void)CopySprite:(int)iPlaceDest source:(int)iPlaceSrc;
+-(void)RemoveParticle:(int)iIndexPar;
 -(void)RemoveAllParticles;
+
+-(void)SetDefaultVertex:(int)Place;
+
+-(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
+-(void)selfSave:(NSMutableData *)m_pData;
 
 /** заготовки =) **/
 -(void)Destroy;

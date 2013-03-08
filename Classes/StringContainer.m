@@ -9,6 +9,7 @@
 #import "StringContainer.h"
 #import "DropBoxMng.h"
 #import "Ob_Editor_Interface.h"
+#import "Ob_ParticleCont_ForStr.h"
 
 @implementation StringContainer
 //------------------------------------------------------------------------------------------------------
@@ -316,18 +317,18 @@
 -(void)AddSmallCube:(FractalString *)pFParent{
     MATRIXcell *pMatrObject=[ArrayPoints GetMatrixAtIndex:pFParent->m_iIndex];
     
-//    FractalString *pStrTest=[[FractalString alloc]
-//                              initWithName:@"test" WithParent:pFParent WithContainer:self];
-//    
-//    [pStrTest SetNameIcon:@"A.png"];
-//    pStrTest->X=-420;
-//    pStrTest->Y=-30;
-//    
-//    pStrTest->m_iIndex=[ArrayPoints SetFloat:44.56];
-//    [m_OperationIndex AddData:pStrTest->m_iIndex WithData:pMatrObject->pValueCopy];
-
-//    return;
+    FractalString *pStrSprite=[[FractalString alloc]
+                              initWithName:@"Sprite" WithParent:pFParent WithContainer:self];
     
+    [pStrSprite SetNameIcon:@"A.png"];
+    pStrSprite->X=-220;
+    pStrSprite->Y=-200;
+    
+    pStrSprite->m_iIndex=[ArrayPoints SetSprite:0];
+    [m_OperationIndex AddData:pStrSprite->m_iIndex WithData:pMatrObject->pValueCopy];
+
+    return;        
+
     //парент objects
     FractalString *pStrInfo=[[FractalString alloc]
                              initWithName:@"Info" WithParent:pFParent WithContainer:self];
@@ -752,7 +753,7 @@ repeate:
                 [[FractalString alloc] initWithData:pDataCurManager->m_pDataDmp
                                 WithCurRead:&pDataCurManager->m_iCurReadingPos
                                 WithParent:nil WithContainer:self];
-                
+                                
                 //загрузка матрицы
                 [ArrayPoints selfLoad:pDataCurManager->m_pDataDmp
                                  rpos:&pDataCurManager->m_iCurReadingPos];
@@ -1002,7 +1003,7 @@ LOOP://бесконечный цикл
                     iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//R
                     F3=(ArrayPoints->pData+iIndexValue);
                     
-                    *F3+=*F1+*F2;
+                    *F3+= *F1+ *F2;//плюсование
                     break;
 //-----------------------------------------------------------------------------------
                 default://имя операции не найдено
@@ -1039,19 +1040,13 @@ NEXT_HEART:
                     iCurrentIndex=((*pParMatrix->pValueCopy)+SIZE_INFO_STRUCT)[iCurrentPlace];
                     pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
                 }
-                else
-                {
-                    goto LEVEL_UP;
-                }
+                else goto LEVEL_UP;//переходим ещё на уровень выше
             }
             goto LOOP;
         break;
 //составная матрица==================================================================
         case STR_COMPLEX:
-            if(pCurrentMatr->sStartPlace==-1)
-            {
-                goto NEXT_HEART;
-            }
+            if(pCurrentMatr->sStartPlace==-1)goto NEXT_HEART;
             
             //заносим старые данные в стек
             if(InfoParMatrix->mCount==InfoParMatrix->mCopasity)

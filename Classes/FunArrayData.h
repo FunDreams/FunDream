@@ -13,10 +13,12 @@
 #define DATA_STRING         5
 #define DATA_TEXTURE        6
 #define DATA_SOUND          7
+#define DATA_SPRITE         8
 
 #import <Foundation/Foundation.h>
 @class StringContainer;
 @class FractalString;
+@class Ob_ParticleCont_ForStr;
 //-------------------------------------------------------------------------------------------------
 //определения для типов ячеек матрицы
 #define STR_SIMPLE          0//нулевой-объект
@@ -69,12 +71,15 @@ typedef struct{
 
 @interface FunArrayData : NSObject{
 @public
+
     StringContainer *pParent;//контейнер родитель
 
+    Ob_ParticleCont_ForStr *pCurrenContPar;//спрайты
     float *pData;//единый массив данных
     int *pDataInt;//данные о копиях ячейки
     BYTE *pType;//тип данных
 
+    Ob_ParticleCont_ForStr *pCurrenContParSrc;//спрайты исходника
     float *pDataSrc;//исходный массив данных при копировании
     int *pDataIntSrc;//исходный массив данных при копировании
     BYTE *pTypeSrc;//тип данных исходника
@@ -106,6 +111,7 @@ typedef struct{
 - (int)SetName:(NSMutableString *)DataValue;
 - (int)SetOb:(FractalString *)DataValue;
 - (int)SetMatrix:(MATRIXcell *)DataMatrix;
+- (int)SetSprite:(int)IndexSprite;
 
 - (void)IncDataAtIndex:(int)iIndex;
 - (void)DecDataAtIndex:(int)iIndex;

@@ -7,7 +7,7 @@
 //
 
 #import "FunArrayData.h"
-
+#import "Ob_ParticleCont_ForStr.h"
 //------------------------------------------------------------------------------------------
 @implementation FunArrayData
 //------------------------------------------------------------------------------------------
@@ -40,6 +40,7 @@
     pDataSrc=pSourceData->pData;
     pTypeSrc=pSourceData->pType;
     pDataIntSrc=pSourceData->pDataIntSrc;
+    pCurrenContParSrc=pSourceData->pCurrenContPar;
 }
 //------------------------------------------------------------------------------------------
 - (void)Increase:(int)CountInc{
@@ -136,6 +137,10 @@
                 iRetIndex = [self SetName:*((NSMutableString **)pDataTmp)];
                 break;
 
+            case DATA_SPRITE:
+                iRetIndex = [self SetSprite:*pDataTmp];
+                break;
+
             default:
                 break;
         }
@@ -166,6 +171,32 @@
     *TmpLink=DataValue;
     
     (*(pType+iIndex))=DATA_INT;
+    
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (int)SetSprite:(int)IndexSprite{
+    
+    int iIndex=[self GetFree];
+    
+    int *TmpLink=(int *)pData+iIndex;
+    int indexParticle=[pCurrenContPar CreateParticle];
+    *TmpLink=indexParticle;
+
+    [pParent->m_OperationIndex OnlyAddData:iIndex WithData:pCurrenContPar->pIndexParticles];
+    
+    if(IndexSprite==0)
+    {
+        int TmpSrcPlace=*((int *)pDataSrc+iIndex);
+        [pCurrenContPar SetDefaultVertex:TmpSrcPlace];
+    }
+    else
+    {
+        int TmpSrcPlace=*((int *)pDataSrc+IndexSprite);
+        [pCurrenContPar CopySprite:indexParticle source:TmpSrcPlace];
+    }
+    
+    (*(pType+iIndex))=DATA_SPRITE;
     
     return iIndex;
 }
@@ -563,6 +594,11 @@
 
                 default:
                     break;
+                    
+                case DATA_SPRITE:
+                {
+                    [pCurrenContPar RemoveParticle:iIndex];
+                }
             }
 
             iCountInArray--;
@@ -629,6 +665,8 @@
         MATRIXcell *pMatr = [self GetMatrixAtIndex:[pValueMatr intValue]];
         [self SaveMatrix:m_pData WithMatr:pMatr];
     }
+    
+    [pCurrenContPar selfSave:m_pData];//сохраняем спрайты
 }
 //--------------------------------------------------------------------------------
 -(void)PrepareLoadData{
@@ -794,6 +832,8 @@
         *TmpLinkMatr=pMatr;
     }
 //--------------------------------------------------------------------------------
+    [pCurrenContPar selfLoad:m_pData rpos:iCurReadingPos];//загружаем спрайты
+
     [self PrepareLoadData];
 }
 //------------------------------------------------------------------------------------------
@@ -893,7 +933,7 @@
 //------------------------------------------------------------------------------------------
 - (void)SaveHeart:(NSMutableData *)pMutData WithMatr:(HeartMatr *)pHeart{
     
-    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pEnPairPar];    
+    [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pEnPairPar];
     [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pEnPairChi];
 
     [pParent->m_OperationIndex selfSave:pMutData WithData:pHeart->pExPairPar];

@@ -45,9 +45,9 @@
 - (void)LinkValues{
     [super LinkValues];
 //====//процессоры для объекта==========================================================================
-    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
-        ASSIGN_STAGE(@"UPDATE",@"Proc:",nil);
-    [self END_QUEUE:pProc name:@"Proc"];
+//    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
+//        ASSIGN_STAGE(@"UPDATE",@"Proc:",nil);
+//    [self END_QUEUE:pProc name:@"Proc"];
     
 //====//различные параметры=============================================================================
    [m_pObjMng->pMegaTree SetCell:(LINK_INT_V(m_iMode,@"m_iMode"))];
@@ -248,7 +248,8 @@
     
     if(pStrCheck!=nil){
         
-        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
+        MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->
+                           m_iIndex];
         
         iIndexCheck=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[0];
         
@@ -265,13 +266,21 @@
         iIndexChelf=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
     }
 //////////////////
-    
+
+    UNFROZE_OBJECT(@"StaticObject",@"Back",
+              //     SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                   SET_COLOR_V(Color3DMake(0.2f,0.2f,0.2f,1),@"mColor"),
+                   SET_FLOAT_V(480,@"mWidth"),
+                   SET_FLOAT_V(640,@"mHeight"),
+                   SET_VECTOR_V(Vector3DMake(-240,0,0),@"m_pCurPosition"),
+                   SET_INT_V(layerBackground,@"m_iLayer"));
+
     UNFROZE_OBJECT(@"StaticObject",@"Sl1",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
                    SET_FLOAT_V(480,@"mWidth"),
                    SET_FLOAT_V(5,@"mHeight"),
                    SET_VECTOR_V(Vector3DMake(-240,202,0),@"m_pCurPosition"),
-                   SET_INT_V(layerBackground,@"m_iLayer"));
+                   SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
 
     UNFROZE_OBJECT(@"StaticObject",@"Sl2",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
@@ -279,7 +288,7 @@
                    SET_FLOAT_V(5,@"mHeight"),
                    SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pCurPosition"),
                    SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
-                   SET_INT_V(layerBackground,@"m_iLayer"));
+                   SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
 //save/load
     
     ButtonGroup = UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
@@ -655,12 +664,12 @@
         }
     }
 }
-//------------------------------------------------------------------------------------------------------
-- (void)InitProc:(ProcStage_ex *)pStage{}
-//------------------------------------------------------------------------------------------------------
-- (void)PrepareProc:(ProcStage_ex *)pStage{}
-//------------------------------------------------------------------------------------------------------
-- (void)Proc:(Processor_ex *)pProc{}
+//----------------------------------------------------------------------------------------------------
+//- (void)InitProc:(ProcStage_ex *)pStage{}
+////---------------------------------------------------------------------------------------------------
+//- (void)PrepareProc:(ProcStage_ex *)pStage{}
+////---------------------------------------------------------------------------------------------------
+//- (void)Proc:(Processor_ex *)pProc{}
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------

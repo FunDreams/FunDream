@@ -314,7 +314,7 @@
     if(iPlace+1>InfoStr->mCount)return;
     
     int *StartData=((*pData)+SIZE_INFO_STRUCT);
-
+    
     int iTmpIndex=StartData[iPlace];
 //проверяем вложеные сслылки на удаляемую матрицу================================================
     int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iTmpIndex];
@@ -322,6 +322,9 @@
 
         MATRIXcell *pCurrentMatrix=InfoStr->ParentMatrix;
         int iIndexCurrentMatr=pCurrentMatrix->iIndexSelf;
+        
+        InfoArrayValue *InfoQueue=(InfoArrayValue *)(*InfoStr->ParentMatrix->pQueue);
+        int *StartDataQueue=((*InfoStr->ParentMatrix->pQueue)+SIZE_INFO_STRUCT);
         
         MATRIXcell *TmpMatrForDel=[m_pParent->ArrayPoints GetMatrixAtIndex:iTmpIndex];
         InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*TmpMatrForDel->pLinks);
@@ -424,11 +427,7 @@
                 
                 [m_pParent->ArrayPoints ReleaseMemoryHeart:pHeart];
                 free(pHeart);
-            }
-            memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
-            
-            InfoQueue->mCount--;
-            [self SetCopasity:InfoQueue->mCount WithData:Parrent->pQueue];
+            }            
         }
         InfoStr->mCount--;
 ///////////////////////////////////////////////////
@@ -454,13 +453,17 @@
             }
         }
         
+        memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
+        InfoQueue->mCount--;
+        [self SetCopasity:InfoQueue->mCount WithData:InfoStr->ParentMatrix->pQueue];
+
         [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
     }
 //================================================================================================
     else
     {//удаление из связей (сначала в текущей матрице)
         
-        if(iType==DATA_FLOAT || iType==DATA_INT){
+        if(iType==DATA_FLOAT || iType==DATA_INT || iType==DATA_SPRITE){
             [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pEnters];
             [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pExits];
             
@@ -545,10 +548,13 @@
                     }
                 }
             }
+            
+            memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
+            InfoQueue->mCount--;
+            [self SetCopasity:InfoQueue->mCount WithData:InfoStr->ParentMatrix->pQueue];
         }
         //
         
-        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
 
         if(InfoStr->mFlags && F_ORDER)
         {
@@ -562,7 +568,8 @@
         }
         
         InfoStr->mCount--;
-    }
+        [m_pParent->ArrayPoints DecDataAtIndex:iTmpIndex];
+    }    
 }
 //------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData WithData:(int **)pData{
