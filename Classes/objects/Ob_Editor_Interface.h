@@ -25,10 +25,12 @@
 #define M_EDIT_NUM      6
 #define M_EDIT_EN_EX    7
 #define M_CONNECT_IND   8
+#define M_SEL_TEXTURE   9
 
 @interface Ob_Editor_Interface : GObject {
 @public
     Ob_ResourceMng *pResIcon;
+    Ob_ResourceMng *pResTexture;
     
     Ob_GroupButtons *ButtonGroup;
     Ob_GroupEmptyPlace *Eplace;
@@ -99,6 +101,7 @@
 - (void)DelStatusBar;
 
 - (void)DoubleTouchObject;
+- (void)SelTexture;
 
 - (void)RemButtonEdit;
 - (void)SetButtonEdit;

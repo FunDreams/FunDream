@@ -83,10 +83,10 @@
     }
     [m_pFolderButton removeAllObjects];
     
-    Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng
-                                GetObjectByName:@"Ob_Editor_Interface"];
+//    Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng
+  //                              GetObjectByName:@"Ob_Editor_Interface"];
     
-    [pInterface SetMode:OldInterfaceMode];
+ //   [pInterface SetMode:OldInterfaceMode];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -303,29 +303,47 @@ exit:
     if(pObTmp!=nil){
         for (Ob_Label *pOb in m_pChildrenbjectsArr)
         {
-            if(pOb==pObTmp){
-                
-                m_iCurrentSelect=i;
-                [Fstring SetNameIcon:pOb->pNameLabel];
-                
-                if(Fstring->pAssotiation!=nil){
-                    
-                    id array = [Fstring->pAssotiation allKeys];
-                    
-                    for (int i=0; i<[array count]; i++) {
+            if(pOb==pObTmp)
+            {
+                switch (m_iTypeRes)
+                {
+                    case R_TEXTURE:
+                    {
+                        m_iCurrentSelect=i;
                         
-                        int pIndexCurrentAss=[[array objectAtIndex:i] intValue];
+                        NSMutableString *pStrTex=[m_pObjMng->pStringContainer->ArrayPoints
+                                               GetIdAtIndex:Fstring->m_iIndex];
+
+                        [pStrTex setString:pOb->pNameLabel];
+                    }
                         
-                        if(pIndexCurrentAss!=Fstring->m_iIndexSelf)
-                        {
-                            FractalString *FAssoc=[m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:pIndexCurrentAss];
-                            [FAssoc SetNameIcon:pOb->pNameLabel];
+                    case R_ICON:
+                    {
+                        m_iCurrentSelect=i;
+                        [Fstring SetNameIcon:pOb->pNameLabel];
+                        
+                        if(Fstring->pAssotiation!=nil){
+                            
+                            id array = [Fstring->pAssotiation allKeys];
+                            
+                            for (int i=0; i<[array count]; i++) {
+                                
+                                int pIndexCurrentAss=[[array objectAtIndex:i] intValue];
+                                
+                                if(pIndexCurrentAss!=Fstring->m_iIndexSelf)
+                                {
+                                    FractalString *FAssoc=[m_pObjMng->pStringContainer->ArrayPoints
+                                                           GetIdAtIndex:pIndexCurrentAss];
+                                    
+                                    [FAssoc SetNameIcon:pOb->pNameLabel];
+                                }
+                            }
                         }
                     }
+                    break;
                 }
 
-                
-                continue;
+                break;
             }
             else
             {
@@ -415,15 +433,13 @@ exit:
     
     switch (m_iTypeRes) {
         case R_TEXTURE:
+            if(![Extention isEqualToString:@"png"] && ![Extention isEqualToString:@"jpg"])return;
+            [m_pObjMng->m_pParent loadTexture:Path WithExt:Extention NameFile:Name];
             break;
             
-        case R_ICON:{
-            
+        case R_ICON:
             if(![Extention isEqualToString:@"png"] && ![Extention isEqualToString:@"jpg"])return;
-                        
             [m_pObjMng->m_pParent loadTexture:Path WithExt:Extention NameFile:Name];
-
-        }
             break;
             
         case R_SOUND:
@@ -886,8 +902,13 @@ Rep:
 - (void)Close{
 
     [NameFolerSelect setString:@"nil"];
-    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"CloseChoseIcon");
+//    OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"CloseChoseIcon");
     [self Hide];
+    
+    Ob_Editor_Interface *pInterface = (Ob_Editor_Interface *)[m_pObjMng
+                                  GetObjectByName:@"Ob_Editor_Interface"];
+    
+    [pInterface SetMode:OldInterfaceMode];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{

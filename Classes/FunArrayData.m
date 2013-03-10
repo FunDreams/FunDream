@@ -138,7 +138,7 @@
                 break;
 
             case DATA_SPRITE:
-                iRetIndex = [self SetSprite:*pDataTmp];
+                iRetIndex = [self SetSprite:*pDataTmp AddParticle:YES];
                 break;
 
             default:
@@ -175,28 +175,46 @@
     return iIndex;
 }
 //------------------------------------------------------------------------------------------
-- (int)SetSprite:(int)IndexSprite{
+- (int)SetSprite:(int)IndexSprite AddParticle:(bool)bPar{
     
     int iIndex=[self GetFree];
     
     int *TmpLink=(int *)pData+iIndex;
-    int indexParticle=[pCurrenContPar CreateParticle];
-    *TmpLink=indexParticle;
+    int indexParticle=0;
+    
+    if(bPar==YES)
+    {
+        indexParticle=[pCurrenContPar CreateParticle];
+        [pParent->m_OperationIndex OnlyAddData:iIndex WithData:pCurrenContPar->pIndexParticles];
 
-    [pParent->m_OperationIndex OnlyAddData:iIndex WithData:pCurrenContPar->pIndexParticles];
-    
-    if(IndexSprite==0)
-    {
-        int TmpSrcPlace=*((int *)pDataSrc+iIndex);
-        [pCurrenContPar SetDefaultVertex:TmpSrcPlace];
-    }
-    else
-    {
-        int TmpSrcPlace=*((int *)pDataSrc+IndexSprite);
-        [pCurrenContPar CopySprite:indexParticle source:TmpSrcPlace];
+        if(IndexSprite==0)
+        {
+            [pCurrenContPar SetDefaultVertex:indexParticle];
+        }
+        else
+        {
+            int TmpSrcPlace=*((int *)pDataSrc+IndexSprite);
+            [pCurrenContPar CopySprite:indexParticle source:TmpSrcPlace];
+        }
     }
     
+    *TmpLink=indexParticle;
     (*(pType+iIndex))=DATA_SPRITE;
+    
+    return iIndex;
+}
+//------------------------------------------------------------------------------------------
+- (int)SetTexture:(NSMutableString *)DataValue{
+    
+    int iIndex=[self GetFree];
+    
+    NSString *pKey = [NSString stringWithFormat:@"%d",iIndex];
+    [pNamesValue setValue:DataValue forKey:pKey];
+    
+    id *TmpLink=(id *)(pData+iIndex);
+    *(TmpLink)=DataValue;
+    
+    (*(pType+iIndex))=DATA_TEXTURE;
     
     return iIndex;
 }
@@ -230,6 +248,7 @@
 
     return iIndex;
 }
+//------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------
 - (void)ReleaseMemoryHeart:(HeartMatr *)pHeart{
     
@@ -488,7 +507,7 @@
     BYTE iType=(*(pType+iIndex));
 
     id *fRet=0;
-    if(iType==DATA_ID || iType==DATA_STRING){
+    if(iType==DATA_ID || iType==DATA_STRING || iType==DATA_TEXTURE){
         fRet=(id *)(pData+iIndex);
         return *fRet;
     }

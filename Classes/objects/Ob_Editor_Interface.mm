@@ -239,6 +239,10 @@
     pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
                             SET_INT_V(R_ICON,@"m_iTypeRes"),
                             SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+
+    pResTexture=UNFROZE_OBJECT(@"Ob_ResourceMng",@"TextureMng",
+                            SET_INT_V(R_TEXTURE,@"m_iTypeRes"),
+                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
 //===============================режими==============================================
 
 	[super Start];
@@ -410,6 +414,20 @@
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)SelTexture{
+    
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+    
+    pResTexture->OldInterfaceMode=m_iMode;
+    OldInterfaceMode=m_iMode;
+    m_iMode=M_SEL_TEXTURE;//sel texture
+    OldCheck=*ICheck;
+    *ICheck=m_iMode;
+    
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)DoubleTouchObject{
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
@@ -501,6 +519,7 @@
 - (void)ClearInterface{
     
     [pResIcon Hide];
+    [pResTexture Hide];
     [pInfoFile Hide];
     [ButtonGroup Hide];
     [Eplace Hide];
@@ -571,6 +590,10 @@
         switch (*ICheck) {
             case M_EDIT_PROP:
                 [pResIcon Show];
+                break;
+
+            case M_SEL_TEXTURE:
+                [pResTexture Show];
                 break;
 
             case M_CONNECT_IND:

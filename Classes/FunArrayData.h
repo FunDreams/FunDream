@@ -31,6 +31,8 @@
 #define NAME_SIMPLE               0
 //имена струн (Операации)
 #define NAME_O_PLUS             5001
+#define NAME_O_UPDATE_XY        5002
+#define NAME_O_DRAW             5003
 //имена струн (Контейнеры)
 #define NAME_K_START            10001
 #define NAME_K_BUTTON_ENVENT    10002
@@ -111,7 +113,8 @@ typedef struct{
 - (int)SetName:(NSMutableString *)DataValue;
 - (int)SetOb:(FractalString *)DataValue;
 - (int)SetMatrix:(MATRIXcell *)DataMatrix;
-- (int)SetSprite:(int)IndexSprite;
+- (int)SetSprite:(int)IndexSprite AddParticle:(bool)bPar;
+- (int)SetTexture:(NSMutableString *)DataValue;
 
 - (void)IncDataAtIndex:(int)iIndex;
 - (void)DecDataAtIndex:(int)iIndex;

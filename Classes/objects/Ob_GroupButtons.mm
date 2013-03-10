@@ -175,11 +175,14 @@
     
     switch (iType)
     {
-
         case DATA_SPRITE:
             ColorTmp = Color3DMake(1, 1, 1, 1);
             break;
 
+        case DATA_TEXTURE:
+            ColorTmp = Color3DMake(1,0,0,1);
+            break;
+            
         case DATA_FLOAT:
         case DATA_INT:
             Width=100;
@@ -218,6 +221,10 @@
                     if(pMatr->NameInformation==NAME_K_START)
                         bFlick=YES;
                     
+                    break;
+
+                case STR_COMPLEX:
+                    ColorTmp = Color3DMake(0, 1, 0, 1);                    
                     break;
                     
                 default:

@@ -260,7 +260,14 @@
             [pInterface SetMode:M_EDIT_NUM];
         }
 
-        
+
+        if(iType==DATA_TEXTURE){
+            
+            SET_CELL(LINK_ID_V(pString,@"DoubleTouchFractalString"));
+            OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"SelTexture");
+        }
+
+            
         SET_STAGE_EX(NAME(self), @"Wait", @"Stop");
     }
 }
@@ -554,8 +561,40 @@ Exit:
 //draw text======================================================================================
 //===============================================================================================
         }
-            break;
-            
+        break;
+
+        case DATA_TEXTURE:
+        {
+            glVertexPointer(3, GL_FLOAT, 0, vertices);
+            glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
+            glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
+
+            glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+                         m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
+                         m_pCurPosition.z);
+
+            glRotatef(m_pCurAngle.z, 0, 0, 1);
+            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+
+            [self SetColor:mColorBack];
+
+            if(m_bBack==YES){
+                glBindTexture(GL_TEXTURE_2D, -1);
+                glDrawArrays(GL_TRIANGLE_STRIP,0,m_iCountVertex);
+            }
+
+            NSMutableString *StrTex=[m_pObjMng->pStringContainer->ArrayPoints
+                                      GetIdAtIndex:pString->m_iIndex];
+            GET_TEXTURE(mTextureId, StrTex);
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
+
+            glScalef(0.9f,0.9f,m_pCurScale.z);
+            [self SetColor:mColor];
+
+            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+        }
+        break;
+
         case DATA_MATRIX:
         case DATA_SPRITE:
             

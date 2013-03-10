@@ -8,123 +8,109 @@
 
 #import "Ob_ParticleCont_ForStr.h"
 //------------------------------------------------------------------------------------------------------
-@implementation Particle_ForStr
--(id)Init:(GObject *)pObParent{
-
-    self = [super init];
-    if (self != nil)
-    {
-        m_pParticleContainer=[pObParent retain];
-        
-        m_fSize=1;
-        m_cColor=pObParent->mColor;        
-    }
-    
-    return self;
-}
 //------------------------------------------------------------------------------------------------------
--(void)SetFrame:(int)iFrame{
-
-    if(m_pParticleContainer!=nil){
-        
-        m_iCurFrame=iFrame;
-        GLfloat *m_pTexCoords=(m_pParticleContainer->texCoords+(m_iCurrentOffset)*12);
-
-        float OffsetX=iFrame%((Ob_ParticleCont_ForStr *)m_pParticleContainer)->
-        m_pAtlasContainer->m_iCountX;
-        float OffsetY=iFrame/((Ob_ParticleCont_ForStr *)m_pParticleContainer)->
-        m_pAtlasContainer->m_iCountX;
-
-        float TmpStepX=((Ob_ParticleCont_ForStr *)m_pParticleContainer)->Xstep/
-        ((Ob_ParticleCont_ForStr *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.x;
-
-        float TmpStepY=((Ob_ParticleCont_ForStr *)m_pParticleContainer)->Ystep/
-        ((Ob_ParticleCont_ForStr *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.y;
-
-        CGRect R= CGRectMake(TmpStepX*OffsetX,TmpStepY*OffsetY,
-        TmpStepX*(OffsetX+1),TmpStepY*(OffsetY+1) );
-
-//////координаты текстуры
-        m_pTexCoords[0]= R.origin.x;
-        m_pTexCoords[1]= R.size.height;
-        
-        m_pTexCoords[2]= R.size.width;
-        m_pTexCoords[3]= R.size.height;
-        
-        m_pTexCoords[6]= R.size.width;
-        m_pTexCoords[7]= R.origin.y;
-        
-        m_pTexCoords[4]= R.origin.x;
-        m_pTexCoords[5]= R.origin.y;
-
-        m_pTexCoords[8]= m_pTexCoords[4];
-        m_pTexCoords[9]= m_pTexCoords[5];
-        m_pTexCoords[10]= m_pTexCoords[2];
-        m_pTexCoords[11]= m_pTexCoords[3];
-    }
-}
+//-(void)SetFrame:(int)iFrame{
+//
+//    if(m_pParticleContainer!=nil){
+//        
+//        m_iCurFrame=iFrame;
+//        GLfloat *m_pTexCoords=(m_pParticleContainer->texCoords+(m_iCurrentOffset)*12);
+//
+//        float OffsetX=iFrame%((Ob_ParticleCont_ForStr *)m_pParticleContainer)->
+//        m_pAtlasContainer->m_iCountX;
+//        float OffsetY=iFrame/((Ob_ParticleCont_ForStr *)m_pParticleContainer)->
+//        m_pAtlasContainer->m_iCountX;
+//
+//        float TmpStepX=((Ob_ParticleCont_ForStr *)m_pParticleContainer)->Xstep/
+//        ((Ob_ParticleCont_ForStr *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.x;
+//
+//        float TmpStepY=((Ob_ParticleCont_ForStr *)m_pParticleContainer)->Ystep/
+//        ((Ob_ParticleCont_ForStr *)m_pParticleContainer)->m_pAtlasContainer->m_vSizeFrame.y;
+//
+//        CGRect R= CGRectMake(TmpStepX*OffsetX,TmpStepY*OffsetY,
+//        TmpStepX*(OffsetX+1),TmpStepY*(OffsetY+1) );
+//
+////////координаты текстуры
+//        m_pTexCoords[0]= R.origin.x;
+//        m_pTexCoords[1]= R.size.height;
+//        
+//        m_pTexCoords[2]= R.size.width;
+//        m_pTexCoords[3]= R.size.height;
+//        
+//        m_pTexCoords[6]= R.size.width;
+//        m_pTexCoords[7]= R.origin.y;
+//        
+//        m_pTexCoords[4]= R.origin.x;
+//        m_pTexCoords[5]= R.origin.y;
+//
+//        m_pTexCoords[8]= m_pTexCoords[4];
+//        m_pTexCoords[9]= m_pTexCoords[5];
+//        m_pTexCoords[10]= m_pTexCoords[2];
+//        m_pTexCoords[11]= m_pTexCoords[3];
+//    }
+//}
 //------------------------------------------------------------------------------------------------------
--(void)UpdateParticleMatr{
-    Vertex3D *m_pVertices=(m_pParticleContainer->vertices+(m_iCurrentOffset)*6);
-    
-    float fSizeX=m_fSize+*X;
-    float fSizeY=m_fSize+*Y;
-    //координаты вершин
-    m_pVertices[0]=Vector3DMake(-fSizeX,  fSizeY, 0.0f);
-    m_pVertices[1]=Vector3DMake( fSizeX,  fSizeY, 0.0f);
-    m_pVertices[2]=Vector3DMake(-fSizeX, -fSizeY, 0.0f);
-    m_pVertices[3]=Vector3DMake( fSizeX, -fSizeY, 0.0f);
-    m_pVertices[4]=m_pVertices[2];
-    m_pVertices[5]=m_pVertices[1]; 
-}
-//------------------------------------------------------------------------------------------------------
--(void)UpdateParticleColor{
-    
-    GLubyte *m_pSquareColors=(m_pParticleContainer->squareColors+(m_iCurrentOffset)*24);
-    
-    ////цвет вершин
-    m_pSquareColors[0]=m_cColor.red*255;
-    m_pSquareColors[1]=m_cColor.green*255;
-    m_pSquareColors[2]=m_cColor.blue*255;
-    m_pSquareColors[3]=m_cColor.alpha*255;
-
-    m_pSquareColors[4]=m_cColor.red*255;
-    m_pSquareColors[5]=m_cColor.green*255;
-    m_pSquareColors[6]=m_cColor.blue*255;
-    m_pSquareColors[7]=m_cColor.alpha*255;
-
-    m_pSquareColors[8]=m_cColor.red*255;
-    m_pSquareColors[9]=m_cColor.green*255;
-    m_pSquareColors[10]=m_cColor.blue*255;
-    m_pSquareColors[11]=m_cColor.alpha*255;
-
-    m_pSquareColors[12]=m_cColor.red*255;
-    m_pSquareColors[13]=m_cColor.green*255;
-    m_pSquareColors[14]=m_cColor.blue*255;
-    m_pSquareColors[15]=m_cColor.alpha*255;
-
-    m_pSquareColors[16]=m_pSquareColors[8];
-    m_pSquareColors[17]=m_pSquareColors[9];
-    m_pSquareColors[18]=m_pSquareColors[10];
-    m_pSquareColors[19]=m_pSquareColors[11];
-
-    m_pSquareColors[20]=m_pSquareColors[4];
-    m_pSquareColors[21]=m_pSquareColors[5];
-    m_pSquareColors[22]=m_pSquareColors[6];
-    m_pSquareColors[23]=m_pSquareColors[7];
-}
-//------------------------------------------------------------------------------------------------------
--(void)UpdateParticle{
-
-    [self UpdateParticleMatr];
-    [self UpdateParticleColor];
-}
-//------------------------------------------------------------------------------------------------------
--(void)dealloc{
-    [m_pParticleContainer release];
-    [super dealloc];
-}
-@end
+//-(void)UpdateParticleMatr{
+//    Vertex3D *m_pVertices=(m_pParticleContainer->vertices+(m_iCurrentOffset)*6);
+//    
+//    float fSizeX=m_fSize+*X;
+//    float fSizeY=m_fSize+*Y;
+//    //координаты вершин
+//    m_pVertices[0]=Vector3DMake(-fSizeX,  fSizeY, 0.0f);
+//    m_pVertices[1]=Vector3DMake( fSizeX,  fSizeY, 0.0f);
+//    m_pVertices[2]=Vector3DMake(-fSizeX, -fSizeY, 0.0f);
+//    m_pVertices[3]=Vector3DMake( fSizeX, -fSizeY, 0.0f);
+//    m_pVertices[4]=m_pVertices[2];
+//    m_pVertices[5]=m_pVertices[1]; 
+//}
+////------------------------------------------------------------------------------------------------------
+//-(void)UpdateParticleColor{
+//    
+//    GLubyte *m_pSquareColors=(m_pParticleContainer->squareColors+(m_iCurrentOffset)*24);
+//    
+//    ////цвет вершин
+//    m_pSquareColors[0]=m_cColor.red*255;
+//    m_pSquareColors[1]=m_cColor.green*255;
+//    m_pSquareColors[2]=m_cColor.blue*255;
+//    m_pSquareColors[3]=m_cColor.alpha*255;
+//
+//    m_pSquareColors[4]=m_cColor.red*255;
+//    m_pSquareColors[5]=m_cColor.green*255;
+//    m_pSquareColors[6]=m_cColor.blue*255;
+//    m_pSquareColors[7]=m_cColor.alpha*255;
+//
+//    m_pSquareColors[8]=m_cColor.red*255;
+//    m_pSquareColors[9]=m_cColor.green*255;
+//    m_pSquareColors[10]=m_cColor.blue*255;
+//    m_pSquareColors[11]=m_cColor.alpha*255;
+//
+//    m_pSquareColors[12]=m_cColor.red*255;
+//    m_pSquareColors[13]=m_cColor.green*255;
+//    m_pSquareColors[14]=m_cColor.blue*255;
+//    m_pSquareColors[15]=m_cColor.alpha*255;
+//
+//    m_pSquareColors[16]=m_pSquareColors[8];
+//    m_pSquareColors[17]=m_pSquareColors[9];
+//    m_pSquareColors[18]=m_pSquareColors[10];
+//    m_pSquareColors[19]=m_pSquareColors[11];
+//
+//    m_pSquareColors[20]=m_pSquareColors[4];
+//    m_pSquareColors[21]=m_pSquareColors[5];
+//    m_pSquareColors[22]=m_pSquareColors[6];
+//    m_pSquareColors[23]=m_pSquareColors[7];
+//}
+////------------------------------------------------------------------------------------------------------
+//-(void)UpdateParticle{
+//
+//    [self UpdateParticleMatr];
+//    [self UpdateParticleColor];
+//}
+////------------------------------------------------------------------------------------------------------
+//-(void)dealloc{
+//    [m_pParticleContainer release];
+//    [super dealloc];
+//}
+//@end
 //------------------------------------------------------------------------------------------------------
 @implementation Ob_ParticleCont_ForStr//container
 //------------------------------------------------------------------------------------------------------
@@ -133,6 +119,8 @@
 	if (self != nil)
     {
         pIndexParticles=[m_pObjMng->pStringContainer->m_OperationIndex InitMemory];
+        pDrawPar=[m_pObjMng->pStringContainer->m_OperationIndex InitMemory];
+        pDrawText=[m_pObjMng->pStringContainer->m_OperationIndex InitMemory];
 
         m_iLayer = layerGame;
 
@@ -156,10 +144,7 @@
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SetDefault{
-    m_bHiden=NO;
-    [m_pNameAtlas setString:@""];
-}
+- (void)SetDefault{m_bHiden=NO;}
 //------------------------------------------------------------------------------------------------------
 //------------------------------------------------------------------------------------------------------
 -(void)CopySprite:(int)iPlaceDest source:(int)iPlaceSrc
@@ -168,16 +153,35 @@
     Vertex3D *m_pVerticesSrc=(m_pObjMng->pStringContainer->
                         ArrayPoints->pCurrenContParSrc->vertices+(iPlaceSrc)*6);
     
-    for (int i=0; i<6; i++) {
+    for (int i=0; i<6; i++)
         m_pVertices[i]=m_pVerticesSrc[i];
-    }
+}
+//------------------------------------------------------------------------------------------------------
+-(void)DrawSprite:(int)Place tex:(int)iTex{
+    
+    [m_pObjMng->pStringContainer->m_OperationIndex OnlyAddData:Place WithData:pDrawPar];
+    [m_pObjMng->pStringContainer->m_OperationIndex OnlyAddData:iTex WithData:pDrawText];
+}
+//------------------------------------------------------------------------------------------------------
+-(void)UpdateSpriteVertex:(int)Place X:(float)X Y:(float)Y{
+    
+    Vertex3D *m_pVertices=(vertices+(Place)*6);
+
+    int iSize=30;
+    //координаты вершин
+    m_pVertices[0]=Vector3DMake(-iSize+X,  iSize+Y, 0.0f);
+    m_pVertices[1]=Vector3DMake( iSize+X,  iSize+Y, 0.0f);
+    m_pVertices[2]=Vector3DMake(-iSize+X, -iSize+Y, 0.0f);
+    m_pVertices[3]=Vector3DMake( iSize+X, -iSize+Y, 0.0f);
+    m_pVertices[4]=m_pVertices[2];
+    m_pVertices[5]=m_pVertices[1];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetDefaultVertex:(int)Place
 {
     Vertex3D *m_pVertices=(vertices+(Place)*6);
     
-    int iSize=10;
+    int iSize=30;
     float X=RND_I_F(200, 100);
     float Y=RND_I_F(0, 100);
     //координаты вершин
@@ -220,60 +224,81 @@
     m_pSquareColors[21]=m_pSquareColors[5];
     m_pSquareColors[22]=m_pSquareColors[6];
     m_pSquareColors[23]=m_pSquareColors[7];
+    
+    GLfloat *m_pTexCoords=(texCoords+(Place)*12);
+
+    m_pTexCoords[0]= 0;
+    m_pTexCoords[1]= 1;
+    
+    m_pTexCoords[2]= 1;
+    m_pTexCoords[3]= 1;
+    
+    m_pTexCoords[6]= 1;
+    m_pTexCoords[7]= 0;
+    
+    m_pTexCoords[4]= 0;
+    m_pTexCoords[5]= 0;
+    
+    m_pTexCoords[8]= m_pTexCoords[4];
+    m_pTexCoords[9]= m_pTexCoords[5];
+    m_pTexCoords[10]= m_pTexCoords[2];
+    m_pTexCoords[11]= m_pTexCoords[3];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-
-    m_pNameAtlas=[NSMutableString stringWithString:@""];
-    [m_pObjMng->pMegaTree SetCell:LINK_STRING_V(m_pNameAtlas,m_strName,@"m_pNameAtlas")];
-    
-//    Processor_ex *pProc = [self START_QUEUE:@"TimeDie"];
-//        ASSIGN_STAGE(@"Proc",@"Proc:",nil);
-//    [self END_QUEUE:pProc name:@"TimeDie"];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
 
 	[super Start];
         
-    m_pAtlasContainer=[m_pParent->m_pTextureAtlasList objectForKey:m_pNameAtlas];
-    
-    if(m_pAtlasContainer!=nil){
-        
-        m_ICountFrames=m_pAtlasContainer->m_iCountY*m_pAtlasContainer->m_iCountX;
-        
-        Xstep=m_pAtlasContainer->m_vSizeFrame.x/m_pAtlasContainer->m_iCountX;
-        Ystep=m_pAtlasContainer->m_vSizeFrame.y/m_pAtlasContainer->m_iCountY;
-        
-        GET_ATLAS_TEXTURE(mTextureId,m_pNameAtlas);
-    }
-    
- //   [self CreateNewParticle];
+//    m_pAtlasContainer=[m_pParent->m_pTextureAtlasList objectForKey:m_pNameAtlas];
+//    
+//    if(m_pAtlasContainer!=nil){
+//        
+//        m_ICountFrames=m_pAtlasContainer->m_iCountY*m_pAtlasContainer->m_iCountX;
+//        
+//        Xstep=m_pAtlasContainer->m_vSizeFrame.x/m_pAtlasContainer->m_iCountX;
+//        Ystep=m_pAtlasContainer->m_vSizeFrame.y/m_pAtlasContainer->m_iCountY;
+//        
+//        GET_ATLAS_TEXTURE(mTextureId,m_pNameAtlas);
+//    }
+//    
+// //   [self CreateNewParticle];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
-	    
-	glVertexPointer(3, GL_FLOAT, 0, vertices);
-    glTexCoordPointer(2, GL_FLOAT, 0, texCoords);
-	glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors);
-   	
-	glBindTexture(GL_TEXTURE_2D, -1);
-	
-	glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
-				 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
-				 m_pCurPosition.z);
-	
-	glRotatef(m_pCurAngle.z, 0, 0, 1);
-	glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
-	
-	glDrawArrays(GL_TRIANGLES, 0, m_iCountVertex);
-}
-//------------------------------------------------------------------------------------------------------
--(id)NewParticle{
-    Particle_ForStr *pParticle=[[Particle_ForStr alloc] Init:self];
-    pParticle->m_iStage=0;
-    return pParticle;
+	       
+    glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
+                 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
+                 m_pCurPosition.z);
+    
+    glRotatef(m_pCurAngle.z, 0, 0, 1);
+    glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
+
+    InfoArrayValue *pInfoDraw=(InfoArrayValue *)(*pDrawPar);
+    int *StartData=(*pDrawPar)+SIZE_INFO_STRUCT;
+
+    InfoArrayValue *pInfoTex=(InfoArrayValue *)(*pDrawText);
+    int *StartDataTex=(*pDrawText)+SIZE_INFO_STRUCT;
+
+    for (int i=0; i<pInfoDraw->mCount; i++) {
+        
+        int iPlace=StartData[i];
+        int iTex=StartDataTex[i];
+        
+        glVertexPointer(3, GL_FLOAT, 0, vertices+(iPlace)*6);
+        glTexCoordPointer(2, GL_FLOAT, 0, texCoords+(iPlace)*12);
+        glColorPointer(4, GL_UNSIGNED_BYTE, 0, squareColors+(iPlace)*24);
+
+        glBindTexture(GL_TEXTURE_2D, iTex);
+
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+    }
+    
+    pInfoDraw->mCount=0;
+    pInfoTex->mCount=0;
 }
 //------------------------------------------------------------------------------------------------------
 -(int)CreateParticle{
@@ -395,6 +420,9 @@
 - (void)dealloc{
     
     [m_pObjMng->pStringContainer->m_OperationIndex OnlyReleaseMemory:pIndexParticles];
+    [m_pObjMng->pStringContainer->m_OperationIndex OnlyReleaseMemory:pDrawPar];
+    [m_pObjMng->pStringContainer->m_OperationIndex OnlyReleaseMemory:pDrawText];
+
     [super dealloc];
 }
 //------------------------------------------------------------------------------------------------------
