@@ -7,6 +7,7 @@
 //
 
 #import "Ob_Tab.h"
+#import "Ob_ResourceMng.h"
 
 @implementation Ob_Tab
 //------------------------------------------------------------------------------------------------------
@@ -74,7 +75,9 @@
     
     if(m_pOwner!=nil){
         
-        COPY_CELL(SET_STRING_V(m_strNameFolder,@"NameFolerSelect"));        
+        [((Ob_ResourceMng *)m_pOwner)->NameFolerSelect setString:m_strNameFolder];
+        
+   //     COPY_CELL(SET_STRING_V(m_strNameFolder,@"NameFolerSelect"));
         OBJECT_PERFORM_SEL(@"Ob_Editor_Interface", @"UpdateB");
     }
 }

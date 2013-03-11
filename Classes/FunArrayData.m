@@ -141,6 +141,10 @@
                 iRetIndex = [self SetSprite:*pDataTmp AddParticle:YES];
                 break;
 
+            case DATA_TEXTURE:
+                iRetIndex = [self SetTexture:*((NSMutableString **)pDataTmp)];
+                break;
+
             default:
                 break;
         }

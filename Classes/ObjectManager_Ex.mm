@@ -185,11 +185,12 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SelfMoveNormal:(id)pDeltaTime{
 
-    FractalString *StartStr = [pStringContainer GetString:@"Objects"];
-    [pStringContainer Update:StartStr];
-    
     NSNumber *NumDelta=pDeltaTime;
     m_fDeltaTime=[NumDelta doubleValue];
+
+    *pStringContainer->pDeltaTime=m_fDeltaTime;
+    FractalString *StartStr = [pStringContainer GetString:@"Objects"];
+    [pStringContainer Update:StartStr];
 
 	NSEnumerator *enumeratorProc;
 

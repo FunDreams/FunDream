@@ -28,7 +28,7 @@
 -(void)RemoveParticle:(int)iIndexPar;
 -(void)RemoveAllParticles;
 
--(void)UpdateSpriteVertex:(int)Place X:(float)X Y:(float)Y;
+-(void)UpdateSpriteVertex:(int)Place X:(float)X Y:(float)Y W:(float)W H:(float)H;
 -(void)DrawSprite:(int)Place tex:(int)iTex;
 
 -(void)SetDefaultVertex:(int)Place;

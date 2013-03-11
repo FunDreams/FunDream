@@ -54,8 +54,8 @@
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
     
-    NameFolerSelect=[NSMutableString stringWithString:@"nil"];
-    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(NameFolerSelect,@"NameFolerSelect"))];
+    NameFolerSelect=[[NSMutableString alloc] initWithString:@"nil"];
+//    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(NameFolerSelect,@"NameFolerSelect"))];
 
     [m_pObjMng AddToGroup:@"Res" Object:self];
 }
@@ -173,7 +173,8 @@
             for (NSString *tNameFolder in pArrTmpNameFolder) {
                     
                 NSString *strNameInsideFolder=[bundleRoot stringByAppendingPathComponent:tNameFolder];
-                NSArray *dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder error:&Error];
+                NSArray *dirContentInFolder=[fm contentsOfDirectoryAtPath:strNameInsideFolder
+                                                                    error:&Error];
                 
                 for (NSString *tNameFile in dirContentInFolder){
                     
@@ -316,7 +317,7 @@ exit:
 
                         [pStrTex setString:pOb->pNameLabel];
                     }
-                        
+
                     case R_ICON:
                     {
                         m_iCurrentSelect=i;
@@ -343,7 +344,7 @@ exit:
                     break;
                 }
 
-                break;
+                continue;
             }
             else
             {

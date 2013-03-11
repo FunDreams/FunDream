@@ -33,6 +33,8 @@
 #define NAME_O_PLUS             5001
 #define NAME_O_UPDATE_XY        5002
 #define NAME_O_DRAW             5003
+#define NAME_O_MOVE             5004
+#define NAME_O_MOVE_ORBIT       5005
 //имена струн (Контейнеры)
 #define NAME_K_START            10001
 #define NAME_K_BUTTON_ENVENT    10002

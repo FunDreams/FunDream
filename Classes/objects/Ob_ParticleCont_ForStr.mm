@@ -163,16 +163,17 @@
     [m_pObjMng->pStringContainer->m_OperationIndex OnlyAddData:iTex WithData:pDrawText];
 }
 //------------------------------------------------------------------------------------------------------
--(void)UpdateSpriteVertex:(int)Place X:(float)X Y:(float)Y{
+-(void)UpdateSpriteVertex:(int)Place X:(float)X Y:(float)Y W:(float)W H:(float)H{
     
     Vertex3D *m_pVertices=(vertices+(Place)*6);
 
-    int iSize=30;
+    float fHalfW=W*0.5f;
+    float fHalfH=H*0.5f;
     //координаты вершин
-    m_pVertices[0]=Vector3DMake(-iSize+X,  iSize+Y, 0.0f);
-    m_pVertices[1]=Vector3DMake( iSize+X,  iSize+Y, 0.0f);
-    m_pVertices[2]=Vector3DMake(-iSize+X, -iSize+Y, 0.0f);
-    m_pVertices[3]=Vector3DMake( iSize+X, -iSize+Y, 0.0f);
+    m_pVertices[0]=Vector3DMake(-fHalfW+X,  fHalfH+Y, 0.0f);
+    m_pVertices[1]=Vector3DMake( fHalfW+X,  fHalfH+Y, 0.0f);
+    m_pVertices[2]=Vector3DMake(-fHalfW+X, -fHalfH+Y, 0.0f);
+    m_pVertices[3]=Vector3DMake( fHalfW+X, -fHalfH+Y, 0.0f);
     m_pVertices[4]=m_pVertices[2];
     m_pVertices[5]=m_pVertices[1];
 }
