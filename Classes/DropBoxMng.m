@@ -338,6 +338,7 @@
                 [pDataManager Clear];
 //////////////////////////////////////////////////////////////////////////////////////////////////
                 StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                [pStringContainerTmp SetParCont];
                 [pStringContainerTmp SetKernel];
                 [pStringContainerTmp CopyStrFrom:m_pObjMng->pStringContainer WithId:pStr];
                 

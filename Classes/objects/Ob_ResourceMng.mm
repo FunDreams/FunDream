@@ -267,7 +267,7 @@ exit:
         
         if(pObSel!=nil){
             OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
-            m_fCurrentOffset=StartOffsetY-offsetSel-StepY;
+            m_fCurrentOffset=0;//StartOffsetY-offsetSel-StepY;
             [self LimmitOffset];
             
             for (Ob_Label *pOb in m_pChildrenbjectsArr)

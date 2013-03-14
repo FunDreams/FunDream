@@ -134,16 +134,26 @@
                 break;
 
             case DATA_STRING:
-                iRetIndex = [self SetName:*((NSMutableString **)pDataTmp)];
+            {
+                NSMutableString *TmpString=[[NSMutableString alloc]
+                                            initWithString:*((NSMutableString **)pDataTmp)];
+
+                iRetIndex = [self SetName:TmpString];
+            }
                 break;
 
             case DATA_SPRITE:
-                iRetIndex = [self SetSprite:*pDataTmp AddParticle:YES];
+                iRetIndex = [self SetSprite:iIndex];
                 break;
 
             case DATA_TEXTURE:
-                iRetIndex = [self SetTexture:*((NSMutableString **)pDataTmp)];
-                break;
+            {
+                NSMutableString *TmpString=[[NSMutableString alloc]
+                                            initWithString:*((NSMutableString **)pDataTmp)];
+                
+                iRetIndex = [self SetTexture:TmpString];
+            }
+            break;
 
             default:
                 break;
@@ -179,27 +189,24 @@
     return iIndex;
 }
 //------------------------------------------------------------------------------------------
-- (int)SetSprite:(int)IndexSprite AddParticle:(bool)bPar{
+- (int)SetSprite:(int)IndexSprite{
     
     int iIndex=[self GetFree];
     
     int *TmpLink=(int *)pData+iIndex;
     int indexParticle=0;
     
-    if(bPar==YES)
-    {
-        indexParticle=[pCurrenContPar CreateParticle];
-        [pParent->m_OperationIndex OnlyAddData:iIndex WithData:pCurrenContPar->pIndexParticles];
+    indexParticle=[pCurrenContPar CreateParticle];
+    [pParent->m_OperationIndex OnlyAddData:iIndex WithData:pCurrenContPar->pIndexParticles];
 
-        if(IndexSprite==0)
-        {
-            [pCurrenContPar SetDefaultVertex:indexParticle];
-        }
-        else
-        {
-            int TmpSrcPlace=*((int *)pDataSrc+IndexSprite);
-            [pCurrenContPar CopySprite:indexParticle source:TmpSrcPlace];
-        }
+    if(IndexSprite==0)
+    {
+        [pCurrenContPar SetDefaultVertex:indexParticle];
+    }
+    else
+    {
+        int TmpSrcPlace=*((int *)pDataSrc+IndexSprite);
+        [pCurrenContPar CopySprite:indexParticle source:TmpSrcPlace];
     }
     
     *TmpLink=indexParticle;
@@ -611,8 +618,8 @@
                 break;
 
                 case DATA_STRING:
+                case DATA_TEXTURE:
                     [pNamesValue removeObjectForKey:pKey];
-                
                     break;
 
                 default:

@@ -163,13 +163,66 @@
     
     if(pMatr!=0){
         
+        InfoArrayValue *InfoStrLinks=(InfoArrayValue *)(*pMatr->pLinks);
+        int *StartDataLink=((*pMatr->pLinks)+SIZE_INFO_STRUCT);
+        
+        for (int i=0; i<InfoStrLinks->mCount; i++)
+        {
+            int iMatrIndex = StartDataLink[i];
+            MATRIXcell *TmpMatrInLinks=[m_pObjMng->pStringContainer->ArrayPoints
+                                        GetMatrixAtIndex:iMatrIndex];
+            
+            if(TmpMatrInLinks!=nil)
+            {
+                
+                InfoArrayValue *InfoQueue=(InfoArrayValue *)(*TmpMatrInLinks->pQueue);
+                int *StartDataQueue=((*TmpMatrInLinks->pQueue)+SIZE_INFO_STRUCT);
+                
+                for (int i=0; i<InfoQueue->mCount; i++)
+                {
+                    HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                    
+                    if(pHeart!=nil){
+                        
+                        InfoArrayValue *InfoEntersH=(InfoArrayValue *)(*pHeart->pEnPairChi);
+                        int *StartDataParEnter=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT);
+                        
+                        for (int j=0; j<InfoEntersH->mCount; j++) {
+                            int TmpIndexInLink=StartDataParEnter[j];
+                            
+                            if(TmpIndexInLink==CurrentStr->m_iIndex){
+                                [m_pObjMng->pStringContainer->m_OperationIndex
+                                 OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairPar];
+                                [m_pObjMng->pStringContainer->m_OperationIndex
+                                 OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairChi];
+                                break;
+                            }
+                        }
+                        
+                        InfoArrayValue *InfoExitrH=(InfoArrayValue *)(*pHeart->pExPairChi);
+                        int *StartDataParExit=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT);
+                        for (int j=0; j<InfoExitrH->mCount; j++) {
+                            int TmpIndexInLink=StartDataParExit[j];
+                            
+                            if(TmpIndexInLink==CurrentStr->m_iIndex){
+                                [m_pObjMng->pStringContainer->m_OperationIndex
+                                 OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairPar];
+                                [m_pObjMng->pStringContainer->m_OperationIndex
+                                 OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairChi];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         [m_pObjMng->pStringContainer->m_OperationIndex
          OnlyRemoveDataAtIndex:CurrentStr->m_iIndex WithData:pMatr->pEnters];
 
         [m_pObjMng->pStringContainer->m_OperationIndex
          OnlyRemoveDataAtIndex:CurrentStr->m_iIndex WithData:pMatr->pExits];
     }
-
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetSimple{
@@ -189,7 +242,7 @@
             if(pIndexCurrentAss!=CurrentStr->m_iIndexSelf)
             {
                 FractalString *FAssoc=[CurrentStr->m_pContainer->ArrayPoints
-                                       GetIdAtIndex:pIndexCurrentAss];
+                                        GetIdAtIndex:pIndexCurrentAss];
                 
                 FAssoc->m_iAdditionalType=ADIT_TYPE_SIMPLE;
             }

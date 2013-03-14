@@ -54,6 +54,7 @@
 -(NSString *)GetRndName;
 -(void)AddSmallCube:(FractalString *)pFParent;
 - (void)LogString:(FractalString *)fString;
+- (void)SetParCont;
 
 -(void)CopyStrFrom:(StringContainer*)SourceContainer WithId:(FractalString *)SourceStr;
 -(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr;

@@ -176,11 +176,11 @@
     switch (iType)
     {
         case DATA_SPRITE:
-            ColorTmp = Color3DMake(1, 1, 1, 1);
+            ColorTmp = Color3DMake(1,0,0,1);
             break;
 
         case DATA_TEXTURE:
-            ColorTmp = Color3DMake(1,0,0,1);
+            ColorTmp = Color3DMake(1,1,1,1);
             break;
             
         case DATA_FLOAT:
@@ -279,10 +279,14 @@
     for(int i=0;i<InfoStr->mCount;i++){
         
         int index=(Data+SIZE_INFO_STRUCT)[i];
-        FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
-                       GetIdAtIndex:index];
+        int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:index];
 
-        [self CreateOb:pFrStr];
+        if(iType==DATA_ID){
+            FractalString *pFrStr=[m_pObjMng->pStringContainer->ArrayPoints
+                           GetIdAtIndex:index];
+
+            [self CreateOb:pFrStr];
+        }
     }
     
     MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pInsideString->m_iIndex];
@@ -335,6 +339,7 @@
                             pObFirst=pObTmp;
                         
                     }
+                    if(pObFirst==nil)continue;
         
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
 
@@ -361,6 +366,7 @@
                             pObFirst=pObTmp;
                         
                     }
+                    if(pObFirst==nil)continue;
                     
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
                     

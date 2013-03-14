@@ -148,15 +148,21 @@
         
         bool bBack=NO;
         
-        InfoArrayValue *InfoPairChild=(InfoArrayValue *)*EndHeart->pEnPairChi;
+        int *StartPairPar=*EndHeart->pEnPairPar+SIZE_INFO_STRUCT;
         int *StartPairChild=*EndHeart->pEnPairChi+SIZE_INFO_STRUCT;
+
+        int iIndexPairPar=StartPairPar[i];
+        int iIndexPairChi=StartPairChild[i];
         
-        for (int k=0; k<InfoPairChild->mCount; k++) {
-            int iIndexPair=StartPairChild[k];
-            
-            if(iIndex==iIndexPair)
-                bBack=YES;
-        }
+        if(iIndexPairPar!=iIndexPairChi)
+            bBack=YES;
+
+//        for (int k=0; k<InfoPairChild->mCount; k++) {
+//            int iIndexPair=StartPairChild[k];
+//            
+//            if(iIndex==iIndexPair)
+//                bBack=YES;
+//        }
 
 
         GObject *pOb = UNFROZE_OBJECT(@"ObjectButton",@"Button",
@@ -212,15 +218,24 @@
 
         bool bBack=NO;
         
-        InfoArrayValue *InfoPairChild=(InfoArrayValue *)*EndHeart->pExPairChi;
+//        InfoArrayValue *InfoPairChild=(InfoArrayValue *)*EndHeart->pExPairChi;
+//        int *StartPairChild=*EndHeart->pExPairChi+SIZE_INFO_STRUCT;
+//        
+//        for (int k=0; k<InfoPairChild->mCount; k++) {
+//            int iIndexPair=StartPairChild[k];
+//            
+//            if(iIndex==iIndexPair)
+//                bBack=YES;
+//        }
+        
+        int *StartPairPar=*EndHeart->pExPairPar+SIZE_INFO_STRUCT;
         int *StartPairChild=*EndHeart->pExPairChi+SIZE_INFO_STRUCT;
         
-        for (int k=0; k<InfoPairChild->mCount; k++) {
-            int iIndexPair=StartPairChild[k];
-            
-            if(iIndex==iIndexPair)
-                bBack=YES;
-        }
+        int iIndexPairPar=StartPairPar[i];
+        int iIndexPairChi=StartPairChild[i];
+        
+        if(iIndexPairPar!=iIndexPairChi)
+            bBack=YES;
 
         GObject *pOb = UNFROZE_OBJECT(@"ObjectButton",@"Button",
                                      SET_INT_V(i,@"m_iNum"),
@@ -245,33 +260,35 @@
     
     ObjectButton *pButtonPush=GET_ID_V(@"ButtonPush");
     
-    int *StartEnter=*pMatr->pEnters+SIZE_INFO_STRUCT;
-    int iIndexPairEx=StartEnter[pButtonPush->m_iNum];
-    
-    if(pButtonPush->m_bBack==YES){//если уже есть привязка, удаляем её
-        
-        InfoArrayValue *InfoPairChild=(InfoArrayValue *)(*EndHeart->pEnPairChi);
-        int *StartPairChild=*EndHeart->pEnPairChi+SIZE_INFO_STRUCT;
-        
-        for (int k=0; k<InfoPairChild->mCount; k++){
-            int iIndexPair=StartPairChild[k];
-            
-            if(iIndexPairEx==iIndexPair){
-                [m_pObjMng->pStringContainer->m_OperationIndex
-                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pEnPairChi];
+    int *StartEnter=*EndHeart->pEnPairPar+SIZE_INFO_STRUCT;
+    StartEnter[pButtonPush->m_iNum]=m_iIndexStart;
 
-                [m_pObjMng->pStringContainer->m_OperationIndex
-                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pEnPairPar];
-            }
-        }
-    }
-    
-    //добаляем пару
-    [m_pObjMng->pStringContainer->m_OperationIndex
-     OnlyAddData:m_iIndexStart WithData:EndHeart->pEnPairPar];
-    
-    [m_pObjMng->pStringContainer->m_OperationIndex
-     OnlyAddData:iIndexPairEx WithData:EndHeart->pEnPairChi];
+//    int iIndexPairEx=StartEnter[pButtonPush->m_iNum];
+//    
+//    if(pButtonPush->m_bBack==YES){//если уже есть привязка, удаляем её
+//        
+//        InfoArrayValue *InfoPairChild=(InfoArrayValue *)(*EndHeart->pEnPairChi);
+//        int *StartPairChild=*EndHeart->pEnPairChi+SIZE_INFO_STRUCT;
+//        
+//        for (int k=0; k<InfoPairChild->mCount; k++){
+//            int iIndexPair=StartPairChild[k];
+//            
+//            if(iIndexPairEx==iIndexPair){
+//                [m_pObjMng->pStringContainer->m_OperationIndex
+//                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pEnPairChi];
+//
+//                [m_pObjMng->pStringContainer->m_OperationIndex
+//                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pEnPairPar];
+//            }
+//        }
+//    }
+//    
+//    //добаляем пару
+//    [m_pObjMng->pStringContainer->m_OperationIndex
+//     OnlyAddData:m_iIndexStart WithData:EndHeart->pEnPairPar];
+//    
+//    [m_pObjMng->pStringContainer->m_OperationIndex
+//     OnlyAddData:iIndexPairEx WithData:EndHeart->pEnPairChi];
     
     DESTROY_OBJECT(self);
 }
@@ -280,33 +297,35 @@
     
     ObjectButton *pButtonPush=GET_ID_V(@"ButtonPush");
     
-    int *StartExits=*pMatr->pExits+SIZE_INFO_STRUCT;
-    int iIndexPairEx=StartExits[pButtonPush->m_iNum];
-    
-    if(pButtonPush->m_bBack==YES){//если уже есть привязка, удаляем её
-        
-        InfoArrayValue *InfoPairChild=(InfoArrayValue *)(*EndHeart->pExPairChi);
-        int *StartPairChild=*EndHeart->pExPairChi+SIZE_INFO_STRUCT;
-        
-        for (int k=0; k<InfoPairChild->mCount; k++){
-            int iIndexPair=StartPairChild[k];
-            
-            if(iIndexPairEx==iIndexPair){
-                [m_pObjMng->pStringContainer->m_OperationIndex
-                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pExPairChi];
-                
-                [m_pObjMng->pStringContainer->m_OperationIndex
-                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pExPairPar];
-            }
-        }
-    }
-    
-    //добаляем пару
-    [m_pObjMng->pStringContainer->m_OperationIndex
-     OnlyAddData:m_iIndexStart WithData:EndHeart->pExPairPar];
-    
-    [m_pObjMng->pStringContainer->m_OperationIndex
-     OnlyAddData:iIndexPairEx WithData:EndHeart->pExPairChi];
+    int *StartExits=*EndHeart->pExPairPar+SIZE_INFO_STRUCT;
+    StartExits[pButtonPush->m_iNum]=m_iIndexStart;
+
+//    int iIndexPairEx=StartExits[pButtonPush->m_iNum];
+//    
+//    if(pButtonPush->m_bBack==YES){//если уже есть привязка, удаляем её
+//        
+//        InfoArrayValue *InfoPairChild=(InfoArrayValue *)(*EndHeart->pExPairChi);
+//        int *StartPairChild=*EndHeart->pExPairChi+SIZE_INFO_STRUCT;
+//        
+//        for (int k=0; k<InfoPairChild->mCount; k++){
+//            int iIndexPair=StartPairChild[k];
+//            
+//            if(iIndexPairEx==iIndexPair){
+//                [m_pObjMng->pStringContainer->m_OperationIndex
+//                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pExPairChi];
+//                
+//                [m_pObjMng->pStringContainer->m_OperationIndex
+//                 OnlyRemoveDataAtPlace:k WithData:EndHeart->pExPairPar];
+//            }
+//        }
+//    }
+//    
+//    //добаляем пару
+//    [m_pObjMng->pStringContainer->m_OperationIndex
+//     OnlyAddData:m_iIndexStart WithData:EndHeart->pExPairPar];
+//    
+//    [m_pObjMng->pStringContainer->m_OperationIndex
+//     OnlyAddData:iIndexPairEx WithData:EndHeart->pExPairChi];
     
     DESTROY_OBJECT(self);
 }

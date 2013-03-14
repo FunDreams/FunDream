@@ -213,6 +213,37 @@
         if(iType==DATA_MATRIX){
             pNewHeart=(HeartMatr *)malloc(sizeof(HeartMatr));
             [m_pParent->ArrayPoints InitMemoryHeart:pNewHeart parent:pMatrPar];
+            
+            MATRIXcell *pMatrParCurr = [m_pParent->ArrayPoints GetMatrixAtIndex:IndexValue];
+            
+            //инициализируем сердце
+            InfoArrayValue *InfoEnters=(InfoArrayValue *)(*pMatrParCurr->pEnters);
+            [m_pParent->m_OperationIndex SetCopasity:InfoEnters->mCount WithData:pNewHeart->pEnPairPar];
+            [m_pParent->m_OperationIndex SetCopasity:InfoEnters->mCount WithData:pNewHeart->pEnPairChi];
+            InfoArrayValue *InfoEnPar=(InfoArrayValue *)(*pNewHeart->pEnPairPar);
+            InfoArrayValue *InfoEnChi=(InfoArrayValue *)(*pNewHeart->pEnPairChi);
+            InfoEnPar->mCount=InfoEnters->mCount;
+            InfoEnChi->mCount=InfoEnters->mCount;
+            
+            for (int i=0; i<InfoEnters->mCount; i++) {
+                int iIndexTmp=(*pMatrParCurr->pEnters+SIZE_INFO_STRUCT)[i];
+                (*pNewHeart->pEnPairPar+SIZE_INFO_STRUCT)[i]=iIndexTmp;
+                (*pNewHeart->pEnPairChi+SIZE_INFO_STRUCT)[i]=iIndexTmp;
+            }
+
+            InfoArrayValue *InfoExit=(InfoArrayValue *)(*pMatrParCurr->pExits);
+            [m_pParent->m_OperationIndex SetCopasity:InfoExit->mCount WithData:pNewHeart->pExPairPar];
+            [m_pParent->m_OperationIndex SetCopasity:InfoExit->mCount WithData:pNewHeart->pExPairChi];
+            InfoArrayValue *InfoExPar=(InfoArrayValue *)(*pNewHeart->pExPairPar);
+            InfoArrayValue *InfoExChi=(InfoArrayValue *)(*pNewHeart->pExPairChi);
+            InfoExPar->mCount=InfoExit->mCount;
+            InfoExChi->mCount=InfoExit->mCount;
+            
+            for (int i=0; i<InfoExit->mCount; i++) {
+                int iIndexTmp=(*pMatrParCurr->pExits+SIZE_INFO_STRUCT)[i];
+                (*pNewHeart->pExPairPar+SIZE_INFO_STRUCT)[i]=iIndexTmp;
+                (*pNewHeart->pExPairChi+SIZE_INFO_STRUCT)[i]=iIndexTmp;
+            }
         }
         
         //копирование в массив
@@ -463,9 +494,21 @@
     else
     {//удаление из связей (сначала в текущей матрице)
         
-        if(iType==DATA_FLOAT || iType==DATA_INT || iType==DATA_SPRITE){
+        if(iType==DATA_FLOAT || iType==DATA_INT || iType==DATA_SPRITE || iType==DATA_TEXTURE){
             [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pEnters];
             [self OnlyRemoveDataAtIndex:iTmpIndex WithData:InfoStr->ParentMatrix->pExits];
+            
+            MATRIXcell *pCurrentMatrix=InfoStr->ParentMatrix;
+
+            //редактируем точку входа
+            if(pCurrentMatrix->sStartPlace==iPlace){
+                pCurrentMatrix->sStartPlace=-1;
+            }
+            
+            if(pCurrentMatrix->sStartPlace==(InfoStr->mCount-1)){
+                pCurrentMatrix->sStartPlace=iPlace;
+            }
+
             
             InfoArrayValue *InfoQueue=(InfoArrayValue *)(*InfoStr->ParentMatrix->pQueue);
             int *StartDataQueue=((*InfoStr->ParentMatrix->pQueue)+SIZE_INFO_STRUCT);
@@ -482,8 +525,11 @@
                         int TmpIndexInLink=StartDataParEnter[j];
                         
                         if(TmpIndexInLink==iTmpIndex){
-                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairPar];
-                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairChi];
+                            int iIndexChild=(*pHeart->pEnPairChi+SIZE_INFO_STRUCT)[j];
+                            (*pHeart->pEnPairPar+SIZE_INFO_STRUCT)[j]=iIndexChild;
+
+//                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairPar];
+//                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pEnPairChi];
                             break;
                         }
                     }
@@ -494,8 +540,11 @@
                         int TmpIndexInLink=StartDataParExit[j];
                         
                         if(TmpIndexInLink==iTmpIndex){
-                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairPar];
-                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairChi];
+                            int iIndexChild=(*pHeart->pExPairChi+SIZE_INFO_STRUCT)[j];
+                            (*pHeart->pExPairPar+SIZE_INFO_STRUCT)[j]=iIndexChild;
+
+//                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairPar];
+//                            [self OnlyRemoveDataAtPlace:j WithData:pHeart->pExPairChi];
                             break;
                         }
                     }
@@ -549,12 +598,28 @@
                 }
             }
             
+            for (int i=0; i<InfoQueue->mCount; i++) {//переименовываем
+                HeartMatr *pHeart=(HeartMatr *)StartDataQueue[i];
+                
+                if(pHeart!=0){
+                    
+                    InfoArrayValue *InfoNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
+                    int *StartDataNext=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT);
+                    
+                    for (int j=0; j<InfoNext->mCount; j++)
+                    {
+                        int iTmpPlace=StartDataNext[j];
+                        if(iTmpPlace==(InfoQueue->mCount-1)){
+                            StartDataNext[j]=iPlace;
+                        }
+                    }
+                }
+            }
+            
             memcpy(StartDataQueue+iPlace, StartDataQueue+(InfoQueue->mCount-1), sizeof(int));
             InfoQueue->mCount--;
             [self SetCopasity:InfoQueue->mCount WithData:InfoStr->ParentMatrix->pQueue];
         }
-        //
-        
 
         if(InfoStr->mFlags && F_ORDER)
         {

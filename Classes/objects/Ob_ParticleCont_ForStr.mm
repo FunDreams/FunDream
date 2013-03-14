@@ -155,6 +155,21 @@
     
     for (int i=0; i<6; i++)
         m_pVertices[i]=m_pVerticesSrc[i];
+
+
+    GLubyte *m_pSquareColors=(squareColors+(iPlaceDest)*24);
+    GLubyte *m_pSquareColorsSrc=(m_pObjMng->pStringContainer->
+                        ArrayPoints->pCurrenContParSrc->squareColors+(iPlaceSrc)*24);
+    
+    for (int i=0; i<24; i++)
+        m_pSquareColors[i]=m_pSquareColorsSrc[i];
+    
+    GLfloat *m_pTexCoords=(texCoords+(iPlaceDest)*12);
+    GLfloat *m_pTexCoordsSrc=(m_pObjMng->pStringContainer->
+                        ArrayPoints->pCurrenContParSrc->texCoords+(iPlaceSrc)*12);
+    
+    for (int i=0; i<12; i++)
+        m_pTexCoords[i]=m_pTexCoordsSrc[i];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)DrawSprite:(int)Place tex:(int)iTex{
@@ -342,8 +357,10 @@
     
     int *TmpPlace=(int *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:iIndexLast];
     *TmpPlace=iRetPlace;
+    
     [m_pObjMng->pStringContainer->m_OperationIndex
             OnlyRemoveDataAtPlace:iRetPlace WithData:pIndexParticles];
+    pInfoParticles=(InfoArrayValue *)(*pIndexParticles);
 
     m_iCountVertex=6*(iCount);
     

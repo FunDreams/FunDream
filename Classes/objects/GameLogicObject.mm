@@ -69,12 +69,9 @@
 - (void)CreateObject_Editor{
 
     [self ClearAllObjects];
+        
+    [m_pObjMng->pStringContainer SetParCont];
     
-    Ob_ParticleCont_ForStr *pOb = CREATE_NEW_OBJECT(@"Ob_ParticleCont_ForStr",@"SpriteContainer",
-                      SET_STRING_V(@"PensilAtl",@"m_pNameAtlas"),
-                      SET_VECTOR_V(Vector3DMake(0, 0, 0),@"m_pCurPosition"));
-    
-    m_pObjMng->pStringContainer->ArrayPoints->pCurrenContPar=pOb;
     UNFROZE_OBJECT(@"Ob_Editor_Interface",@"Ob_Editor_Interface",nil);
     
 
