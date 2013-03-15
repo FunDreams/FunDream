@@ -383,6 +383,7 @@
                 {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
                     StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                    [pStringContainerTmp SetParCont];
                     [pStringContainerTmp SetKernel];
 
                     FractalString *pNewString = [[FractalString alloc]

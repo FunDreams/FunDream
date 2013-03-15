@@ -39,7 +39,7 @@
 - (void)SetSrc:(FunArrayData *)pSourceData{
     pDataSrc=pSourceData->pData;
     pTypeSrc=pSourceData->pType;
-    pDataIntSrc=pSourceData->pDataIntSrc;
+    pDataIntSrc=pSourceData->pDataInt;
     pCurrenContParSrc=pSourceData->pCurrenContPar;
 }
 //------------------------------------------------------------------------------------------
@@ -51,9 +51,9 @@
     pDataInt=realloc(pDataInt,iCount*sizeof(int));
     pType=realloc(pType,iCount*sizeof(unsigned char));
     
-    pDataSrc=pData;
-    pTypeSrc=pType;
-    pDataIntSrc=pDataInt;
+//    pDataSrc=pData;
+//    pTypeSrc=pType;
+//    pDataIntSrc=pDataInt;
     
     for (int i=0; i<CountInc; i++) {
         
@@ -75,9 +75,9 @@
     pDataInt=malloc(iCountTmp*sizeof(int));
     pType=malloc(iCountTmp*sizeof(unsigned char));
 
-    pDataSrc=pData;
-    pTypeSrc=pType;
-    pDataIntSrc=pDataInt;
+//    pDataSrc=pData;
+//    pTypeSrc=pType;
+//    pDataIntSrc=pDataInt;
 
     memset(pData, 0, sizeof(float));
     memset(pDataInt, 0, sizeof(int));
@@ -159,6 +159,7 @@
                 break;
         }
     }
+        
     return iRetIndex;
 }
 //------------------------------------------------------------------------------------------
@@ -402,8 +403,12 @@
         InfoArrayValue *InfoStr=(InfoArrayValue *)(*DataMatrix->pValueCopy);
         int *StartData=((*DataMatrix->pValueCopy)+SIZE_INFO_STRUCT);
 
+        if(InfoStr->mCount==18){
+            int m=0;
+        }
         for (int i=0; i<InfoStr->mCount; i++) {//копируем все дочерние объекты
             int iTmpIndex=StartData[i];
+            int itypesdsf=pTypeSrc[iTmpIndex];
             
             if(iTmpIndex<pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
             {
@@ -427,7 +432,7 @@
                     else
                     {
                         int iNewIndex=[self CopyDataAtIndex:iTmpIndex];
-
+                        
                         NSNumber *pNumFutureNewIndex=[NSNumber numberWithInt:iNewIndex];
                         [pDicRename setObject:pNumFutureNewIndex forKey:pOldNum];
 

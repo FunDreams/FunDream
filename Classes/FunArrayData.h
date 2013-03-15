@@ -5,7 +5,7 @@
 //  Created by Konstantin Maximov on 24.04.12.
 //  Copyright (c) 2012 FunDreams. All rights reserved.
 //
-#define DATA_ZERO           0//пустая струна
+#define DATA_ZERO           0//ничего
 #define DATA_ID             1//струна, объект для отображения информации
 #define DATA_MATRIX         2//матрица данных
 #define DATA_FLOAT          3

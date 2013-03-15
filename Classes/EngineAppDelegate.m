@@ -184,11 +184,11 @@
 	
     [m_pTimer invalidate];
     
-#ifdef EDITOR
-    [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
-#endif
-    
-	[m_pPrSettings Save];
+//#ifdef EDITOR
+//    [m_pRootViewController->m_pMainController->m_pObjMng->pStringContainer SaveContainer];
+//#endif
+//    
+//	[m_pPrSettings Save];
 }
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application {
