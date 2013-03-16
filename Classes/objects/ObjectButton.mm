@@ -50,6 +50,7 @@
     [m_strNameObjectDClick setString:@""];
     
     mColorBack = Color3DMake(0, 1, 0, 1);
+    m_Disable=NO;
     m_bBack=NO;
     [self SetUnPush];
 }
