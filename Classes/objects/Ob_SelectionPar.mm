@@ -102,6 +102,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateTmp{
 
+    int iType=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:m_iIndexStart];
     InfoArrayValue *InfoChildString=(InfoArrayValue *)*pConnString->pChildString;
     int *StartChildString=*pConnString->pChildString+SIZE_INFO_STRUCT;
 
@@ -157,15 +158,14 @@
         if(iIndexPairPar!=iIndexPairChi)
             bBack=YES;
 
-//        for (int k=0; k<InfoPairChild->mCount; k++) {
-//            int iIndexPair=StartPairChild[k];
-//            
-//            if(iIndex==iIndexPair)
-//                bBack=YES;
-//        }
+        int iTypeLink=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:iIndex];
 
+        bool m_Disable=false;
+        if(iType!=iTypeLink)
+            m_Disable=YES;
 
         GObject *pOb = UNFROZE_OBJECT(@"ObjectButton",@"Button",
+                                     SET_BOOL_V(m_Disable,@"m_Disable"),
                                      SET_INT_V(i,@"m_iNum"),
                                      SET_INT_V(bSimple,@"m_iType"),
                                      SET_STRING_V(pNameIcon,@"m_DOWN"),
@@ -236,8 +236,16 @@
         
         if(iIndexPairPar!=iIndexPairChi)
             bBack=YES;
+        
+        int iTypeLink=[m_pObjMng->pStringContainer->ArrayPoints GetTypeAtIndex:iIndex];
+        
+        bool m_Disable=false;
+        if(iType!=iTypeLink)
+            m_Disable=YES;
+
 
         GObject *pOb = UNFROZE_OBJECT(@"ObjectButton",@"Button",
+                                      SET_BOOL_V(m_Disable,@"m_Disable"),
                                      SET_INT_V(i,@"m_iNum"),
                                      SET_INT_V(bSimple,@"m_iType"),
                                      SET_STRING_V(pNameIcon,@"m_DOWN"),

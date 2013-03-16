@@ -1090,6 +1090,14 @@ repeate:
     [ArrayPoints selfSave:pDataCurManager->m_pDataDmp];
 
     [pDataCurManager Save];
+    
+    //сбрасываем флаги сохранения
+    NSEnumerator *Enumerator = [DicStrings objectEnumerator];
+    FractalString *pOb;
+    
+    while ((pOb = [Enumerator nextObject])) {
+        pOb->bAlradySave=NO;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 //копируем струну в другое пространство (перекодирование имён параметров)
@@ -1232,7 +1240,7 @@ repeate:
                             }
                         }
                     }
-//==========================================================================================================
+//=========================================================================================================
                     //удаляемся из парента саму струну
                     [m_OperationIndex RemoveDataAtPlace:i WithData:Data];
                     [DicStrings removeObjectForKey:pFrStr->strUID];
@@ -1341,6 +1349,7 @@ LOOP://бесконечный цикл
                                         
                     pNum=[m_pObjMng->m_pParent->m_pTextureList objectForKey:pName];
                     if(pNum!=nil)iTextureName=pNum->m_iTextureId;
+                    else iTextureName=-1;
 
                     iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//Sprite
                     I1=((int *)ArrayPoints->pData+iIndexValue);

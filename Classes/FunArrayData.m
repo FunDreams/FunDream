@@ -47,13 +47,17 @@
     
     int FirstIndex=iCount;
     iCount+=CountInc;
+    
+    float *TmpData=pData;
     pData=realloc(pData,iCount*sizeof(float));
     pDataInt=realloc(pDataInt,iCount*sizeof(int));
     pType=realloc(pType,iCount*sizeof(unsigned char));
     
-//    pDataSrc=pData;
-//    pTypeSrc=pType;
-//    pDataIntSrc=pDataInt;
+    if(pDataSrc==TmpData){
+        pDataSrc=pData;
+        pTypeSrc=pType;
+        pDataIntSrc=pDataInt;
+    }
     
     for (int i=0; i<CountInc; i++) {
         
@@ -71,13 +75,16 @@
 - (void)Reserv:(int)iCountTmp{
     iCount=iCountTmp;
     
+    float *TmpData=pData;
     pData=malloc(iCountTmp*sizeof(float));
     pDataInt=malloc(iCountTmp*sizeof(int));
     pType=malloc(iCountTmp*sizeof(unsigned char));
 
-//    pDataSrc=pData;
-//    pTypeSrc=pType;
-//    pDataIntSrc=pDataInt;
+    if(pDataSrc==TmpData){
+        pDataSrc=pData;
+        pTypeSrc=pType;
+        pDataIntSrc=pDataInt;
+    }
 
     memset(pData, 0, sizeof(float));
     memset(pDataInt, 0, sizeof(int));
@@ -403,12 +410,8 @@
         InfoArrayValue *InfoStr=(InfoArrayValue *)(*DataMatrix->pValueCopy);
         int *StartData=((*DataMatrix->pValueCopy)+SIZE_INFO_STRUCT);
 
-        if(InfoStr->mCount==18){
-            int m=0;
-        }
         for (int i=0; i<InfoStr->mCount; i++) {//копируем все дочерние объекты
             int iTmpIndex=StartData[i];
-            int itypesdsf=pTypeSrc[iTmpIndex];
             
             if(iTmpIndex<pParent->iIndexMaxSys)//если индекс-константа то её переименовывать не надо
             {

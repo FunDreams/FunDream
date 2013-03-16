@@ -598,8 +598,8 @@
 
             case M_CONNECT_IND:
             {
-                if(EditorSelectPar==nil){
-                    
+                if(EditorSelectPar==nil)
+                {
                     EditorSelectPar =  UNFROZE_OBJECT(@"Ob_SelectionPar",@"SelectionPar",
                                             SET_FLOAT_V(54,@"mWidth"),
                                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),

@@ -134,6 +134,10 @@
         [self SetPush];
     }
     else [self SetUnPush];
+    
+    if(m_Disable==YES)
+        mColor.alpha=0.5f;
+    else mColor.alpha=1;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetUnPush{
@@ -336,6 +340,7 @@
     glRotatef(m_pCurAngle.z, 0, 0, 1);
     glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
 
+    mColorBack.alpha=mColor.alpha;
     [self SetColor:mColorBack];
 
     glBindTexture(GL_TEXTURE_2D, -1);

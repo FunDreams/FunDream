@@ -39,6 +39,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SetDefault{
 
+    bAlradySave=NO;
     [self SetFlag:ONLY_IN_MEM];
     [self SetNameIcon:@"none"];
     m_iIndex=1;//zero
@@ -150,7 +151,6 @@
         {
             strUID = StrRndName;
         }
-
         
         X=pStrSource->X;
         Y=pStrSource->Y;
@@ -427,7 +427,6 @@
             int *StartIndex=(*pChildString)+SIZE_INFO_STRUCT;
             int iCount=InfoStr->mCount;
             
-            
             if(bAlradySave==NO){
                 bAlradySave=YES;
                 if(pAssotiation!=nil){
@@ -440,7 +439,8 @@
                         
                         if(pIndexCurrentAss!=m_iIndexSelf)
                         {
-                            FractalString *FAssoc=[m_pContainer->ArrayPoints GetIdAtIndex:pIndexCurrentAss];
+                            FractalString *FAssoc=[m_pContainer->ArrayPoints
+                                                   GetIdAtIndex:pIndexCurrentAss];
                             FAssoc->bAlradySave=YES;
                         }
                     }
