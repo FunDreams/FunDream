@@ -159,7 +159,7 @@
         m_iAdditionalType=pStrSource->m_iAdditionalType;
         [self SetParent:Parent];
         
-        if(bLink==YES){
+        if(bLink==YES || pStrSource->m_iIndex<=m_pContainer->iIndexMaxSys){
             
             m_iIndex=[m_pContainer->ArrayPoints LinkDataAtIndex:pStrSource->m_iIndex];
 

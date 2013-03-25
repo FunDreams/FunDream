@@ -5,6 +5,21 @@
 //  Created by Konstantin Maximov on 24.04.12.
 //  Copyright (c) 2012 FunDreams. All rights reserved.
 //
+#import <Foundation/Foundation.h>
+@class StringContainer;
+@class FractalString;
+@class Ob_ParticleCont_ForStr;
+//-------------------------------------------------------------------------------------------------
+#define RESERV_KERNEL 1000000
+//-------------------------------------------------------------------------------------------------
+#define Ind_ZERO                    0
+#define Ind_DELTATIME               200000
+#define IND_MAIN_DATA_MATRIX        100
+
+#define IND_DATA_MATRIX_EMPTY       101
+#define IND_DATA_MATRIX_SYS         102
+#define IND_DATA_MATRIX_OPER        103
+//-------------------------------------------------------------------------------------------------
 #define DATA_ZERO           0//ничего
 #define DATA_ID             1//струна, объект для отображения информации
 #define DATA_MATRIX         2//матрица данных
@@ -14,11 +29,6 @@
 #define DATA_TEXTURE        6
 #define DATA_SOUND          7
 #define DATA_SPRITE         8
-
-#import <Foundation/Foundation.h>
-@class StringContainer;
-@class FractalString;
-@class Ob_ParticleCont_ForStr;
 //-------------------------------------------------------------------------------------------------
 //определения для типов ячеек матрицы
 #define STR_SIMPLE          0//нулевой-объект
@@ -28,18 +38,15 @@
 #define STR_ARRAY           4//матрица массив
 //-------------------------------------------------------------------------------------------------
 //имена ячеек матрицы
-#define NAME_SIMPLE               0
-//имена струн (Операации)
-#define NAME_O_PLUS             5001
-#define NAME_O_UPDATE_XY        5002
-#define NAME_O_DRAW             5003
-#define NAME_O_MOVE             5004
-#define NAME_O_MOVE_ORBIT       5005
-#define NAME_O_PLUS_VECTOR      5006
-
-//имена струн (Контейнеры)
-#define NAME_K_START            10001
-#define NAME_K_BUTTON_ENVENT    10002
+//имена струн (Операации)++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#define NAME_O_PLUS             3001
+#define NAME_O_UPDATE_XY        3002
+#define NAME_O_DRAW             3003
+#define NAME_O_MOVE             3004
+#define NAME_O_MOVE_ORBIT       3005
+#define NAME_O_PLUS_VECTOR      3006
+//имена струн (Контейнеры)+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#define NAME_K_BUTTON_ENVENT    40001
 //-------------------------------------------------------------------------------------------------
 typedef struct{
 //MATRIX 28.01.2013
@@ -78,6 +85,7 @@ typedef struct{
 @interface FunArrayData : NSObject{
 @public
 
+    bool m_bSaveKernel;
     StringContainer *pParent;//контейнер родитель
 
     Ob_ParticleCont_ForStr *pCurrenContPar;//спрайты

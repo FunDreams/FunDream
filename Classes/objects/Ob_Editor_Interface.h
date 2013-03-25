@@ -26,6 +26,7 @@
 #define M_EDIT_EN_EX    7
 #define M_CONNECT_IND   8
 #define M_SEL_TEXTURE   9
+#define M_ADD_NEW_DATA  10
 
 @interface Ob_Editor_Interface : GObject {
 @public
@@ -50,6 +51,7 @@
     GObject *PrBar;
     int OldCheck;
 
+    GObject *BDropPlus;
     GObject *BDropBox;
     GObject *BMove;
     GObject *BCopy;
@@ -66,6 +68,7 @@
     GObject *EditorNum;
     GObject *EditorSelect;
     GObject *EditorSelectPar;
+    GObject *EditorAddNewData;
     int iIndexForNum;
     FractalString *StringSelect;
     

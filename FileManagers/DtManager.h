@@ -121,6 +121,13 @@
  **/
 -(BOOL) GetBoolValue;
 
+//архивирование/разорхивирование
+-(NSMutableData*)compressData:(NSMutableData*)uncompressedData;
+-(NSMutableData*)uncompressGZip:(NSMutableData*)compressedData;
+-(bool)Save_And_Compress;
+-(bool)LoadCompress;
+
+
 //-(void)initDropBox;//инициализация dropBox
 -(void)UpLoad;//Загрузка файла на сервер
 -(void)UpLoadWithName:(NSString *)NameUpload;//загрузка со специальным именем

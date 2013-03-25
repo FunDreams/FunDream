@@ -362,7 +362,7 @@
             if(m_pCurPosition.x<-440)m_pCurPosition.x=-440;
             if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
 
-            if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
+        //    if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
             if(m_pCurPosition.y>170)m_pCurPosition.y=170;
 
             pString->X=m_pCurPosition.x;

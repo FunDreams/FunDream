@@ -152,9 +152,13 @@
     
     int *StartData=((*pData)+SIZE_INFO_STRUCT);
     
-    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iDataValue];
+    int iType=0;
+    if(m_pParent->ArrayPoints->m_bSaveKernel==YES)
+        iType=*(m_pParent->ArrayPoints->pTypeSrc+iDataValue);
+    else iType=*(m_pParent->ArrayPoints->pType+iDataValue);
+
     if(iType==DATA_MATRIX){
-        [self SetParentMatrix:iDataValue WithData:pData];        
+        [self SetParentMatrix:iDataValue WithData:pData];
     }
     
     if(InfoStr->ParentMatrix!=0){
@@ -194,7 +198,11 @@
 
     StartData[InfoStr->mCount]=IndexValue;
     
-    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:IndexValue];
+    int iType=0;
+    if(IndexValue>=RESERV_KERNEL)
+        iType=*(m_pParent->ArrayPoints->pType+IndexValue);
+    else iType=*(m_pParent->ArrayPoints->pTypeSrc+IndexValue);
+
     if(iType==DATA_MATRIX){
         [self SetParentMatrix:IndexValue WithData:pData];        
     }
@@ -216,7 +224,7 @@
             
             MATRIXcell *pMatrParCurr = [m_pParent->ArrayPoints GetMatrixAtIndex:IndexValue];
             
-            //инициализируем сердце
+//инициализируем сердце (делаем копию пап индексов)=================================================
             InfoArrayValue *InfoEnters=(InfoArrayValue *)(*pMatrParCurr->pEnters);
             [m_pParent->m_OperationIndex SetCopasity:InfoEnters->mCount WithData:pNewHeart->pEnPairPar];
             [m_pParent->m_OperationIndex SetCopasity:InfoEnters->mCount WithData:pNewHeart->pEnPairChi];
@@ -244,6 +252,7 @@
                 (*pNewHeart->pExPairPar+SIZE_INFO_STRUCT)[i]=iIndexTmp;
                 (*pNewHeart->pExPairChi+SIZE_INFO_STRUCT)[i]=iIndexTmp;
             }
+//===================================================================================================
         }
         
         //копирование в массив
@@ -286,7 +295,11 @@
                 break;
             }
 
-            int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iTmpIndex];
+            int iType=0;
+            if(m_pParent->ArrayPoints->m_bSaveKernel==YES)
+                iType=*(m_pParent->ArrayPoints->pTypeSrc+iTmpIndex);
+            else iType=*(m_pParent->ArrayPoints->pType+iTmpIndex);
+            
             if(iType==DATA_MATRIX){
 
                 NSNumber *pNum=[NSNumber numberWithInt:iTmpIndex];
@@ -348,7 +361,11 @@
     
     int iTmpIndex=StartData[iPlace];
 //проверяем вложеные сслылки на удаляемую матрицу================================================
-    int iType=[m_pParent->ArrayPoints GetTypeAtIndex:iTmpIndex];
+    int iType=0;
+    if(m_pParent->ArrayPoints->m_bSaveKernel==YES)
+        iType=*(m_pParent->ArrayPoints->pType+iTmpIndex);
+    else iType=*(m_pParent->ArrayPoints->pType+iTmpIndex);
+
     if(iType==DATA_MATRIX){
 
         MATRIXcell *pCurrentMatrix=InfoStr->ParentMatrix;

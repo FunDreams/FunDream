@@ -17,6 +17,7 @@
 #import "Ob_Editor_Num.h"
 #import "Ob_Selection.h"
 #import "Ob_SelectionPar.h"
+#import "Ob_AddNewData.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -58,6 +59,25 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CreateButtons{
     
+    if(m_iMode!=M_DROP_BOX){
+    BDropPlus = UNFROZE_OBJECT(@"ObjectButton",@"ButtonPlus",
+                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                    SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
+                    SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
+                    SET_FLOAT_V(46,@"mWidth"),
+                    SET_FLOAT_V(46*FACTOR_DEC,@"mHeight"),
+                    SET_BOOL_V(YES,@"m_bLookTouch"),
+                    SET_INT_V(bSimple,@"m_iType"),
+//                  SET_BOOL_V(YES,@"m_bBack"),
+                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                    SET_STRING_V(@"AddNewData",@"m_strNameStage"),
+                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                    SET_VECTOR_V(Vector3DMake(-456,180,0),@"m_pCurPosition"));
+    }
+    else BDropPlus=0;
+
+
     BTash=UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonTash.png",@"m_UP"),
@@ -68,8 +88,6 @@
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_INT_V(bSimple,@"m_iType"),
-                   //SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                   //SET_STRING_V(@"Save",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
                    SET_VECTOR_V(Vector3DMake(-450,-295,0),@"m_pCurPosition"));
     
@@ -135,19 +153,19 @@
                    SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
 
     BConnect=UNFROZE_OBJECT(@"ObjectButton",@"ButtonConnect",
-                         SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
-                         SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
-                         SET_STRING_V(@"ButtonConnection.png",@"m_DOWN"),
-                         SET_STRING_V(@"ButtonConnection.png",@"m_UP"),
-                         SET_FLOAT_V(54,@"mWidth"),
-                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
-                         SET_BOOL_V(YES,@"m_bLookTouch"),
-                         SET_BOOL_V((m_iMode==M_CONNECT)?YES:NO,@"m_bIsPush"),
-                         SET_INT_V(bRadioBox,@"m_iType"),
-                         SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
-                         SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
-                         SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                         SET_VECTOR_V(Vector3DMake(-200,295,0),@"m_pCurPosition"));
+                     SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                     SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                     SET_STRING_V(@"ButtonConnection.png",@"m_DOWN"),
+                     SET_STRING_V(@"ButtonConnection.png",@"m_UP"),
+                     SET_FLOAT_V(54,@"mWidth"),
+                     SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                     SET_BOOL_V(YES,@"m_bLookTouch"),
+                     SET_BOOL_V((m_iMode==M_CONNECT)?YES:NO,@"m_bIsPush"),
+                     SET_INT_V(bRadioBox,@"m_iType"),
+                     SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                     SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
+                     SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                     SET_VECTOR_V(Vector3DMake(-200,295,0),@"m_pCurPosition"));
 
     
 }
@@ -263,7 +281,7 @@
         if(ICheck)
         {
             if(*ICheck==M_EDIT_PROP || *ICheck==M_EDIT_NUM || *ICheck==M_EDIT_EN_EX
-               || *ICheck==M_CONNECT_IND)*ICheck=0;
+               || *ICheck==M_CONNECT_IND || *ICheck==M_SEL_TEXTURE || *ICheck==M_ADD_NEW_DATA)*ICheck=0;
             m_iMode=(int)(*ICheck);
         }
         
@@ -428,6 +446,20 @@
     [self UpdateB];
 }
 //------------------------------------------------------------------------------------------------------
+- (void)AddNewData{
+    
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+    
+    pResTexture->OldInterfaceMode=m_iMode;
+    OldInterfaceMode=m_iMode;
+    m_iMode=M_ADD_NEW_DATA;//sel texture
+    OldCheck=*ICheck;
+    *ICheck=m_iMode;
+    
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
 - (void)DoubleTouchObject{
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
@@ -547,6 +579,9 @@
 
     DESTROY_OBJECT(BSetProp);
     BSetProp=nil;
+
+    DESTROY_OBJECT(BDropPlus);
+    BDropPlus=nil;
     
     DEL_CELL(@"DropBoxString");
     DEL_CELL(@"DragObject");
@@ -596,6 +631,21 @@
                 [pResTexture Show];
                 break;
 
+            case M_ADD_NEW_DATA:
+            {
+                if(EditorAddNewData==nil)
+                {
+                    EditorAddNewData =  UNFROZE_OBJECT(@"Ob_AddNewData",@"EditorAddNewData",
+                                            SET_FLOAT_V(54,@"mWidth"),
+                                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                            SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
+                    
+                    ((Ob_AddNewData *)EditorAddNewData)->OldInterfaceMode=OldInterfaceMode;
+                    OBJECT_PERFORM_SEL(NAME(EditorAddNewData), @"UpdateTmp");
+                }
+            }
+                break;
+                
             case M_CONNECT_IND:
             {
                 if(EditorSelectPar==nil)
@@ -604,7 +654,7 @@
                                             SET_FLOAT_V(54,@"mWidth"),
                                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                                             SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
-                    
+
                     ((Ob_SelectionPar *)EditorSelectPar)->OldInterfaceMode=OldInterfaceMode;
                     ((Ob_SelectionPar *)EditorSelectPar)->EndHeart=EndHeart;
                     ((Ob_SelectionPar *)EditorSelectPar)->m_iIndexStart=m_iIndexStart;

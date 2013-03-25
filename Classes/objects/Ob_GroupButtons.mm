@@ -218,8 +218,8 @@
                     
                 case STR_CONTAINER:
                     ColorTmp = Color3DMake(0, 0, 0, 1);
-                    if(pMatr->NameInformation==NAME_K_START)
-                        bFlick=YES;
+       //             if(pMatr->NameInformation==NAME_K_START)
+         //               bFlick=YES;
                     
                     break;
 
@@ -382,15 +382,15 @@
     }
 
     
-    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1)
-    {
-        if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
-            m_iCurrentSelect=0;
-        
-        ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
-        
-        OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
-    }
+//    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1)
+//    {
+//        if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
+//            m_iCurrentSelect=0;
+//        
+//        ObjectB_Ob *pObSel=[m_pChildrenbjectsArr objectAtIndex:m_iCurrentSelect];
+//        
+//        OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
+//    }
     [self SetButton];
 }
 //------------------------------------------------------------------------------------------------------

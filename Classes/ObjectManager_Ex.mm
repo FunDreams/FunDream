@@ -8,6 +8,7 @@
 #import "Mega_tree.h"
 #import "ObjectManager_Ex.h"
 #import "Dictionary_Ex.h"
+#import "MainCycle.h"
 
 @implementation CObjectManager
 @synthesize m_bReserv,m_pObjectList;
@@ -190,7 +191,7 @@
 
     *pStringContainer->pDeltaTime=m_fDeltaTime;
     FractalString *StartStr = [pStringContainer GetString:@"Objects"];
-    [pStringContainer Update:StartStr];
+    [pStringContainer->pMainCycle Update:StartStr];
 
 	NSEnumerator *enumeratorProc;
 

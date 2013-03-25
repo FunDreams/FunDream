@@ -8,6 +8,7 @@
 
 #import "FunArrayData.h"
 #import "Ob_ParticleCont_ForStr.h"
+#import "Kernel.h"
 //------------------------------------------------------------------------------------------
 @implementation FunArrayData
 //------------------------------------------------------------------------------------------
@@ -17,6 +18,7 @@
 
     if(self){
 
+        m_bSaveKernel=NO;
         pFreeArray = [[NSMutableArray alloc] init];
         iCountInc=1000;
         iCount=0;
@@ -30,7 +32,8 @@
         pDicRename = [[NSMutableDictionary alloc] init];
         DicAllAssociations = [[NSMutableDictionary alloc] init];
         
-        [self Increase:iCopasity];
+        if(iCopasity>0)
+            [self Increase:iCopasity];
     }
     
     return self;
@@ -86,9 +89,9 @@
         pDataIntSrc=pDataInt;
     }
 
-    memset(pData, 0, sizeof(float));
-    memset(pDataInt, 0, sizeof(int));
-    memset(pType, 0, sizeof(unsigned char));
+    memset(pData, 0, iCountTmp*sizeof(float));
+    memset(pDataInt, 0, iCountTmp*sizeof(int));
+    memset(pType, 0, iCountTmp*sizeof(unsigned char));
 }
 //------------------------------------------------------------------------------------------
 - (int)GetFree{
@@ -456,26 +459,11 @@
         [self RenameIndexData:pNewMatr->pEnters Dic:pDicRename];
         [pParent->m_OperationIndex CopyDataFrom:DataMatrix->pExits To:pNewMatr->pExits];
         [self RenameIndexData:pNewMatr->pExits Dic:pDicRename];
-        
-        //copy enters/exit
-//        InfoArrayValue *InfoStrEnters=(InfoArrayValue *)(*DataMatrix->pEnters);
-//        int *StartDataEnters=((*DataMatrix->pEnters)+SIZE_INFO_STRUCT);
-//        
-//        for (int i=0; i<InfoStrEnters->mCount; i++) {//
-//            int iTmpIndex=StartDataEnters[i];
-//            
-//            NSNumber *pOldNum = [NSNumber numberWithInt:iTmpIndex];
-//            NSNumber *pNewNum = [pDicRename objectForKey:pOldNum];
-//        }
-//
-//        InfoArrayValue *InfoStrExit=(InfoArrayValue *)(*DataMatrix->pExits);
-//        int *StartDataExit=((*DataMatrix->pExits)+SIZE_INFO_STRUCT);
-        
+                
         //pNewMatr->pQueue// copy queue
         InfoArrayValue *InfoStrQueueSelf=(InfoArrayValue *)(*pNewMatr->pQueue);
         int *StartDataQueueSelf=((*pNewMatr->pQueue)+SIZE_INFO_STRUCT);
 
-//        InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*DataMatrix->pQueue);
         int *StartDataQueue=((*DataMatrix->pQueue)+SIZE_INFO_STRUCT);
         
         for (int i=0; i<InfoStrQueueSelf->mCount; i++) {//
@@ -496,55 +484,102 @@
 //------------------------------------------------------------------------------------------
 - (MATRIXcell *)GetMatrixAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
-    
-    BYTE iType=(*(pType+iIndex));
-    
     MATRIXcell **fRet=0;
     
-    if(iType==DATA_MATRIX){
-        fRet=(MATRIXcell **)(pData+iIndex);
-        return *fRet;
+    if(iIndex>=RESERV_KERNEL){
+        
+        BYTE iType=(*(pType+iIndex));
+        
+        MATRIXcell **fRet=0;
+        
+        if(iType==DATA_MATRIX){
+            fRet=(MATRIXcell **)(pData+iIndex);
+            return *fRet;
+        }
     }
-    else return 0;
+    else
+    {
+        BYTE iType=(*(pTypeSrc+iIndex));
+                
+        if(iType==DATA_MATRIX){
+            fRet=(MATRIXcell **)(pDataSrc+iIndex);
+            return *fRet;
+        }
+    }
+    
+    return 0;
 }
 //------------------------------------------------------------------------------------------
 - (void *)GetDataAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
     
-    BYTE iType=(*(pType+iIndex));
+    if(iIndex>=RESERV_KERNEL){
+        BYTE iType=(*(pType+iIndex));
+        
+        void *fRet=0;
+        if(iType!=DATA_MATRIX && iType!=DATA_ID)
+            fRet=(pData+iIndex);
+        
+        return fRet;
+    }
+    else{
+        
+        BYTE iType=(*(pTypeSrc+iIndex));
 
-    void *fRet=0;
-    if(iType!=DATA_MATRIX && iType!=DATA_ID)
-        fRet=(pData+iIndex);
+        void *fRet=0;
+        if(iType!=DATA_MATRIX && iType!=DATA_ID)
+            fRet=(pDataSrc+iIndex);
+        
+        return fRet;
+    }
     
-    return fRet;
+    return 0;
 }
 //------------------------------------------------------------------------------------------
 - (id)GetIdAtIndex:(int)iIndex{
     if(iIndex>iCount)return 0;
     
-    BYTE iType=(*(pType+iIndex));
+    if(iIndex>=RESERV_KERNEL){
 
-    id *fRet=0;
-    if(iType==DATA_ID || iType==DATA_STRING || iType==DATA_TEXTURE){
-        fRet=(id *)(pData+iIndex);
-        return *fRet;
+        BYTE iType=(*(pType+iIndex));
+
+        id *fRet=0;
+        if(iType==DATA_ID || iType==DATA_STRING || iType==DATA_TEXTURE){
+            fRet=(id *)(pData+iIndex);
+            return *fRet;
+        }
     }
-    else return 0;
-}
-//------------------------------------------------------------------------------------------
-- (int)GetIncAtIndex:(int)iIndex{
-    int iRet=(*(pDataInt+iIndex));
-    return iRet;
+    else
+    {
+        BYTE iType=(*(pTypeSrc+iIndex));
+        
+        id *fRet=0;
+        if(iType==DATA_ID || iType==DATA_STRING || iType==DATA_TEXTURE){
+            fRet=(id *)(pDataSrc+iIndex);
+            return *fRet;
+        }
+    }
+    
+    return 0;
 }
 //------------------------------------------------------------------------------------------
 - (int)GetCountAtIndex:(int)iIndex{
-    int iRet=(*(pDataInt+iIndex));
+    
+    int iRet=0;
+    if(iIndex>=RESERV_KERNEL)
+        iRet=(*(pDataInt+iIndex));
+    else iRet=(*(pDataIntSrc+iIndex));
+    
     return iRet;
 }
 //------------------------------------------------------------------------------------------
 - (unsigned char)GetTypeAtIndex:(int)iIndex{
-    BYTE iRet=(*(pType+iIndex));
+    
+    BYTE iRet=0;
+    if(iIndex>=RESERV_KERNEL)
+        iRet=(*(pType+iIndex));
+    else iRet=(*(pTypeSrc+iIndex));
+    
     return iRet;
 }
 //------------------------------------------------------------------------------------------
@@ -552,7 +587,6 @@
 - (void)IncDataAtIndex:(int)iIndex{
     
     int *TmpInc=(pDataInt+iIndex);
-
     (*TmpInc)++;
 }
 //------------------------------------------------------------------------------------------
@@ -648,14 +682,21 @@
 //------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData{
     
-    [m_pData appendBytes:&iCount length:sizeof(int)];
+    int iOffset=0;
+    if(m_bSaveKernel==YES)iOffset=RESERV_KERNEL;
+    
+    if(m_bSaveKernel==YES){
+        int mCurentCount=iCount-iOffset;
+        [m_pData appendBytes:&mCurentCount length:sizeof(int)];
+    }
+    else [m_pData appendBytes:&iCount length:sizeof(int)];
+    
     [m_pData appendBytes:&iCountInArray length:sizeof(int)];
     [m_pData appendBytes:&iCountInc length:sizeof(int)];
     
-    [m_pData appendBytes:pData length:iCount*sizeof(float)];
-    [m_pData appendBytes:pDataInt length:iCount*sizeof(int)];
-    [m_pData appendBytes:pType length:iCount*sizeof(unsigned char)];
-
+    [m_pData appendBytes:pData+iOffset length:(iCount-iOffset)*sizeof(float)];
+    [m_pData appendBytes:pDataInt+iOffset length:(iCount-iOffset)*sizeof(int)];
+    [m_pData appendBytes:pType+iOffset length:(iCount-iOffset)*sizeof(unsigned char)];
 //сохраняем свободные ячейки------------------------------------------------------
     NSData *data = [NSKeyedArchiver archivedDataWithRootObject:pFreeArray];
     int iLen=[data length];
@@ -780,7 +821,11 @@
     
     [m_pData getBytes:&iCount range:NSMakeRange( *iCurReadingPos, sizeof(int))];
     *iCurReadingPos += sizeof(int);
-    [self Reserv:iCount];
+    int iOffset=0;
+    if(m_bSaveKernel==YES)iOffset=RESERV_KERNEL;
+
+    [self Reserv:iCount+iOffset];
+    if(m_bSaveKernel==YES)[self->pParent->pKernel SetKernel];
     
     [m_pData getBytes:&iCountInArray range:NSMakeRange( *iCurReadingPos, sizeof(int))];
     *iCurReadingPos += sizeof(int);
@@ -788,14 +833,16 @@
     [m_pData getBytes:&iCountInc range:NSMakeRange( *iCurReadingPos, sizeof(int))];
     *iCurReadingPos += sizeof(int);
 
-    [m_pData getBytes:pData range:NSMakeRange( *iCurReadingPos, iCount*sizeof(float))];
-    *iCurReadingPos += iCount*sizeof(float);
+    [m_pData getBytes:pData+iOffset range:NSMakeRange( *iCurReadingPos, (iCount-iOffset)*sizeof(float))];
+    *iCurReadingPos += (iCount-iOffset)*sizeof(float);
     
-    [m_pData getBytes:pDataInt range:NSMakeRange( *iCurReadingPos, iCount*sizeof(int))];
-    *iCurReadingPos += iCount*sizeof(int);
+    [m_pData getBytes:pDataInt+iOffset range:NSMakeRange( *iCurReadingPos, (iCount-iOffset)*sizeof(int))];
+    *iCurReadingPos += (iCount-iOffset)*sizeof(int);
 
-    [m_pData getBytes:pType range:NSMakeRange( *iCurReadingPos, iCount*sizeof(unsigned char))];
-    *iCurReadingPos += iCount*sizeof(unsigned char);
+    [m_pData getBytes:pType+iOffset range:NSMakeRange(*iCurReadingPos,
+                                                      (iCount-iOffset)*sizeof(unsigned char))];
+    
+    *iCurReadingPos += (iCount-iOffset)*sizeof(unsigned char);
 //--------------------------------------------------------------------------------
     int iLen;
     [m_pData getBytes:&iLen range:NSMakeRange( *iCurReadingPos, sizeof(int))];
@@ -951,6 +998,9 @@
         
         int iIndexValue=StartDataCopy[i];
         int iType=[self GetTypeAtIndex:iIndexValue];
+        
+        iType=*(pType+iIndexValue);
+        
         [pParent->m_OperationIndex Extend:pMatr->pQueue];
         InfoQueue=(InfoArrayValue *)(*pMatr->pQueue);
         StartDataQueue=((*pMatr->pQueue)+SIZE_INFO_STRUCT);

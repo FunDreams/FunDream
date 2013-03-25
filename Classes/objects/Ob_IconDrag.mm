@@ -238,6 +238,19 @@ Exit:
                         initWithName:@"EmptyOb" WithParent:pParent
                                     WithContainer:m_pObjMng->pStringContainer];
 
+                MATRIXcell *pMatrPar=[m_pObjMng->pStringContainer->ArrayPoints
+                                      GetMatrixAtIndex:pParent->m_iIndex];
+                
+                pNewString->m_iIndex=[m_pObjMng->pStringContainer->ArrayPoints SetMatrix:0];
+                [m_pObjMng->pStringContainer->m_OperationIndex AddData:pNewString->m_iIndex
+                                            WithData:pMatrPar->pValueCopy];
+                
+                MATRIXcell *pMatrNew=[m_pObjMng->pStringContainer->ArrayPoints
+                                       GetMatrixAtIndex:pNewString->m_iIndex];
+                
+                pMatrNew->TypeInformation=STR_COMPLEX;
+                pMatrNew->NameInformation=STR_SIMPLE;
+
                 [self SetPos:pNewString];
             }
         }

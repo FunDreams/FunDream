@@ -11,9 +11,17 @@
 @class FunArrayDataIndexes;
 @class CObjectManager;
 @class Ob_ParticleCont_ForStr;
+@class MainCycle;
+@class Kernel;
+
+#define MAX_REZERV 4000
 
 @interface StringContainer : NSObject{//пространство струн 
-@public    
+@public
+    
+    MainCycle *pMainCycle;
+    Kernel *pKernel;
+
     FunArrayData *ArrayPoints;
     NSMutableDictionary *DicStrings;
     NSMutableDictionary *DicLog;
@@ -42,7 +50,6 @@
 }
 
 -(id)init:(id)Parent;
--(void)Update:(FractalString *)StartString;
 
 -(void)SetKernel;
 -(void)SetEditor;

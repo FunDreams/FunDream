@@ -10,6 +10,8 @@
 #import "DropBoxMng.h"
 #import "Ob_Editor_Interface.h"
 #import "Ob_ParticleCont_ForStr.h"
+#import "MainCycle.h"
+#import "Kernel.h"
 
 @implementation StringContainer
 //------------------------------------------------------------------------------------------------------
@@ -19,7 +21,7 @@
 
     if(self){
         
-        ArrayPoints = [[FunArrayData alloc] initWithCopasity:100];
+        ArrayPoints = [[FunArrayData alloc] initWithCopasity:0];
         ArrayPoints->iCountInc=100;
         ArrayPoints->pParent=self;
 
@@ -33,6 +35,11 @@
         DicLog = [[NSMutableDictionary alloc] init];
 
         m_pObjMng=Parent;
+
+        DicStrings = [[NSMutableDictionary alloc] init];
+        
+        pMainCycle = [[MainCycle alloc] init:self];
+        pKernel = [[Kernel alloc] init:self];
 
 #ifdef EDITOR
         ArrayDumpFiles = [[NSMutableArray alloc] init];
@@ -342,7 +349,7 @@
 //--------------------------------------------------------------------------------------
     FractalString *pStrUpdate=[[FractalString alloc]
                              initWithName:@"Update" WithParent:pFParent WithContainer:self];
-    pStrUpdate->m_iIndex=12;
+    pStrUpdate->m_iIndex=NAME_O_UPDATE_XY;
     MATRIXcell *pMatrUpdate=[ArrayPoints GetMatrixAtIndex:pStrUpdate->m_iIndex];
     
     int index=(*pMatrUpdate->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -356,7 +363,7 @@
 //--------------------------------------------------------------------------------------
     FractalString *pStrDraw=[[FractalString alloc]
                                initWithName:@"Draw" WithParent:pFParent WithContainer:self];
-    pStrDraw->m_iIndex=24;
+    pStrDraw->m_iIndex=NAME_O_DRAW;
     MATRIXcell *pMatrDraw=[ArrayPoints GetMatrixAtIndex:pStrDraw->m_iIndex];
     
     index=(*pMatrDraw->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -371,7 +378,7 @@
     
     FractalString *pStrMove=[[FractalString alloc]
                              initWithName:@"Move" WithParent:pFParent WithContainer:self];
-    pStrMove->m_iIndex=29;
+    pStrMove->m_iIndex=NAME_O_MOVE;
     MATRIXcell *pMatrMove=[ArrayPoints GetMatrixAtIndex:pStrMove->m_iIndex];
     
     index=(*pMatrMove->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -386,7 +393,7 @@
     
     FractalString *pStrMoveOrbit=[[FractalString alloc]
                              initWithName:@"MoveOrbit" WithParent:pFParent WithContainer:self];
-    pStrMoveOrbit->m_iIndex=35;
+    pStrMoveOrbit->m_iIndex=NAME_O_MOVE_ORBIT;
     MATRIXcell *pMatrMoveOrbit=[ArrayPoints GetMatrixAtIndex:pStrMoveOrbit->m_iIndex];
     
     index=(*pMatrMoveOrbit->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -401,7 +408,7 @@
     
     FractalString *pStrAddVector=[[FractalString alloc]
                                   initWithName:@"AddVector" WithParent:pFParent WithContainer:self];
-    pStrAddVector->m_iIndex=49;
+    pStrAddVector->m_iIndex=NAME_O_PLUS_VECTOR;
     MATRIXcell *pMatrAddVector=[ArrayPoints GetMatrixAtIndex:pStrAddVector->m_iIndex];
     
     index=(*pMatrAddVector->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -438,7 +445,7 @@
     [m_OperationIndex AddData:pStrInfo->m_iIndex WithData:pMatrObject->pValueCopy];
     MATRIXcell *pMatrInfo=[ArrayPoints GetMatrixAtIndex:pStrInfo->m_iIndex];
     pMatrInfo->TypeInformation=STR_COMPLEX;
-    pMatrInfo->NameInformation=NAME_SIMPLE;
+    pMatrInfo->NameInformation=STR_SIMPLE;
     
 //  return;
 //--------------------------------------------------------------------------------------------------
@@ -471,7 +478,7 @@
 
     FractalString *pStrPlus=[[FractalString alloc]
                             initWithName:@"Plus" WithParent:pStrInfo WithContainer:self];
-    pStrPlus->m_iIndex=4;
+    pStrPlus->m_iIndex=NAME_O_PLUS;
     MATRIXcell *pMatrPlus=[ArrayPoints GetMatrixAtIndex:pStrPlus->m_iIndex];
         
     index=(*pMatrPlus->pValueCopy+SIZE_INFO_STRUCT)[0];
@@ -526,276 +533,16 @@
 //    //----------------------------------------------------------------------
 }
 //------------------------------------------------------------------------------------------------------
-#define MAX_REZERV 4000
 -(void)InitIndex{//линкуем константы к контейнеру
     FractalString *pFStringZero = [self GetString:@"Zero"];
     if(pFStringZero!=nil){
         
-        pDeltaTime = [ArrayPoints GetDataAtIndex:2];        
-        iIndexMaxSys=MAX_REZERV+2;//202
+        pDeltaTime = [ArrayPoints GetDataAtIndex:200000];
     }
 }
 //------------------------------------------------------------------------------------------------------
--(void)SetKernel{//устанавливаем константы для ядра (эти индексы не переименовываются)
-    FractalString *pFStringZero=[[FractalString alloc]
-                                 initWithName:@"Zero" WithParent:nil WithContainer:self];
-    pFStringZero->m_iIndex=[ArrayPoints SetMatrix:0];
-    [ArrayPoints IncDataAtIndex:pFStringZero->m_iIndex];
-    MATRIXcell *pMatrZero=[ArrayPoints GetMatrixAtIndex:pFStringZero->m_iIndex];
-////////////////////////////////////////////////////////////////////////////////////////////////////
-    //zero point
-    int iZeroPoint=[ArrayPoints SetFloat:0];//1
-    [m_OperationIndex AddData:iZeroPoint WithData:pMatrZero->pValueCopy];
-
-    //delta time
-    int iDeltaTime=[ArrayPoints SetFloat:0.0f];//2
-    [m_OperationIndex AddData:iDeltaTime WithData:pMatrZero->pValueCopy];
-    
-//операции -----------------------------------------------------------------------------------------
-    int m_iIndexOpetations=[ArrayPoints SetMatrix:0];//матрица списка всех операций
-    MATRIXcell *pMatrOperations=[ArrayPoints GetMatrixAtIndex:m_iIndexOpetations];
-    [m_OperationIndex AddData:m_iIndexOpetations WithData:pMatrZero->pValueCopy];
-//операция "плюс"----------------------------------------------------------------------------------
-    int IndexMatrPlus=[ArrayPoints SetMatrix:0];//4
-    MATRIXcell *pMatrPlus=[ArrayPoints GetMatrixAtIndex:IndexMatrPlus];
-    pMatrPlus->TypeInformation=STR_OPERATION;
-    pMatrPlus->NameInformation=NAME_O_PLUS;
-    
-    //заглавный смысл
-    NSMutableString *pNameIcon = [NSMutableString stringWithString:@"o_plus.png"];
-    int iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
-//Enter===============================================================================================
-    int iIndexA=[ArrayPoints SetFloat:0];//A
-    [m_OperationIndex AddData:iIndexA WithData:pMatrPlus->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_A.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
-
-    int iIndexB=[ArrayPoints SetFloat:0];//B
-    [m_OperationIndex AddData:iIndexB WithData:pMatrPlus->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_B.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrPlus->pValueCopy];
-    
-    [m_OperationIndex OnlyAddData:iIndexA  WithData:pMatrPlus->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexB  WithData:pMatrPlus->pEnters];
-//exit===============================================================================================
-    int iIndexR=[ArrayPoints SetFloat:0];//R
-    [m_OperationIndex AddData:iIndexR WithData:pMatrPlus->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_R.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    
-    [m_OperationIndex AddData:pMatrPlus->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//операция "update"----------------------------------------------------------------------------------
-    int IndexMatrUpdate=[ArrayPoints SetMatrix:0];//12
-    MATRIXcell *pMatrUpdate=[ArrayPoints GetMatrixAtIndex:IndexMatrUpdate];
-    pMatrUpdate->TypeInformation=STR_OPERATION;
-    pMatrUpdate->NameInformation=NAME_O_UPDATE_XY;
-    
-    //заглавный смысл
-    pNameIcon = [NSMutableString stringWithString:@"_updateSprite.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-//Enter===============================================================================================
-    int iIndexX=[ArrayPoints SetFloat:0];//X
-    [m_OperationIndex AddData:iIndexX WithData:pMatrUpdate->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_X.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-    
-    int iIndexY=[ArrayPoints SetFloat:0];//Y
-    [m_OperationIndex AddData:iIndexY WithData:pMatrUpdate->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_Y.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-
-    int iIndexW=[ArrayPoints SetFloat:0];//W
-    [m_OperationIndex AddData:iIndexW WithData:pMatrUpdate->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_W.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-    
-    int iIndexH=[ArrayPoints SetFloat:0];//H
-    [m_OperationIndex AddData:iIndexH WithData:pMatrUpdate->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_H.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-    
-    int iIndexSpriteZero=[ArrayPoints SetSprite:0];//Zero Sprite
-    [m_OperationIndex AddData:iIndexSpriteZero WithData:pMatrUpdate->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_S.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrUpdate->pValueCopy];
-
-    [m_OperationIndex OnlyAddData:iIndexX  WithData:pMatrUpdate->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexY  WithData:pMatrUpdate->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexW  WithData:pMatrUpdate->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexH  WithData:pMatrUpdate->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexSpriteZero  WithData:pMatrUpdate->pEnters];
-    
-    [m_OperationIndex AddData:pMatrUpdate->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//операция "draw"----------------------------------------------------------------------------------
-    int IndexMatrDraw=[ArrayPoints SetMatrix:0];//24
-    MATRIXcell *pMatrDraw=[ArrayPoints GetMatrixAtIndex:IndexMatrDraw];
-    pMatrDraw->TypeInformation=STR_OPERATION;
-    pMatrDraw->NameInformation=NAME_O_DRAW;
-    
-    //заглавный смысл
-    pNameIcon = [NSMutableString stringWithString:@"_draw.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrDraw->pValueCopy];
-//Enter===============================================================================================
-    NSMutableString *NameTexture=[NSMutableString stringWithString:@""];
-    int iNameTex=[ArrayPoints SetTexture:NameTexture];//Texture
-    [m_OperationIndex AddData:iNameTex WithData:pMatrDraw->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_T.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrDraw->pValueCopy];
-    
-    [m_OperationIndex AddData:iIndexSpriteZero WithData:pMatrDraw->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_S.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrDraw->pValueCopy];
-    
-    [m_OperationIndex OnlyAddData:iNameTex  WithData:pMatrDraw->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexSpriteZero  WithData:pMatrDraw->pEnters];
-    
-    [m_OperationIndex AddData:pMatrDraw->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//операция "Прямолинейное движение"------------------------------------------------------------------
-    int IndexMatrMove=[ArrayPoints SetMatrix:0];//29
-    MATRIXcell *pMatrMove=[ArrayPoints GetMatrixAtIndex:IndexMatrMove];
-    pMatrMove->TypeInformation=STR_OPERATION;
-    pMatrMove->NameInformation=NAME_O_MOVE;
-    
-    //заглавный смысл
-    pNameIcon = [NSMutableString stringWithString:@"_MoveLine.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMove->pValueCopy];
-//Enter===============================================================================================
-    int iIndexV=[ArrayPoints SetFloat:0];//V
-    [m_OperationIndex AddData:iIndexV WithData:pMatrMove->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_V.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMove->pValueCopy];
-    
-    [m_OperationIndex OnlyAddData:iIndexV  WithData:pMatrMove->pEnters];
-//exit===============================================================================================
-    iIndexR=[ArrayPoints SetFloat:0];//R
-    [m_OperationIndex AddData:iIndexR WithData:pMatrMove->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_R.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMove->pValueCopy];
-    
-    [m_OperationIndex OnlyAddData:iIndexR  WithData:pMatrMove->pExits];
-    
-    [m_OperationIndex AddData:pMatrMove->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//операция "движение по окружности"-----------------------------------------------------------------
-    int IndexMatrMoveOrbit=[ArrayPoints SetMatrix:0];//35
-    MATRIXcell *pMatrMoveOrbit=[ArrayPoints GetMatrixAtIndex:IndexMatrMoveOrbit];
-    pMatrMoveOrbit->TypeInformation=STR_OPERATION;
-    pMatrMoveOrbit->NameInformation=NAME_O_MOVE_ORBIT;
-    
-    //заглавный смысл
-    pNameIcon = [NSMutableString stringWithString:@"_MoveOrbit.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-//Enter===============================================================================================
-    iIndexX=[ArrayPoints SetFloat:0];//X
-    [m_OperationIndex AddData:iIndexX WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_X.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    iIndexY=[ArrayPoints SetFloat:0];//Y
-    [m_OperationIndex AddData:iIndexY WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_Y.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    iIndexR=[ArrayPoints SetFloat:0];//R
-    [m_OperationIndex AddData:iIndexR WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_R.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    iIndexA=[ArrayPoints SetFloat:0];//A
-    [m_OperationIndex AddData:iIndexA WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_A.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    [m_OperationIndex OnlyAddData:iIndexX  WithData:pMatrMoveOrbit->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexY  WithData:pMatrMoveOrbit->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexR  WithData:pMatrMoveOrbit->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexA  WithData:pMatrMoveOrbit->pEnters];
-//exit==========================================================================================
-    iIndexX=[ArrayPoints SetFloat:0];//X
-    [m_OperationIndex AddData:iIndexX WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_X.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    iIndexY=[ArrayPoints SetFloat:0];//Y
-    [m_OperationIndex AddData:iIndexX WithData:pMatrMoveOrbit->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_Y.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrMoveOrbit->pValueCopy];
-
-    [m_OperationIndex OnlyAddData:iIndexX  WithData:pMatrMoveOrbit->pExits];
-    [m_OperationIndex OnlyAddData:iIndexY  WithData:pMatrMoveOrbit->pExits];
-    
-    [m_OperationIndex AddData:pMatrMoveOrbit->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//операция "сложение векторов"----------------------------------------------------------------------------
-    int IndexMatrAddVector=[ArrayPoints SetMatrix:0];//49
-    MATRIXcell *pMatrAddVector=[ArrayPoints GetMatrixAtIndex:IndexMatrAddVector];
-    pMatrAddVector->TypeInformation=STR_OPERATION;
-    pMatrAddVector->NameInformation=NAME_O_PLUS_VECTOR;
-    
-    //заглавный смысл
-    pNameIcon = [NSMutableString stringWithString:@"_peXY.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrAddVector->pValueCopy];
-    //Enter===============================================================================================
-    iIndexX=[ArrayPoints SetFloat:0];//X
-    [m_OperationIndex AddData:iIndexX WithData:pMatrAddVector->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_X.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrAddVector->pValueCopy];
-    
-    iIndexY=[ArrayPoints SetFloat:0];//Y
-    [m_OperationIndex AddData:iIndexY WithData:pMatrAddVector->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_Y.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrAddVector->pValueCopy];
-    
-    [m_OperationIndex OnlyAddData:iIndexX  WithData:pMatrAddVector->pEnters];
-    [m_OperationIndex OnlyAddData:iIndexY  WithData:pMatrAddVector->pEnters];
-    //exit===============================================================================================
-    iIndexX=[ArrayPoints SetFloat:0];//X
-    [m_OperationIndex AddData:iIndexX WithData:pMatrAddVector->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_X.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrAddVector->pValueCopy];
-
-    iIndexY=[ArrayPoints SetFloat:0];//Y
-    [m_OperationIndex AddData:iIndexY WithData:pMatrAddVector->pValueCopy];
-    pNameIcon = [NSMutableString stringWithString:@"_Y.png"];
-    iIndIconName=[ArrayPoints SetName:pNameIcon];
-    [m_OperationIndex AddData:iIndIconName WithData:pMatrAddVector->pValueCopy];
-
-    [m_OperationIndex OnlyAddData:iIndexX  WithData:pMatrAddVector->pExits];
-    [m_OperationIndex OnlyAddData:iIndexY  WithData:pMatrAddVector->pExits];
-    
-    [m_OperationIndex AddData:pMatrAddVector->iIndexSelf WithData:pMatrOperations->pValueCopy];
-//=================================================================================================
-////////////////////////////////////////////////////////////////////////////////////////////////////
-    //резервируем константы ядра
-    for (int i=0; i<MAX_REZERV; i++) {
-        int iIndexRezerv=[ArrayPoints SetFloat:0.0f];
-        [m_OperationIndex AddData:iIndexRezerv WithData:pMatrZero->pValueCopy];
-        iIndexMaxSys=iIndexRezerv;
-    }
+-(void)SetKernel{
+    [pKernel SetKernel];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)SetEditor{//надстройка для редактора
@@ -850,7 +597,7 @@
     [pFStringObjects SetNameIcon:@"EmptyPlace.png"];
 
     //добалсяем первичные струны
-    [self AddSmallCube:pFStringObjects];    
+  //  [self AddSmallCube:pFStringObjects];
 }
 //------------------------------------------------------------------------------------------------------
 -(void)ConnectStart:(FractalString *)StartStr End:(FractalString *)EndStr
@@ -1265,242 +1012,6 @@ repeate:
     return [DicStrings objectForKey:strName];
 }
 //------------------------------------------------------------------------------------------------------
--(void)Update:(FractalString *)StartString{
-//главный цикл обработки матрицы
-        
-    short iCurrentPlace;
-    int iCurrentIndex;
-    int *pQueue;
-    HeartMatr *pHeart;
-    InfoArrayValue *pInfoTmp;
-    NSMutableString *pName;
-    
-    TextureContainer *pNum;
-    int *I1;//,*I2,*I3;
-    float *F1,*F2,*F3,*F4,*F5,*F6;
-    int iIndexValue,iTextureName=-1;
-    
-    InfoArrayValue *InfoParMatrix=(InfoArrayValue *)(*pParMatrixStack);
-    InfoArrayValue *InfoCurPlace=(InfoArrayValue *)(*pCurPlaceStack);
-    
-    int *StartDataParMatrix=((*pParMatrixStack)+SIZE_INFO_STRUCT);
-    int *StartDataCurPlace=((*pCurPlaceStack)+SIZE_INFO_STRUCT);
-//------------------------------------------------------------------------------------
-    if(StartString==nil)return;
-    MATRIXcell *pParMatrix=[ArrayPoints GetMatrixAtIndex:StartString->m_iIndex];
-    if(pParMatrix->sStartPlace==-1)return;
-    iCurrentPlace=pParMatrix->sStartPlace;
-
-    int IndexInside=((*pParMatrix->pValueCopy) + SIZE_INFO_STRUCT)[pParMatrix->sStartPlace];
-    MATRIXcell *pCurrentMatr=[ArrayPoints GetMatrixAtIndex:IndexInside];
-    if(pCurrentMatr==nil)return;
-        
-    pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
-    pHeart=(HeartMatr *)pQueue[iCurrentPlace];
-
-LOOP://бесконечный цикл
-    
-    switch (pCurrentMatr->TypeInformation)
-    {
-//операции===========================================================================
-        case STR_OPERATION:
-
-            switch (pCurrentMatr->NameInformation)
-            {
-//операция плюс----------------------------------------------------------------------
-                case NAME_O_PLUS:
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//A
-                    F1=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//B
-                    F2=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//R
-                    F3=(ArrayPoints->pData+iIndexValue);
-                    
-                    *F3+= *F1+ *F2;//плюсование
-                    break;
-//операция update---------------------------------------------------------------------
-                case NAME_O_UPDATE_XY:
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//X
-                    F1=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//Y
-                    F2=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[2];//W
-                    F3=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[3];//H
-                    F4=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[4];//Sprite
-                    I1=((int *)ArrayPoints->pData+iIndexValue);
-
-                    [ArrayPoints->pCurrenContPar UpdateSpriteVertex:*I1 X:*F1 Y:*F2 W:*F3 H:*F4];
-                    break;
-//операция draw---------------------------------------------------------------------
-                case NAME_O_DRAW:
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//texture
-                    pName=*((id *)(ArrayPoints->pData+iIndexValue));
-                                        
-                    pNum=[m_pObjMng->m_pParent->m_pTextureList objectForKey:pName];
-                    if(pNum!=nil)iTextureName=pNum->m_iTextureId;
-                    else iTextureName=-1;
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//Sprite
-                    I1=((int *)ArrayPoints->pData+iIndexValue);
-                    
-                    [ArrayPoints->pCurrenContPar DrawSprite:*I1 tex:iTextureName];
-                    break;
-//операция move---------------------------------------------------------------------
-                case NAME_O_MOVE:
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//V
-                    F1=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//R
-                    F2=(ArrayPoints->pData+iIndexValue);
-                    
-                    *F2+=*F1*(*pDeltaTime);
-                    
-                    break;
-
-                case NAME_O_MOVE_ORBIT:
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//X0
-                    F1=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//Y0
-                    F2=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[2];//R
-                    F3=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[3];//A
-                    F4=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//X
-                    F5=(ArrayPoints->pData+iIndexValue);
-
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[1];//Y
-                    F6=(ArrayPoints->pData+iIndexValue);
-
-                    float fSin=sinf(*F4);
-                    float fCos=cosf(*F4);
-                    
-                    *F5=*F1+*F3*(fCos);
-                    *F6=*F2+*F3*(fSin);
-                    
-                    break;
-
-                case NAME_O_PLUS_VECTOR:
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[0];//X0
-                    F1=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[1];//Y0
-                    F2=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//X1
-                    F3=(ArrayPoints->pData+iIndexValue);
-                    
-                    iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[1];//Y1
-                    F4=(ArrayPoints->pData+iIndexValue);
-    
-                    *F3=*F3+*F1;//сложение векторов покомпонентно
-                    *F4=*F4+*F2;
-                    
-                    break;
-//-----------------------------------------------------------------------------------
-                default://имя операции не найдено
-                    break;
-            }
-//следующая операция=================================================================
-            pInfoTmp=(InfoArrayValue *)(*pHeart->pNextPlaces);
-            
-            if(pInfoTmp->mCount>0){
-                iCurrentPlace=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT)[0];
-                IndexInside=((*pParMatrix->pValueCopy) + SIZE_INFO_STRUCT)[iCurrentPlace];
-                
-                pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+IndexInside));
-                pHeart=(HeartMatr *)pQueue[iCurrentPlace];
-            }
-            else
-            {
-LEVEL_UP:
-                if(InfoParMatrix->mCount==0)return;//выходим из обработки если стек пуст
-                
-                //достаём данные из стека
-                InfoParMatrix->mCount--;
-                InfoCurPlace->mCount--;
-
-                pParMatrix=*((MATRIXcell **)(StartDataParMatrix+InfoParMatrix->mCount));
-                iCurrentPlace=StartDataCurPlace[InfoCurPlace->mCount];
-                pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
-                pHeart=(HeartMatr *)pQueue[iCurrentPlace];
-NEXT_HEART:
-                pInfoTmp=(InfoArrayValue *)(*pHeart->pNextPlaces);
-                if(pInfoTmp->mCount>0){
-
-                    iCurrentPlace=((*pHeart->pNextPlaces)+SIZE_INFO_STRUCT)[0];
-                    iCurrentIndex=((*pParMatrix->pValueCopy)+SIZE_INFO_STRUCT)[iCurrentPlace];
-                    pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
-                    
-//                    pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
-                    pHeart=(HeartMatr *)pQueue[iCurrentPlace];
-                }
-                else goto LEVEL_UP;//переходим ещё на уровень выше
-            }
-            goto LOOP;
-        break;
-//составная матрица==================================================================
-        case STR_COMPLEX:
-            if(pCurrentMatr->sStartPlace==-1)goto NEXT_HEART;
-            
-            //заносим старые данные в стек
-            if(InfoParMatrix->mCount==InfoParMatrix->mCopasity)
-            {                
-                InfoParMatrix->mCopasity+=100;
-                InfoCurPlace->mCopasity+=100;
-                
-                int FullSize=InfoParMatrix->mCopasity*sizeof(int)+sizeof(InfoArrayValue);
-                *pParMatrixStack = (int *)realloc(*pParMatrixStack,FullSize);
-                *pCurPlaceStack = (int *)realloc(*pCurPlaceStack,FullSize);
-                
-                InfoParMatrix=(InfoArrayValue *)(*pParMatrixStack);
-                InfoCurPlace=(InfoArrayValue *)(*pCurPlaceStack);
-                
-                StartDataParMatrix=((*pParMatrixStack)+SIZE_INFO_STRUCT);
-                StartDataCurPlace=((*pCurPlaceStack)+SIZE_INFO_STRUCT);
-            }
-            
-            //копируем данные в стек
-            MATRIXcell **TmpLink=(MATRIXcell **)(StartDataParMatrix+InfoParMatrix->mCount);
-            *TmpLink=pParMatrix;
-            StartDataCurPlace[InfoCurPlace->mCount]=iCurrentPlace;
-            
-            InfoParMatrix->mCount++;
-            InfoCurPlace->mCount++;
-
-            pParMatrix=pCurrentMatr;
-            iCurrentPlace=pCurrentMatr->sStartPlace;
-            iCurrentIndex=((*pCurrentMatr->pValueCopy)+SIZE_INFO_STRUCT)[iCurrentPlace];
-            pCurrentMatr=*((MATRIXcell **)(ArrayPoints->pData+iCurrentIndex));
-            pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
-            pHeart=(HeartMatr *)pQueue[iCurrentPlace];
-
-            goto LOOP;//входим в матрицу
-        break;
-//===================================================================================
-        default://тип не найден
-            break;
-    }
-}
-//------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
     [m_OperationIndex OnlyReleaseMemory:pCurPlaceStack];
@@ -1516,7 +1027,10 @@ NEXT_HEART:
         [pManager release];
     }
     [ArrayDumpFiles release];
-        
+    
+    [pMainCycle release];
+    [pKernel release];
+
     [super dealloc];
 }
 //------------------------------------------------------------------------------------------------------

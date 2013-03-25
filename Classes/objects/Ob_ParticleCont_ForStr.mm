@@ -383,7 +383,10 @@
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
 -(void)selfSave:(NSMutableData *)m_pData{
-
+    
+    [m_pObjMng->pStringContainer->m_OperationIndex selfSave:m_pData WithData:pIndexParticles];
+    InfoArrayValue *pInfoParticles=(InfoArrayValue *)(*pIndexParticles);
+    
     int Size=m_iCountVertex*sizeof(Vertex3D);
     [m_pData appendBytes:&Size length:sizeof(int)];
     [m_pData appendBytes:vertices length:Size];
@@ -396,43 +399,47 @@
     [m_pData appendBytes:&Size length:sizeof(int)];
     [m_pData appendBytes:squareColors length:Size];
     
-    [m_pObjMng->pStringContainer->m_OperationIndex selfSave:m_pData WithData:pIndexParticles];
 }
 //------------------------------------------------------------------------------------------
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos{
 
-    //координаты вершин
-    int iSize;
-    int iReadSize=sizeof(int);
-    [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
-    *iCurReadingPos += iReadSize;
-
-    m_iCountVertex=iSize/6;
-    
-    vertices=(Vertex3D *)realloc(vertices, iSize);
-    [m_pData getBytes:vertices range:NSMakeRange( *iCurReadingPos, iSize)];
-    *iCurReadingPos += iSize;
-
-    //координаты текстуры
-    iReadSize=sizeof(int);
-    [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
-    *iCurReadingPos += iReadSize;
-    
-    texCoords=(GLfloat *)realloc(texCoords, iSize);
-    [m_pData getBytes:texCoords range:NSMakeRange( *iCurReadingPos, iSize)];
-    *iCurReadingPos += iSize;
-
-    //цвета вершин
-    iReadSize=sizeof(int);
-    [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
-    *iCurReadingPos += iReadSize;
-    
-    squareColors=(GLubyte *)realloc(squareColors, iSize);
-    [m_pData getBytes:squareColors range:NSMakeRange( *iCurReadingPos, iSize)];
-    *iCurReadingPos += iSize;
-    
+    //количество вершин
     [m_pObjMng->pStringContainer->m_OperationIndex
      selfLoad:m_pData rpos:iCurReadingPos WithData:pIndexParticles];
+    InfoArrayValue *pInfoParticles=(InfoArrayValue *)(*pIndexParticles);
+    
+    if(pInfoParticles->mCount>0){
+
+        //координаты вершин
+        int iSize;
+        int iReadSize=sizeof(int);
+        [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
+        *iCurReadingPos += iReadSize;
+        
+        vertices=(Vertex3D *)realloc(vertices, iSize);
+        [m_pData getBytes:vertices range:NSMakeRange( *iCurReadingPos, iSize)];
+        *iCurReadingPos += iSize;
+
+        //координаты текстуры
+        iReadSize=sizeof(int);
+        [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
+        *iCurReadingPos += iReadSize;
+        
+        texCoords=(GLfloat *)realloc(texCoords, iSize);
+        [m_pData getBytes:texCoords range:NSMakeRange( *iCurReadingPos, iSize)];
+        *iCurReadingPos += iSize;
+
+        //цвета вершин
+        iReadSize=sizeof(int);
+        [m_pData getBytes:&iSize range:NSMakeRange( *iCurReadingPos, iReadSize)];
+        *iCurReadingPos += iReadSize;
+        
+        squareColors=(GLubyte *)realloc(squareColors, iSize);
+        [m_pData getBytes:squareColors range:NSMakeRange( *iCurReadingPos, iSize)];
+        *iCurReadingPos += iSize;
+    }
+    
+    m_iCountVertex=6*(pInfoParticles->mCount);
 }
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc{

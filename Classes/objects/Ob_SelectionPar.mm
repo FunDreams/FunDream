@@ -133,7 +133,7 @@
         }
         else
         {
-            int CurretnOffset=i*2+1+1;
+            int CurretnOffset=i*2+1;
             int index=StartChild[CurretnOffset];
             
             NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints
@@ -169,8 +169,8 @@
                                      SET_INT_V(i,@"m_iNum"),
                                      SET_INT_V(bSimple,@"m_iType"),
                                      SET_STRING_V(pNameIcon,@"m_DOWN"),
-                                     SET_BOOL_V(bBack,@"m_bBack"),
                                      SET_STRING_V(pNameIcon,@"m_UP"),
+                                     SET_BOOL_V(bBack,@"m_bBack"),
                                      SET_FLOAT_V(54,@"mWidth"),
                                      SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
                                      SET_BOOL_V(YES,@"m_bLookTouch"),
@@ -203,10 +203,11 @@
         }
         else
         {
-            int CurretnOffset=i*2+1+1+InfoEnter->mCount*2;
+            int CurretnOffset=i*2+1+InfoEnter->mCount*2;
             int index=StartChild[CurretnOffset];
             
-            NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:index];
+            NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                        GetIdAtIndex:index];
             
             [pNameIcon setString:TmpStr];
         }

@@ -136,6 +136,9 @@
     }
     else [self SetUnPush];
     
+    if(m_iType==bSimple)
+        [self SetUnPush];
+    
     if(m_Disable==YES)
         mColor.alpha=0.5f;
     else mColor.alpha=1;
@@ -193,8 +196,8 @@
 	if([[self FindProcByName:@"Proc"]->m_CurStage->NameStage isEqualToString:@"Idle"] && m_Disable==NO)
     {
         if(m_bNotPush==NO){
-            if(m_iType==bCheckBox || m_iType==bRadioBox){
-                
+            if(m_iType==bCheckBox || m_iType==bRadioBox)
+            {
               if(m_iType==bRadioBox && m_bDrag==YES){
                    [m_pObjMng->pMegaTree SetCell:LINK_ID_V(self,@"ObCheck")];
                   

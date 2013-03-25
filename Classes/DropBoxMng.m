@@ -12,6 +12,7 @@
 #import "Ob_Editor_Interface.h"
 #import "InfoFile.h"
 #import "Ob_EmtyPlace.h"
+#import "Kernel.h"
 
 #define NAME_INFO_FILE @"_info"
 @implementation DropBoxMng
@@ -339,7 +340,9 @@
 //////////////////////////////////////////////////////////////////////////////////////////////////
                 StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
                 [pStringContainerTmp SetParCont];
-                [pStringContainerTmp SetKernel];
+                [pStringContainerTmp->pKernel SetZeroKernel];
+                pStringContainerTmp->ArrayPoints->m_bSaveKernel=YES;
+
                 [pStringContainerTmp CopyStrFrom:m_pObjMng->pStringContainer WithId:pStr];
                 
                 id pEncodeString = [pStringContainerTmp GetString:pStr->strUID];
@@ -350,7 +353,7 @@
                 
                 [pStringContainerTmp release];
 //////////////////////////////////////////////////////////////////////////////////////////////////
-                [pDataManager Save];
+                [pDataManager Save_And_Compress];
 
                 [pDataManager UpLoadWithName:pStr->strUID];
                 
@@ -365,7 +368,7 @@
 -(void)loadAndMerge{
     
     CDataManager* pDataCurManager = pDataManager;
-    bool Rez=[pDataCurManager Load];
+    bool Rez=[pDataCurManager LoadCompress];
     
     int iLen=[pDataCurManager->m_pDataDmp length];
     if(iLen==0)Rez=false;
@@ -382,9 +385,10 @@
                 if(StrDropBox!=nil)
                 {
 /////////////////////////////////////////////////////////////////////////////////////////////////////
-                    StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];
+                    StringContainer *pStringContainerTmp = [[StringContainer alloc] init:m_pObjMng];                    
                     [pStringContainerTmp SetParCont];
-                    [pStringContainerTmp SetKernel];
+                    [pStringContainerTmp->pKernel SetKernel];
+                    pStringContainerTmp->ArrayPoints->m_bSaveKernel=YES;
 
                     FractalString *pNewString = [[FractalString alloc]
                                     initWithData:pDataCurManager->m_pDataDmp
@@ -451,7 +455,7 @@
 
     NSMutableArray *pFstrRez = [[NSMutableArray alloc] init];
     
-    [pDataManager Load];
+    [pDataManager LoadCompress];
     [pInfofile LoadFile:pDataManager->m_pDataDmp ReadPos:&ReadPos];
     //meta data to array-------------------------------------------------------------
     NSMutableArray *pArray=[[NSMutableArray alloc] init];
@@ -634,7 +638,7 @@ Repeate2:;//главная синхронизация
         [pInfofile SaveFile:pDataManager->m_pDataDmp];
   //      [Str selfSaveOnlyStructure:pDataManager->m_pDataDmp WithVer:1 Deep:0 MaxDeep:1];
         
-        [pDataManager Save];
+        [pDataManager Save_And_Compress];
         
         [pDataManager UpLoadWithName:NAME_INFO_FILE];
         
