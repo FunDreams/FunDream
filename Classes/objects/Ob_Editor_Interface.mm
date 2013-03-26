@@ -242,8 +242,12 @@
     MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints
                        GetMatrixAtIndex:ButtonGroup->pInsideString->m_iIndex];
     
-    if(pMatr!=nil)
-        pMatr->sStartPlace=ButtonGroup->m_iCurrentSelect;
+    if(pMatr!=nil){
+        
+        if(pMatr->sStartPlace==ButtonGroup->m_iCurrentSelect)
+            pMatr->sStartPlace=-1;
+        else pMatr->sStartPlace=ButtonGroup->m_iCurrentSelect;
+    }
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -291,7 +295,7 @@
 
     UNFROZE_OBJECT(@"StaticObject",@"Back",
               //     SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_COLOR_V(Color3DMake(0.2f,0.2f,0.2f,1),@"mColor"),
+                   SET_COLOR_V(Color3DMake(0.0f,0.0f,0.0f,1),@"mColor"),
                    SET_FLOAT_V(480,@"mWidth"),
                    SET_FLOAT_V(640,@"mHeight"),
                    SET_VECTOR_V(Vector3DMake(-240,0,0),@"m_pCurPosition"),
@@ -515,7 +519,6 @@
     bool bLoad = [m_pObjMng->pStringContainer LoadContainer];
 
     if(bLoad==NO)[m_pObjMng->pStringContainer SetEditor];
-    [m_pObjMng->pStringContainer InitIndex];
     
     OBJECT_PERFORM_SEL(@"GroupPlaces",@"ReLinkEmptyPlace");
     

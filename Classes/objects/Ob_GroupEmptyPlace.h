@@ -14,7 +14,7 @@
 @interface Ob_GroupEmptyPlace : GObject {
     int m_iNumButton;
     FractalString *pChelf;
-    int *m_iChelf;
+    int iIndexChelf;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;

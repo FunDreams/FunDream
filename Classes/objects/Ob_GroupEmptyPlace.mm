@@ -76,10 +76,8 @@
         
         MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
         int index=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
-        int *FChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
-                               GetDataAtIndex:index];
         
-        m_iChelf=FChelf;
+        iIndexChelf=index;
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -157,6 +155,9 @@
                 GET_TEXTURE(pObTmp->mTextureId, @"EmptyPlace.png");
             }
             
+            int *m_iChelf=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                                GetDataAtIndex:iIndexChelf];
+
             if(i==*m_iChelf)[pObTmp SetPush];
         }
     }

@@ -385,7 +385,6 @@
 -(void)selfSave:(NSMutableData *)m_pData{
     
     [m_pObjMng->pStringContainer->m_OperationIndex selfSave:m_pData WithData:pIndexParticles];
-    InfoArrayValue *pInfoParticles=(InfoArrayValue *)(*pIndexParticles);
     
     int Size=m_iCountVertex*sizeof(Vertex3D);
     [m_pData appendBytes:&Size length:sizeof(int)];

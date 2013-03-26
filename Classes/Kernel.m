@@ -196,6 +196,7 @@
 //------------------------------------------------------------------------------------------------
 -(void)SetKernel{//устанавливаем константы для ядра (эти индексы не переименовываются)
     
+    NSMutableString *NameTexture;
     int iMatr;
     int iCurrentIndIcon=300000;
     int iCurrentIndPar=400000;
@@ -215,13 +216,13 @@
     
     //Empty int
     int iIndexIntZeroTmp = 150001;
-    [self CreateFloatByIndex:iIndexIntZeroTmp withData:0];
+    [self CreateIntByIndex:iIndexIntZeroTmp withData:0];
     [self SetData:iIndexIntZeroTmp withNameIcon:@"_I.png" withMatr:pMatrTmpData
       withIndIcon:&iCurrentIndIcon];
     
-    //Empty Sprite
+    //Empty Name
     int iIndexNameZeroTmp = 150002;
-    NSMutableString *NameTexture=[NSMutableString stringWithString:@"0"];
+    NameTexture=[NSMutableString stringWithString:@"0"];
     [self CreateStringByIndex:iIndexNameZeroTmp withData:NameTexture];
     [self SetData:iIndexNameZeroTmp withNameIcon:@"_N.png" withMatr:pMatrTmpData
       withIndIcon:&iCurrentIndIcon];
@@ -267,16 +268,16 @@
     
     //Empty int
     int iIndexIntZero = 100001;
-    [self CreateFloatByIndex:iIndexIntZero withData:0];
+    [self CreateIntByIndex:iIndexIntZero withData:0];
     [self SetData:iIndexIntZero withNameIcon:@"_I.png" withMatr:pMatrDataEmpty
       withIndIcon:&iCurrentIndIcon];
 
-    //Empty Sprite
-    int iIndexNameZero = 100002;
-    NameTexture=[NSMutableString stringWithString:@"0"];
-    [self CreateStringByIndex:iIndexNameZero withData:NameTexture];
-    [self SetData:iIndexNameZero withNameIcon:@"_N.png" withMatr:pMatrDataEmpty
-      withIndIcon:&iCurrentIndIcon];
+//    //Empty Name
+//    int iIndexNameZero = 100002;
+//    NameTexture=[NSMutableString stringWithString:@"0"];
+//    [self CreateStringByIndex:iIndexNameZero withData:NameTexture];
+//    [self SetData:iIndexNameZero withNameIcon:@"_N.png" withMatr:pMatrDataEmpty
+//      withIndIcon:&iCurrentIndIcon];
 
     //Empty Texture
     int iIndexTextureZero = 100003;

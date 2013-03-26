@@ -25,7 +25,7 @@
 -(void)Update:(FractalString *)StartString{
     //главный цикл обработки матрицы
     
-    float *pDeltaTime=m_pContainer->pDeltaTime;
+    float pDeltaTime=(m_pContainer->ArrayPoints->pData)[Ind_DELTATIME];
     FunArrayData *ArrayPoints=m_pContainer->ArrayPoints;
 
     short iCurrentPlace;
@@ -125,7 +125,7 @@ LOOP://бесконечный цикл
                 iIndexValue=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[0];//R
                 F2=(ArrayPoints->pData+iIndexValue);
                 
-                *F2+=*F1*(*pDeltaTime);
+                *F2+=*F1*(pDeltaTime);
                 
                 break;
 //операция движение по окружности---------------------------------------------------

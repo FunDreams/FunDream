@@ -192,7 +192,7 @@
                     int iFontSize=10;
                     TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
                             Tex:TextureIndicatorValue fSize:iFontSize
-                            dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+                            dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Gill Sans"];
                 }
             }
                 
@@ -359,10 +359,10 @@
             LastPointTouch.x=Point.x;
             LastPointTouch.y=Point.y;
 
-            if(m_pCurPosition.x<-440)m_pCurPosition.x=-440;
+            if(m_pCurPosition.x<-450)m_pCurPosition.x=-450;
             if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
 
-        //    if(m_pCurPosition.y<-280)m_pCurPosition.y=-280;
+            if(m_pCurPosition.y<-300)m_pCurPosition.y=-300;
             if(m_pCurPosition.y>170)m_pCurPosition.y=170;
 
             pString->X=m_pCurPosition.x;
@@ -545,19 +545,21 @@ Exit:
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-            glScalef(0.9f,0.9f,m_pCurScale.z);
-            [self SetColor:mColor];
+            [self SetColor:Color3DMake(1, 1, 1, 1)];
             
-            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+//            glScalef(0.9f,0.9f,m_pCurScale.z);
+//            [self SetColor:mColor];
+//            
+//            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             
-            glTranslatef(-0.68f,0,0);
-            glScalef(0.35f,1,m_pCurScale.z);
+//            glTranslatef(-0.68,0,0);
+  //          glScalef(0.35f,1,m_pCurScale.z);
             glBindTexture(GL_TEXTURE_2D, mTextureId);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
 
             [self UpdateTextureOnFace];
-            [self drawTextAtX:m_pCurPosition.x+15 Y:m_pCurPosition.y
-                        Color:Color3DMake(0,0,0,1) Tex:TextureIndicatorValue];
+            [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y-26
+                        Color:Color3DMake(1,1,1,1) Tex:TextureIndicatorValue];
 //draw text======================================================================================
 //===============================================================================================
         }
@@ -616,16 +618,17 @@ Exit:
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-            if(m_iTypeStr==DATA_MATRIX)
-            {
+    //        if(m_iTypeStr==DATA_MATRIX)
+  //          {
                 glBindTexture(GL_TEXTURE_2D, mTextureId);
-            }
-            else
-            {
-                glBindTexture(GL_TEXTURE_2D, -1);
-            }
+//            }
+//            else
+//            {
+//                glBindTexture(GL_TEXTURE_2D, -1);
+//            }
             
-            glScalef(0.9f,0.9f,m_pCurScale.z);
+            glScalef(1.06f,1.06f,m_pCurScale.z);
+            
             [self SetColor:mColor];
             
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
@@ -633,8 +636,12 @@ Exit:
             if(m_iTypeStr==DATA_SPRITE)
             {
                 [self UpdateTextureOnFace];
-                [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y
+
+                [self drawTextAtX:m_pCurPosition.x-14 Y:m_pCurPosition.y-11
                             Color:Color3DMake(0,0,0,1) Tex:TextureIndicatorSprite];
+
+                [self drawTextAtX:m_pCurPosition.x-16 Y:m_pCurPosition.y-12
+                            Color:Color3DMake(1,1,1,1) Tex:TextureIndicatorSprite];
             }
             break;
             
@@ -652,15 +659,15 @@ Exit:
             [StrValueOnLink release];
             StrValueOnLink=[[NSString stringWithString:pStr] retain];
             
-            int iFontSize=20;
+            int iFontSize=14;
             TextureIndicatorLink=[self CreateText:StrValueOnLink al:UITextAlignmentCenter
-                                Tex:TextureIndicatorLink fSize:iFontSize
-                                dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Helvetica"];
+                        Tex:TextureIndicatorLink fSize:iFontSize
+                        dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Gill Sans"];
         }
     }
 
     if (TextureIndicatorLink!=nil) {
-        [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y+32
+        [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y+28
                     Color:Color3DMake(0,1,0,1) Tex:TextureIndicatorLink];
     }
 }

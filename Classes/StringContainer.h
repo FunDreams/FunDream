@@ -45,7 +45,7 @@
     int **pParMatrixStack;
     int **pCurPlaceStack;
 //kernell data====================================================================
-    float *pDeltaTime;
+  //  int iIndexDeltaTime;
     int iIndexMaxSys;
 }
 
@@ -53,13 +53,11 @@
 
 -(void)SetKernel;
 -(void)SetEditor;
--(void)InitIndex;
 
 -(id)GetString:(NSString *)strName;
 -(void)DelChilds:(FractalString *)strDelChilds;
 -(void)DelString:(FractalString *)strDel;
 -(NSString *)GetRndName;
--(void)AddSmallCube:(FractalString *)pFParent;
 - (void)LogString:(FractalString *)fString;
 - (void)SetParCont;
 

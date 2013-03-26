@@ -189,7 +189,8 @@
     NSNumber *NumDelta=pDeltaTime;
     m_fDeltaTime=[NumDelta doubleValue];
 
-    *pStringContainer->pDeltaTime=m_fDeltaTime;
+    (pStringContainer->ArrayPoints->pData)[Ind_DELTATIME]=m_fDeltaTime;
+    
     FractalString *StartStr = [pStringContainer GetString:@"Objects"];
     [pStringContainer->pMainCycle Update:StartStr];
 
