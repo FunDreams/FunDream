@@ -545,7 +545,7 @@ Exit:
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-            [self SetColor:Color3DMake(1, 1, 1, 1)];
+            [self SetColor:mColor];
             
 //            glScalef(0.9f,0.9f,m_pCurScale.z);
 //            [self SetColor:mColor];

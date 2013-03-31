@@ -18,6 +18,7 @@
 #import "Ob_Selection.h"
 #import "Ob_SelectionPar.h"
 #import "Ob_AddNewData.h"
+#import "Ob_BigWheel.h"
 
 @implementation Ob_Editor_Interface
 //------------------------------------------------------------------------------------------------------
@@ -77,6 +78,7 @@
     }
     else BDropPlus=0;
 
+    BigWheel = UNFROZE_OBJECT(@"Ob_BigWheel",@"BigWheel",nil);
 
     BTash=UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
@@ -295,7 +297,7 @@
 
     UNFROZE_OBJECT(@"StaticObject",@"Back",
               //     SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_COLOR_V(Color3DMake(0.0f,0.0f,0.0f,1),@"mColor"),
+                   SET_COLOR_V(Color3DMake(0.2f,0.2f,0.2f,1),@"mColor"),
                    SET_FLOAT_V(480,@"mWidth"),
                    SET_FLOAT_V(640,@"mHeight"),
                    SET_VECTOR_V(Vector3DMake(-240,0,0),@"m_pCurPosition"),
@@ -558,7 +560,10 @@
     [pInfoFile Hide];
     [ButtonGroup Hide];
     [Eplace Hide];
-    
+
+    DESTROY_OBJECT(BigWheel);
+    BigWheel=nil;
+
     DESTROY_OBJECT(PrSyn);
     PrSyn=nil;
 

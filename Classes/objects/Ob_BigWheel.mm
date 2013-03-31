@@ -6,18 +6,19 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_Templet.h"
+#import "Ob_BigWheel.h"
+#import "Ob_Editor_Interface.h"
 
-@implementation Ob_Templet
+@implementation Ob_BigWheel
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerTemplet;
-        m_iLayerTouch=layerTouch_0;//слой касания
+        m_iLayer = layerInterfaceSpace11;
+        m_iLayerTouch=layerTouch_2N;//слой касания
     }
-    
+
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -41,16 +42,18 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
-    m_bHiden=NO;
-
     //   GET_DIM_FROM_TEXTURE(@"");
+    m_bHiden=NO;
 	mWidth  = 50;
-	mHeight = 50;
+	mHeight = 250;
+    
+    m_pCurPosition.x=-450;
+    m_pCurPosition.y=-140;
 
 	[super Start];
 
-    //   [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId, m_pNameTexture);
+    [self SetTouch:YES];//интерактивность
+    GET_TEXTURE(mTextureId, @"EditParam.png");
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
@@ -72,5 +75,48 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Destroy{[super Destroy];}
 //------------------------------------------------------------------------------------------------------
-//- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{}
+- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    StartPoint=Point;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    
+    LOCK_TOUCH;
+    
+    float fDelta=(Point.y-StartPoint.y)*0.3f;
+    StartPoint=Point;
+
+    Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
+                                        GetObjectByName:@"Ob_Editor_Interface"];
+    
+    if(pInterface->StringSelect!=0)
+    {
+        int iType = [m_pObjMng->pStringContainer->ArrayPoints
+                    GetTypeAtIndex:pInterface->StringSelect->m_iIndex];
+        
+        switch (iType) {
+            case DATA_FLOAT:
+            {
+                float *pValue = (float *)[m_pObjMng->pStringContainer->ArrayPoints
+                            GetDataAtIndex:pInterface->StringSelect->m_iIndex];
+                
+                *pValue+=fDelta;
+            }
+                break;
+
+            case DATA_INT:
+            {
+                int *pValue = (int *)[m_pObjMng->pStringContainer->ArrayPoints
+                                          GetDataAtIndex:pInterface->StringSelect->m_iIndex];
+                
+                *pValue=(int)(*pValue+fDelta);
+            }
+                break;
+
+            default:
+                break;
+        }
+    }
+}
+//------------------------------------------------------------------------------------------------------
 @end

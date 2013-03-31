@@ -141,7 +141,7 @@
 {
 	m_pPrSettings = pPrSettings;
 }
-
+//------------------------------------------------------------------------------------------------------
 - (void)SelfMove:(double)DeltaTime
 {
   //  if(loadingSubviews==YES)return;

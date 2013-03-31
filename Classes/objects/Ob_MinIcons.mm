@@ -6,15 +6,15 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_Arrow.h"
+#import "Ob_MinIcons.h"
 
-@implementation Ob_Arrow
+@implementation Ob_MinIcons
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerInterfaceSpace10;
+        m_iLayer = layerInterfaceSpace9;
         m_iLayerTouch=layerTouch_0;//слой касания
     }
     
@@ -29,14 +29,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)LinkValues{
     [super LinkValues];
-    [m_pObjMng->pMegaTree SetCell:(LINK_VECTOR_V(Start_Vector,m_strName,@"Start_Vector"))];
-//====//процессоры для объекта==========================================================================
-    Processor_ex* pProc = [self START_QUEUE:@"Proc"];
-  //      ASSIGN_STAGE(@"IDLE",@"Idle:",nil);
-        ASSIGN_STAGE(@"PROC",@"Proc:",nil);
-    [self END_QUEUE:pProc name:@"Proc"];
-    
-//====//различные параметры=============================================================================       
+//====//различные параметры=============================================================================
 //    m_strNameObject=[NSMutableString stringWithString:@""];    
 //    [m_pObjMng->pMegaTree SetCell:(LINK_STRING_V(m_strNameSound,m_strName,@"m_strNameSound"))];
 }
@@ -50,14 +43,13 @@
 
     //   GET_DIM_FROM_TEXTURE(@"");
     m_bHiden=NO;
-	mWidth  = 5;
-    
-	mHeight = 0;
+	mWidth  = 20;
+	mHeight = 20;
 
 	[super Start];
 
-    [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId,@"LineWhite.png");
+    [self SetTouch:NO];//интерактивность
+    GET_TEXTURE(mTextureId, m_pNameTexture);
 
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
@@ -102,21 +94,25 @@
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
 	
-    Vector3D TmpVector=Vector3DMake(End_Vector.x-Start_Vector.x, End_Vector.y-Start_Vector.y, 0);
+    if(Start==0)return;
+    if(End==0)return;
+
+    Vector3D TmpVector=Vector3DMake(End->x-Start->x, End->y-Start->y, 0);
     float L=Vector3DMagnitude(TmpVector);
-    Vector3D CurPos=Vector3DMake(TmpVector.x*0.5f+Start_Vector.x,
-                                 TmpVector.y*0.5f+Start_Vector.y,0);
     
     Vector3D TmpVector2=TmpVector;
     TmpVector2.x/=L;
     TmpVector2.y/=L;
 
+    Vector3D CurPos=Vector3DMake(-TmpVector2.x*40+End->x,
+                                 -TmpVector2.y*40+End->y,0);
+
     float Angle=atan(TmpVector.x/TmpVector.y);
-    m_pCurAngle.z=-Angle*180/(3.14f);
     
-    if(L*0.5f-20<0)
-        m_pCurScale.y=0;
-    else m_pCurScale.y=L*0.5f-20;
+    if(((TmpVector.x<=0  && TmpVector.y<0) || (TmpVector.x>0  && TmpVector.y<0)))
+    {
+        Angle+=3.14f;
+    }
     
 	[self SetColor:mColor];
     

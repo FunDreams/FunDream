@@ -87,6 +87,9 @@
 		18B6656F14778F4C0039E5C7 /* 72x72.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6656E14778F4C0039E5C7 /* 72x72.png */; };
 		18B6657214778FEF0039E5C7 /* 29x29.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6657014778FEF0039E5C7 /* 29x29.png */; };
 		18B6657314778FEF0039E5C7 /* 512x512.png in Resources */ = {isa = PBXBuildFile; fileRef = 18B6657114778FEF0039E5C7 /* 512x512.png */; };
+		18C8762D1705FCB500DA9A1B /* libTestFlight.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 18C8762C1705FCB500DA9A1B /* libTestFlight.a */; };
+		18C8763017081B8500DA9A1B /* Ob_MinIcons.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18C8762F17081B8500DA9A1B /* Ob_MinIcons.mm */; };
+		18C8763317085B4200DA9A1B /* Ob_BigWheel.mm in Sources */ = {isa = PBXBuildFile; fileRef = 18C8763217085B4200DA9A1B /* Ob_BigWheel.mm */; };
 		18D79553127B29C800BD5445 /* GLView.m in Sources */ = {isa = PBXBuildFile; fileRef = 18D79552127B29C800BD5445 /* GLView.m */; };
 		18D79587127B2A4700BD5445 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 18D79586127B2A4700BD5445 /* OpenGLES.framework */; };
 		18D9810D152F438C00C9F37A /* mainController-ipad.xib in Resources */ = {isa = PBXBuildFile; fileRef = 18D98106152F438C00C9F37A /* mainController-ipad.xib */; };
@@ -262,6 +265,11 @@
 		18B6656E14778F4C0039E5C7 /* 72x72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 72x72.png; path = ../../../../72x72.png; sourceTree = "<group>"; };
 		18B6657014778FEF0039E5C7 /* 29x29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 29x29.png; path = ../../../../29x29.png; sourceTree = "<group>"; };
 		18B6657114778FEF0039E5C7 /* 512x512.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = 512x512.png; path = ../../../../512x512.png; sourceTree = "<group>"; };
+		18C8762C1705FCB500DA9A1B /* libTestFlight.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libTestFlight.a; sourceTree = "<group>"; };
+		18C8762E17081B8400DA9A1B /* Ob_MinIcons.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_MinIcons.h; path = objects/Ob_MinIcons.h; sourceTree = "<group>"; };
+		18C8762F17081B8500DA9A1B /* Ob_MinIcons.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_MinIcons.mm; path = objects/Ob_MinIcons.mm; sourceTree = "<group>"; };
+		18C8763117085B4100DA9A1B /* Ob_BigWheel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_BigWheel.h; path = objects/Ob_BigWheel.h; sourceTree = "<group>"; };
+		18C8763217085B4200DA9A1B /* Ob_BigWheel.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_BigWheel.mm; path = objects/Ob_BigWheel.mm; sourceTree = "<group>"; };
 		18D79551127B29C800BD5445 /* GLView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GLView.h; sourceTree = "<group>"; };
 		18D79552127B29C800BD5445 /* GLView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GLView.m; sourceTree = "<group>"; };
 		18D79556127B29E600BD5445 /* ConstantsAndMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; lineEnding = 0; path = ConstantsAndMacros.h; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.objcpp; };
@@ -347,6 +355,7 @@
 				18A5E3FB140D27AD005F14ED /* Foundation.framework in Frameworks */,
 				182786E0157681F0002145F7 /* DropboxSDK.framework in Frameworks */,
 				182A35DC17003DCA006B867F /* libz.1.2.5.dylib in Frameworks */,
+				18C8762D1705FCB500DA9A1B /* libTestFlight.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -456,6 +465,10 @@
 		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				18C8763117085B4100DA9A1B /* Ob_BigWheel.h */,
+				18C8763217085B4200DA9A1B /* Ob_BigWheel.mm */,
+				18C8762E17081B8400DA9A1B /* Ob_MinIcons.h */,
+				18C8762F17081B8500DA9A1B /* Ob_MinIcons.mm */,
 				182D401416DA2BB30075AAEE /* Ob_Connectors.h */,
 				182D401516DA2BB60075AAEE /* Ob_Connectors.mm */,
 				183D8642169825D300FC9C01 /* Ob_Arrow.h */,
@@ -658,6 +671,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				18C8762C1705FCB500DA9A1B /* libTestFlight.a */,
 				182A35DB17003DCA006B867F /* libz.1.2.5.dylib */,
 				182786DF157681F0002145F7 /* DropboxSDK.framework */,
 				1817D5B5156959B300ED0758 /* OpenAL.framework */,
@@ -844,6 +858,8 @@
 				1844896116F870A400D8FD27 /* MainCycle.m in Sources */,
 				1844896416F8774A00D8FD27 /* Kernel.m in Sources */,
 				1844896916F99AB500D8FD27 /* Ob_AddNewData.mm in Sources */,
+				18C8763017081B8500DA9A1B /* Ob_MinIcons.mm in Sources */,
+				18C8763317085B4200DA9A1B /* Ob_BigWheel.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -884,7 +900,11 @@
 				GCC_PREFIX_HEADER = FunDreams_Prefix.pch;
 				INFOPLIST_FILE = "FunDreams-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/apple/Downloads/TestFlightSDK1.2.1,
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = FunDreams;
 				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "D7189993-1349-47D8-9BCD-1624650164F1";
 				SDKROOT = iphoneos;
@@ -912,9 +932,13 @@
 				GCC_PREFIX_HEADER = FunDreams_Prefix.pch;
 				INFOPLIST_FILE = "FunDreams-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/apple/Downloads/TestFlightSDK1.2.1,
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = FunDreams;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4609AB1E-014F-4783-A27A-660BAA1BBF8F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "09F8A297-0C81-46C8-A842-6F48457ADD02";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -938,9 +962,13 @@
 				GCC_PREFIX_HEADER = FunDreams_Prefix.pch;
 				INFOPLIST_FILE = "FunDreams-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 4.0;
-				LIBRARY_SEARCH_PATHS = "$(inherited)";
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					/Users/apple/Downloads/TestFlightSDK1.2.1,
+					"\"$(SRCROOT)\"",
+				);
 				PRODUCT_NAME = FunDreams;
-				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "4609AB1E-014F-4783-A27A-660BAA1BBF8F";
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "09F8A297-0C81-46C8-A842-6F48457ADD02";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

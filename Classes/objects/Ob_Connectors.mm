@@ -114,6 +114,13 @@
     TmpVector2.y/=L;
 
     float Angle=atan(TmpVector.x/TmpVector.y);
+    
+    if(((TmpVector.x<=0  && TmpVector.y<0)||
+       (TmpVector.x>0  && TmpVector.y<0)))
+    {
+        Angle+=3.14f;
+    }
+    
     m_pCurAngle.z=-Angle*180/(3.14f);
     
     if(L*0.5f-20<0)

@@ -6,6 +6,7 @@
 
 //	#define FPS
     #define FADE_NO
+    #define MY
 //  #define MULTITOUCH
 //  #define BANNER_IAD
     #define EDITOR

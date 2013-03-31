@@ -241,7 +241,7 @@
             [m_pObjMng->pStringContainer->m_OperationIndex
                     AddData:pNewString->m_iIndex WithData:pMatrPar->pValueCopy];
 
-            pNewString->m_iIndex=pNewString->m_iIndex;
+        //    pNewString->m_iIndex=pNewString->m_iIndex;
             
             pNewString->X=-360;
             pNewString->Y=150;

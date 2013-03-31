@@ -17,6 +17,7 @@
     int m_iCurrentSelect;
     FractalString *pInsideString;
     NSMutableArray* m_pChildrenbjectsArrConn;
+    NSMutableArray* m_pChildrenbjectsMinIcon;
 }
 
 -(id)Init:(id)Parent WithName:(NSString *)strName;
@@ -31,6 +32,5 @@
 - (void)SetButton;
 
 - (void)CreateOb:(FractalString *)pFrStr;
-- (void)CreateInfo:(FractalString *)pFrStr;
 
 @end

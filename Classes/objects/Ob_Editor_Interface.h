@@ -59,6 +59,7 @@
     GObject *BConnect;
     GObject *BSetProp;
     GObject *BSetActivity;
+    GObject *BigWheel;
     
     NSMutableArray *pArrayToDel;
 

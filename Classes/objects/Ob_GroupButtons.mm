@@ -10,6 +10,7 @@
 #import "ObjectB_Ob.h"
 #import "Ob_Editor_Interface.h"
 #import "Ob_Connectors.h"
+#import "Ob_MinIcons.h"
 
 @implementation Ob_GroupButtons
 //------------------------------------------------------------------------------------------------------
@@ -24,6 +25,7 @@
         m_iNumButton=9;
         
         m_pChildrenbjectsArrConn = [[NSMutableArray alloc] init];
+        m_pChildrenbjectsMinIcon = [[NSMutableArray alloc] init];
     }
     
 	return self;
@@ -109,6 +111,11 @@
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArrConn removeAllObjects];
+    
+    for (Ob_MinIcons *pOb in m_pChildrenbjectsMinIcon) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsMinIcon removeAllObjects];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Show{
@@ -212,6 +219,11 @@
     }
     [m_pChildrenbjectsArrConn removeAllObjects];
     
+    for (Ob_MinIcons *pOb in m_pChildrenbjectsMinIcon) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsMinIcon removeAllObjects];
+//------------------------------------------------------------------------------------------------------    
     int *Data=(*pInsideString->pChildString);
     InfoArrayValue *InfoStr=(InfoArrayValue *)(Data);
 
@@ -233,11 +245,25 @@
         
         InfoArrayValue *InfoStrQueue=(InfoArrayValue *)(*pMatr->pQueue);
         int *StartDataQ=(*pMatr->pQueue)+SIZE_INFO_STRUCT;
-        
+                
         for (int i=0; i<InfoStrQueue->mCount; i++) {
             HeartMatr *pHeart=(HeartMatr *)StartDataQ[i];
             
             if(pHeart!=nil){
+                
+                int  iCurIndexMatr=((*pMatr->pValueCopy)+SIZE_INFO_STRUCT)[i];
+                MATRIXcell *pMatrChild=[m_pObjMng->pStringContainer->ArrayPoints
+                                   GetMatrixAtIndex:iCurIndexMatr];
+                int *StartChild=*pMatrChild->pValueCopy+SIZE_INFO_STRUCT;
+                InfoArrayValue *InfoEnter=(InfoArrayValue *)*pMatrChild->pEnters;
+
+                int  iCurIndexChildStr=((*pInsideString->pChildString)+SIZE_INFO_STRUCT)[i];
+                FractalString *pStringTmp=(FractalString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                         GetIdAtIndex:iCurIndexChildStr];
+
+                InfoArrayValue *InfoChildString=(InfoArrayValue *)*pStringTmp->pChildString;
+                int *StartChildString=*pStringTmp->pChildString+SIZE_INFO_STRUCT;
+
                 InfoArrayValue *InfoStrNext=(InfoArrayValue *)(*pHeart->pNextPlaces);
                 int *StartDataNext=(*pHeart->pNextPlaces)+SIZE_INFO_STRUCT;
                 
@@ -256,7 +282,8 @@
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:Place];
 
                     Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
-                                                SET_COLOR_V(Color3DMake(1, 0, 1, 0.5f),@"mColor"));
+                                                SET_STRING_V(@"LineDirect.png",@"m_pNameTexture"),
+                                                SET_COLOR_V(Color3DMake(1, 0, 1, 0.7f),@"mColor"));
                     pObConn->Start=&pObFirst->m_pCurPosition;
                     pObConn->End=&pObSecond->m_pCurPosition;
                     [m_pChildrenbjectsArrConn addObject:pObConn];
@@ -283,11 +310,46 @@
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
 
                     Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
-                                                SET_COLOR_V(Color3DMake(0, 0.5f, 1, 0.5f),@"mColor"));
+                                                SET_STRING_V(@"LineWhite.png",@"m_pNameTexture"),
+                                                SET_COLOR_V(Color3DMake(0, 0.5f, 1, 0.7f),@"mColor"));
                     
                     pObConn->Start=&pObFirst->m_pCurPosition;
                     pObConn->End=&pObSecond->m_pCurPosition;
                     [m_pChildrenbjectsArrConn addObject:pObConn];
+//--------------------------------------------------------------------------------------------------
+                    NSMutableString *pNameIcon=[NSMutableString stringWithString:@""];
+                    if(pMatrChild->TypeInformation==STR_COMPLEX){
+                        
+                        for (int k=0; k<InfoChildString->mCount; k++) {
+                            int iTmpIndex=StartChildString[k];
+                            FractalString *pString=(FractalString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                                     GetIdAtIndex:iTmpIndex];
+                            
+                            if(pString->m_iIndex==iCurIndex){
+                                [pNameIcon setString:pString->sNameIcon];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int CurretnOffset=j*2+1;
+                        int index=StartChild[CurretnOffset];
+                        
+                        NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                                    GetIdAtIndex:index];
+                        
+                        if(TmpStr!=nil)
+                            [pNameIcon setString:TmpStr];
+                    }
+                    
+                    Ob_MinIcons *pObMinIcon=UNFROZE_OBJECT(@"Ob_MinIcons",@"MinIcon",
+                                                SET_STRING_V(pNameIcon,@"m_pNameTexture"));
+                    
+                    pObMinIcon->Start=&pObFirst->m_pCurPosition;
+                    pObMinIcon->End=&pObSecond->m_pCurPosition;
+                    [m_pChildrenbjectsMinIcon addObject:pObMinIcon];
+//--------------------------------------------------------------------------------------------------
                 }
                 
                 InfoArrayValue *InfoStrExitPar=(InfoArrayValue *)(*pHeart->pExPairPar);
@@ -310,17 +372,51 @@
                     ObjectB_Ob *pObSecond=[m_pChildrenbjectsArr objectAtIndex:i];
                     
                     Ob_Connectors *pObConn=UNFROZE_OBJECT(@"Ob_Connectors",@"Connectors",
-                                            SET_COLOR_V(Color3DMake(1, 0.5f, 0, 0.5f),@"mColor"));
+                                            SET_STRING_V(@"LineWhite.png",@"m_pNameTexture"),
+                                            SET_COLOR_V(Color3DMake(1, 0.5f, 0, 0.7f),@"mColor"));
                     
                     pObConn->Start=&pObFirst->m_pCurPosition;
                     pObConn->End=&pObSecond->m_pCurPosition;
                     [m_pChildrenbjectsArrConn addObject:pObConn];
+//--------------------------------------------------------------------------------------------------
+                    NSMutableString *pNameIcon=[NSMutableString stringWithString:@""];
+                    if(pMatrChild->TypeInformation==STR_COMPLEX){
+                        
+                        for (int k=0; k<InfoChildString->mCount; k++) {
+                            int iTmpIndex=StartChildString[k];
+                            FractalString *pString=(FractalString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                                     GetIdAtIndex:iTmpIndex];
+                            
+                            if(pString->m_iIndex==iCurIndex){
+                                [pNameIcon setString:pString->sNameIcon];
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        int CurretnOffset=j*2+1+InfoEnter->mCount*2;
+                        int index=StartChild[CurretnOffset];
+                        
+                        NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints
+                                                                    GetIdAtIndex:index];
+                        
+                        if(TmpStr!=nil)
+                            [pNameIcon setString:TmpStr];
+                    }
+
+                    Ob_MinIcons *pObMinIcon=UNFROZE_OBJECT(@"Ob_MinIcons",@"MinIcon",
+                                                SET_STRING_V(pNameIcon,@"m_pNameTexture"));
+                    
+                    pObMinIcon->Start=&pObFirst->m_pCurPosition;
+                    pObMinIcon->End=&pObSecond->m_pCurPosition;
+                    [m_pChildrenbjectsMinIcon addObject:pObMinIcon];
+//--------------------------------------------------------------------------------------------------
                 }
             }
         }
     }
 
-    
 //    if([m_pChildrenbjectsArr count]>0 && m_iCurrentSelect!=-1)
 //    {
 //        if(m_iCurrentSelect>[m_pChildrenbjectsArr count]-1)
@@ -330,7 +426,7 @@
 //        
 //        OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
 //    }
- //   [self SetButton];
+//   [self SetButton];
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SetString:(FractalString *)Str{
@@ -365,6 +461,16 @@
         DESTROY_OBJECT(pOb);
     }
     [m_pChildrenbjectsArr removeAllObjects];
+
+    for (Ob_Connectors *pOb in m_pChildrenbjectsArrConn) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsArrConn removeAllObjects];
+
+    for (Ob_MinIcons *pOb in m_pChildrenbjectsMinIcon) {
+        DESTROY_OBJECT(pOb);
+    }
+    [m_pChildrenbjectsMinIcon removeAllObjects];
 
     [super Destroy];
 }
@@ -414,6 +520,7 @@
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc
 {
+    [m_pChildrenbjectsMinIcon release];
     [m_pChildrenbjectsArrConn release];
     [super dealloc];
 }

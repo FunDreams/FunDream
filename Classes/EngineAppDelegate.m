@@ -7,6 +7,7 @@
 //
 
 #import "EngineAppDelegate.h"
+#import "TestFlight.h"
 
 #ifdef EDITOR
 #import <DropboxSDK/DropboxSDK.h>
@@ -27,13 +28,20 @@
 @synthesize window;
 @synthesize m_pRootViewController;
 //------------------------------------------------------------------------------------------------------
-- (void)applicationDidFinishLaunching:(UIApplication *)application {    
-
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
+    
 #ifdef EDITOR
+
+#ifdef MY
     // Set these variables before launching the app
     NSString* appKey = @"4mrgtc1jg1k1gub";
-	NSString* appSecret = @"6tyvjyni3p0zpp3";
-    
+	NSString* appSecret = @"6tyvjyni3p0zpp3";//my
+#else//билд для демонстрации
+    [TestFlight takeOff:@"68368488-56ab-4dad-b003-04302bcf72f4"];
+    NSString* appKey = @"8a3vim8t9ypmsk1";
+	NSString* appSecret = @"5fql7kkj3cxhk6l";
+#endif
+
 	NSString *root = kDBRootAppFolder; // Should be set to either kDBRootAppFolder or kDBRootDropbox
 	// You can determine if you have App folder access or Full Dropbox along with your consumer key/secret
 	// from https://dropbox.com/developers/apps
