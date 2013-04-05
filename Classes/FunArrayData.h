@@ -13,9 +13,20 @@
 #define RESERV_KERNEL 1000000
 //-------------------------------------------------------------------------------------------------
 #define Ind_ZERO                    0
-#define Ind_DELTATIME               200000
-#define IND_MAIN_DATA_MATRIX        100
 
+#define Ind_DELTATIME               200000
+#define Ind_W_EMULATOR              200001
+#define Ind_H_EMULATOR              200002
+#define Ind_ANG_EMULATOR            200003
+#define Ind_SCALE_EMULATOR          200004
+#define Ind_dX_EMULATOR             200005
+#define Ind_dY_EMULATOR             200006
+#define Ind_SCALE_X_EMULATOR        200007
+#define Ind_SCALE_Y_EMULATOR        200008
+#define Ind_MODE_EMULATOR           200009
+
+
+#define IND_MAIN_DATA_MATRIX        100
 #define IND_DATA_MATRIX_EMPTY       101
 #define IND_DATA_MATRIX_SYS         102
 #define IND_DATA_MATRIX_OPER        103

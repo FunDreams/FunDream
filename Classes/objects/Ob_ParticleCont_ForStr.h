@@ -12,11 +12,19 @@
 #import "FractalString.h"
 
 
+#define MODE_EDITOR     1
+#define MODE_APP        2
+
 @interface Ob_ParticleCont_ForStr : GObject {
 @public
     int **pIndexParticles; //индексы частиц в матрице
     int **pDrawPar; //индексы частиц в матрице
-    int **pDrawText; //индексы текстур    
+    int **pDrawText; //индексы текстур
+    
+    float fOffset;
+    float fOffsetAngle;
+    float CurW,CurH;
+    int iMode;
 }
 
 /** Инициализирует объект **/
@@ -35,6 +43,9 @@
 
 -(void)selfLoad:(NSMutableData *)m_pData rpos:(int *)iCurReadingPos;
 -(void)selfSave:(NSMutableData *)m_pData;
+
+- (void)SetFullScreen;
+- (void)SetWindow;
 
 /** заготовки =) **/
 -(void)Destroy;

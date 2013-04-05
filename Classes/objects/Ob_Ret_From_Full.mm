@@ -6,19 +6,20 @@
 //  Copyright 2010 __FunDreamsInc__. All rights reserved.
 //
 
-#import "Ob_BigWheel.h"
 #import "Ob_Editor_Interface.h"
+#import "Ob_Ret_From_Full.h"
+#import "Ob_ParticleCont_ForStr.h"
 
-@implementation Ob_BigWheel
+@implementation Ob_Ret_From_Full
 //------------------------------------------------------------------------------------------------------
 - (id)Init:(id)Parent WithName:(NSString *)strName{
 	self = [super Init:Parent WithName:strName];
 	if (self != nil)
     {
-        m_iLayer = layerInterfaceSpace11;
-        m_iLayerTouch=layerTouch_2N;//слой касания
+        m_iLayer = layerTemplet;
+        m_iLayerTouch=layerTouch_3N;//слой касания
     }
-
+    
 	return self;
 }
 //------------------------------------------------------------------------------------------------------
@@ -42,19 +43,32 @@
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
     
+    m_bHiden=YES;
+    EndPoint=-1;
+
     //   GET_DIM_FROM_TEXTURE(@"");
-    m_bHiden=NO;
-	mWidth  = 50;
-	mHeight = 250;
-    
-    m_pCurPosition.x=-485;
-    m_pCurPosition.y=-260;
+    if(m_pObjMng->m_pParent->previousOrientation==UIInterfaceOrientationLandscapeLeft ||
+       m_pObjMng->m_pParent->previousOrientation==UIInterfaceOrientationLandscapeRight)
+    {
+        mWidth  = 1024;
+        mHeight = 768;
+        
+        Xp=412;
+        Yp=284;
+    }
+    else {
+        
+        mWidth  = 768;
+        mHeight = 1024;
+        
+        Xp=284;
+        Yp=412;
+    }
 
 	[super Start];
 
     [self SetTouch:YES];//интерактивность
-    GET_TEXTURE(mTextureId, @"EditParam.png");
-
+    mTextureId=-1;
     //[m_pObjMng AddToGroup:@"NameGroup" Object:self];//группировка
     //[self SelfOffsetVert:Vector3DMake(0,1,0)];//cдвиг
 }
@@ -73,50 +87,49 @@
 //------------------------------------------------------------------------------------------------------
 - (void)dealloc{[super dealloc];}
 //------------------------------------------------------------------------------------------------------
-- (void)Destroy{[super Destroy];}
-//------------------------------------------------------------------------------------------------------
-- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
-    StartPoint=Point;
-}
-//------------------------------------------------------------------------------------------------------
-- (void)touchesMoved:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+- (void)Destroy{
     
-    LOCK_TOUCH;
-    
-    float fDelta=(Point.y-StartPoint.y)*0.3f;
-    StartPoint=Point;
-
     Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
                                         GetObjectByName:@"Ob_Editor_Interface"];
     
-    if(pInterface->StringSelect!=0)
-    {
-        int iType = [m_pObjMng->pStringContainer->ArrayPoints
-                    GetTypeAtIndex:pInterface->StringSelect->m_iIndex];
+    [pInterface CreateFundInt];
+    [pInterface SetMode:pInterface->OldInterfaceMode];
+    [m_pObjMng->pStringContainer->ArrayPoints->pCurrenContPar SetWindow];
+
+    [super Destroy];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesBegan:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
         
-        switch (iType) {
-            case DATA_FLOAT:
-            {
-                float *pValue = (float *)[m_pObjMng->pStringContainer->ArrayPoints
-                            GetDataAtIndex:pInterface->StringSelect->m_iIndex];
-                
-                *pValue+=fDelta;
-            }
-                break;
-
-            case DATA_INT:
-            {
-                int *pValue = (int *)[m_pObjMng->pStringContainer->ArrayPoints
-                                          GetDataAtIndex:pInterface->StringSelect->m_iIndex];
-                
-                *pValue=(int)(*pValue+fDelta);
-            }
-                break;
-
-            default:
-                break;
-        }
+    if(Point.x<-Xp && Point.y>284){
+        EndPoint=2;
     }
+    else if(Point.x>Xp && Point.y>Yp){
+        EndPoint=3;
+    }
+    else if(Point.x>Xp && Point.y<-Yp){
+        EndPoint=0;
+    }
+    else if(Point.x<-Xp && Point.y<-Yp){
+        EndPoint=1;
+    }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)touchesEnded:(UITouch *)CurrentTouch WithPoint:(CGPoint)Point{
+    if(Point.x<-Xp && Point.y>Yp && EndPoint==0){
+        DESTROY_OBJECT(self);
+    }
+    else if(Point.x>Xp && Point.y>Yp && EndPoint==1){
+        DESTROY_OBJECT(self);
+    }
+    else if(Point.x>Xp && Point.y<-Yp && EndPoint==2){
+        DESTROY_OBJECT(self);
+    }
+    else if(Point.x<-Xp && Point.y<-Yp && EndPoint==3){
+        DESTROY_OBJECT(self);
+    }
+    
+    EndPoint=-1;
 }
 //------------------------------------------------------------------------------------------------------
 @end

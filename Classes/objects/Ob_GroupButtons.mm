@@ -188,7 +188,7 @@
                            SET_STRING_V(@"ButtonOb.png",@"m_DOWN"),
                            SET_STRING_V(@"ButtonOb.png",@"m_UP"),
                            SET_FLOAT_V(Width,@"mWidth"),
-                           SET_FLOAT_V(Height*FACTOR_DEC,@"mHeight"),
+                           SET_FLOAT_V(Height,@"mHeight"),
                            //SET_BOOL_V(YES,@"m_bLookTouch"),
                            SET_STRING_V(NAME(self),@"m_strNameObject"),
                            SET_STRING_V(@"Check",@"m_strNameStage"),
@@ -208,6 +208,11 @@
 - (void)UpdateButt{
     
     if(pInsideString==nil)return;
+    
+    Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
+                            GetObjectByName:@"Ob_Editor_Interface"];
+    
+    pInterface->StringSelect=0;
     
     for (ObjectB_Ob *pOb in m_pChildrenbjectsArr) {
         DESTROY_OBJECT(pOb);
@@ -444,7 +449,7 @@
 - (void)Start{
 
     mWidth=30;
-    mHeight=30*FACTOR_DEC;
+    mHeight=30;
 
 	[super Start];
 

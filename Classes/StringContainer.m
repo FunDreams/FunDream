@@ -369,7 +369,7 @@
     [m_OperationIndex AddData:pFSChelf->m_iIndex WithData:pMatrEditor->pValueCopy];
     MATRIXcell *pMatrChelf=[ArrayPoints GetMatrixAtIndex:pFSChelf->m_iIndex];
     
-    for(int i=0;i<8;i++){//записываем имя струны на полке
+    for(int i=0;i<11;i++){//записываем имя струны на полке
         NSMutableString *ZeroString = [NSMutableString stringWithString:@"Objects"];
         
         int iIndexZeroName=[ArrayPoints SetName:ZeroString];

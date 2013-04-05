@@ -68,36 +68,36 @@
                                SET_STRING_V(@"Close.png",@"m_DOWN"),
                                SET_STRING_V(@"Close.png",@"m_UP"),
                                SET_FLOAT_V(64,@"mWidth"),
-                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(64,@"mHeight"),
                                SET_BOOL_V(YES,@"m_bLookTouch"),
                                SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
                                SET_STRING_V(NAME(self),@"m_strNameObject"),
                                SET_STRING_V(@"Close",@"m_strNameStage"),
                                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-40,286,0),@"m_pCurPosition"));
+                               SET_VECTOR_V(Vector3DMake(-40,330,0),@"m_pCurPosition"));
     
     IconEnters=UNFROZE_OBJECT(@"StaticObject",@"Enter",
                                SET_STRING_V(@"In.png",@"m_pNameTexture"),
                                SET_FLOAT_V(64,@"mWidth"),
-                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-                               SET_VECTOR_V(Vector3DMake(-360,170,0),@"m_pCurPosition"),
+                               SET_FLOAT_V(64,@"mHeight"),
+                               SET_VECTOR_V(Vector3DMake(-390,230,0),@"m_pCurPosition"),
                                SET_INT_V(layerInterfaceSpace6,@"m_iLayer"));
 
     IconExits=UNFROZE_OBJECT(@"StaticObject",@"Exit",
                               SET_STRING_V(@"Out.png",@"m_pNameTexture"),
                               SET_FLOAT_V(64,@"mWidth"),
-                              SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
-                              SET_VECTOR_V(Vector3DMake(-120,170,0),@"m_pCurPosition"),
+                              SET_FLOAT_V(64,@"mHeight"),
+                              SET_VECTOR_V(Vector3DMake(-130,230,0),@"m_pCurPosition"),
                               SET_INT_V(layerInterfaceSpace6,@"m_iLayer"));
     
-    Line=UNFROZE_OBJECT(@"StaticObject",@"Sl2",
+    Line=UNFROZE_OBJECT(@"StaticObject",@"Sl5",
                    SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_FLOAT_V(520,@"mWidth"),
+                   SET_FLOAT_V(669,@"mWidth"),
                    SET_FLOAT_V(5,@"mHeight"),
-                   SET_VECTOR_V(Vector3DMake(-240,-60,0),@"m_pCurPosition"),
+                   SET_VECTOR_V(Vector3DMake(-256,-49.9,0),@"m_pCurPosition"),
                    SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
-                   SET_INT_V(layerBackground,@"m_iLayer"));
+                   SET_INT_V(layerInterfaceSpace6,@"m_iLayer"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateTmp{
@@ -144,7 +144,7 @@
         
         float X,Y;
         
-        X=-440+(i%4)*54;
+        X=-470+(i%4)*54;
         Y=100-(i/4)*50;
         
         bool bBack=NO;
@@ -171,8 +171,8 @@
                                      SET_STRING_V(pNameIcon,@"m_DOWN"),
                                      SET_STRING_V(pNameIcon,@"m_UP"),
                                      SET_BOOL_V(bBack,@"m_bBack"),
-                                     SET_FLOAT_V(54,@"mWidth"),
-                                     SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                     SET_FLOAT_V(44,@"mWidth"),
+                                     SET_FLOAT_V(44,@"mHeight"),
                                      SET_BOOL_V(YES,@"m_bLookTouch"),
                                      SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                      SET_STRING_V(NAME(self),@"m_strNameObject"),
@@ -214,7 +214,7 @@
 
         float X,Y;
         
-        X=-200+(i%4)*54;
+        X=-210+(i%4)*54;
         Y=100-(i/4)*50;;
 
         bool bBack=NO;
@@ -252,8 +252,8 @@
                                      SET_STRING_V(pNameIcon,@"m_DOWN"),
                                      SET_BOOL_V(bBack,@"m_bBack"),
                                      SET_STRING_V(pNameIcon,@"m_UP"),
-                                     SET_FLOAT_V(54,@"mWidth"),
-                                     SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                     SET_FLOAT_V(44,@"mWidth"),
+                                     SET_FLOAT_V(44,@"mHeight"),
                                      SET_BOOL_V(YES,@"m_bLookTouch"),
                                      SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                      SET_STRING_V(NAME(self),@"m_strNameObject"),

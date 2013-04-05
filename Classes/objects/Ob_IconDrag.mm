@@ -64,11 +64,11 @@
     pNewString->X=m_pCurPosition.x;
     pNewString->Y=m_pCurPosition.y;
     
-    if(pNewString->X<-440)pNewString->X=-440;
-    if(pNewString->X>-40)pNewString->X=-40;
+    if(pNewString->X<-480)pNewString->X=-480;
+    if(pNewString->X>-25)pNewString->X=-25;
     
-    if(pNewString->Y<-280)pNewString->Y=-280;
-    if(pNewString->Y>170)pNewString->Y=170;
+    if(pNewString->Y<-350)pNewString->Y=-350;
+    if(pNewString->Y>258)pNewString->Y=258;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)EndObject{
@@ -150,7 +150,7 @@
     {
         if(pMode!=0 && *pMode==M_DROP_BOX)
         {
-            if(m_pCurPosition.y<202 && pInsideString!=nil){
+            if(m_pCurPosition.y<286 && pInsideString!=nil){
 
                 if(bFromEmpty==YES)
                 {                        
@@ -209,7 +209,7 @@
 //                }
 //            }
 Exit:
-            if(m_pCurPosition.y<202 && pInsideString!=nil &&
+            if(m_pCurPosition.y<285 && pInsideString!=nil &&
                ![pInsideString->strUID isEqualToString:@"Objects"]){
 
                 bool bLink=NO;
@@ -232,7 +232,7 @@ Exit:
 //                    else
                         [self SetPos:pNewString];
             }
-            else if(m_pCurPosition.y<202){
+            else if(m_pCurPosition.y<285){
 
                 FractalString *pNewString =[[FractalString alloc]
                         initWithName:@"EmptyOb" WithParent:pParent

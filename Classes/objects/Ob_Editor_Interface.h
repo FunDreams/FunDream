@@ -27,6 +27,7 @@
 #define M_CONNECT_IND   8
 #define M_SEL_TEXTURE   9
 #define M_ADD_NEW_DATA  10
+#define M_FULL_SCREEN   11
 
 @interface Ob_Editor_Interface : GObject {
 @public
@@ -51,12 +52,20 @@
     GObject *PrBar;
     int OldCheck;
 
+    GObject *Back;
+
+    GObject *Sl1;
+    GObject *Sl2;
+    GObject *Sl3;
+    
+    GObject *RectView;
     GObject *BDropPlus;
     GObject *BDropBox;
     GObject *BMove;
     GObject *BCopy;
     GObject *BLink;
     GObject *BConnect;
+    GObject *BFullScreen;
     GObject *BSetProp;
     GObject *BSetActivity;
     GObject *BigWheel;
@@ -109,6 +118,9 @@
 
 - (void)RemButtonEdit;
 - (void)SetButtonEdit;
+
+- (void)removeFundInt;
+- (void)CreateFundInt;
 
 - (void)UpdateB;
 

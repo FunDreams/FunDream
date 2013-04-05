@@ -60,6 +60,9 @@
 //------------------------------------------------------------------------------------------------------
 - (void)CreateButtons{
     
+    RectView = UNFROZE_OBJECT(@"Ob_RectView",@"RectView",nil);
+
+    float fXtash;
     if(m_iMode!=M_DROP_BOX){
     BDropPlus = UNFROZE_OBJECT(@"ObjectButton",@"ButtonPlus",
                     SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
@@ -67,39 +70,55 @@
                     SET_STRING_V(@"ButtonPlus.png",@"m_DOWN"),
                     SET_STRING_V(@"ButtonPlus.png",@"m_UP"),
                     SET_FLOAT_V(46,@"mWidth"),
-                    SET_FLOAT_V(46*FACTOR_DEC,@"mHeight"),
+                    SET_FLOAT_V(46,@"mHeight"),
                     SET_BOOL_V(YES,@"m_bLookTouch"),
                     SET_INT_V(bSimple,@"m_iType"),
 //                  SET_BOOL_V(YES,@"m_bBack"),
                     SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                     SET_STRING_V(@"AddNewData",@"m_strNameStage"),
                     SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                    SET_VECTOR_V(Vector3DMake(-456,180,0),@"m_pCurPosition"));
+                    SET_VECTOR_V(Vector3DMake(-485,255,0),@"m_pCurPosition"));
+        
+        BigWheel = UNFROZE_OBJECT(@"Ob_BigWheel",@"BigWheel",nil);
+        
+        Sl3=UNFROZE_OBJECT(@"StaticObject",@"Sl3",
+                           SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                           SET_FLOAT_V(669,@"mWidth"),
+                           SET_FLOAT_V(5,@"mHeight"),
+                           SET_VECTOR_V(Vector3DMake(-458,-49.5f,0),@"m_pCurPosition"),
+                           SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
+                           SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
+        
+        fXtash=-433;
     }
-    else BDropPlus=0;
-
-    BigWheel = UNFROZE_OBJECT(@"Ob_BigWheel",@"BigWheel",nil);
+    else{
+        
+        BDropPlus=0;
+        BigWheel=0;
+        Sl3=0;
+        fXtash=-490;
+    }
 
     BTash=UNFROZE_OBJECT(@"ObjectButton",@"ButtonTach",
                    SET_STRING_V(@"ButtonTash.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonTash.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(44,@"mWidth"),
+                   SET_FLOAT_V(44,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V(YES,@"m_bNotPush"),
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_INT_V(bSimple,@"m_iType"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-450,-295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(fXtash,-363,0),@"m_pCurPosition"));
     
     BDropBox = UNFROZE_OBJECT(@"ObjectButton",@"ButtonDropBox",
                   SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                   SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                   SET_STRING_V(@"Button_DropBox.png",@"m_DOWN"),
                   SET_STRING_V(@"Button_DropBox.png",@"m_UP"),
-                  SET_FLOAT_V(46,@"mWidth"),
-                  SET_FLOAT_V(46*FACTOR_DEC,@"mHeight"),
+                  SET_FLOAT_V(40,@"mWidth"),
+                  SET_FLOAT_V(40,@"mHeight"),
                   SET_BOOL_V(YES,@"m_bLookTouch"),
                   SET_BOOL_V((m_iMode==M_DROP_BOX)?YES:NO,@"m_bIsPush"),
                   SET_INT_V(bRadioBox,@"m_iType"),
@@ -107,69 +126,82 @@
                   SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                   SET_STRING_V(@"SetDropBox",@"m_strNameStage"),
                   SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                  SET_VECTOR_V(Vector3DMake(-450,295,0),@"m_pCurPosition"));
+                  SET_VECTOR_V(Vector3DMake(-488,360,0),@"m_pCurPosition"));
     
     BMove=UNFROZE_OBJECT(@"ObjectButton",@"ButtonMove",
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Move.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Move.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(44,@"mWidth"),
+                   SET_FLOAT_V(44,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V((m_iMode==M_MOVE)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckMove",@"m_strNameStage"),
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-380,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-440,360,0),@"m_pCurPosition"));
     
     BCopy=UNFROZE_OBJECT(@"ObjectButton",@"ButtonCopy",
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Copy.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Copy.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(44,@"mWidth"),
+                   SET_FLOAT_V(44,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V((m_iMode==M_COPY)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckCopy",@"m_strNameStage"),
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-320,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-394,360,0),@"m_pCurPosition"));
     
     BLink=UNFROZE_OBJECT(@"ObjectButton",@"ButtonLink",
                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                    SET_STRING_V(@"Button_Link.png",@"m_DOWN"),
                    SET_STRING_V(@"Button_Link.png",@"m_UP"),
-                   SET_FLOAT_V(54,@"mWidth"),
-                   SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(44,@"mWidth"),
+                   SET_FLOAT_V(44,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_BOOL_V((m_iMode==M_LINK)?YES:NO,@"m_bIsPush"),
                    SET_INT_V(bRadioBox,@"m_iType"),
                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                    SET_STRING_V(@"CheckLink",@"m_strNameStage"),
                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-260,295,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-348,360,0),@"m_pCurPosition"));
 
     BConnect=UNFROZE_OBJECT(@"ObjectButton",@"ButtonConnect",
                      SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
                      SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                      SET_STRING_V(@"ButtonConnection.png",@"m_DOWN"),
                      SET_STRING_V(@"ButtonConnection.png",@"m_UP"),
-                     SET_FLOAT_V(54,@"mWidth"),
-                     SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                     SET_FLOAT_V(44,@"mWidth"),
+                     SET_FLOAT_V(44,@"mHeight"),
                      SET_BOOL_V(YES,@"m_bLookTouch"),
                      SET_BOOL_V((m_iMode==M_CONNECT)?YES:NO,@"m_bIsPush"),
                      SET_INT_V(bRadioBox,@"m_iType"),
                      SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                      SET_STRING_V(@"CheckConnection",@"m_strNameStage"),
                      SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                     SET_VECTOR_V(Vector3DMake(-200,295,0),@"m_pCurPosition"));
+                     SET_VECTOR_V(Vector3DMake(-302,360,0),@"m_pCurPosition"));    
 
-    
+    BFullScreen=UNFROZE_OBJECT(@"ObjectButton",@"ButtonFullScreen",
+                    SET_INT_V(layerInterfaceSpace5,@"m_iLayer"),
+                    SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
+                    SET_STRING_V(@"_F.png",@"m_DOWN"),
+                    SET_STRING_V(@"_F.png",@"m_UP"),
+                    SET_FLOAT_V(44,@"mWidth"),
+                    SET_FLOAT_V(44,@"mHeight"),
+                    SET_BOOL_V(YES,@"m_bLookTouch"),
+                    SET_BOOL_V((m_iMode==M_FULL_SCREEN)?YES:NO,@"m_bIsPush"),
+                    SET_INT_V(bRadioBox,@"m_iType"),
+                    SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
+                    SET_STRING_V(@"CheckFullScreen",@"m_strNameStage"),
+                    SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
+                    SET_VECTOR_V(Vector3DMake(-256,360,0),@"m_pCurPosition"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)RemButtonEdit{
@@ -200,13 +232,13 @@
                             SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                             SET_STRING_V(@"ButtonTime.png",@"m_DOWN"),
                             SET_STRING_V(@"ButtonTime.png",@"m_UP"),
-                            SET_FLOAT_V(54,@"mWidth"),
-                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                            SET_FLOAT_V(44,@"mWidth"),
+                            SET_FLOAT_V(44,@"mHeight"),
                             SET_INT_V(bSimple,@"m_iType"),
                             SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                             SET_STRING_V(@"CheckSetProp",@"m_strNameStage"),
                             SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                            SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+                            SET_VECTOR_V(Vector3DMake(-100,360,0),@"m_pCurPosition"));
     
     [self RemButtonEdit];
 }
@@ -228,13 +260,13 @@
                             SET_INT_V(layerTouch_0,@"m_iLayerTouch"),
                             SET_STRING_V(@"StartActivity.png",@"m_DOWN"),
                             SET_STRING_V(@"StartActivity.png",@"m_UP"),
-                            SET_FLOAT_V(54,@"mWidth"),
-                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                            SET_FLOAT_V(44,@"mWidth"),
+                            SET_FLOAT_V(44,@"mHeight"),
                             SET_INT_V(bSimple,@"m_iType"),
                             SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                             SET_STRING_V(@"SetActivFirstOperation",@"m_strNameStage"),
                             SET_STRING_V(@"chekbox1.wav", @"m_strNameSound"),
-                            SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+                            SET_VECTOR_V(Vector3DMake(-100,360,0),@"m_pCurPosition"));
 
     [self RemButtonEdit];
 }
@@ -243,13 +275,51 @@
 {
     MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints
                        GetMatrixAtIndex:ButtonGroup->pInsideString->m_iIndex];
-    
+
     if(pMatr!=nil){
         
         if(pMatr->sStartPlace==ButtonGroup->m_iCurrentSelect)
             pMatr->sStartPlace=-1;
         else pMatr->sStartPlace=ButtonGroup->m_iCurrentSelect;
     }
+}
+//------------------------------------------------------------------------------------------------------
+- (void)removeFundInt{
+    
+    DESTROY_OBJECT(Back);
+    Back=nil;
+
+    DESTROY_OBJECT(Sl1);
+    Sl1=nil;
+
+    DESTROY_OBJECT(Sl2);
+    Sl2=nil;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CreateFundInt{
+    
+    Back = UNFROZE_OBJECT(@"StaticObject",@"Back",
+                          //     SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                          SET_COLOR_V(Color3DMake(0.2f,0.2f,0.2f,1),@"mColor"),
+                          SET_FLOAT_V(512,@"mWidth"),
+                          SET_FLOAT_V(768,@"mHeight"),
+                          SET_VECTOR_V(Vector3DMake(-256,0,0),@"m_pCurPosition"),
+                          SET_INT_V(layerBackground,@"m_iLayer"));
+    
+    Sl1 = UNFROZE_OBJECT(@"StaticObject",@"Sl1",
+                         SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                         SET_FLOAT_V(512,@"mWidth"),
+                         SET_FLOAT_V(5,@"mHeight"),
+                         SET_VECTOR_V(Vector3DMake(-256,285,0),@"m_pCurPosition"),
+                         SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
+    
+    Sl2 = UNFROZE_OBJECT(@"StaticObject",@"Sl2",
+                         SET_STRING_V(@"Line.png",@"m_pNameTexture"),
+                         SET_FLOAT_V(768,@"mWidth"),
+                         SET_FLOAT_V(5,@"mHeight"),
+                         SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pCurPosition"),
+                         SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
+                         SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Start{
@@ -262,11 +332,11 @@
     //создаём ресурсы по порядку
     pResIcon=UNFROZE_OBJECT(@"Ob_ResourceMng",@"IconMng",
                             SET_INT_V(R_ICON,@"m_iTypeRes"),
-                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+                            SET_VECTOR_V(Vector3DMake(-256, -49.9f, 0),@"m_pCurPosition"));
 
     pResTexture=UNFROZE_OBJECT(@"Ob_ResourceMng",@"TextureMng",
                             SET_INT_V(R_TEXTURE,@"m_iTypeRes"),
-                            SET_VECTOR_V(Vector3DMake(-240, -60, 0),@"m_pCurPosition"));
+                            SET_VECTOR_V(Vector3DMake(-256, -49.9f, 0),@"m_pCurPosition"));
 //===============================режими==============================================
 
 	[super Start];
@@ -287,36 +357,15 @@
         if(ICheck)
         {
             if(*ICheck==M_EDIT_PROP || *ICheck==M_EDIT_NUM || *ICheck==M_EDIT_EN_EX
-               || *ICheck==M_CONNECT_IND || *ICheck==M_SEL_TEXTURE || *ICheck==M_ADD_NEW_DATA)*ICheck=0;
+               || *ICheck==M_CONNECT_IND || *ICheck==M_SEL_TEXTURE || *ICheck==M_ADD_NEW_DATA
+               || *ICheck==M_FULL_SCREEN)*ICheck=0;
             m_iMode=(int)(*ICheck);
         }
         
         iIndexChelf=(*pMatr->pValueCopy+SIZE_INFO_STRUCT)[1];
     }
 //////////////////
-
-    UNFROZE_OBJECT(@"StaticObject",@"Back",
-              //     SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_COLOR_V(Color3DMake(0.2f,0.2f,0.2f,1),@"mColor"),
-                   SET_FLOAT_V(480,@"mWidth"),
-                   SET_FLOAT_V(640,@"mHeight"),
-                   SET_VECTOR_V(Vector3DMake(-240,0,0),@"m_pCurPosition"),
-                   SET_INT_V(layerBackground,@"m_iLayer"));
-
-    UNFROZE_OBJECT(@"StaticObject",@"Sl1",
-                   SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_FLOAT_V(480,@"mWidth"),
-                   SET_FLOAT_V(5,@"mHeight"),
-                   SET_VECTOR_V(Vector3DMake(-240,202,0),@"m_pCurPosition"),
-                   SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
-
-    UNFROZE_OBJECT(@"StaticObject",@"Sl2",
-                   SET_STRING_V(@"Line.png",@"m_pNameTexture"),
-                   SET_FLOAT_V(640,@"mWidth"),
-                   SET_FLOAT_V(5,@"mHeight"),
-                   SET_VECTOR_V(Vector3DMake(0,0,0),@"m_pCurPosition"),
-                   SET_VECTOR_V(Vector3DMake(0,0,90),@"m_pCurAngle"),
-                   SET_INT_V(layerInterfaceSpace1,@"m_iLayer"));
+    [self CreateFundInt];
 //save/load
     
     ButtonGroup = UNFROZE_OBJECT(@"Ob_GroupButtons",@"GroupButtons",
@@ -328,7 +377,7 @@
     
     Eplace = UNFROZE_OBJECT(@"Ob_GroupEmptyPlace",@"GroupPlaces",
                    SET_INT_V(*FChelf,@"m_iCurrentSelect"),
-                   SET_VECTOR_V(Vector3DMake(-185,235,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-216,310,0),@"m_pCurPosition"));
     
 //===================================================================================
     [self UpdateB];
@@ -367,6 +416,7 @@
     OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BFullScreen),@"SetUnPush");
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
@@ -382,6 +432,7 @@
     OBJECT_PERFORM_SEL(NAME(BLink),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BFullScreen),@"SetUnPush");
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
@@ -397,6 +448,7 @@
     OBJECT_PERFORM_SEL(NAME(BCopy),   @"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BFullScreen),@"SetUnPush");
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
@@ -412,6 +464,7 @@
     OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BFullScreen),@"SetUnPush");
 
     OBJECT_PERFORM_SEL(@"DropBox",@"DownLoadInfoFile");
     
@@ -429,11 +482,33 @@
     OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
     OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BFullScreen),@"SetUnPush");
     
     int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
                         GetDataAtIndex:iIndexCheck];
 
     m_iMode=M_CONNECT;//Connection
+    *ICheck=m_iMode;
+    [self UpdateB];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)CheckFullScreen{
+
+    [m_pObjMng->pStringContainer->ArrayPoints->pCurrenContPar SetFullScreen];
+
+    UNFROZE_OBJECT(@"Ob_Ret_From_Full",@"Ret_From_Full",nil);
+
+    OBJECT_PERFORM_SEL(NAME(BMove),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BCopy),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BLink),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BDropBox),@"SetUnPush");
+    OBJECT_PERFORM_SEL(NAME(BConnect),@"SetUnPush");
+    
+    int *ICheck=(int *)[m_pObjMng->pStringContainer->ArrayPoints
+                        GetDataAtIndex:iIndexCheck];
+    
+    OldInterfaceMode=m_iMode;
+    m_iMode=M_FULL_SCREEN;//Full Screen
     *ICheck=m_iMode;
     [self UpdateB];
 }
@@ -561,6 +636,12 @@
     [ButtonGroup Hide];
     [Eplace Hide];
 
+    DESTROY_OBJECT(RectView);
+    RectView=nil;
+
+    DESTROY_OBJECT(Sl3);
+    Sl3=nil;
+
     DESTROY_OBJECT(BigWheel);
     BigWheel=nil;
 
@@ -581,6 +662,9 @@
     
     DESTROY_OBJECT(BLink);
     BLink=nil;
+
+    DESTROY_OBJECT(BFullScreen);
+    BFullScreen=nil;
 
     DESTROY_OBJECT(BConnect);
     BConnect=nil;
@@ -615,7 +699,7 @@
 
 //    FractalString *pStrOb = [m_pObjMng->pStringContainer GetString:@"Objects"];
 //    [m_pObjMng->pStringContainer LogString:pStrOb];
-    
+        
     FractalString *pStrCheck = [m_pObjMng->pStringContainer GetString:@"CurrentCheck"];
     
     MATRIXcell *pMatr=[m_pObjMng->pStringContainer->ArrayPoints GetMatrixAtIndex:pStrCheck->m_iIndex];
@@ -645,7 +729,7 @@
                 {
                     EditorAddNewData =  UNFROZE_OBJECT(@"Ob_AddNewData",@"EditorAddNewData",
                                             SET_FLOAT_V(54,@"mWidth"),
-                                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                            SET_FLOAT_V(54,@"mHeight"),
                                             SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
                     
                     ((Ob_AddNewData *)EditorAddNewData)->OldInterfaceMode=OldInterfaceMode;
@@ -660,7 +744,7 @@
                 {
                     EditorSelectPar =  UNFROZE_OBJECT(@"Ob_SelectionPar",@"SelectionPar",
                                             SET_FLOAT_V(54,@"mWidth"),
-                                            SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                            SET_FLOAT_V(54,@"mHeight"),
                                             SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
 
                     ((Ob_SelectionPar *)EditorSelectPar)->OldInterfaceMode=OldInterfaceMode;
@@ -691,7 +775,7 @@
 
                     EditorSelect =  UNFROZE_OBJECT(@"Ob_Selection",@"Selection",
                                        SET_FLOAT_V(54,@"mWidth"),
-                                       SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                       SET_FLOAT_V(54,@"mHeight"),
                                        SET_VECTOR_V(Vector3DMake(-250,-30,0),@"m_pCurPosition"));
                     
                     ((Ob_Selection *)EditorSelect)->OldInterfaceMode=OldInterfaceMode;
@@ -699,6 +783,12 @@
                     
                     OBJECT_PERFORM_SEL(NAME(EditorSelect), @"UpdateTmp");
                 }
+            }
+            break;
+                
+            case M_FULL_SCREEN:
+            {
+                [self removeFundInt];
             }
             break;
                 
@@ -713,13 +803,13 @@
                         PrSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSynh",
                                              SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
                                              SET_STRING_V(@"Button_Synh.png",@"m_UP"),
-                                             SET_FLOAT_V(54,@"mWidth"),
-                                             SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                             SET_FLOAT_V(44,@"mWidth"),
+                                             SET_FLOAT_V(44,@"mHeight"),
                                              SET_BOOL_V(YES,@"m_bLookTouch"),
                                              SET_STRING_V(@"Ob_Editor_Interface",@"m_strNameObject"),
                                              SET_STRING_V(@"SynhDropBox",@"m_strNameStage"),
                                              SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                                             SET_VECTOR_V(Vector3DMake(-100,295,0),@"m_pCurPosition"));
+                                             SET_VECTOR_V(Vector3DMake(-100,360,0),@"m_pCurPosition"));
                 }
                 
                 OBJECT_PERFORM_SEL(@"GroupPlaces", @"UpdateButt");
@@ -744,6 +834,7 @@
                 break;
         }
     }
+    StringSelect=0;
 }
 //----------------------------------------------------------------------------------------------------
 //- (void)InitProc:(ProcStage_ex *)pStage{}
@@ -764,5 +855,5 @@
     [aProp release];
     [super dealloc];
 }
-
+//------------------------------------------------------------------------------------------------------
 @end

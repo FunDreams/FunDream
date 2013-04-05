@@ -23,7 +23,7 @@
         m_fCurrentOffset=0;
         m_bHiden=NO;
         mColor=Color3DMake(1, 1, 1, 0);
-        m_iLayer = layerTemplet;
+        m_iLayer = layerInterfaceSpace2;
         m_iLayerTouch=layerTouch_0;//слой касания
         
         pListNamesRes = [[NSMutableDictionary alloc] init];
@@ -97,14 +97,14 @@
     pObBtnClose=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClose",
                                SET_STRING_V(@"Close.png",@"m_DOWN"),
                                SET_STRING_V(@"Close.png",@"m_UP"),
-                               SET_FLOAT_V(54,@"mWidth"),
-                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(44,@"mWidth"),
+                               SET_FLOAT_V(44,@"mHeight"),
                                SET_BOOL_V(YES,@"m_bLookTouch"),
                                SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                SET_STRING_V(NAME(self),@"m_strNameObject"),
                                SET_STRING_V(@"Close",@"m_strNameStage"),
                                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-35,290,0),@"m_pCurPosition"));
+                               SET_VECTOR_V(Vector3DMake(-26,360,0),@"m_pCurPosition"));
     
     if(PrBar!=nil)[PrBar AddToDraw];
     else
@@ -125,7 +125,7 @@
             }
         }
         
-        float sY=300;
+        float sY=365;
         float fStep=40;
         
         for (NSString *tFolder in dirContents) {
@@ -148,7 +148,7 @@
                                      SET_STRING_V(NameTexture,@"m_pNameTexture"),
                                      SET_STRING_V(tFolder,@"m_strNameFolder"),
                                      LINK_ID_V(self,@"m_pOwner"),
-                                     SET_VECTOR_V(Vector3DMake(-460+fStep*i,sY,0),@"m_pCurPosition"));
+                                     SET_VECTOR_V(Vector3DMake(-490+fStep*i,sY,0),@"m_pCurPosition"));
 
                 [m_pFolderButton addObject:pObBtnTab];
                 i++;
@@ -233,16 +233,22 @@ exit:
         float offsetSel=0;
         
         for (NSString *tNameFile in dirContentInFolder){
-
+            
             float fOffset=0;
-            float TmpOff=115;
+            float TmpOff=125;
 
             if(i%2==0){
                 fOffset=-TmpOff;
-                OffsetY-=StepY;
+                
+                if(i!=0)
+                    OffsetY-=StepY;
+                
                 m_fDownLimmit+=StepY;
             }
-            else fOffset=TmpOff;
+            else{
+             
+                fOffset=TmpOff-20;
+            }
 
             Ob_Label *pOb = UNFROZE_OBJECT(@"Ob_Label",@"Label",
                           LINK_ID_V(self,@"m_pOwner"),
@@ -260,15 +266,13 @@ exit:
             }
         }
         
-        m_fDownLimmit+=FACTOR_DEC;
-        
-        if([m_pChildrenbjectsArr count]>18)
-            m_fDownLimmit-=9*StepY;
+        if([m_pChildrenbjectsArr count]>12)
+            m_fDownLimmit-=12*StepY;
         
         if(pObSel!=nil){
             OBJECT_PERFORM_SEL(NAME(pObSel), @"SetPush");
-            m_fCurrentOffset=0;//StartOffsetY-offsetSel-StepY;
-            [self LimmitOffset];
+            m_fCurrentOffset=100;//StartOffsetY-offsetSel-StepY;
+       //     [self LimmitOffset];
             
             for (Ob_Label *pOb in m_pChildrenbjectsArr)
             {
@@ -359,8 +363,9 @@ exit:
     
     m_fCurrentOffset=0;
     
-    mWidth=460;
-    mHeight=510;
+    m_bHiden=NO;
+    mWidth=500;
+    mHeight=660;
         
 	[super Start];
 
@@ -877,14 +882,14 @@ Rep:
                 pObBtnSyn=UNFROZE_OBJECT(@"ObjectButton",@"ButtonSyn",
                                          SET_STRING_V(@"Button_Synh.png",@"m_DOWN"),
                                          SET_STRING_V(@"Button_Synh.png",@"m_UP"),
-                                         SET_FLOAT_V(54,@"mWidth"),
-                                         SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                         SET_FLOAT_V(44,@"mWidth"),
+                                         SET_FLOAT_V(44,@"mHeight"),
                                          SET_BOOL_V(YES,@"m_bLookTouch"),
                                          SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                          SET_STRING_V(NAME(self),@"m_strNameObject"),
                                          SET_STRING_V(@"SynRes",@"m_strNameStage"),
                                          SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                                         SET_VECTOR_V(Vector3DMake(-35,232,0),@"m_pCurPosition"));
+                                         SET_VECTOR_V(Vector3DMake(-26,310,0),@"m_pCurPosition"));
             }
 
             NSLog(@"Res DownLoad MetaData");            
@@ -929,14 +934,14 @@ Rep:
 //------------------------------------------------------------------------------------------------------
 -(void)LimmitOffset{
     if((m_fCurrentOffset)<0)
-        m_fCurrentOffset=m_fUpLimmit;
+        m_fCurrentOffset=0;
     
     if((m_fCurrentOffset)>m_fDownLimmit)
         m_fCurrentOffset=m_fDownLimmit;
 }
 //------------------------------------------------------------------------------------------------------
 - (void)Move:(CGPoint)Point{
-    if(m_bStartPush==YES && [m_pChildrenbjectsArr count] > 18){
+    if(m_bStartPush==YES && [m_pChildrenbjectsArr count] > 24){
         float DeltaF=Point.y-m_pStartPoint.y;
         m_fCurrentOffset+=DeltaF;
         
@@ -961,7 +966,7 @@ Rep:
 }
 //------------------------------------------------------------------------------------------------------
 - (void)SelfDrawOffset{
-         
+    
     if(PrBar!=nil && PrBar->m_bHiden==NO){
         
         glLoadIdentity();

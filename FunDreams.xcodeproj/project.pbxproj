@@ -66,6 +66,8 @@
 		187E228F1165E9CB00EA912F /* SoundEngine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 187E228D1165E9CB00EA912F /* SoundEngine.cpp */; };
 		187E22A61165EC3200EA912F /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22A51165EC3200EA912F /* CoreAudio.framework */; };
 		187E22D41165ECA100EA912F /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 187E22D31165ECA100EA912F /* QuartzCore.framework */; };
+		187F6685170C27480020E52E /* Ob_Ret_From_Full.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187F6684170C27460020E52E /* Ob_Ret_From_Full.mm */; };
+		187F6688170D66F30020E52E /* Ob_RectView.mm in Sources */ = {isa = PBXBuildFile; fileRef = 187F6687170D66F20020E52E /* Ob_RectView.mm */; };
 		189015721291684E0027418F /* MKStoreManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 1890156E1291684E0027418F /* MKStoreManager.m */; settings = {COMPILER_FLAGS = "-w"; }; };
 		189015731291684E0027418F /* MKStoreObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 189015701291684E0027418F /* MKStoreObserver.m */; };
 		189015AB129171540027418F /* DtManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 189015A8129171540027418F /* DtManager.m */; };
@@ -228,6 +230,10 @@
 		187E228E1165E9CB00EA912F /* SoundEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SoundEngine.h; sourceTree = "<group>"; };
 		187E22A51165EC3200EA912F /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		187E22D31165ECA100EA912F /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
+		187F6683170C27450020E52E /* Ob_Ret_From_Full.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_Ret_From_Full.h; path = objects/Ob_Ret_From_Full.h; sourceTree = "<group>"; };
+		187F6684170C27460020E52E /* Ob_Ret_From_Full.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_Ret_From_Full.mm; path = objects/Ob_Ret_From_Full.mm; sourceTree = "<group>"; };
+		187F6686170D66F00020E52E /* Ob_RectView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Ob_RectView.h; path = objects/Ob_RectView.h; sourceTree = "<group>"; };
+		187F6687170D66F20020E52E /* Ob_RectView.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = Ob_RectView.mm; path = objects/Ob_RectView.mm; sourceTree = "<group>"; };
 		1890156D1291684E0027418F /* MKStoreManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreManager.h; sourceTree = "<group>"; };
 		1890156E1291684E0027418F /* MKStoreManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MKStoreManager.m; sourceTree = "<group>"; };
 		1890156F1291684E0027418F /* MKStoreObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MKStoreObserver.h; sourceTree = "<group>"; };
@@ -465,6 +471,10 @@
 		18B839241564D74800A0DB6E /* First Kernel */ = {
 			isa = PBXGroup;
 			children = (
+				187F6686170D66F00020E52E /* Ob_RectView.h */,
+				187F6687170D66F20020E52E /* Ob_RectView.mm */,
+				187F6683170C27450020E52E /* Ob_Ret_From_Full.h */,
+				187F6684170C27460020E52E /* Ob_Ret_From_Full.mm */,
 				18C8763117085B4100DA9A1B /* Ob_BigWheel.h */,
 				18C8763217085B4200DA9A1B /* Ob_BigWheel.mm */,
 				18C8762E17081B8400DA9A1B /* Ob_MinIcons.h */,
@@ -860,6 +870,8 @@
 				1844896916F99AB500D8FD27 /* Ob_AddNewData.mm in Sources */,
 				18C8763017081B8500DA9A1B /* Ob_MinIcons.mm in Sources */,
 				18C8763317085B4200DA9A1B /* Ob_BigWheel.mm in Sources */,
+				187F6685170C27480020E52E /* Ob_Ret_From_Full.mm in Sources */,
+				187F6688170D66F30020E52E /* Ob_RectView.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

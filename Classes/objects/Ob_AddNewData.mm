@@ -61,28 +61,28 @@
     pObBtnClose=UNFROZE_OBJECT(@"ObjectButton",@"ButtonClose",
                                SET_STRING_V(@"Close.png",@"m_DOWN"),
                                SET_STRING_V(@"Close.png",@"m_UP"),
-                               SET_FLOAT_V(64,@"mWidth"),
-                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(44,@"mWidth"),
+                               SET_FLOAT_V(44,@"mHeight"),
                                SET_BOOL_V(YES,@"m_bLookTouch"),
                                SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
                                SET_STRING_V(NAME(self),@"m_strNameObject"),
                                SET_STRING_V(@"Close",@"m_strNameStage"),
                                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-40,280,0),@"m_pCurPosition"));
+                               SET_VECTOR_V(Vector3DMake(-30,360,0),@"m_pCurPosition"));
 
     pObBtnUp=UNFROZE_OBJECT(@"ObjectButton",@"ButtonUp",
                                SET_STRING_V(@"Button_From_box_Up.png",@"m_DOWN"),
                                SET_STRING_V(@"Button_From_box_Up.png",@"m_UP"),
-                               SET_FLOAT_V(64,@"mWidth"),
-                               SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(44,@"mWidth"),
+                               SET_FLOAT_V(44,@"mHeight"),
                                SET_BOOL_V(YES,@"m_bLookTouch"),
                                SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
                                SET_STRING_V(NAME(self),@"m_strNameObject"),
                                SET_STRING_V(@"Up",@"m_strNameStage"),
                                SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                               SET_VECTOR_V(Vector3DMake(-440,280,0),@"m_pCurPosition"));
+                               SET_VECTOR_V(Vector3DMake(-490,360,0),@"m_pCurPosition"));
     
     pMatr=[m_pObjMng->pStringContainer->ArrayPoints
                               GetMatrixAtIndex:IND_MAIN_DATA_MATRIX];
@@ -102,8 +102,8 @@
         NSMutableString *TmpStr=(NSMutableString *)[m_pObjMng->pStringContainer->ArrayPoints
                                                     GetIdAtIndex:iIndexNameIcon];
 
-        float X=-440+(i%9)*54;
-        float Y=160-(i/9)*54;
+        float X=-480+(i%9)*54;
+        float Y=250-(i/9)*54;
 
         NSString *TmpName=[NSString stringWithFormat:@"%d",i];
         GObject *pOb=UNFROZE_OBJECT(@"ObjectButton",TmpName,
@@ -111,7 +111,7 @@
                                 SET_STRING_V(TmpStr,@"m_DOWN"),
                                 SET_STRING_V(TmpStr,@"m_UP"),
                                 SET_FLOAT_V(54,@"mWidth"),
-                                SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                SET_FLOAT_V(54,@"mHeight"),
                                 SET_BOOL_V(NO,@"m_bLookTouch"),
                                 SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                 SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -149,6 +149,8 @@
 //    InfoArrayValue *pInfoChild=(InfoArrayValue *)(*pMatr->pValueCopy);
     int *StartChild=*pMatr->pValueCopy+SIZE_INFO_STRUCT;
     
+    float fX=-430,fY=246;
+    
     if(pMatr->iIndexSelf==IND_MAIN_DATA_MATRIX)
     {
         int iIndexTmp=StartChild[pButtonPush->m_iNum*2];
@@ -157,10 +159,12 @@
     }
     else
     {
+        Ob_GroupButtons *pObGroup = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
+        MATRIXcell *pMatrPar=[m_pObjMng->pStringContainer->ArrayPoints
+                              GetMatrixAtIndex:pObGroup->pInsideString->m_iIndex];
+
         if(pMatr->iIndexSelf==IND_DATA_MATRIX_OPER)
-        {
-            Ob_GroupButtons *pObGroup = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
-            
+        {            
             int iIndexIcon=StartChild[pButtonPush->m_iNum*2+1];
             NSMutableString *strIcon = [m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:iIndexIcon];
             int iIndexMatr=StartChild[pButtonPush->m_iNum*2];
@@ -174,16 +178,11 @@
 
             pNewString->m_iIndex=pMatr->iIndexSelf;
 
-            MATRIXcell *pMatrPar=[m_pObjMng->pStringContainer->ArrayPoints
-                                  GetMatrixAtIndex:pObGroup->pInsideString->m_iIndex];
-
             [m_pObjMng->pStringContainer->m_OperationIndex AddData:pNewString->m_iIndex
                              WithData:pMatrPar->pValueCopy];
 
-            pNewString->X=-400;
-            pNewString->Y=150;
-
-            [self Close];
+            pNewString->X=fX;
+            pNewString->Y=fY;
         }
         else if(pMatr->iIndexSelf==IND_DATA_MATRIX_EMPTY)
         {
@@ -223,10 +222,6 @@
                     return;
                     break;
             }
-
-            Ob_GroupButtons *pObGroup = (Ob_GroupButtons *)[m_pObjMng GetObjectByName:@"GroupButtons"];
-            MATRIXcell *pMatrPar=[m_pObjMng->pStringContainer->ArrayPoints
-                                  GetMatrixAtIndex:pObGroup->pInsideString->m_iIndex];
             
             int iIndexIcon=StartChild[pButtonPush->m_iNum*2+1];
             NSMutableString *strIcon = [m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:iIndexIcon];
@@ -240,16 +235,38 @@
             
             [m_pObjMng->pStringContainer->m_OperationIndex
                     AddData:pNewString->m_iIndex WithData:pMatrPar->pValueCopy];
-
-        //    pNewString->m_iIndex=pNewString->m_iIndex;
             
-            pNewString->X=-360;
-            pNewString->Y=150;
-            
-            [self Close];
+            pNewString->X=fX;
+            pNewString->Y=fY;
         }
+        else if(pMatr->iIndexSelf==IND_DATA_MATRIX_SYS)
+        {
+            int iNewIndex;
+            int iIndexData=StartChild[pButtonPush->m_iNum*2];
+            iNewIndex=iIndexData;
+            
+            int iIndexIcon=StartChild[pButtonPush->m_iNum*2+1];
+            NSMutableString *strIcon = [m_pObjMng->pStringContainer->ArrayPoints GetIdAtIndex:iIndexIcon];
+                        
+            FractalString *pNewString =[[FractalString alloc]
+                                        initWithName:@"NewSys" WithParent:pObGroup->pInsideString
+                                        WithContainer:m_pObjMng->pStringContainer];
+            
+            [pNewString SetNameIcon:strIcon];
+            pNewString->m_iIndex=iNewIndex;
+            
+            [m_pObjMng->pStringContainer->m_OperationIndex
+             AddData:pNewString->m_iIndex WithData:pMatrPar->pValueCopy];
+            
+            pNewString->X=fX;
+            pNewString->Y=fY;
+            
+        }
+        
+        [self Close];
     }
 
+    
  //   int *StartEnter=*EndHeart->pEnPairPar+SIZE_INFO_STRUCT;
    // StartEnter[pButtonPush->m_iNum]=m_iIndexStart;
 }

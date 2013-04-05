@@ -111,8 +111,8 @@
                                     //SET_COLOR_V(pColorBack,@"mColorBack"),
                                     SET_STRING_V(pFrStr->sNameIcon,@"m_DOWN"),
                                     SET_STRING_V(pFrStr->sNameIcon,@"m_UP"),
-                                    SET_FLOAT_V(54,@"mWidth"),
-                                    SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                                    SET_FLOAT_V(44,@"mWidth"),
+                                    SET_FLOAT_V(44,@"mHeight"),
                                     SET_BOOL_V(YES,@"m_bLookTouch"),
                                     SET_INT_V(2,@"m_iType"),
                                     SET_STRING_V(NAME(self),@"m_strNameObject"),
@@ -205,7 +205,9 @@
     }
     
     Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
-    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    if(oInterface->BDropBox!=nil){
+        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)uploadFileFailedWithError{
@@ -214,7 +216,9 @@
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     
     Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
-    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+    if(oInterface->BDropBox!=nil){
+        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadFileFailedWithError{
@@ -239,7 +243,9 @@
     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
     
     Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
-    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(1, 0, 0, 1),@"mColorBack"));
+    if(oInterface->BDropBox!=nil){
+        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+    }
 }
 //------------------------------------------------------------------------------------------------------
 -(void)loadedMetadata{
@@ -251,8 +257,12 @@
     else
     {
         [self LoadAndSyns];
+        
         Ob_Editor_Interface *oInterface = (Ob_Editor_Interface *)[m_pObjMng GetObjectByName:@"Ob_Editor_Interface"];
-        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+        
+        if(oInterface->BDropBox!=nil){
+            OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+        }
     }
 }
 //------------------------------------------------------------------------------------------------------
@@ -435,8 +445,9 @@
                     
                     OBJECT_PERFORM_SEL(@"Ob_Editor_Interface",@"UpdateB");
 
-                    OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),
-                                    SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+                    if(oInterface->BDropBox!=nil){
+                        OBJECT_SET_PARAMS(NAME(oInterface->BDropBox),SET_COLOR_V(Color3DMake(0, 1, 0, 1),@"mColorBack"));
+                    }
                 }
             }
             break;

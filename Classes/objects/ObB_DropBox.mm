@@ -168,9 +168,9 @@
             [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DropBoxString"))];
 
             Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
-                           SET_FLOAT_V(54,@"mWidth"),
+                           SET_FLOAT_V(44,@"mWidth"),
                            SET_BOOL_V(NO,@"bFromEmpty"),
-                           SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                           SET_FLOAT_V(44,@"mHeight"),
                            SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                            SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
             
@@ -249,7 +249,7 @@
  //   glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
     glBindTexture(GL_TEXTURE_2D, mTextureId);
     
-	glScalef(0.8f,0.8f,m_pCurScale.z);
+//	glScalef(0.8f,0.8f,m_pCurScale.z);
     [self SetColor:mColor];
     
     glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);

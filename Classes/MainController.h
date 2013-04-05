@@ -175,6 +175,7 @@
 -(UInt32)SetDim:(UInt32)Varialable;
 - (bool)SmallDevice;
 
+- (void)SetInterfaceRotation:(UIInterfaceOrientation)previousOrientationTmp;
 -(UInt32) GetTextureId:(NSString*)textureName;
 
 @end

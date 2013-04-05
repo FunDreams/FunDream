@@ -202,6 +202,15 @@ LEVEL_UP:
                 iCurrentPlace=StartDataCurPlace[InfoCurPlace->mCount];
                 pQueue=(*pParMatrix->pQueue)+SIZE_INFO_STRUCT;
                 pHeart=(HeartMatr *)pQueue[iCurrentPlace];
+                
+                //возвращаемые параметры
+                InfoArrayValue *InfoPar=(InfoArrayValue *)(*pHeart->pExPairPar);
+                for (int k=0; k<InfoPar->mCount; k++) {
+                    int Index1=((*pHeart->pExPairPar)+SIZE_INFO_STRUCT)[k];
+                    int Index2=((*pHeart->pExPairChi)+SIZE_INFO_STRUCT)[k];
+                    
+                    ArrayPoints->pData[Index2]=ArrayPoints->pData[Index1];
+                }
 NEXT_HEART:
                 pInfoTmp=(InfoArrayValue *)(*pHeart->pNextPlaces);
                 if(pInfoTmp->mCount>0){
@@ -236,6 +245,16 @@ NEXT_HEART:
                 StartDataParMatrix=((*m_pContainer->pParMatrixStack)+SIZE_INFO_STRUCT);
                 StartDataCurPlace=((*m_pContainer->pCurPlaceStack)+SIZE_INFO_STRUCT);
             }
+            
+            //входные параметры
+            InfoArrayValue *InfoPar=(InfoArrayValue *)(*pHeart->pEnPairPar);
+            for (int k=0; k<InfoPar->mCount; k++) {
+                int Index1=((*pHeart->pEnPairPar)+SIZE_INFO_STRUCT)[k];
+                int Index2=((*pHeart->pEnPairChi)+SIZE_INFO_STRUCT)[k];
+                
+                ArrayPoints->pData[Index2]=ArrayPoints->pData[Index1];
+            }
+
             
             //копируем данные в стек
             MATRIXcell **TmpLink=(MATRIXcell **)(StartDataParMatrix+InfoParMatrix->mCount);

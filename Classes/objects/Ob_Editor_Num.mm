@@ -98,20 +98,20 @@
                    SET_STRING_V(@"Close.png",@"m_DOWN"),
                    SET_STRING_V(@"Close.png",@"m_UP"),
                    SET_FLOAT_V(64,@"mWidth"),
-                   SET_FLOAT_V(64*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(64,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                    SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
                    SET_STRING_V(NAME(self),@"m_strNameObject"),
                    SET_STRING_V(@"Close",@"m_strNameStage"),
                    SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                   SET_VECTOR_V(Vector3DMake(-40,280,0),@"m_pCurPosition"));
+                   SET_VECTOR_V(Vector3DMake(-40,340,0),@"m_pCurPosition"));
 
     pObBtnMinus=UNFROZE_OBJECT(@"ObjectButton",@"ButtonMinus",
                    SET_STRING_V(@"ButtonMinus.png",@"m_DOWN"),
                    SET_STRING_V(@"ButtonMinus.png",@"m_UP"),
                    SET_FLOAT_V(90,@"mWidth"),
-                   SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(90,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                    SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -125,7 +125,7 @@
                        SET_STRING_V(@"Point.png",@"m_DOWN"),
                        SET_STRING_V(@"Point.png",@"m_UP"),
                        SET_FLOAT_V(90,@"mWidth"),
-                       SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                       SET_FLOAT_V(90,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
                        SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                        SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -138,7 +138,7 @@
                        SET_STRING_V(@"Point.png",@"m_DOWN"),
                        SET_STRING_V(@"Point.png",@"m_UP"),
                        SET_FLOAT_V(90,@"mWidth"),
-                       SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                       SET_FLOAT_V(90,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
                        SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                        SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -152,7 +152,7 @@
                    SET_STRING_V(@"Clear.png",@"m_DOWN"),
                    SET_STRING_V(@"Clear.png",@"m_UP"),
                    SET_FLOAT_V(90,@"mWidth"),
-                   SET_FLOAT_V(90*FACTOR_DEC,@"mHeight"),
+                   SET_FLOAT_V(90,@"mHeight"),
                    SET_BOOL_V(YES,@"m_bLookTouch"),
                    SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                    SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -173,7 +173,7 @@
                        SET_STRING_V(StrContainer,@"m_DOWN"),
                        SET_STRING_V(StrContainer,@"m_UP"),
                        SET_FLOAT_V(80,@"mWidth"),
-                       SET_FLOAT_V(80*FACTOR_DEC,@"mHeight"),
+                       SET_FLOAT_V(80,@"mHeight"),
                        SET_BOOL_V(YES,@"m_bLookTouch"),
                        SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                        SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -189,7 +189,7 @@
                                       SET_STRING_V(@"0.png",@"m_DOWN"),
                                       SET_STRING_V(@"0.png",@"m_UP"),
                                       SET_FLOAT_V(80,@"mWidth"),
-                                      SET_FLOAT_V(80*FACTOR_DEC,@"mHeight"),
+                                      SET_FLOAT_V(80,@"mHeight"),
                                       SET_BOOL_V(YES,@"m_bLookTouch"),
                                       SET_INT_V(layerInterfaceSpace8,@"m_iLayer"),
                                       SET_INT_V(layerTouch_2N,@"m_iLayerTouch"),
@@ -373,7 +373,7 @@
 - (void)SelfDrawOffset{
     
     [self UpdateNum];
-    [self drawTextAtX:-280 Y:260
+    [self drawTextAtX:-280 Y:330
                 Color:Color3DMake(1,0.5f,0.5f,1) Tex:TextureIndicatorValue];
 }
 //------------------------------------------------------------------------------------------------------

@@ -106,7 +106,7 @@
     }
     [m_pChildrenbjectsArr removeAllObjects];
 
-    mWidth=m_iNumButton*56;
+    mWidth=m_iNumButton*44;
     float Step=mWidth/m_iNumButton;
     
     float fOffset=mWidth/2+Step*0.5f;
@@ -117,8 +117,8 @@
 
             Ob_EmtyPlace *pObTmp=UNFROZE_OBJECT(@"Ob_EmtyPlace",@"E_Place",
                 SET_BOOL_V(bPush,@"m_bIsPush"),
-                SET_FLOAT_V(54,@"mWidth"),
-                SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                SET_FLOAT_V(44,@"mWidth"),
+                SET_FLOAT_V(44,@"mHeight"),
                 SET_STRING_V(NAME(self),@"m_strNameObject"),
                 SET_STRING_V(@"Check",@"m_strNameStage"),
                 SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),

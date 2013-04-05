@@ -105,7 +105,7 @@
 //------------------------------------------------------------------------------------------------------
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    
+        
  	m_pPrSettings = nil;
 
 	m_pSoundList = [[NSMutableDictionary alloc] init];
@@ -117,17 +117,6 @@
     fFactorIncInv=1;
     fFactorDecInv=1;
 	m_fScacleController=1;
-
-	if([self isDeviceAniPad]){
-        fFactorDec=(float)(2.0f-FACTOR_SCALE);
-        fFactorInc=FACTOR_SCALE;
-
-        self->m_fScacleController=2;
-    }
-    else{
-        fFactorDecInv=(float)(2.0f-FACTOR_SCALE);
-        fFactorIncInv=FACTOR_SCALE;
-    }
 	
 	m_sPause=NSSelectorFromString(@"SelfMovePaused:");
 	m_sNormal=NSSelectorFromString(@"SelfMoveNormal:");
@@ -144,6 +133,30 @@
 	else previousOrientation=UIInterfaceOrientationPortrait;
 
     return self;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetInterfaceRotation:(UIInterfaceOrientation)previousOrientationTmp{
+    if(previousOrientationTmp==UIInterfaceOrientationLandscapeRight){
+        m_pObjMng->fAngleRotateOffset=-90;
+        m_pObjMng->fCurrentAngleRotateOffset=-90;
+    }
+    
+    if(previousOrientationTmp==UIInterfaceOrientationLandscapeLeft){
+        m_pObjMng->fAngleRotateOffset=90;
+        m_pObjMng->fCurrentAngleRotateOffset=90;
+    }
+    
+    if(previousOrientationTmp==UIInterfaceOrientationPortraitUpsideDown){
+        m_pObjMng->fAngleRotateOffset=180;
+        m_pObjMng->fCurrentAngleRotateOffset=180;
+    }
+
+    if(previousOrientationTmp==UIInterfaceOrientationPortrait){
+        m_pObjMng->fAngleRotateOffset=0;
+        m_pObjMng->fCurrentAngleRotateOffset=0;
+    }
+
+    previousOrientation=previousOrientationTmp;
 }
 //------------------------------------------------------------------------------------------------------
 // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
@@ -176,21 +189,8 @@
     [[NSNotificationCenter defaultCenter] addObserver:self
                                     selector:@selector(didRotate)
                                     name:@"UIDeviceOrientationDidChangeNotification" object:nil];
-        
-    if(previousOrientation==UIInterfaceOrientationLandscapeRight){
-        m_pObjMng->fAngleRotateOffset=-90;
-        m_pObjMng->fCurrentAngleRotateOffset=-90;
-    }
-
-    if(previousOrientation==UIInterfaceOrientationLandscapeLeft){
-        m_pObjMng->fAngleRotateOffset=90;
-        m_pObjMng->fCurrentAngleRotateOffset=90;
-    }
     
-    if(previousOrientation==UIInterfaceOrientationPortraitUpsideDown){
-        m_pObjMng->fAngleRotateOffset=180;
-        m_pObjMng->fCurrentAngleRotateOffset=180;
-    }
+    [self SetInterfaceRotation:previousOrientation];
 }
 
 -(void) createGLView
@@ -469,7 +469,10 @@ FullName:(NSString *)FullNameSound
 	CGPoint InterPoint=*pPoint;
 	
 	CGPoint tmpPointDif;
-	CGRect rect = self.view.bounds; 
+	CGRect rect = self.view.bounds;
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+    float VIEWPORT_W=screenRect.size.width;
+    float VIEWPORT_H=screenRect.size.height;
 	
 //    UIDeviceOrientation orientation = [[UIDevice currentDevice] orientation];
 
@@ -878,8 +881,11 @@ FullName:(NSString *)FullNameSound
 //------------------------------------------------------------------------------------------------------
 -(void)SetOrt:(Vector3D)Offset{
 	m_vOffset=Offset;
-        
-    glOrthof (- VIEWPORT_W*0.5f+Offset.x, VIEWPORT_W*0.5f+Offset.x, - VIEWPORT_H*0.5f+Offset.y, VIEWPORT_H*0.5f+Offset.y,  0.0f, 20.0f);
+    
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+
+    glOrthof (- screenRect.size.width*0.5f+Offset.x, screenRect.size.width*0.5f+Offset.x,
+              - screenRect.size.height*0.5f+Offset.y, screenRect.size.height*0.5f+Offset.y,  0.0f, 20.0f);
 }
 //------------------------------------------------------------------------------------------------------
 -(void)LoadAllSounds{

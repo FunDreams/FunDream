@@ -65,7 +65,7 @@
 //------------------------------------------------------------------------------------------------------
 -(int)CreateFloatByIndex:(int)iIndex withData:(float)DataValue{
     
-    int *TmpLink=(int *)ArrayPoints->pData+iIndex;
+    float *TmpLink=ArrayPoints->pData+iIndex;
     *TmpLink=DataValue;
     (*(ArrayPoints->pType+iIndex))=DATA_FLOAT;
     return iIndex;
@@ -295,11 +295,55 @@
     //системные константы 
     //DeltaT
     int iIndexDeltaT = Ind_DELTATIME;
-    [self CreateFloatByIndex:iIndexDeltaT withData:Ind_DELTATIME];
+    [self CreateFloatByIndex:iIndexDeltaT withData:0];
     [self SetData:iIndexDeltaT withNameIcon:@"_T.png" withMatr:pMatrDataSys
      withIndIcon:&iCurrentIndIcon];
+    
+    int iIndexW_EM = Ind_W_EMULATOR;
+    [self CreateFloatByIndex:iIndexW_EM withData:768];
+    [self SetData:iIndexW_EM withNameIcon:@"_W.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
 
-//операции -----------------------------------------------------------------------------------------    
+    int iIndexH_EM = Ind_H_EMULATOR;
+    [self CreateFloatByIndex:iIndexH_EM withData:1024];
+    [self SetData:iIndexH_EM withNameIcon:@"_H.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexAng_EM = Ind_ANG_EMULATOR;
+    [self CreateFloatByIndex:iIndexAng_EM withData:0];
+    [self SetData:iIndexAng_EM withNameIcon:@"_A.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexScale_EM = Ind_SCALE_EMULATOR;
+    [self CreateFloatByIndex:iIndexScale_EM withData:100];
+    [self SetData:iIndexScale_EM withNameIcon:@"_S.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexDx_EM = Ind_dX_EMULATOR;
+    [self CreateFloatByIndex:iIndexDx_EM withData:0];
+    [self SetData:iIndexDx_EM withNameIcon:@"_X.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexDy_EM = Ind_dY_EMULATOR;
+    [self CreateFloatByIndex:iIndexDy_EM withData:0];
+    [self SetData:iIndexDy_EM withNameIcon:@"_Y.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+    
+    int iIndexScale_X_EM = Ind_SCALE_X_EMULATOR;
+    [self CreateFloatByIndex:iIndexScale_X_EM withData:100];
+    [self SetData:iIndexScale_X_EM withNameIcon:@"_S.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexScale_Y_EM = Ind_SCALE_Y_EMULATOR;
+    [self CreateFloatByIndex:iIndexScale_Y_EM withData:100];
+    [self SetData:iIndexScale_Y_EM withNameIcon:@"_S.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+
+    int iIndexMode_EM = Ind_MODE_EMULATOR;
+    [self CreateIntByIndex:iIndexMode_EM withData:0];
+    [self SetData:iIndexMode_EM withNameIcon:@"_M.png" withMatr:pMatrDataSys
+      withIndIcon:&iCurrentIndIcon];
+//операции -----------------------------------------------------------------------------------------
     int *pStartDataListMatr=(*pMatrOperations->pValueCopy)+SIZE_INFO_STRUCT;
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -309,8 +353,7 @@
     MATRIXcell *pMatr=[self SetOperationMatrix:pStartDataListMatr nameTex:@"o_plus.png"
                     listMatr:GM_DEFAULT nameOperation:NAME_O_PLUS
                     withMatr:pMatrOperations withIndIcon:&iCurrentIndIcon];
-    
-        
+
     [self CreateFloatByIndex:iCurrentIndPar withData:0];
     [self SetEnter:iCurrentIndPar NameIcon:@"_A.png" matr:pMatr
               icon:&iCurrentIndIcon iPar:&iCurrentIndPar];
@@ -319,7 +362,6 @@
     [self SetEnter:iCurrentIndPar NameIcon:@"_B.png" matr:pMatr
               icon:&iCurrentIndIcon iPar:&iCurrentIndPar];
 
-    
     [self CreateFloatByIndex:iCurrentIndPar withData:0];
     [self SetExit:iCurrentIndPar NameIcon:@"_R.png" matr:pMatr
               icon:&iCurrentIndIcon iPar:&iCurrentIndPar];

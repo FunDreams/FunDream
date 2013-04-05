@@ -59,6 +59,9 @@
 
     Texture2D* TextureIndicatorSprite;
     NSString *StrValueSprite;
+    
+    int mTextureIdEn;
+    int mTextureIdEx;
 }
 
 /** Инициализирует объект **/

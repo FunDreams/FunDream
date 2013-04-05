@@ -19,6 +19,8 @@
         //	NSLog(@"Init");	
 
         m_iLayerTouch = layerTouch_0;
+        m_iLayer = layerTemplet;
+        
         m_pArrayImages = [[NSMutableArray alloc] init];
 
         iIdSound=-1;

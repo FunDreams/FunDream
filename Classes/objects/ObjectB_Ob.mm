@@ -129,6 +129,9 @@
     else [self setUnFlick];
     
     mCountTmp=30;
+    
+    GET_TEXTURE(mTextureIdEn, @"Enter.png");
+    GET_TEXTURE(mTextureIdEx, @"Exit.png");
 }
 //------------------------------------------------------------------------------------------------------
 - (void)UpdateTextureOnFace{
@@ -159,7 +162,7 @@
                     int iFontSize=20;
                     TextureIndicatorSprite=[self CreateText:StrValueSprite al:UITextAlignmentCenter
                                                 Tex:TextureIndicatorValue fSize:iFontSize
-                                                dimensions:CGSizeMake(mWidth-10, iFontSize+4)
+                                                dimensions:CGSizeMake(mWidth, iFontSize+4)
                                                 fontName:@"Helvetica"];
                 }
 
@@ -192,7 +195,7 @@
                     int iFontSize=10;
                     TextureIndicatorValue=[self CreateText:StrValueOnFace al:UITextAlignmentCenter
                             Tex:TextureIndicatorValue fSize:iFontSize
-                            dimensions:CGSizeMake(mWidth-10, iFontSize+4) fontName:@"Gill Sans"];
+                            dimensions:CGSizeMake(mWidth, iFontSize+4) fontName:@"Gill Sans"];
                 }
             }
                 
@@ -359,11 +362,11 @@
             LastPointTouch.x=Point.x;
             LastPointTouch.y=Point.y;
 
-            if(m_pCurPosition.x<-450)m_pCurPosition.x=-450;
-            if(m_pCurPosition.x>-40)m_pCurPosition.x=-40;
+            if(m_pCurPosition.x<-436)m_pCurPosition.x=-436;
+            if(m_pCurPosition.x>-25)m_pCurPosition.x=-25;
 
-            if(m_pCurPosition.y<-300)m_pCurPosition.y=-300;
-            if(m_pCurPosition.y>170)m_pCurPosition.y=170;
+            if(m_pCurPosition.y<-350)m_pCurPosition.y=-350;
+            if(m_pCurPosition.y>258)m_pCurPosition.y=258;
 
             pString->X=m_pCurPosition.x;
             pString->Y=m_pCurPosition.y;
@@ -389,8 +392,8 @@
                 [m_pObjMng->pMegaTree SetCell:(LINK_ID_V(pString,@"DragObject"))];
 
                 Ob_IconDrag *pOb=UNFROZE_OBJECT(@"Ob_IconDrag",@"IconDrag",
-                               SET_FLOAT_V(54,@"mWidth"),
-                               SET_FLOAT_V(54*FACTOR_DEC,@"mHeight"),
+                               SET_FLOAT_V(44,@"mWidth"),
+                               SET_FLOAT_V(44,@"mHeight"),
                                SET_BOOL_V(NO,@"bFromEmpty"),
                                SET_VECTOR_V(m_pCurPosition,@"m_pCurPosition"),
                                SET_STRING_V(pString->sNameIcon,@"m_pNameTexture"));
@@ -451,6 +454,11 @@
         
         if([pOb Intersect:Point])
         {
+            Ob_Editor_Interface *pInterface=(Ob_Editor_Interface *)[m_pObjMng
+                                                GetObjectByName:@"Ob_Editor_Interface"];
+    
+            pInterface->StringSelect=0;
+                
             [m_pObjMng->pStringContainer DelString:pString];
             bUpdate=YES;
             goto Exit;
@@ -535,7 +543,7 @@ Exit:
                          m_pCurPosition.z);
             
             glRotatef(m_pCurAngle.z, 0, 0, 1);
-            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+            glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
             
             [self SetColor:mColorBack];
             
@@ -547,18 +555,26 @@ Exit:
             
             [self SetColor:mColor];
             
-//            glScalef(0.9f,0.9f,m_pCurScale.z);
-//            [self SetColor:mColor];
-//            
-//            glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
-            
-//            glTranslatef(-0.68,0,0);
-  //          glScalef(0.35f,1,m_pCurScale.z);
             glBindTexture(GL_TEXTURE_2D, mTextureId);
             glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            
+            if(pString->m_iAdditionalType==ADIT_TYPE_ENTER ||
+               pString->m_iAdditionalType==ADIT_TYPE_EXIT)
+            {                
+                glScalef(0.5f,0.5f,1);
+                glTranslatef(-1.5f,1.5f,0);
+                
+                if(pString->m_iAdditionalType==ADIT_TYPE_ENTER)
+                    glBindTexture(GL_TEXTURE_2D, mTextureIdEn);
+                else if(pString->m_iAdditionalType==ADIT_TYPE_EXIT)
+                    glBindTexture(GL_TEXTURE_2D, mTextureIdEx);
+                else glBindTexture(GL_TEXTURE_2D, -1);
 
+                glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
+            }
+            
             [self UpdateTextureOnFace];
-            [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y-26
+            [self drawTextAtX:m_pCurPosition.x Y:m_pCurPosition.y-27
                         Color:Color3DMake(1,1,1,1) Tex:TextureIndicatorValue];
 //draw text======================================================================================
 //===============================================================================================
@@ -576,7 +592,7 @@ Exit:
                          m_pCurPosition.z);
 
             glRotatef(m_pCurAngle.z, 0, 0, 1);
-            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+            glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
 
             [self SetColor:mColorBack];
 
@@ -609,7 +625,7 @@ Exit:
                          m_pCurPosition.z);
             
             glRotatef(m_pCurAngle.z, 0, 0, 1);
-            glScalef(m_pCurScale.x*1.1f,m_pCurScale.y*1.1f,m_pCurScale.z);
+            glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
             
             [self SetColor:mColorBack];
             
@@ -618,16 +634,7 @@ Exit:
                 glDrawArrays(GL_TRIANGLE_STRIP, 0, m_iCountVertex);
             }
             
-    //        if(m_iTypeStr==DATA_MATRIX)
-  //          {
-                glBindTexture(GL_TEXTURE_2D, mTextureId);
-//            }
-//            else
-//            {
-//                glBindTexture(GL_TEXTURE_2D, -1);
-//            }
-            
-            glScalef(1.06f,1.06f,m_pCurScale.z);
+            glBindTexture(GL_TEXTURE_2D, mTextureId);
             
             [self SetColor:mColor];
             

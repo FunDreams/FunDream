@@ -85,7 +85,7 @@
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonRestart",
 //                   SET_STRING_V(@"ButtonRestart_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
-//                   SET_FLOAT_V(64*FACTOR_DEC,@"mWidth"),
+//                   SET_FLOAT_V(64,@"mWidth"),
 //                   SET_FLOAT_V(64,@"mHeight"),
 //                   SET_BOOL_V(YES,@"m_bLookTouch"),
 //                   SET_STRING_V(@"AIObject",@"m_strNameObject"),
@@ -111,24 +111,24 @@
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonPoint",
 //                   SET_STRING_V(@"ButtonPoint_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"ButtonPoint_Up.png",@"m_UP"),
-//                   SET_FLOAT_V(64*FACTOR_DEC,@"mWidth"),
+//                   SET_FLOAT_V(64,@"mWidth"),
 //                   SET_FLOAT_V(64,@"mHeight"),
 //                   SET_BOOL_V(YES,@"m_bLookTouch"),
 //                   //            SET_STRING_V(@"Worl d",@"m_strNameObject"),
 //                   //          SET_STRING_V(@"StartGame",@"m_strNameStage"),
 //                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                   SET_VECTOR_V(Vector3DMake(-34*FACTOR_DEC,-440,0),@"m_pCurPosition"));
+//                   SET_VECTOR_V(Vector3DMake(-34,-440,0),@"m_pCurPosition"));
 //
 //    UNFROZE_OBJECT(@"ObjectButton",@"ButtonLine",
 //                   SET_STRING_V(@"ButtonString_Down.png",@"m_DOWN"),
 //                   SET_STRING_V(@"ButtonString_Up.png",@"m_UP"),
-//                   SET_FLOAT_V(64*FACTOR_DEC,@"mWidth"),
+//                   SET_FLOAT_V(64,@"mWidth"),
 //                   SET_FLOAT_V(64,@"mHeight"),
 //                   SET_BOOL_V(YES,@"m_bLookTouch"),
 //                   //            SET_STRING_V(@"World",@"m_strNameObject"),
 //                   //          SET_STRING_V(@"StartGame",@"m_strNameStage"),
 //                   SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-//                   SET_VECTOR_V(Vector3DMake(-102*FACTOR_DEC,-440,0),@"m_pCurPosition"));
+//                   SET_VECTOR_V(Vector3DMake(-102,-440,0),@"m_pCurPosition"));
 }
 //------------------------------------------------------------------------------------------------------
 - (void)CreateObject_Debug
@@ -159,24 +159,24 @@
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonRestart",
                       SET_STRING_V(@"ButtonRestart_Down.png",@"m_DOWN"),
                       SET_STRING_V(@"ButtonRestart_Up.png",@"m_UP"),
-                      SET_FLOAT_V(64*FACTOR_DEC,@"mWidth"),
+                      SET_FLOAT_V(64,@"mWidth"),
                       SET_FLOAT_V(64,@"mHeight"),
                       SET_BOOL_V(YES,@"m_bLookTouch"),
                       SET_STRING_V(@"AIObject",@"m_strNameObject"),
                       SET_STRING_V(@"RestartGame",@"m_strNameStage"),
                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                      SET_VECTOR_V(Vector3DMake(120*FACTOR_DEC,440,0),@"m_pCurPosition"));
+                      SET_VECTOR_V(Vector3DMake(120,440,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectButton",@"ButtonEditor",
                       SET_STRING_V(@"ButtonEditor_Down.png",@"m_DOWN"),
                       SET_STRING_V(@"ButtonEditor_Up.png",@"m_UP"),
-                      SET_FLOAT_V(64*FACTOR_DEC,@"mWidth"),
+                      SET_FLOAT_V(64,@"mWidth"),
                       SET_FLOAT_V(64,@"mHeight"),
                       SET_BOOL_V(YES,@"m_bLookTouch"),
                       SET_STRING_V(@"AIObject",@"m_strNameObject"),
                       SET_STRING_V(@"CreateObject_Editor",@"m_strNameStage"),
                       SET_STRING_V(@"PushButton.wav", @"m_strNameSound"),
-                      SET_VECTOR_V(Vector3DMake(52*FACTOR_DEC,440,0),@"m_pCurPosition"));
+                      SET_VECTOR_V(Vector3DMake(52,440,0),@"m_pCurPosition"));
 
     UNFROZE_OBJECT(@"ObjectGameSpaun",@"Spaun",nil);
     UNFROZE_OBJECT(@"ObjectWorld",@"World",nil);

@@ -268,6 +268,7 @@
 - (void)Start{
 
 	[super Start];
+    [self SetWindow];
         
 //    m_pAtlasContainer=[m_pParent->m_pTextureAtlasList objectForKey:m_pNameAtlas];
 //    
@@ -284,14 +285,89 @@
 // //   [self CreateNewParticle];
 }
 //------------------------------------------------------------------------------------------------------
-- (void)SelfDrawOffset{
-	       
-    glTranslatef(m_pCurPosition.x+m_pObjMng->m_pParent->m_vOffset.x*m_fScaleOffset,
-                 m_pCurPosition.y+m_pObjMng->m_pParent->m_vOffset.y*m_fScaleOffset,
-                 m_pCurPosition.z);
+- (void)SetFullScreen{
+    int Mode=*((int *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_MODE_EMULATOR]);
+
+    fOffset=0;
     
-    glRotatef(m_pCurAngle.z, 0, 0, 1);
-    glScalef(m_pCurScale.x,m_pCurScale.y,m_pCurScale.z);
+    switch (Mode) {
+        case 0:
+            [m_pObjMng->m_pParent SetInterfaceRotation:UIInterfaceOrientationPortrait];
+            break;
+            
+        default:
+            [m_pObjMng->m_pParent SetInterfaceRotation:UIInterfaceOrientationLandscapeRight];
+            break;
+    }
+    
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+
+    CurW=screenRect.size.width;
+    CurH=screenRect.size.height;
+    
+    iMode=MODE_APP;
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SetWindow{
+    fOffset=256;
+    fOffsetAngle=0;
+    
+    CGRect screenRect = [UIScreen mainScreen].bounds;
+
+    CurW=screenRect.size.height/2;
+    CurH=screenRect.size.width;
+    
+    iMode=MODE_EDITOR;
+    
+    [m_pObjMng->m_pParent SetInterfaceRotation:UIInterfaceOrientationLandscapeRight];
+}
+//------------------------------------------------------------------------------------------------------
+- (void)UpdateMatrixViewer{
+    float DeltaX=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_dX_EMULATOR]);
+    float DeltaY=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_dY_EMULATOR]);
+    float Angle=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_ANG_EMULATOR]);
+    float ScaleAdd=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_SCALE_EMULATOR]);
+    float ScaleX=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_SCALE_X_EMULATOR]);
+    float ScaleY=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_SCALE_Y_EMULATOR]);
+    float W=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_W_EMULATOR]);
+    float H=*((float *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_H_EMULATOR]);
+
+    int Mode=*((int *)[m_pObjMng->pStringContainer->ArrayPoints GetDataAtIndex:Ind_MODE_EMULATOR]);
+
+    float Tmpf=H/W;
+    
+    float fScale=1;
+    
+    if(Tmpf>=CurH/CurW)
+        fScale=CurH/H;
+    else fScale=CurW/W;
+    
+    if(iMode==MODE_EDITOR){
+        fScale*=ScaleAdd*0.01f;
+    }
+
+    m_pCurPosition.x=DeltaX;
+    m_pCurPosition.y=DeltaY;
+    
+    if(iMode==MODE_APP){
+        m_pCurAngle.x=Angle;
+    }
+    else if(iMode==MODE_EDITOR){
+        m_pCurAngle.x=Angle+Mode*90;
+    }
+    
+    m_pCurScale.x=((fScale*ScaleX)*0.01f);
+    m_pCurScale.y=((fScale*ScaleY)*0.01f);
+}
+//------------------------------------------------------------------------------------------------------
+- (void)SelfDrawOffset{
+
+    [self UpdateMatrixViewer];
+
+    glTranslatef(fOffset,0,0);
+    glRotatef(m_pCurAngle.x, 0, 0, 1);
+    glScalef(m_pCurScale.x,m_pCurScale.y,1);
+    glTranslatef(m_pCurPosition.x,m_pCurPosition.y,0);
 
     InfoArrayValue *pInfoDraw=(InfoArrayValue *)(*pDrawPar);
     int *StartData=(*pDrawPar)+SIZE_INFO_STRUCT;
