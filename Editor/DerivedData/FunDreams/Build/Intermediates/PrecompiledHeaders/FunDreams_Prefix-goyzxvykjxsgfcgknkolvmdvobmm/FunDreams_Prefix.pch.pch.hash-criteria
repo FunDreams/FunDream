@@ -1,0 +1,26 @@
+Contents of /WORK/FunDream/Editor/FunDreams_Prefix.pch
+-x
+c++
+-arch
+armv7
+-fpascal-strings
+-Os
+-DCONFIGURATION_Release
+-isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk
+-g
+-fvisibility=hidden
+-fvisibility-inlines-hidden
+-miphoneos-version-min=4.0
+-iquote
+-iquote
+-I/WORK/FunDream/Editor/DerivedData/FunDreams/Build/Products/Release-iphoneos/include
+-Ifacebook-iphone-sdk/src
+-F/WORK/FunDream/Editor/DerivedData/FunDreams/Build/Products/Release-iphoneos
+-F/WORK/FunDream/Editor/QuincyKit
+-F/Applications/Xcode.app/Contents/Developer/Library/Frameworks
+-F/WORK/FunDream/Editor
+arm-apple-darwin13.4.0
+"4.2.1 Compatible Apple LLVM 5.1 (clang-503.0.40)"
+SDK_PRODUCT_BUILD_VERSION=11D167
+11D167

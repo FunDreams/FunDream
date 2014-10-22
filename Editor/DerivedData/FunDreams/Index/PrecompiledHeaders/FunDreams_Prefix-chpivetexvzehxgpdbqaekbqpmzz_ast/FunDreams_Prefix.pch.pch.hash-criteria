@@ -1,0 +1,37 @@
+Contents of /WORK/FunDream/Editor/FunDreams_Prefix.pch
+-x
+objective-c
+-arch
+i386
+-fretain-comments-from-system-headers
+-std=c99
+-fpascal-strings
+-O0
+-DDEBUG=1
+-DCONFIGURATION_Debug
+-isysroot
+/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.platform/Developer/SDKs/iPhoneSimulator7.1.sdk
+-fexceptions
+-fasm-blocks
+-g
+-fvisibility=hidden
+-fobjc-abi-version=2
+-fobjc-legacy-dispatch
+-mios-simulator-version-min=4.0
+-iquote
+-iquote
+-I/WORK/FunDream/Editor/DerivedData/FunDreams/Build/Products/Debug-iphonesimulator/include
+-Ifacebook-iphone-sdk/src
+-F/WORK/FunDream/Editor/DerivedData/FunDreams/Build/Products/Debug-iphonesimulator
+-F/WORK/FunDream/Editor/QuincyKit
+-F/Applications/Xcode.app/Contents/Developer/Library/Frameworks
+-F/WORK/FunDream/Editor
+-ferror-limit=10
+-working-directory=/WORK/FunDream/Editor
+-Xclang
+-detailed-preprocessing-record
+-DTARGET_OS_IPHONE
+i386-apple-darwin13.4.0
+"4.2.1 Compatible Apple LLVM 5.1 (clang-503.0.40)"
+SDK_PRODUCT_BUILD_VERSION=11D167
+11D167

@@ -1,0 +1,281 @@
+TUtilsLib
+v6
+r1
+cCheck dependencies
+cProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+cLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a normal armv7
+cLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a normal armv7s
+cLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a normal arm64
+cCreateUniversalBinary /WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a normal armv7\ armv7s\ arm64
+cPBXCp UtilsLib/UtilsLib.h LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk
+c0000000052823D210000000000000110
+t1384267041
+s272
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/SDKSettings.plist
+c0000000052720F59000000000000036B
+t1383206745
+s875
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/CoreServices/SystemVersion.plist
+c0000000052720F5A00000000000001A0
+t1383206746
+s416
+
+N/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/Foundation.framework/Foundation
+c0000000052720F610000000000A92BC0
+t1383206753
+s11086784
+
+N/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/5.0/include/module.map
+c00000000527210410000000000000AC9
+t1383206977
+s2761
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch
+t1391605640
+s83620
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch
+t1391605640
+s83648
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch
+t1391605640
+s107200
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.LinkFileList
+c0000000052F23787000000000000007B
+t1391605639
+s123
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o
+t1391605640
+s4020
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a
+t1391605640
+s4272
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.LinkFileList
+c0000000052F23787000000000000007B
+t1391605639
+s123
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o
+t1391605640
+s3440
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a
+t1391605640
+s3688
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.LinkFileList
+c0000000052F23787000000000000007C
+t1391605639
+s124
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o
+t1391605640
+s3440
+
+N/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a
+t1391605640
+s3688
+
+N/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h
+t2
+s0
+
+N/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a
+t2
+s0
+
+N/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch
+c0000000052F22C3500000000000000B6
+t1391602741
+s182
+
+N/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.h
+c0000000052F22C3500000000000000CC
+t1391602741
+s204
+
+N/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+c0000000052F22C3500000000000000B9
+t1391602741
+s185
+
+CBuild AST from /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+r0
+
+CCheck dependencies
+r0
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection18"Check dependencies18"Check dependencies9fc8e7076fa2b841^dc84fb076fa2b841^---0#1#1#--18"Check dependencies36"901BE754-0796-437F-AFAE-D11F7B9E3429-
+
+CCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298440.244969
+e413298440.279900
+r1
+xCompileC
+xBuild/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o
+x/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+xnormal
+xarm64
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m196"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o UtilsLib/UtilsLib.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler93e33e086fa2b841^f8a847086fa2b841^---0#0#1#-19%DVTDocumentLocation2@50"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m0000000000000000^3282"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o UtilsLib/UtilsLib.m normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch arm64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/arm64 -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -include /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.d --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.dia -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.o36"71DF5D26-B6BD-4F69-AAAA-61D12DE9EE33-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298440.203938
+e413298440.244620
+r1
+xCompileC
+xBuild/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o
+x/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+xnormal
+xarmv7
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m196"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o UtilsLib/UtilsLib.m normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler325534086fa2b841^e8a53e086fa2b841^---0#0#1#-19%DVTDocumentLocation2@50"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m0000000000000000^3282"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o UtilsLib/UtilsLib.m normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/armv7 -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -include /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.d --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.dia -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.o36"83D9D9D0-92E7-4B00-86C1-069241DBB842-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CCompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298440.205288
+e413298440.245289
+r1
+xCompileC
+xBuild/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o
+x/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+xnormal
+xarmv7s
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection51"Compile /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m198"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o UtilsLib/UtilsLib.m normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compilerb0ac34086fa2b841^b2bd3e086fa2b841^---0#0#1#-19%DVTDocumentLocation2@50"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m0000000000000000^3289"CompileC Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o UtilsLib/UtilsLib.m normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c -arch armv7s -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/armv7s -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -include /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.d --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.dia -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.m -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.o36"B335B910-F362-4B64-B92E-4899D2E57EFB-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CCreateUniversalBinary /WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a normal armv7\ armv7s\ arm64
+s413298440.297407
+e413298440.306464
+r1
+xCreateUniversalBinary
+x/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a
+xnormal
+xarmv7 armv7s arm64
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection82"Create universal binary /WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a84"CreateUniversalBinary LIB/Release-iphoneos/libUtilsLib.a normal armv7\ armv7s\ arm64b83a4c086fa2b841^c9764e086fa2b841^---0#0#1#-19%DVTDocumentLocation2@65"file:///WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a0034b450ddffdf42^765"CreateUniversalBinary LIB/Release-iphoneos/libUtilsLib.a normal armv7\ armv7s\ arm64    cd /WORK/FunDream/UtilsLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    libtool -static /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a -o /WORK/FunDream/UtilsLib/LIB/Release-iphoneos/libUtilsLib.a36"1B757878-09F0-4FE7-9FA6-38978EF8F3AE-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a normal arm64
+s413298440.289135
+e413298440.296772
+r1
+xLibtool
+x/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a
+xnormal
+xarm64
+o/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection122"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a normal arm64122"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a normal arm64931a4a086fa2b841^1ef94b086fa2b841^-159"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC -0#0#1#--970"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a normal arm64    cd /WORK/FunDream/UtilsLib    setenv IPHONEOS_DEPLOYMENT_TARGET 7.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only arm64 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -L/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -filelist /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/UtilsLib.LinkFileList -ObjC -framework Foundation -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/arm64/libUtilsLib.a36"0D296DDD-4C97-40BE-8D2E-782C5E76E58B-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a normal armv7
+s413298440.280663
+e413298440.288872
+r1
+xLibtool
+x/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a
+xnormal
+xarmv7
+o/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection122"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a normal armv7122"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a normal armv7c4ee47086fa2b841^f8354a086fa2b841^-159"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC -0#0#1#--970"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a normal armv7    cd /WORK/FunDream/UtilsLib    setenv IPHONEOS_DEPLOYMENT_TARGET 7.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only armv7 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -L/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -filelist /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/UtilsLib.LinkFileList -ObjC -framework Foundation -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7/libUtilsLib.a36"A8F0FF83-8E1A-45E3-9A65-95935C3333BA-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CLibtool /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a normal armv7s
+s413298440.281151
+e413298440.289682
+r1
+xLibtool
+x/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a
+xnormal
+xarmv7s
+o/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC 
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection124"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a normal armv7s124"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a normal armv7s9a0b48086fa2b841^74404a086fa2b841^-159"/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool: -dynamic not specified the following flags are invalid: -ObjC -0#0#1#--975"Libtool Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a normal armv7s    cd /WORK/FunDream/UtilsLib    setenv IPHONEOS_DEPLOYMENT_TARGET 7.0    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -static -arch_only armv7s -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -L/WORK/FunDream/UtilsLib/LIB/Release-iphoneos -filelist /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/UtilsLib.LinkFileList -ObjC -framework Foundation -o /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/Objects-normal/armv7s/libUtilsLib.a36"F2CECB90-58E4-48DF-BE1D-A470D6ABD6D7-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CPBXCp UtilsLib/UtilsLib.h LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h
+s413298440.306994
+e413298440.308109
+r1
+xPBXCp
+xUtilsLib/UtilsLib.h
+xLIB/Release-iphoneos/include/UtilsLib/UtilsLib.h
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection53"Copy LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h74"PBXCp UtilsLib/UtilsLib.h LIB/Release-iphoneos/include/UtilsLib/UtilsLib.ha4a94e086fa2b841^cee14e086fa2b841^---0#0#1#-19%DVTDocumentLocation2@79"file:///WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h0034b450ddffdf42^638"PBXCp UtilsLib/UtilsLib.h LIB/Release-iphoneos/include/UtilsLib/UtilsLib.h    cd /WORK/FunDream/UtilsLib    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    builtin-copy -exclude .DS_Store -exclude CVS -exclude .svn -exclude .git -exclude .hg -strip-debug-symbols -strip-tool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip -resolve-src-symlinks /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib.h /WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include/UtilsLib36"3E8FB8FC-6238-4D05-BD43-B07D680CA68B-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CProcessPCH /Users/apple/Library/Developer/Xcode/DerivedData/UtilsLib-cnkrkmrorxmbfpdforjmglasvrhl/Index/PrecompiledHeaders/UtilsLib-Prefix-akmlkxofqmdjrrcakqtoxloekhvn_ast/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH /Users/apple/Library/Developer/Xcode/DerivedData/UtilsLib-cnkrkmrorxmbfpdforjmglasvrhl/Index/PrecompiledHeaders/UtilsLib-Prefix-ccuxdkkpbeovzlfdksegjzkzogke_ast/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH /Users/apple/Library/Developer/Xcode/DerivedData/UtilsLib-cnkrkmrorxmbfpdforjmglasvrhl/Index/PrecompiledHeaders/UtilsLib-Prefix-dbynlgfkdglsfbbpgdypzjadazde_ast/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.astbuilder
+r0
+
+CProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298439.985940
+e413298440.106172
+r1
+xProcessPCH
+x/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch
+xUtilsLib/UtilsLib-Prefix.pch
+xnormal
+xarmv7s
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection39"Precompile UtilsLib/UtilsLib-Prefix.pch217"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compilerba87fc076fa2b841^bf451b086fa2b841^---0#0#1#-19%DVTDocumentLocation2@59"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch0000000000000000^3207"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7s objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c-header -arch armv7s -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/armv7s -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.dia -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.d -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch -o /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-eigwkpkreitbqnhjbgrskzqulrlc/UtilsLib-Prefix.pch.pch36"F869A9B3-3E57-4F3B-A384-7314E5FEFD79-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298439.983410
+e413298440.105240
+r1
+xProcessPCH
+x/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch
+xUtilsLib/UtilsLib-Prefix.pch
+xnormal
+xarmv7
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection39"Precompile UtilsLib/UtilsLib-Prefix.pch216"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compilere125fc076fa2b841^713c1b086fa2b841^---0#0#1#-19%DVTDocumentLocation2@59"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch0000000000000000^3204"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal armv7 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c-header -arch armv7 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/armv7 -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.dia -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.d -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch -o /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-emowkiznzfjbszbkbxhrsoumnbly/UtilsLib-Prefix.pch.pch36"DFD2B1D4-2B24-4DDA-A43D-C26EEDCD2464-
+b3CC59982-1E64-49D3-A460-EF031412D754
+
+CProcessPCH /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler
+s413298440.105618
+e413298440.203150
+r1
+xProcessPCH
+x/WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch
+xUtilsLib/UtilsLib-Prefix.pch
+xnormal
+xarm64
+xobjective-c
+xcom.apple.compilers.llvm.clang.1_0.compiler
+d/WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch
+lSLF06#21%IDEActivityLogSection1@2#32"com.apple.dt.IDE.BuildLogSection39"Precompile UtilsLib/UtilsLib-Prefix.pch216"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compilerb3291b086fa2b841^360334086fa2b841^---0#0#1#-19%DVTDocumentLocation2@59"file:///WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch0000000000000000^3204"ProcessPCH Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch UtilsLib/UtilsLib-Prefix.pch normal arm64 objective-c com.apple.compilers.llvm.clang.1_0.compiler    cd /WORK/FunDream/UtilsLib    setenv LANG en_US.US-ASCII    setenv PATH "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/usr/bin:/Applications/Xcode.app/Contents/Developer/usr/bin:/usr/bin:/bin:/usr/sbin:/sbin"    /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -x objective-c-header -arch arm64 -fmessage-length=0 -fdiagnostics-show-note-include-stack -fmacro-backtrace-limit=0 -std=gnu99 -fobjc-arc -fmodules -fmodules-cache-path=/Users/apple/Library/Developer/Xcode/DerivedData/ModuleCache -Wno-trigraphs -fpascal-strings -Os -Wno-missing-field-initializers -Wno-missing-prototypes -Werror=return-type -Wno-implicit-atomic-properties -Werror=deprecated-objc-isa-usage -Werror=objc-root-class -Wno-receiver-is-weak -Wno-arc-repeated-use-of-weak -Wduplicate-method-match -Wno-missing-braces -Wparentheses -Wswitch -Wunused-function -Wno-unused-label -Wno-unused-parameter -Wunused-variable -Wunused-value -Wempty-body -Wuninitialized -Wno-unknown-pragmas -Wno-shadow -Wno-four-char-constants -Wno-conversion -Wconstant-conversion -Wint-conversion -Wbool-conversion -Wenum-conversion -Wshorten-64-to-32 -Wpointer-sign -Wno-newline-eof -Wno-selector -Wno-strict-selector-match -Wundeclared-selector -Wno-deprecated-implementations -DNS_BLOCK_ASSERTIONS=1 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk -fstrict-aliasing -Wprotocol -Wdeprecated-declarations -g -Wno-sign-conversion -miphoneos-version-min=7.0 -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-generated-files.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-own-target-headers.hmap -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-all-target-headers.hmap -iquote /WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/UtilsLib-project-headers.hmap -I/WORK/FunDream/UtilsLib/LIB/Release-iphoneos/include -I/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources/arm64 -I/WORK/FunDream/UtilsLib/Build/Intermediates/UtilsLib.build/Release-iphoneos/UtilsLib.build/DerivedSources -F/WORK/FunDream/UtilsLib/LIB/Release-iphoneos --serialize-diagnostics /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.dia -MMD -MT dependencies -MF /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.d -c /WORK/FunDream/UtilsLib/UtilsLib/UtilsLib-Prefix.pch -o /WORK/FunDream/UtilsLib/Build/Intermediates/PrecompiledHeaders/UtilsLib-Prefix-fboarapxadqodahjrkwpqxlpbana/UtilsLib-Prefix.pch.pch36"42BA937F-919A-41B5-B9FB-A69715432E01-
+b3CC59982-1E64-49D3-A460-EF031412D754
+

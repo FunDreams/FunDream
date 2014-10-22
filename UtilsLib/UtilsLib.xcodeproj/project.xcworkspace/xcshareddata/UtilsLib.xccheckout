@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>31C9C38C-D9A6-41E0-B1CD-F652879352D4</string>
+	<key>IDESourceControlProjectName</key>
+	<string>UtilsLib</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>037B08D5-8DAA-4DF4-B4BE-4813C5DD7DC1</key>
+		<string>https://github.com/FunDreams/FunDream.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>UtilsLib/UtilsLib.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>037B08D5-8DAA-4DF4-B4BE-4813C5DD7DC1</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/FunDreams/FunDream.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>037B08D5-8DAA-4DF4-B4BE-4813C5DD7DC1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>037B08D5-8DAA-4DF4-B4BE-4813C5DD7DC1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>UtilsLib</string>
+		</dict>
+	</array>
+</dict>
+</plist>

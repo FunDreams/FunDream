@@ -1,0 +1,23 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#ifdef __OBJC__
+    #import <Foundation/Foundation.h>
+#import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
+
+    #import <OpenGLES/EAGL.h>
+    #import <OpenGLES/ES1/gl.h>
+    #import <OpenGLES/ES1/glext.h>
+//#import "OpenGLCommon.h"
+//#import "ConstantsAndMacros.h"
+//#import "FunArrayData.h"
+//#import "FunArrayDataIndexes.h"
+//#import "FractalString.h"
+
+
+
+#endif
